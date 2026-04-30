@@ -1,0 +1,231 @@
+2026-04-27 13:14:51,857  INFO      ============================================================
+2026-04-27 13:14:51,857  INFO      Pipeline run started  2026-04-27 13:14:51
+2026-04-27 13:14:51,858  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-27 13:14:59,416  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-27.parquet
+2026-04-27 13:14:59,416  ERROR     Drive upload failed (data still saved locally): [Errno 2] No such file or directory: 'C:\\ArtisticDentalPortal\\credentials.json'
+2026-04-27 13:14:59,418  INFO      Pipeline run complete.
+2026-04-27 13:45:31,874  INFO      ============================================================
+2026-04-27 13:45:31,875  INFO      Pipeline run started  2026-04-27 13:45:31
+2026-04-27 13:45:31,875  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-27 13:45:39,552  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-27.parquet
+2026-04-27 13:45:39,553  ERROR     Drive upload failed (data still saved locally): Client secrets must be for a web or installed app.
+2026-04-27 13:45:39,553  INFO      Pipeline run complete.
+2026-04-27 14:00:16,233  INFO      ============================================================
+2026-04-27 14:00:16,233  INFO      Pipeline run started  2026-04-27 14:00:16
+2026-04-27 14:00:16,233  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-27 14:00:23,753  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-27.parquet
+2026-04-27 14:00:24,304  INFO      Please visit this URL to authorize this application: https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=653389953797-733vcl1qfd40192gnkikm5lvgq5v1sdv.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A50128%2F&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.file&state=9SjXfZiomziYvNR4eo2skNNyEJiMPu&code_challenge=4ilnzjNOWz4q8vIdJuLc9weTEAyxffho7ItSyM3OzYA&code_challenge_method=S256&access_type=offline
+2026-04-27 14:05:59,238  INFO      ============================================================
+2026-04-27 14:05:59,238  INFO      Pipeline run started  2026-04-27 14:05:59
+2026-04-27 14:05:59,239  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-27 14:06:06,783  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-27.parquet
+2026-04-27 14:06:07,359  INFO      Please visit this URL to authorize this application: https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=653389953797-733vcl1qfd40192gnkikm5lvgq5v1sdv.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A50592%2F&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.file&state=UiTpwqhp0FK8m7MQ8sRSH9Z8ntLvnC&code_challenge=pEF0aYGtnmiWCx7phu7VKKhzhtz9nkKExtjgtBB-JGY&code_challenge_method=S256&access_type=offline
+2026-04-27 14:06:50,771  INFO      "GET /?state=UiTpwqhp0FK8m7MQ8sRSH9Z8ntLvnC&iss=https://accounts.google.com&code=4/0AeoWuM9c-gFMV1gvT_gH_Yx3d-xirQfSz1XFz10uoAjLfoMIPMQ0_2Wt6PyFbLOPTW7emg&scope=https://www.googleapis.com/auth/drive.file HTTP/1.1" 200 65
+2026-04-27 14:06:51,628  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-27 14:06:52,301  WARNING   Encountered 403 Forbidden with reason "accessNotConfigured"
+2026-04-27 14:06:52,302  ERROR     Drive upload failed (data still saved locally): <HttpError 403 when requesting https://www.googleapis.com/drive/v3/files?q=name%3D%27latest_kpis.xlsx%27+and+%2717xL2IX7CT3vJpwid2FI1ssgijVHDR0cD%27+in+parents+and+trashed%3Dfalse&fields=files%28id%2Cname%29&alt=json returned "Google Drive API has not been used in project 653389953797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/drive.googleapis.com/overview?project=653389953797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.". Details: "[{'message': 'Google Drive API has not been used in project 653389953797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/drive.googleapis.com/overview?project=653389953797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.', 'domain': 'usageLimits', 'reason': 'accessNotConfigured', 'extendedHelp': 'https://console.developers.google.com'}]">
+2026-04-27 14:06:52,303  INFO      Pipeline run complete.
+2026-04-27 14:09:56,028  INFO      ============================================================
+2026-04-27 14:09:56,028  INFO      Pipeline run started  2026-04-27 14:09:56
+2026-04-27 14:09:56,029  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-27 14:10:03,548  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-27.parquet
+2026-04-27 14:10:03,553  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-27 14:10:04,177  WARNING   Encountered 403 Forbidden with reason "accessNotConfigured"
+2026-04-27 14:10:04,178  ERROR     Drive upload failed (data still saved locally): <HttpError 403 when requesting https://www.googleapis.com/drive/v3/files?q=name%3D%27latest_kpis.xlsx%27+and+%2717xL2IX7CT3vJpwid2FI1ssgijVHDR0cD%27+in+parents+and+trashed%3Dfalse&fields=files%28id%2Cname%29&alt=json returned "Google Drive API has not been used in project 653389953797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/drive.googleapis.com/overview?project=653389953797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.". Details: "[{'message': 'Google Drive API has not been used in project 653389953797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/drive.googleapis.com/overview?project=653389953797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.', 'domain': 'usageLimits', 'reason': 'accessNotConfigured', 'extendedHelp': 'https://console.developers.google.com'}]">
+2026-04-27 14:10:04,178  INFO      Pipeline run complete.
+2026-04-27 14:15:59,346  INFO      ============================================================
+2026-04-27 14:15:59,346  INFO      Pipeline run started  2026-04-27 14:15:59
+2026-04-27 14:15:59,346  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-27 14:16:06,912  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-27.parquet
+2026-04-27 14:16:07,470  INFO      Please visit this URL to authorize this application: https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=653389953797-733vcl1qfd40192gnkikm5lvgq5v1sdv.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A51372%2F&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.file&state=dUEa8rlAijGiKBgwVyEiBK5aBVdsp1&code_challenge=2mTyePi-b0slhYgS89vfRnuHUZ5ZjndiJZlz8An7Gjs&code_challenge_method=S256&access_type=offline
+2026-04-27 14:16:16,676  INFO      "GET /?state=dUEa8rlAijGiKBgwVyEiBK5aBVdsp1&iss=https://accounts.google.com&code=4/0AeoWuM_-quplKYpe4GXyyceuM9Li8YGb0VWLEasL_AGG1Hlcf92fSUhwtsAldq8Q8jL_2A&scope=https://www.googleapis.com/auth/drive.file HTTP/1.1" 200 65
+2026-04-27 14:16:17,494  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-27 14:16:18,151  WARNING   Encountered 403 Forbidden with reason "accessNotConfigured"
+2026-04-27 14:16:18,151  ERROR     Drive upload failed (data still saved locally): <HttpError 403 when requesting https://www.googleapis.com/drive/v3/files?q=name%3D%27latest_kpis.xlsx%27+and+%2717xL2IX7CT3vJpwid2FI1ssgijVHDR0cD%27+in+parents+and+trashed%3Dfalse&fields=files%28id%2Cname%29&alt=json returned "Google Drive API has not been used in project 653389953797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/drive.googleapis.com/overview?project=653389953797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.". Details: "[{'message': 'Google Drive API has not been used in project 653389953797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/drive.googleapis.com/overview?project=653389953797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.', 'domain': 'usageLimits', 'reason': 'accessNotConfigured', 'extendedHelp': 'https://console.developers.google.com'}]">
+2026-04-27 14:16:18,153  INFO      Pipeline run complete.
+2026-04-27 14:18:51,882  INFO      ============================================================
+2026-04-27 14:18:51,882  INFO      Pipeline run started  2026-04-27 14:18:51
+2026-04-27 14:18:51,882  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-27 14:18:59,511  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-27.parquet
+2026-04-27 14:19:00,074  INFO      Please visit this URL to authorize this application: https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=653389953797-733vcl1qfd40192gnkikm5lvgq5v1sdv.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A51622%2F&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.file&state=eg98g7tyuoQft9gwykbNXVH9bTRkSW&code_challenge=1iUnuMnXfkDOVONm2GkYJON1EkMEaBVkAdtW8l6Vh6s&code_challenge_method=S256&access_type=offline
+2026-04-27 14:19:06,113  INFO      "GET /?state=eg98g7tyuoQft9gwykbNXVH9bTRkSW&iss=https://accounts.google.com&code=4/0AeoWuM88ZoKEGhHgOwqq2Hli6A9ODRUhkW_DCZ15wlsWC6eC25Z3iSW0ZVcr1y3NJYmsOA&scope=https://www.googleapis.com/auth/drive.file HTTP/1.1" 200 65
+2026-04-27 14:19:06,902  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-27 14:19:09,295  INFO      Uploaded Drive file: latest_kpis.xlsx  (id=1e39GlGfULD2gb6wWnA4764J0-hOmUWFn)
+2026-04-27 14:19:11,678  INFO      Uploaded Drive file: dental_data_2026-04-27.xlsx  (id=1uv8WNh-sY2bHP55AwnmzrsGrvXWhqNN4)
+2026-04-27 14:19:11,678  INFO      Google Drive upload complete.
+2026-04-27 14:19:11,680  INFO      Pipeline run complete.
+2026-04-27 14:30:56,196  INFO      ============================================================
+2026-04-27 14:30:56,196  INFO      Pipeline run started  2026-04-27 14:30:56
+2026-04-27 14:30:56,196  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-27 14:31:04,028  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-27.parquet
+2026-04-27 14:31:04,033  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-27 14:31:06,417  INFO      Updated  Drive file: latest_kpis.xlsx  (id=1e39GlGfULD2gb6wWnA4764J0-hOmUWFn)
+2026-04-27 14:31:09,565  INFO      Updated  Drive file: dental_data_2026-04-27.xlsx  (id=1uv8WNh-sY2bHP55AwnmzrsGrvXWhqNN4)
+2026-04-27 14:31:09,565  INFO      Google Drive upload complete.
+2026-04-27 14:31:09,566  INFO      Pipeline run complete.
+2026-04-28 06:00:02,974  INFO      ============================================================
+2026-04-28 06:00:02,974  INFO      Pipeline run started  2026-04-28 06:00:02
+2026-04-28 06:00:02,974  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-28 06:00:10,070  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-28.parquet
+2026-04-28 06:00:10,738  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-28 06:00:13,234  INFO      Updated  Drive file: latest_kpis.xlsx  (id=1e39GlGfULD2gb6wWnA4764J0-hOmUWFn)
+2026-04-28 06:00:15,333  INFO      Uploaded Drive file: dental_data_2026-04-28.xlsx  (id=1nv1NAko6HfBJyosDI7pjen41SCMSm7Gm)
+2026-04-28 06:00:15,333  INFO      Google Drive upload complete.
+2026-04-28 06:00:15,334  INFO      Pipeline run complete.
+2026-04-29 06:00:05,830  INFO      ============================================================
+2026-04-29 06:00:05,832  INFO      Pipeline run started  2026-04-29 06:00:05
+2026-04-29 06:00:05,832  INFO      Loading from CSV/Excel exports in C:\ArtisticDentalPortal\sample_exports
+2026-04-29 06:00:13,441  INFO      Saved local snapshot: C:\ArtisticDentalPortal\cache\dental_data_2026-04-29.parquet
+2026-04-29 06:00:14,166  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-29 06:00:16,842  INFO      Updated  Drive file: latest_kpis.xlsx  (id=1e39GlGfULD2gb6wWnA4764J0-hOmUWFn)
+2026-04-29 06:00:18,692  INFO      Uploaded Drive file: dental_data_2026-04-29.xlsx  (id=1lTRs4hTHsaxQs5POdOqL3rPuhD5e_lGs)
+2026-04-29 06:00:18,692  INFO      Google Drive upload complete.
+2026-04-29 06:00:18,692  INFO      Pipeline run complete.
+2026-04-29 12:30:46,470  INFO      ============================================================
+2026-04-29 12:30:46,470  INFO      Pipeline started  2026-04-29 12:30:46
+2026-04-29 12:30:46,472  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-29 12:30:47,004  INFO      Raw file: 107316 rows loaded
+2026-04-29 12:30:47,072  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-29 12:42:46,189  INFO      ============================================================
+2026-04-29 12:42:46,190  INFO      Pipeline started  2026-04-29 12:42:46
+2026-04-29 12:42:46,191  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-29 12:42:46,740  INFO      Raw file: 107316 rows loaded
+2026-04-29 12:42:46,798  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-29 12:44:27,310  INFO      ============================================================
+2026-04-29 12:44:27,310  INFO      Pipeline started  2026-04-29 12:44:27
+2026-04-29 12:44:27,311  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-29 12:44:27,831  INFO      Raw file: 107316 rows loaded
+2026-04-29 12:44:27,877  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-29 12:49:09,568  INFO      ============================================================
+2026-04-29 12:49:09,568  INFO      Pipeline started  2026-04-29 12:49:09
+2026-04-29 12:49:09,569  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-29 12:49:10,045  INFO      Raw file: 107316 rows loaded
+2026-04-29 12:49:10,091  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-29 12:50:28,683  INFO      ============================================================
+2026-04-29 12:50:28,683  INFO      Pipeline started  2026-04-29 12:50:28
+2026-04-29 12:50:28,684  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-29 12:50:29,196  INFO      Raw file: 107316 rows loaded
+2026-04-29 12:50:29,243  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-29 12:54:02,914  INFO      Saved local cache: C:\ArtisticDentalPortal\cache\latest_kpis.xlsx
+2026-04-29 12:54:03,606  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-29 12:54:04,372  ERROR     Drive upload failed (data saved locally): <HttpError 404 when requesting https://www.googleapis.com/drive/v3/files?q=name%3D%27latest_kpis.xlsx%27+and+%27YOUR_GOOGLE_DRIVE_FOLDER_ID%27+in+parents+and+trashed%3Dfalse&fields=files%28id%29&alt=json returned "File not found: .". Details: "[{'message': 'File not found: .', 'domain': 'global', 'reason': 'notFound', 'location': 'fileId', 'locationType': 'parameter'}]">
+2026-04-29 12:54:04,373  INFO      Pipeline run complete.
+2026-04-29 12:55:22,131  INFO      ============================================================
+2026-04-29 12:55:22,131  INFO      Pipeline started  2026-04-29 12:55:22
+2026-04-29 12:55:22,133  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-29 12:55:22,638  INFO      Raw file: 107316 rows loaded
+2026-04-29 12:55:22,685  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-29 12:55:24,999  INFO      Saved local cache: C:\ArtisticDentalPortal\cache\latest
+2026-04-29 12:55:25,005  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-29 12:55:25,701  ERROR     Drive upload failed (data saved locally): <HttpError 404 when requesting https://www.googleapis.com/drive/v3/files?q=name%3D%27department_mix.csv%27+and+%27YOUR_GOOGLE_DRIVE_FOLDER_ID%27+in+parents+and+trashed%3Dfalse&fields=files%28id%29&alt=json returned "File not found: .". Details: "[{'message': 'File not found: .', 'domain': 'global', 'reason': 'notFound', 'location': 'fileId', 'locationType': 'parameter'}]">
+2026-04-29 12:55:25,701  INFO      Pipeline run complete.
+2026-04-29 12:59:27,456  INFO      ============================================================
+2026-04-29 12:59:27,457  INFO      Pipeline started  2026-04-29 12:59:27
+2026-04-29 12:59:27,457  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-29 12:59:27,993  INFO      Raw file: 107316 rows loaded
+2026-04-29 12:59:28,039  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-29 12:59:30,319  INFO      Saved local cache: C:\ArtisticDentalPortal\cache\latest
+2026-04-29 12:59:30,323  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-29 12:59:31,005  ERROR     Drive upload failed (data saved locally): <HttpError 404 when requesting https://www.googleapis.com/drive/v3/files?q=name%3D%27department_mix.csv%27+and+%27YOUR_GOOGLE_DRIVE_FOLDER_ID%27+in+parents+and+trashed%3Dfalse&fields=files%28id%29&alt=json returned "File not found: .". Details: "[{'message': 'File not found: .', 'domain': 'global', 'reason': 'notFound', 'location': 'fileId', 'locationType': 'parameter'}]">
+2026-04-29 12:59:31,006  INFO      Pipeline run complete.
+2026-04-29 13:17:31,845  INFO      ============================================================
+2026-04-29 13:17:31,845  INFO      Pipeline started  2026-04-29 13:17:31
+2026-04-29 13:17:31,845  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-29 13:17:32,331  INFO      Raw file: 107316 rows loaded
+2026-04-29 13:17:32,379  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-29 13:17:34,681  INFO      Saved local cache: C:\ArtisticDentalPortal\cache\latest
+2026-04-29 13:17:34,685  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-29 13:17:37,276  INFO      Uploaded Drive: department_mix.csv
+2026-04-29 13:17:38,988  INFO      Uploaded Drive: implant_pipeline.csv
+2026-04-29 13:17:40,480  INFO      Uploaded Drive: kpi_gauges.csv
+2026-04-29 13:17:42,295  INFO      Uploaded Drive: pareto_accounts.csv
+2026-04-29 13:17:44,336  INFO      Uploaded Drive: profitability.csv
+2026-04-29 13:17:46,042  INFO      Uploaded Drive: quarterly_trend.csv
+2026-04-29 13:17:52,387  INFO      Uploaded Drive: raw_sales.csv
+2026-04-29 13:17:54,866  INFO      Uploaded Drive: remake_trends.csv
+2026-04-29 13:17:56,548  INFO      Uploaded Drive: ytd_summary.csv
+2026-04-29 13:17:56,548  INFO      Google Drive upload complete.
+2026-04-29 13:17:56,549  INFO      Pipeline run complete.
+2026-04-29 15:17:48,619  INFO      ============================================================
+2026-04-29 15:17:48,620  INFO      Pipeline started  2026-04-29 15:17:48
+2026-04-29 15:17:48,620  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-29 15:17:49,122  INFO      Raw file: 107316 rows loaded
+2026-04-29 15:17:49,171  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-29 15:17:49,172  WARNING   Active_30_day.csv not found
+2026-04-29 15:17:49,198  INFO      Remakes: 12 rows
+2026-04-29 15:17:51,491  INFO      Saved local cache: C:\ArtisticDentalPortal\cache\latest
+2026-04-29 15:17:52,168  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-29 15:17:52,888  ERROR     Drive upload failed (data saved locally): <HttpError 404 when requesting https://www.googleapis.com/drive/v3/files?q=name%3D%27department_mix.csv%27+and+%27YOUR_GOOGLE_DRIVE_FOLDER_ID%27+in+parents+and+trashed%3Dfalse&fields=files%28id%29&alt=json returned "File not found: .". Details: "[{'message': 'File not found: .', 'domain': 'global', 'reason': 'notFound', 'location': 'fileId', 'locationType': 'parameter'}]">
+2026-04-29 15:17:52,889  INFO      Pipeline run complete.
+2026-04-30 06:00:02,936  INFO      ============================================================
+2026-04-30 06:00:02,936  INFO      Pipeline started  2026-04-30 06:00:02
+2026-04-30 06:00:02,936  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-30 06:00:03,363  INFO      Raw file: 107316 rows loaded
+2026-04-30 06:00:03,408  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-30 06:00:03,409  WARNING   Active_30_day.csv not found
+2026-04-30 06:00:03,429  INFO      Remakes: 12 rows
+2026-04-30 06:00:05,487  INFO      Saved local cache: C:\ArtisticDentalPortal\cache\latest
+2026-04-30 06:00:06,180  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-30 06:00:06,865  ERROR     Drive upload failed (data saved locally): <HttpError 404 when requesting https://www.googleapis.com/drive/v3/files?q=name%3D%27department_mix.csv%27+and+%27YOUR_GOOGLE_DRIVE_FOLDER_ID%27+in+parents+and+trashed%3Dfalse&fields=files%28id%29&alt=json returned "File not found: .". Details: "[{'message': 'File not found: .', 'domain': 'global', 'reason': 'notFound', 'location': 'fileId', 'locationType': 'parameter'}]">
+2026-04-30 06:00:06,865  INFO      Pipeline run complete.
+2026-04-30 12:15:55,613  INFO      ============================================================
+2026-04-30 12:15:55,613  INFO      Pipeline started  2026-04-30 12:15:55
+2026-04-30 12:15:55,613  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-30 12:15:56,111  INFO      Raw file: 107316 rows loaded
+2026-04-30 12:15:56,161  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-30 12:15:56,161  WARNING   Active_30_day.csv not found
+2026-04-30 12:15:56,185  INFO      Remakes: 12 rows
+2026-04-30 12:24:21,816  INFO      ============================================================
+2026-04-30 12:24:21,816  INFO      Pipeline started  2026-04-30 12:24:21
+2026-04-30 12:24:21,817  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-30 12:24:22,338  INFO      Raw file: 107316 rows loaded
+2026-04-30 12:24:22,389  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-30 12:24:22,389  WARNING   Active_30_day.csv not found
+2026-04-30 12:24:22,414  INFO      Remakes: 12 rows
+2026-04-30 12:24:22,659  INFO      WIP: 728 open cases, $147652 total value
+2026-04-30 12:24:24,954  INFO      Saved local cache: C:\ArtisticDentalPortal\cache\latest
+2026-04-30 12:24:25,637  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-30 12:24:26,350  ERROR     Drive upload failed (data saved locally): <HttpError 404 when requesting https://www.googleapis.com/drive/v3/files?q=name%3D%27department_mix.csv%27+and+%27YOUR_GOOGLE_DRIVE_FOLDER_ID%27+in+parents+and+trashed%3Dfalse&fields=files%28id%29&alt=json returned "File not found: .". Details: "[{'message': 'File not found: .', 'domain': 'global', 'reason': 'notFound', 'location': 'fileId', 'locationType': 'parameter'}]">
+2026-04-30 12:24:26,350  INFO      Pipeline run complete.
+2026-04-30 12:30:55,299  INFO      ============================================================
+2026-04-30 12:30:55,299  INFO      Pipeline started  2026-04-30 12:30:55
+2026-04-30 12:30:55,299  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-30 12:30:55,822  INFO      Raw file: 107316 rows loaded
+2026-04-30 12:30:55,883  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-30 12:30:57,219  INFO      Active cases: 8745 rows
+2026-04-30 12:30:57,245  INFO      Remakes: 12 rows
+2026-04-30 12:30:57,508  INFO      WIP: 728 open cases, $147652 total value
+2026-04-30 12:33:17,372  INFO      ============================================================
+2026-04-30 12:33:17,372  INFO      Pipeline started  2026-04-30 12:33:17
+2026-04-30 12:33:17,373  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-30 12:33:17,880  INFO      Raw file: 107316 rows loaded
+2026-04-30 12:33:17,931  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-30 12:33:19,277  INFO      Active cases: 8745 rows
+2026-04-30 12:33:19,298  INFO      Remakes: 12 rows
+2026-04-30 12:33:19,578  INFO      WIP: 728 open cases, $147652 total value
+2026-04-30 12:35:43,508  INFO      ============================================================
+2026-04-30 12:35:43,509  INFO      Pipeline started  2026-04-30 12:35:43
+2026-04-30 12:35:43,509  INFO      Loading Magic Touch data from C:\ArtisticDentalPortal\live_exports
+2026-04-30 12:35:44,020  INFO      Raw file: 107316 rows loaded
+2026-04-30 12:35:44,071  INFO      Clean: 107316 rows, 4104 unique customers
+2026-04-30 12:35:45,414  INFO      Active cases: 8745 rows
+2026-04-30 12:35:45,434  INFO      Remakes: 12 rows
+2026-04-30 12:35:45,681  INFO      WIP: 728 open cases, $147652 total value
+2026-04-30 12:35:48,041  INFO      Saved local cache: C:\ArtisticDentalPortal\cache\latest
+2026-04-30 12:35:48,046  INFO      file_cache is only supported with oauth2client<4.0.0
+2026-04-30 12:35:50,729  INFO      Uploaded Drive: active_accounts_30d.csv
+2026-04-30 12:35:52,656  INFO      Updated  Drive: department_mix.csv
+2026-04-30 12:35:54,660  INFO      Updated  Drive: implant_pipeline.csv
+2026-04-30 12:35:56,563  INFO      Updated  Drive: kpi_gauges.csv
+2026-04-30 12:35:58,539  INFO      Updated  Drive: pareto_accounts.csv
+2026-04-30 12:36:00,728  INFO      Updated  Drive: profitability.csv
+2026-04-30 12:36:02,426  INFO      Updated  Drive: quarterly_trend.csv
+2026-04-30 12:36:09,062  INFO      Updated  Drive: raw_sales.csv
+2026-04-30 12:36:10,791  INFO      Uploaded Drive: remakes_detail.csv
+2026-04-30 12:36:12,409  INFO      Uploaded Drive: remake_by_reason.csv
+2026-04-30 12:36:13,965  INFO      Updated  Drive: remake_trends.csv
+2026-04-30 12:36:15,480  INFO      Uploaded Drive: wip_detail.csv
+2026-04-30 12:36:17,100  INFO      Uploaded Drive: wip_summary.csv
+2026-04-30 12:36:18,729  INFO      Updated  Drive: ytd_summary.csv
+2026-04-30 12:36:18,730  INFO      Google Drive upload complete.
+2026-04-30 12:36:18,732  INFO      Pipeline run complete.

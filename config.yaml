@@ -1,0 +1,48 @@
+# ============================================================
+# Artistic Dental Studio — Pipeline Configuration
+# ============================================================
+
+# --- Data Source --------------------------------------------
+data_source:
+  mode: csv                          # "csv" | "odbc"
+  csv:
+    watch_folder: "C:/ArtisticDentalPortal/live_exports"
+    sales_file: "Sales_Data.csv"         # Magic Touch aggregated sales export
+    active_cases_file: "Active_30_day.csv" # Active cases last 30 days
+    remakes_file: "Remakes.csv"           # Remakes last 30 days
+    wip_file: "WIP_Cases.csv"             # WIP (add tomorrow)
+    encoding: "utf-8-sig"
+    cases_encoding: "latin-1"             # Magic Touch case exports use latin-1
+
+  # --- Phase 2: swap mode to "odbc" when ready -------------
+  odbc:
+    dsn: "MagicTouchDSN"
+    driver: "{ODBC Driver 17 for SQL Server}"
+    server: "localhost\\SQLEXPRESS"
+    database: "MagicTouchDB"
+    trusted_connection: "yes"
+
+# --- Google Drive -------------------------------------------
+google_drive:
+  credentials_file: "credentials.json"
+  token_file: "token.pickle"
+  folder_id: "17xL2IX7CT3vJpwid2FI1ssgijVHDR0cD"
+  upload_folder_name: "ArtisticDental_Pipeline"
+
+# --- Schedule -----------------------------------------------
+schedule:
+  run_time: "06:00"
+  timezone: "America/Chicago"
+
+# --- Business Targets ---------------------------------------
+targets:
+  annual_growth_pct: 7.0
+  pareto_threshold: 0.80
+  remake_alert_pct: 5.0
+  implant_turnaround_days: 14
+
+# --- Output -------------------------------------------------
+output:
+  local_cache_dir: "cache"
+  processed_filename: "dental_data_{date}.xlsx"
+  log_file: "pipeline.log"

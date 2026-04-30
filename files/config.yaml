@@ -1,0 +1,49 @@
+# ============================================================
+# Artistic Dental Studio — Pipeline Configuration
+# ============================================================
+
+# --- Data Source (Phase 1: CSV/Excel exports) ---------------
+data_source:
+  mode: csv                          # "csv" | "odbc" (switch when Magic Touch confirms)
+  csv:
+    watch_folder: "C:/MagicTouch/Exports"   # Folder Magic Touch drops exports into
+    orders_file: "orders.csv"
+    accounts_file: "accounts.csv"
+    implants_file: "implants_pipeline.csv"
+    quickbooks_file: "qb_financials.xlsx"
+    encoding: "utf-8-sig"            # handles Excel BOM
+
+  # --- Phase 2: swap mode to "odbc" and fill this in -------
+  odbc:
+    dsn: "MagicTouchDSN"             # DSN name from ODBC Data Sources (Windows)
+    driver: "{ODBC Driver 17 for SQL Server}"
+    server: "localhost\\SQLEXPRESS"
+    database: "MagicTouchDB"
+    trusted_connection: "yes"        # Windows auth; or set user/password below
+    # user: ""
+    # password: ""                   # store in .env, never here
+
+# --- Google Drive -------------------------------------------
+google_drive:
+  credentials_file: "credentials.json"   # OAuth2 / Service Account JSON from GCP
+  token_file: "token.pickle"
+  folder_id: "YOUR_GOOGLE_DRIVE_FOLDER_ID"   # paste target folder ID from Drive URL
+  upload_folder_name: "ArtisticDental_Pipeline"
+
+# --- Schedule -----------------------------------------------
+schedule:
+  run_time: "06:00"          # daily pull at 6 AM (before partners start their day)
+  timezone: "America/Chicago"
+
+# --- Business Targets ---------------------------------------
+targets:
+  annual_growth_pct: 7.0           # YTD vs prior year growth target
+  pareto_threshold: 0.80           # top accounts driving 80% of revenue
+  remake_alert_pct: 5.0            # flag if remake rate exceeds this %
+  implant_turnaround_days: 14      # expected implant case turnaround
+
+# --- Output / Caching ---------------------------------------
+output:
+  local_cache_dir: "cache"         # local snapshot before Drive upload
+  processed_filename: "dental_data_{date}.parquet"
+  log_file: "pipeline.log"
