@@ -27,6 +27,108 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
 
+# ── Gmail attachment downloader ────────────────────────────────────────────────
+GMAIL_SCOPES = [
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/gmail.readonly",
+]
+
+def download_gmail_attachments(dest_folder: Path) -> list[str]:
+    """
+    Check the MagicTouchExports Gmail label and download any CSV attachments
+    to dest_folder. Returns list of downloaded filenames.
+    """
+    import base64
+    from googleapiclient.discovery import build as gbuild
+
+    token_path  = BASE_DIR / CFG["google_drive"]["token_file"]
+    creds_path  = BASE_DIR / CFG["google_drive"]["credentials_file"]
+
+    creds = None
+    if token_path.exists():
+        with open(token_path, "rb") as f:
+            creds = pickle.load(f)
+
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(str(creds_path), GMAIL_SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open(token_path, "wb") as f:
+            pickle.dump(creds, f)
+
+    gmail = gbuild("gmail", "v1", credentials=creds)
+    downloaded = []
+
+    # Search for unread emails in MagicTouchExports label from last 24 hours
+    query = "label:MagicTouchExports has:attachment newer_than:1d"
+    results = gmail.users().messages().list(userId="me", q=query).execute()
+    messages = results.get("messages", [])
+
+    if not messages:
+        log.info("Gmail: no new Magic Touch exports found")
+        return downloaded
+
+    log.info("Gmail: found %d new export email(s)", len(messages))
+
+    for msg_ref in messages:
+        msg = gmail.users().messages().get(
+            userId="me", id=msg_ref["id"], format="full"
+        ).execute()
+
+        subject = next(
+            (h["value"] for h in msg["payload"]["headers"] if h["name"] == "Subject"),
+            "Unknown"
+        )
+
+        parts = msg.get("payload", {}).get("parts", [])
+        for part in parts:
+            filename = part.get("filename", "")
+            if not filename or not filename.lower().endswith(".csv"):
+                continue
+
+            att_id = part["body"].get("attachmentId")
+            if not att_id:
+                continue
+
+            att = gmail.users().messages().attachments().get(
+                userId="me", messageId=msg_ref["id"], id=att_id
+            ).execute()
+
+            data = base64.urlsafe_b64decode(att["data"])
+
+            # Map Magic Touch report names to our standard filenames
+            save_name = _map_report_filename(filename, subject)
+            save_path = dest_folder / save_name
+
+            with open(save_path, "wb") as f:
+                f.write(data)
+
+            log.info("Gmail: downloaded %s → %s", filename, save_name)
+            downloaded.append(save_name)
+
+    return downloaded
+
+
+def _map_report_filename(filename: str, subject: str) -> str:
+    """Map Magic Touch report filenames to our standard names."""
+    fname = filename.lower()
+    subj  = subject.lower()
+
+    if "allcasesbydate" in fname or "allcasesbydate" in subj:
+        return "Active_30_day.csv"
+    if "salesdata" in fname or "sales" in subj:
+        return "Sales_Data.csv"
+    if "remake" in fname or "remake" in subj:
+        return "Remakes.csv"
+    if "wip" in fname or "wip" in subj or "opencase" in fname:
+        return "WIP.csv"
+
+    # Default — keep original name
+    return filename
+
+
 # ── Logging ────────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
@@ -43,7 +145,7 @@ BASE_DIR = Path(__file__).parent
 with open(BASE_DIR / "config.yaml") as f:
     CFG = yaml.safe_load(f)
 
-SCOPES = ["https://www.googleapis.com/auth/drive.file"]
+SCOPES = GMAIL_SCOPES
 CACHE_DIR = BASE_DIR / CFG["output"]["local_cache_dir"]
 CACHE_DIR.mkdir(exist_ok=True)
 
@@ -300,9 +402,13 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     ).round(2)
     kpis["profitability"] = prof
 
-    # ── 2. Pareto — top accounts by LTD revenue ───────────────────────────
-    total_ltd = prof["ltd_sales"].sum()
-    prof_sorted = prof.sort_values("ltd_sales", ascending=False).copy()
+    # ── 2. Pareto — active accounts only (ytd or ly sales > 0) ───────────
+    active_prof = prof[(prof["ytd_sales"] > 0) | (prof["ly_sales"] > 0)].copy()
+    log.info("Active accounts (ytd or ly sales > 0): %d of %d total",
+             len(active_prof), len(prof))
+
+    total_ltd = active_prof["ltd_sales"].sum()
+    prof_sorted = active_prof.sort_values("ltd_sales", ascending=False).copy()
     prof_sorted["cum_ltd"] = prof_sorted["ltd_sales"].cumsum()
     prof_sorted["cum_pct"] = prof_sorted["cum_ltd"] / total_ltd
     threshold = CFG["targets"]["pareto_threshold"]
@@ -418,14 +524,22 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
 
     # ── 7c. Active Accounts (last 30 days) ────────────────────
     active = tables.get("active_cases", pd.DataFrame())
-    if not active.empty and "account_id" in active.columns:
-        active_accounts = active[active["status"].isin(["Invoiced","In Production",
-                                                          "On Hold","Outsourced"])
-                                ].groupby("account_id").agg(
-            cases=("case_number","count"),
-            revenue=("total_charge","sum"),
-        ).reset_index().sort_values("revenue", ascending=False)
-        kpis["active_accounts_30d"] = active_accounts
+    if not active.empty:
+        # Ensure account_id column exists
+        if "account_id" not in active.columns and "Cases_CustomerID" in active.columns:
+            active["account_id"] = active["Cases_CustomerID"]
+        if "total_charge" not in active.columns and "Cases_TotalCharge" in active.columns:
+            active["total_charge"] = pd.to_numeric(active["Cases_TotalCharge"], errors="coerce").fillna(0)
+        if "account_id" in active.columns:
+            # All cases with any status count as active accounts
+            active_accounts = active[active["account_id"].notna()].groupby("account_id").agg(
+                cases=("account_id","count"),
+                revenue=("total_charge","sum"),
+            ).reset_index().sort_values("revenue", ascending=False)
+            kpis["active_accounts_30d"] = active_accounts
+            log.info("Active accounts 30d: %d unique accounts", len(active_accounts))
+        else:
+            kpis["active_accounts_30d"] = pd.DataFrame()
     else:
         kpis["active_accounts_30d"] = pd.DataFrame()
 
@@ -457,9 +571,13 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
         "implant_ytd_sales":    implants["ytd_sales"].sum(),
         "implant_accounts":     impl_summary["account_id"].nunique(),
         "pareto_account_count": len(kpis["pareto_accounts"]),
-        "total_account_count":  len(prof),
+        "total_account_count":  len(active_prof),
+        "all_account_count":    len(prof),
         "mtd_revenue":          mtd_sales,
         "mtd_remake_rate":      round(mtd_remake / mtd_sales * 100, 2) if mtd_sales else 0,
+        "mtd_projected_month":  round(mtd_sales / date.today().day * __import__('calendar').monthrange(date.today().year, date.today().month)[1], 2) if mtd_sales and date.today().day > 0 else 0,
+        "mtd_days_elapsed":     date.today().day,
+        "mtd_days_in_month":    __import__('calendar').monthrange(date.today().year, date.today().month)[1],
         "wip_value":            wip_value,
         "wip_count":            wip_count,
         "wip_overdue":          wip_overdue,
@@ -522,6 +640,18 @@ def run_pipeline():
     log.info("=" * 60)
     log.info("Pipeline started  %s", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
+    # Step 0: Pull fresh exports from Gmail before loading
+    live_exports = BASE_DIR / CFG["data_source"]["csv"]["watch_folder"].replace("C:/ArtisticDentalPortal/", "")
+    watch_folder = Path(CFG["data_source"]["csv"]["watch_folder"])
+    try:
+        downloaded = download_gmail_attachments(watch_folder)
+        if downloaded:
+            log.info("Gmail: pulled %d file(s): %s", len(downloaded), downloaded)
+        else:
+            log.info("Gmail: no new files — using existing exports")
+    except Exception as exc:
+        log.error("Gmail download failed (using existing files): %s", exc)
+
     tables = load_data()
     kpis   = compute_kpis(tables)
 
@@ -550,6 +680,23 @@ def run_pipeline():
         log.info("Google Drive upload complete.")
     except Exception as exc:
         log.error("Drive upload failed (data saved locally): %s", exc)
+
+    # Auto-push fresh CSV files to GitHub
+    try:
+        import subprocess
+        repo_dir = str(BASE_DIR)
+        subprocess.run(["git", "stash"], cwd=repo_dir)
+        subprocess.run(["git", "pull", "origin", "main", "--rebase"], cwd=repo_dir)
+        subprocess.run(["git", "stash", "pop"], cwd=repo_dir)
+        subprocess.run(["git", "add", "cache/latest/"], cwd=repo_dir, check=True)
+        result = subprocess.run(["git", "commit", "-m", f"Auto-update data {date.today()}"], cwd=repo_dir)
+        if result.returncode == 0:
+            subprocess.run(["git", "push", "origin", "main"], cwd=repo_dir, check=True)
+            log.info("GitHub push complete.")
+        else:
+            log.info("Nothing new to push to GitHub.")
+    except Exception as exc:
+        log.error("GitHub push failed (data still saved locally): %s", exc)
 
     log.info("Pipeline run complete.")
 
