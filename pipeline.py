@@ -330,6 +330,10 @@ def _clean_sales(df: pd.DataFrame) -> pd.DataFrame:
     df["is_implant"] = df["department"].str.upper().str.contains(
         "IMPLANT", na=False)
 
+    # Drop Crystal Report header/footer rows (no account_id)
+    if "account_id" in df.columns:
+        df = df[df["account_id"].notna() & (df["account_id"].astype(str).str.strip() != "")].copy()
+
     return df
 
 
