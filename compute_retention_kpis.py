@@ -106,7 +106,7 @@ def main():
     if not periods_df.empty:
         log.info("Quick summary:")
         for _, p in periods_df.iterrows():
-            log.info("  %s  %s  %d tracked  →  %d retained / %d at_risk / %d lost  (%.1f%%)",
+            log.info("  %s  %s  %d tracked  ->  %d retained / %d at_risk / %d lost  (%.1f%%)",
                      p["period_id"], p["m3_label"], p["total"],
                      p["retained"], p["at_risk"], p["lost"], p["retained_pct"])
 
