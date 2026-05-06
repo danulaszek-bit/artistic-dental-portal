@@ -1,5 +1,46 @@
-credentials.json 
-token.pickle 
-live_exports/ 
-pipeline.log 
-pipeline.log 
+# Artistic Dental Portal - .gitignore
+# ===================================
+# Anything matched here will NEVER be committed to GitHub.
+
+# === Secrets — never commit these ===
+credentials.json
+token.pickle
+*.key
+*.pem
+
+# === PHI / customer data — never commit these ===
+cache/case_history.csv
+case_files/
+retention_periods/
+live_exports/
+
+# === Raw / large source data ===
+*.xls
+*.xlsx
+sample_exports/
+
+# === Logs ===
+*.log
+pipeline.log
+retention_pipeline.log
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+
+# === Editor / OS noise ===
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# === Throwaway ZIPs / patches ===
+dashboard_fix*.zip
+*.tmp
+
+# === Cache directories — only `cache/latest/` is committed ===
+cache/snapshot_*/
