@@ -200,6 +200,38 @@ table.dr-grid tr:last-child td {{ border-bottom: none; }}
 .dot-rmk  {{ display:inline-block; width:10px; height:10px; border-radius:2px; background:{COLORS['ylw']}; }}
 .dot-none {{ display:inline-block; width:10px; height:10px; border-radius:2px; background:{COLORS['bdr2']}; }}
 
+/* Checkmark month indicators (matches Lexie's v3 mok / mno) */
+.mok   {{ color: {COLORS['grn']};  font-size: 15px; font-weight: 700; }}
+.mno   {{ color: {COLORS['bdr']};  font-size: 16px; font-weight: 400; }}
+
+/* Filter pills (matches Lexie's v3 .fbtn / fg / fy / fr / fb / fp) */
+.fbtn-row {{
+    display: flex; gap: 7px; flex-wrap: wrap;
+    margin: 14px 0 6px;
+}}
+.fbtn {{
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid {COLORS['bdr']};
+    background: transparent;
+    color: {COLORS['txt2']};
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    text-decoration: none !important;
+    transition: all 0.15s;
+}}
+.fbtn:hover {{ color: {COLORS['txt']}; border-color: {COLORS['txt2']}; }}
+.fbtn.on  {{ background: {COLORS['sfc']}; color: {COLORS['txt']}; border-color: {COLORS['acc']}; }}
+.fbtn.fb.on {{ background: rgba(88,166,255,0.12);  color: {COLORS['acc']}; border-color: {COLORS['acc']}; }}
+.fbtn.fg.on {{ background: rgba(63,185,80,0.12);   color: {COLORS['grn']}; border-color: {COLORS['grn']}; }}
+.fbtn.fy.on {{ background: rgba(210,153,34,0.12);  color: {COLORS['ylw']}; border-color: {COLORS['ylw']}; }}
+.fbtn.fr.on {{ background: rgba(248,81,73,0.12);   color: {COLORS['red']}; border-color: {COLORS['red']}; }}
+.fbtn.fp.on {{ background: rgba(163,113,247,0.12); color: {COLORS['pur']}; border-color: {COLORS['pur']}; }}
+.fbtn.ft.on {{ background: rgba(57,197,207,0.12);  color: {COLORS['teal']}; border-color: {COLORS['teal']}; }}
+
 /* Streamlit tweaks */
 .stTabs [data-baseweb="tab-list"] {{ gap: 4px; border-bottom: 1px solid {COLORS['bdr']}; }}
 .stTabs [data-baseweb="tab"] {{
@@ -297,11 +329,11 @@ def status_pill(status: str) -> str:
 
 
 def month_dot(activity: str | None) -> str:
+    """Match Lexie's v3 mok() exactly: green check for active (real cases), grey dash otherwise.
+    Remake-only months are treated as inactive — no separate marker (matches v3 screenshot)."""
     if activity == "real":
-        return '<span class="dot-real" title="Active"></span>'
-    if activity == "remake":
-        return '<span class="dot-rmk" title="Remake-only"></span>'
-    return '<span class="dot-none" title="No cases"></span>'
+        return '<span class="mok" title="Sent real case">✓</span>'
+    return '<span class="mno" title="No real cases">—</span>'
 
 
 def window_months(m1_month: int, m1_year: int, start_offset: int, count: int):
@@ -642,19 +674,28 @@ def render_period(period_row: pd.Series, doctors_df: pd.DataFrame, cases: pd.Dat
     # Stat pill row
     render_stat_pills(rows)
 
-    # Filter pills
-    st.markdown(" ")
-    f_cols = st.columns([1,1,1,1,1,1,1,2])
-    filt = st.session_state.get(f"filt_{pid}", "all")
-    options = [("all","All"), ("retained","Retained"), ("at_risk","At Risk"),
-               ("lost","Lost"), ("new","New"), ("returning","Returning"), ("digital","Digital")]
-    for i, (key, label) in enumerate(options):
-        is_active = filt == key
-        if f_cols[i].button(label, width='stretch',
-                            type="primary" if is_active else "secondary",
-                            key=f"btn_{pid}_{key}"):
-            st.session_state[f"filt_{pid}"] = key
-            st.rerun()
+    # Filter pills — HTML anchors with query-param state, semantic colors per Lexie's v3
+    qp_key = f"filt_{pid}"
+    filt = st.query_params.get(qp_key, "all")
+    options = [
+        ("all",       "All",       "fb"),
+        ("retained",  "Retained",  "fg"),
+        ("at_risk",   "At Risk",   "fy"),
+        ("lost",      "Lost",      "fr"),
+        ("new",       "New",       "fp"),
+        ("returning", "Returning", "ft"),
+        ("digital",   "Digital",   "fg"),
+    ]
+    pill_html = '<div class="fbtn-row">'
+    for key, label, color_cls in options:
+        active = "on" if filt == key else ""
+        # Build URL preserving other params, override just this one
+        params = dict(st.query_params)
+        params[qp_key] = key
+        qs = "&".join(f"{k}={v}" for k, v in params.items())
+        pill_html += f'<a class="fbtn {color_cls} {active}" href="?{qs}" target="_self">{label}</a>'
+    pill_html += "</div>"
+    st.markdown(pill_html, unsafe_allow_html=True)
 
     # Apply filter
     filtered = rows.copy()
