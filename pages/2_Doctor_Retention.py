@@ -263,45 +263,38 @@ table.dr-grid tr:last-child td {{ border-bottom: none; }}
 
 @st.cache_data(ttl=300)
 def load_retention_data():
-    """Load all retention CSVs from cache/latest/."""
+    """Load retention CSVs from cache/latest/. NOTE: doctor_activity.csv is the
+    PHI-free aggregated version of case_history. case_history stays local only."""
     out = {
-        "periods": pd.DataFrame(),
-        "doctors": pd.DataFrame(),
-        "master":  pd.DataFrame(),
-        "cases":   pd.DataFrame(),
+        "periods":  pd.DataFrame(),
+        "doctors":  pd.DataFrame(),
+        "master":   pd.DataFrame(),
+        "activity": pd.DataFrame(),
     }
     pp = LATEST_DIR / "retention_periods.csv"
     pd_ = LATEST_DIR / "retention_doctors.csv"
     pm = LATEST_DIR / "retention_master.csv"
-    pc = CACHE_DIR / "case_history.csv"
-    if pp.exists(): out["periods"] = pd.read_csv(pp)
-    if pd_.exists(): out["doctors"] = pd.read_csv(pd_, dtype={"customer_id": str})
-    if pm.exists(): out["master"]  = pd.read_csv(pm,  dtype={"customer_id": str})
-    if pc.exists(): out["cases"]   = pd.read_csv(pc,
-                                                  dtype={"case_number": str, "account_id": str},
-                                                  keep_default_na=False)
+    pa = LATEST_DIR / "doctor_activity.csv"
+    if pp.exists(): out["periods"]  = pd.read_csv(pp)
+    if pd_.exists(): out["doctors"]  = pd.read_csv(pd_, dtype={"customer_id": str})
+    if pm.exists(): out["master"]   = pd.read_csv(pm,  dtype={"customer_id": str})
+    if pa.exists(): out["activity"] = pd.read_csv(pa,  dtype={"account_id": str})
     return out
 
 
-def doctor_monthly_activity(cases: pd.DataFrame) -> dict:
+def doctor_monthly_activity(activity_df: pd.DataFrame) -> dict:
     """
-    Return {customer_id: {(month0idx, year): 'real' | 'remake'}} from the case
-    history. 'real' means at least one billable case that month; 'remake' means
-    only non-billable (remake-100 / adjustment) cases.
+    Convert the aggregated doctor_activity.csv DataFrame into the lookup
+    structure the doctor table needs: {account_id: {(month, year): status}}.
     """
-    if cases.empty:
+    if activity_df is None or activity_df.empty:
         return {}
-    df = cases.copy()
-    df["date_in"] = pd.to_datetime(df["date_in"], errors="coerce")
-    df = df.dropna(subset=["date_in"])
-    df["m"] = df["date_in"].dt.month - 1
-    df["y"] = df["date_in"].dt.year
-    df["billable"] = df["is_non_billable"].astype(str).str.lower().isin(("false","0","")) == True
     out: dict = {}
-    for (cid, m, y), grp in df.groupby(["account_id", "m", "y"]):
+    for _, row in activity_df.iterrows():
+        cid = str(row["account_id"])
         if cid not in out:
             out[cid] = {}
-        out[cid][(int(m), int(y))] = "real" if grp["billable"].any() else "remake"
+        out[cid][(int(row["month"]), int(row["year"]))] = row["status"]
     return out
 
 
@@ -442,7 +435,7 @@ def render_stat_pills(rows: pd.DataFrame):
 
 def render_doctor_table(rows: pd.DataFrame,
                         period: dict | None = None,
-                        cases: pd.DataFrame | None = None,
+                        activity: pd.DataFrame | None = None,
                         title: str = "Doctors",
                         subtitle: str = ""):
     """Render the period doctor table with grouped 3M/6M/12M columns."""
@@ -458,8 +451,8 @@ def render_doctor_table(rows: pd.DataFrame,
         months_3m  = window_months(m1m, m1y, 0, 3)
         months_6m  = window_months(m1m, m1y, 3, 3)
         months_12m = window_months(m1m, m1y, 6, 6)
-        if cases is not None and not cases.empty:
-            activity_map = doctor_monthly_activity(cases)
+        if activity is not None and not activity.empty:
+            activity_map = doctor_monthly_activity(activity)
 
     def m_label(my): return f"{MONTH_ABBR[my[0]]}'{str(my[1])[2:]}"
 
@@ -654,7 +647,7 @@ def render_master(master_df: pd.DataFrame, doctors_df: pd.DataFrame):
 #  RENDER: SINGLE PERIOD VIEW
 # ══════════════════════════════════════════════════════════════════════════════
 
-def render_period(period_row: pd.Series, doctors_df: pd.DataFrame, cases: pd.DataFrame):
+def render_period(period_row: pd.Series, doctors_df: pd.DataFrame, activity: pd.DataFrame):
     pid = period_row["period_id"]
     rows = doctors_df[doctors_df["period_id"] == pid].copy()
     if rows.empty:
@@ -713,7 +706,7 @@ def render_period(period_row: pd.Series, doctors_df: pd.DataFrame, cases: pd.Dat
         "m1_month": MONTH_ABBR.index(period_row["m1_label"].split()[0]),
         "m1_year":  int(period_row["m1_label"].split()[1]),
     }
-    render_doctor_table(filtered, period=period_dict, cases=cases,
+    render_doctor_table(filtered, period=period_dict, activity=activity,
                         title=f"{period_row['m3_label']} Doctors",
                         subtitle=sub)
 
@@ -728,7 +721,7 @@ data = load_retention_data()
 periods_df = data["periods"]
 doctors_df = data["doctors"]
 master_df = data["master"]
-cases = data["cases"]
+activity = data["activity"]
 
 if periods_df.empty:
     empty_state("📋", "No retention data yet",
@@ -751,13 +744,13 @@ for i, year in enumerate(years, start=2):
     with tabs[i]:
         year_periods = periods_df[periods_df["year"] == year].sort_values("period_id")
         if len(year_periods) == 1:
-            render_period(year_periods.iloc[0], doctors_df, cases)
+            render_period(year_periods.iloc[0], doctors_df, activity)
         else:
             month_labels = [p["m3_label"].split()[0] for _, p in year_periods.iterrows()]
             sub_tabs = st.tabs(month_labels)
             for j, (_, prow) in enumerate(year_periods.iterrows()):
                 with sub_tabs[j]:
-                    render_period(prow, doctors_df, cases)
+                    render_period(prow, doctors_df, activity)
 
 st.divider()
 st.caption("Doctor Retention · Powered by retention.py + pipeline.py · Refreshed nightly at 6 AM")

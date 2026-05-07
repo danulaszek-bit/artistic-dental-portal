@@ -818,6 +818,34 @@ def compute_retention(periods: list[dict],
     return periods_df, doctors_df, master_df
 
 
+
+
+def compute_doctor_activity(case_history: pd.DataFrame) -> pd.DataFrame:
+    """
+    Aggregate per-doctor monthly activity from the case history.
+    Returns a clean PHI-free DataFrame: [account_id, month, year, status]
+    where status is 'real' (sent >=1 billable case in that month) or
+    'remake' (only non-billable cases). Safe to commit to GitHub.
+    """
+    if case_history.empty:
+        return pd.DataFrame(columns=['account_id', 'month', 'year', 'status'])
+    df = case_history.copy()
+    df['date_in'] = pd.to_datetime(df['date_in'], errors='coerce')
+    df = df.dropna(subset=['date_in'])
+    df['month'] = df['date_in'].dt.month - 1   # 0-indexed (matches Lexie)
+    df['year']  = df['date_in'].dt.year
+    df['billable'] = ~df['is_non_billable'].astype(str).str.lower().isin(('true', '1'))
+    rows = []
+    for (cid, m, y), grp in df.groupby(['account_id', 'month', 'year']):
+        rows.append({
+            'account_id': str(cid),
+            'month': int(m),
+            'year':  int(y),
+            'status': 'real' if grp['billable'].any() else 'remake',
+        })
+    return pd.DataFrame(rows).sort_values(['account_id', 'year', 'month'])
+
+
 # -----------------------------------------------------------------------------
 #  Convenience: load all periods from a folder
 # -----------------------------------------------------------------------------

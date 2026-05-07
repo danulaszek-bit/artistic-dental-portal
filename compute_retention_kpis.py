@@ -88,10 +88,12 @@ def main():
     periods_df, doctors_df, master_df = ret.compute_retention(periods, cases_df)
 
     # Write outputs
+    activity_df = ret.compute_doctor_activity(cases_df)
     out_files = {
         "retention_periods.csv": periods_df,
         "retention_doctors.csv": doctors_df,
         "retention_master.csv":  master_df,
+        "doctor_activity.csv":   activity_df,
     }
     for name, df in out_files.items():
         path = LATEST_DIR / name
