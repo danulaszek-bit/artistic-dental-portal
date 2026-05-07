@@ -846,6 +846,23 @@ def compute_doctor_activity(case_history: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows).sort_values(['account_id', 'year', 'month'])
 
 
+
+
+def compute_case_summary(case_history: pd.DataFrame) -> pd.DataFrame:
+    """
+    Sanitized per-case summary for the doctor detail modal. Keeps only the
+    columns that are safe to commit to GitHub (no patient names, no pan #s).
+    Returns: [account_id, case_number, date_in, doctor_name, is_non_billable]
+    """
+    if case_history.empty:
+        return pd.DataFrame(columns=['account_id', 'case_number', 'date_in',
+                                     'doctor_name', 'is_non_billable'])
+    keep = ['account_id', 'case_number', 'date_in', 'doctor_name', 'is_non_billable']
+    df = case_history[[c for c in keep if c in case_history.columns]].copy()
+    df = df.dropna(subset=['date_in'])
+    return df.sort_values('date_in', ascending=False)
+
+
 # -----------------------------------------------------------------------------
 #  Convenience: load all periods from a folder
 # -----------------------------------------------------------------------------

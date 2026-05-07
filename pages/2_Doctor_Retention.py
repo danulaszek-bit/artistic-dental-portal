@@ -263,22 +263,26 @@ table.dr-grid tr:last-child td {{ border-bottom: none; }}
 
 @st.cache_data(ttl=300)
 def load_retention_data():
-    """Load retention CSVs from cache/latest/. NOTE: doctor_activity.csv is the
-    PHI-free aggregated version of case_history. case_history stays local only."""
+    """Load retention CSVs from cache/latest/. NOTE: doctor_activity.csv and
+    case_summary.csv are PHI-free aggregations / sanitizations of case_history.
+    case_history stays local only."""
     out = {
         "periods":  pd.DataFrame(),
         "doctors":  pd.DataFrame(),
         "master":   pd.DataFrame(),
         "activity": pd.DataFrame(),
+        "summary":  pd.DataFrame(),
     }
     pp = LATEST_DIR / "retention_periods.csv"
     pd_ = LATEST_DIR / "retention_doctors.csv"
     pm = LATEST_DIR / "retention_master.csv"
     pa = LATEST_DIR / "doctor_activity.csv"
+    ps = LATEST_DIR / "case_summary.csv"
     if pp.exists(): out["periods"]  = pd.read_csv(pp)
     if pd_.exists(): out["doctors"]  = pd.read_csv(pd_, dtype={"customer_id": str})
     if pm.exists(): out["master"]   = pd.read_csv(pm,  dtype={"customer_id": str})
     if pa.exists(): out["activity"] = pd.read_csv(pa,  dtype={"account_id": str})
+    if ps.exists(): out["summary"]  = pd.read_csv(ps,  dtype={"account_id": str, "case_number": str})
     return out
 
 
@@ -506,7 +510,9 @@ def render_doctor_table(rows: pd.DataFrame,
 
         act = activity_map.get(cid, {}) if activity_map else {}
 
-        html += f"<tr><td><code style='color:{COLORS['acc']};font-size:11px'>{cid}</code></td>"
+        html += (f'<tr><td><a href="?detail={cid}" target="_self" '
+                 f'style="text-decoration:none"><code style="color:{COLORS["acc"]};'
+                 f'font-size:11px;cursor:pointer">{cid}</code></a></td>')
         html += f"<td style='font-weight:500'>{name}</td>"
         html += f"<td>{type_badge}</td><td>{digital_html}</td>"
         for my in months_3m:
@@ -626,6 +632,7 @@ def render_master(master_df: pd.DataFrame, doctors_df: pd.DataFrame):
                 df["city"].str.lower().str.contains(s, na=False)]
 
     # Display columns
+    # Build show frame with a clickable Detail link column
     show = pd.DataFrame({
         "Customer ID": df["customer_id"],
         "Doctor Name": df["name"],
@@ -639,8 +646,18 @@ def render_master(master_df: pd.DataFrame, doctors_df: pd.DataFrame):
         "12M Status": df.get("status_12m", "").map(
             {"retained":"🟢 Retained","lost":"🔴 Lost"}).fillna("—"),
         "Last Case": df["last_case_date"] if "last_case_date" in df.columns else "",
+        "Detail": df["customer_id"].apply(lambda c: f"?detail={c}"),
     })
-    st.dataframe(show, width='stretch', hide_index=True, height=600)
+    st.dataframe(
+        show, width='stretch', hide_index=True, height=600,
+        column_config={
+            "Detail": st.column_config.LinkColumn(
+                "View",
+                help="Click to see full doctor detail",
+                display_text="Open →",
+            ),
+        },
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -711,6 +728,154 @@ def render_period(period_row: pd.Series, doctors_df: pd.DataFrame, activity: pd.
                         subtitle=sub)
 
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  RENDER: DOCTOR DETAIL PANEL  (triggered by ?detail=<cid> query param)
+# ══════════════════════════════════════════════════════════════════════════════
+
+def render_doctor_detail(cid: str,
+                          master_df: pd.DataFrame,
+                          doctors_df: pd.DataFrame,
+                          periods_df: pd.DataFrame,
+                          activity: pd.DataFrame,
+                          summary: pd.DataFrame):
+    """Inline detail panel for a single doctor. Closes by clicking the X button."""
+    cid = str(cid)
+
+    # Find this doctor's master row (most recent across all periods)
+    mrow = master_df[master_df["customer_id"] == cid]
+    if mrow.empty:
+        st.warning(f"No data for doctor `{cid}`.")
+        if st.button("✕ Close detail", key=f"close_{cid}_missing"):
+            st.query_params.pop("detail", None)
+            st.rerun()
+        return
+    mrow = mrow.iloc[0]
+
+    # ── Header row with close button ────────────────────────────────────────
+    hcol1, hcol2 = st.columns([10, 1])
+    with hcol1:
+        type_badge = ""
+        if str(mrow.get("type", "")).lower() == "new":
+            type_badge = '<span class="bdg b-new">New</span>'
+        elif str(mrow.get("type", "")).lower() == "returning":
+            type_badge = '<span class="bdg b-ret">Returning</span>'
+        digital = str(mrow.get("digital", "")).lower() in ("true", "1")
+        digital_badge = '<span class="bdg b-dig">Digital</span>' if digital else ''
+        st.markdown(
+            f"""
+            <div style="background:{COLORS['sfc']};border:1px solid {COLORS['bdr']};
+                        border-radius:12px;padding:18px 22px;margin-bottom:12px">
+              <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;
+                          color:{COLORS['txt']};margin-bottom:4px">{mrow['name']}</div>
+              <div style="font-size:12px;color:{COLORS['txt2']};font-family:monospace;
+                          letter-spacing:0.5px;margin-bottom:8px">
+                {cid} &nbsp;·&nbsp; {mrow.get('city','') or '—'}
+              </div>
+              <div>{type_badge} &nbsp; {digital_badge}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with hcol2:
+        if st.button("✕", key=f"close_{cid}", help="Close detail panel"):
+            st.query_params.pop("detail", None)
+            st.rerun()
+
+    # ── Status across every loaded period ───────────────────────────────────
+    st.markdown(f"#### Status across loaded periods")
+    dr_rows = doctors_df[doctors_df["customer_id"] == cid].copy()
+    if dr_rows.empty:
+        st.caption("This doctor doesn't appear on any loaded retention period.")
+    else:
+        dr_rows = dr_rows.merge(periods_df[["period_id","m3_label","year"]],
+                                on="period_id", how="left")
+        dr_rows = dr_rows.sort_values("period_id")
+        # Render as a horizontal pill list
+        pill_html = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">'
+        for _, r in dr_rows.iterrows():
+            s3 = r["status_3m"]
+            color = {"retained": COLORS["grn"], "at_risk": COLORS["ylw"],
+                     "lost": COLORS["red"]}.get(s3, COLORS["txt2"])
+            label = {"retained": "Retained", "at_risk": "Needs Work",
+                     "lost": "Lost"}.get(s3, s3)
+            pill_html += (
+                f'<div style="background:{COLORS["sfc"]};border:1px solid {COLORS["bdr"]};'
+                f'border-radius:8px;padding:8px 12px;min-width:130px">'
+                f'<div style="font-size:10px;color:{COLORS["txt2"]};text-transform:uppercase;'
+                f'letter-spacing:0.3px;margin-bottom:4px">{r["m3_label"]}</div>'
+                f'<div style="font-size:13px;font-weight:700;color:{color}">'
+                f'<span class="sdot" style="background:{color};box-shadow:0 0 5px {color}80"></span>'
+                f'&nbsp;{label}</div></div>'
+            )
+        pill_html += '</div>'
+        st.markdown(pill_html, unsafe_allow_html=True)
+
+    # ── Monthly activity timeline (last 18 months) ──────────────────────────
+    st.markdown(f"#### Monthly activity (last 18 months)")
+    if activity is None or activity.empty:
+        st.caption("No activity data loaded.")
+    else:
+        my_act = activity[activity["account_id"] == cid].copy()
+        # Build month/year list backwards 18 months from today
+        today = pd.Timestamp.today()
+        months_to_show = []
+        for offset in range(17, -1, -1):
+            m = today.month - 1 - offset
+            y = today.year
+            while m < 0:
+                m += 12; y -= 1
+            months_to_show.append((m, y))
+        # Lookup
+        act_dict = {(int(r["month"]), int(r["year"])): r["status"]
+                    for _, r in my_act.iterrows()}
+        cells = '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px">'
+        for m, y in months_to_show:
+            status = act_dict.get((m, y))
+            if status == "real":
+                bg = COLORS["grn"]; mark = "✓"
+            elif status == "remake":
+                bg = COLORS["ylw"]; mark = "~"
+            else:
+                bg = COLORS["bdr2"]; mark = ""
+            cells += (
+                f'<div style="display:flex;flex-direction:column;align-items:center;'
+                f'min-width:42px">'
+                f'<div style="background:{bg};color:white;width:36px;height:36px;'
+                f'border-radius:6px;display:flex;align-items:center;justify-content:center;'
+                f'font-weight:700">{mark}</div>'
+                f'<div style="font-size:9px;color:{COLORS["txt2"]};margin-top:3px">'
+                f'{MONTH_ABBR[m]} \u2019{str(y)[2:]}</div></div>'
+            )
+        cells += '</div>'
+        st.markdown(cells, unsafe_allow_html=True)
+        # Summary count
+        total_real = sum(1 for k in act_dict if act_dict[k] == "real"
+                          and k in [(m,y) for m,y in months_to_show])
+        st.caption(f"{total_real} of last 18 months had at least one billable case.")
+
+    # ── Most recent cases (last 30) ─────────────────────────────────────────
+    st.markdown(f"#### Recent cases")
+    if summary is None or summary.empty:
+        st.caption("No case summary data loaded.")
+    else:
+        my_cases = summary[summary["account_id"] == cid].head(30).copy()
+        if my_cases.empty:
+            st.caption("No cases on record for this doctor.")
+        else:
+            display = pd.DataFrame({
+                "Case #": my_cases["case_number"],
+                "Date In": pd.to_datetime(my_cases["date_in"], errors="coerce")
+                                .dt.strftime("%b %d, %Y"),
+                "Billable": my_cases["is_non_billable"].apply(
+                    lambda v: "✓" if str(v).lower() not in ("true","1") else "—"
+                ),
+            })
+            st.dataframe(display, width='stretch', hide_index=True, height=320)
+            st.caption(f"Showing {len(my_cases)} most recent. Total cases on record: "
+                       f"{(summary['account_id'] == cid).sum()}.")
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  MAIN — TABS / NAVIGATION
 # ══════════════════════════════════════════════════════════════════════════════
@@ -720,8 +885,15 @@ st.markdown("# 🦷 Doctor Retention")
 data = load_retention_data()
 periods_df = data["periods"]
 doctors_df = data["doctors"]
-master_df = data["master"]
-activity = data["activity"]
+master_df  = data["master"]
+activity   = data["activity"]
+summary    = data["summary"]
+
+# ── If ?detail=<cid> in URL, render the doctor detail panel inline at the top ──
+detail_cid = st.query_params.get("detail")
+if detail_cid:
+    render_doctor_detail(detail_cid, master_df, doctors_df, periods_df, activity, summary)
+    st.divider()
 
 if periods_df.empty:
     empty_state("📋", "No retention data yet",
