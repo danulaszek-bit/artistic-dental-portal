@@ -21,6 +21,7 @@ git add dashboard.py
 git add retention.py
 git add import_case_history.py
 git add compute_retention_kpis.py
+git add compute_active_accounts.py
 git add git_push.bat
 git add deploy.bat
 git add .streamlit/
