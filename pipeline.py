@@ -660,16 +660,22 @@ def run_pipeline():
     log.info("Pipeline started  %s", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     # Step 0: Pull fresh exports from Gmail before loading
+    # GMAIL_KILL_SWITCH — set to False to skip Gmail download entirely.
+    # Useful when scheduled reports are wrong/partial and overwriting good files.
+    GMAIL_ENABLED = False
     live_exports = BASE_DIR / CFG["data_source"]["csv"]["watch_folder"].replace("C:/ArtisticDentalPortal/", "")
     watch_folder = Path(CFG["data_source"]["csv"]["watch_folder"])
-    try:
-        downloaded = download_gmail_attachments(watch_folder)
-        if downloaded:
-            log.info("Gmail: pulled %d file(s): %s", len(downloaded), downloaded)
-        else:
-            log.info("Gmail: no new files — using existing exports")
-    except Exception as exc:
-        log.error("Gmail download failed (using existing files): %s", exc)
+    if GMAIL_ENABLED:
+        try:
+            downloaded = download_gmail_attachments(watch_folder)
+            if downloaded:
+                log.info("Gmail: pulled %d file(s): %s", len(downloaded), downloaded)
+            else:
+                log.info("Gmail: no new files — using existing exports")
+        except Exception as exc:
+            log.error("Gmail download failed (using existing files): %s", exc)
+    else:
+        log.info("Gmail: SKIPPED (GMAIL_ENABLED=False) — using existing live_exports/")
 
     tables = load_data()
     kpis   = compute_kpis(tables)
