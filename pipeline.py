@@ -100,6 +100,9 @@ def download_gmail_attachments(dest_folder: Path) -> list[str]:
 
             # Map Magic Touch report names to our standard filenames
             save_name = _map_report_filename(filename, subject)
+            if save_name is None:
+                log.info("Gmail: skipping %s (not a recognized report)", filename)
+                continue
             save_path = dest_folder / save_name
 
             with open(save_path, "wb") as f:
@@ -112,21 +115,33 @@ def download_gmail_attachments(dest_folder: Path) -> list[str]:
 
 
 def _map_report_filename(filename: str, subject: str) -> str:
-    """Map Magic Touch report filenames to our standard names."""
+    """
+    Map Magic Touch report filenames to our standard names.
+    Returns None for unrecognized reports so they get skipped (instead of
+    accidentally clobbering known files).
+    """
     fname = filename.lower()
     subj  = subject.lower()
 
+    # EXCLUSIONS — known wrong-format reports we never want to ingest.
+    # The "Sales Summary by Customer & Product" report is single-period and
+    # missing the SalesData_* columns we need; ignoring it keeps it from
+    # overwriting the real SalesData export.
+    if "salessummary" in fname or "salessummary" in subj:
+        return None
+
     if "allcasesbydate" in fname or "allcasesbydate" in subj:
         return "Active_30_day.csv"
-    if "salesdata" in fname or "sales" in subj:
+    # Be specific — only match the SalesData report, not any "sales" subject
+    if "salesdata" in fname or "sales_data" in fname or "salesdata" in subj:
         return "Sales_Data.csv"
     if "remake" in fname or "remake" in subj:
         return "Remakes.csv"
     if "wip" in fname or "wip" in subj or "opencase" in fname:
         return "WIP.csv"
 
-    # Default — keep original name
-    return filename
+    # Unrecognized — skip rather than blindly save with original name
+    return None
 
 
 # ── Logging ────────────────────────────────────────────────────────────────────
