@@ -444,7 +444,64 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
     if remakes_detail.empty:
         st.info("No remakes in the last 30 days.")
     else:
-        # ── Top: by-department $ bar + overall pie ──────────────────────────
+        # ── Grouping toggle (Product Type vs Department) ────────────────────
+        # Default to Product Type per Danny's preference. Toggle is sticky
+        # in session state so it survives reruns.
+        group_choice = "Product Type"
+        group_col = "product_category"
+        if full_df is not None and not full_df.empty:
+            has_category = "product_category" in full_df.columns and \
+                           full_df["product_category"].astype(str).str.strip().ne("").any()
+            has_department = "product_department" in full_df.columns and \
+                             full_df["product_department"].astype(str).str.strip().ne("").any()
+            if has_category and has_department:
+                group_choice = st.radio(
+                    "Group remakes by:",
+                    options=["Product Type", "Department"],
+                    horizontal=True,
+                    key="remake_group_toggle",
+                )
+                group_col = "product_category" if group_choice == "Product Type" else "product_department"
+            elif has_department and not has_category:
+                group_col = "product_department"
+                group_choice = "Department"
+            elif has_category and not has_department:
+                group_col = "product_category"
+                group_choice = "Product Type"
+
+        # Compute group-level summary on the fly from full_df so toggle works.
+        live_dept_df = pd.DataFrame()
+        live_dept_reason_df = pd.DataFrame()
+        if full_df is not None and not full_df.empty and group_col in full_df.columns:
+            grp_rows = full_df.drop_duplicates(subset=["case_number", group_col]) \
+                              if "case_number" in full_df.columns else full_df
+            agg_kwargs = {"remake_cases": ("case_number", "nunique")} \
+                         if "case_number" in grp_rows.columns else {"remake_cases": (group_col, "size")}
+            if "total_charge" in grp_rows.columns:
+                agg_kwargs["remake_dollars"] = ("total_charge", "sum")
+            live_dept_df = (grp_rows.groupby(group_col)
+                                    .agg(**agg_kwargs)
+                                    .reset_index()
+                                    .rename(columns={group_col: "product_department"})
+                                    .sort_values("remake_cases", ascending=False))
+            if "remake_reason" in grp_rows.columns:
+                live_dept_reason_df = (grp_rows.groupby([group_col, "remake_reason"])
+                                               .size().reset_index(name="count")
+                                               .rename(columns={group_col: "product_department"})
+                                               .sort_values(["product_department", "count"],
+                                                            ascending=[True, False]))
+        # Fall back to pre-computed (always department-based) if full_df missing
+        if live_dept_df.empty and dept_df is not None and not dept_df.empty:
+            live_dept_df = dept_df
+        if live_dept_reason_df.empty and dept_reason_df is not None and not dept_reason_df.empty:
+            live_dept_reason_df = dept_reason_df
+
+        # Re-bind for the rest of the function (rest of code uses dept_df / dept_reason_df).
+        dept_df = live_dept_df
+        dept_reason_df = live_dept_reason_df
+        group_label = group_choice  # "Product Type" or "Department" for chart titles
+
+        # ── Top: by-group $ bar + overall pie ───────────────────────────────
         if dept_df is not None and not dept_df.empty:
             c1, c2 = st.columns([3, 2])
             with c1:
@@ -460,7 +517,7 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
                 fig.update_xaxes(title_text="Remake $", tickprefix="$")
                 fig.update_yaxes(title_text="")
                 fig.update_layout(showlegend=False, coloraxis_showscale=False)
-                st.markdown("**Remake $ by Department**")
+                st.markdown(f"**Remake $ by {group_label}**")
                 st.plotly_chart(style_plotly(fig, height=300), width='stretch')
             with c2:
                 if not reason_df.empty and "remake_reason" in reason_df.columns:
@@ -489,11 +546,11 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
             with c2:
                 pass  # detail table rendered below regardless
 
-        # ── Per-department reason pies (top 6 depts by case count) ──────────
+        # ── Per-group reason pies (top 6 by case count) ─────────────────────
         if dept_reason_df is not None and not dept_reason_df.empty and dept_df is not None and not dept_df.empty:
             top_depts = dept_df.sort_values("remake_cases", ascending=False).head(6)
             top_dept_names = top_depts["product_department"].tolist()
-            st.markdown("**Reason Breakdown by Department**")
+            st.markdown(f"**Reason Breakdown by {group_label}**")
             cols_per_row = 3
             pie_palette = [COLORS['acc'], COLORS['pur'], COLORS['gold'],
                            COLORS['red'], "#5fa8d3", "#9eb574",
@@ -518,22 +575,22 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
                                                      font=dict(size=13)))
                         st.plotly_chart(style_plotly(fig, height=240), width='stretch')
 
-        # ── Drill-down by department ────────────────────────────────────────
-        if full_df is not None and not full_df.empty and "product_department" in full_df.columns:
+        # ── Drill-down (follows the Product Type / Department toggle above) ─
+        if full_df is not None and not full_df.empty and group_col in full_df.columns:
             st.divider()
-            st.markdown("**🔍 Drill Into a Department**")
-            dept_options = ["(all departments)"] + sorted(
-                [d for d in full_df["product_department"].dropna().unique()
+            st.markdown(f"**🔍 Drill Into a {group_label}**")
+            drill_options = ["(all)"] + sorted(
+                [d for d in full_df[group_col].dropna().unique()
                  if str(d).strip()]
             )
             picked = st.selectbox(
-                "Pick a department to see its remakes — reasons + the specific products that were remade:",
-                options=dept_options,
-                key="remake_dept_picker",
+                f"Pick a {group_label.lower()} to see its remakes — reasons + the specific lines that were remade:",
+                options=drill_options,
+                key=f"remake_drill_picker_{group_col}",
             )
 
-            if picked != "(all departments)":
-                drill = full_df[full_df["product_department"] == picked].copy()
+            if picked != "(all)":
+                drill = full_df[full_df[group_col] == picked].copy()
                 if drill.empty:
                     st.info(f"No remakes recorded for {picked} in the last 30 days.")
                 else:
@@ -547,6 +604,13 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
                     m1.metric(f"{picked} — Cases", f"{case_count}")
                     m2.metric("Product Lines", f"{line_count}")
                     m3.metric("Total Remake $", f"${dollars:,.2f}")
+
+                    # Secondary breakdown: show the "other" dimension within
+                    # what was picked. If grouping by Product Type, show the
+                    # departments inside that type. If grouping by Department,
+                    # show the product types inside that department.
+                    other_col = "product_department" if group_col == "product_category" else "product_category"
+                    other_label = "Department" if other_col == "product_department" else "Product Type"
 
                     g1, g2 = st.columns([1, 1])
                     with g1:
@@ -569,13 +633,13 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
                                               title=f"{picked} — Reasons")
                             st.plotly_chart(style_plotly(fig, height=320), width='stretch')
                     with g2:
-                        if "product_category" in drill.columns:
+                        if other_col in drill.columns:
                             prod_breakdown = (
-                                drill.groupby("product_category").size()
+                                drill.groupby(other_col).size()
                                      .reset_index(name="lines")
                                      .sort_values("lines", ascending=True)
                             )
-                            fig = px.bar(prod_breakdown, x="lines", y="product_category",
+                            fig = px.bar(prod_breakdown, x="lines", y=other_col,
                                          orientation="h",
                                          text="lines",
                                          color="lines",
@@ -587,13 +651,13 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
                             fig.update_yaxes(title_text="")
                             fig.update_layout(showlegend=False,
                                               coloraxis_showscale=False,
-                                              title=f"{picked} — Products")
+                                              title=f"{picked} — by {other_label}")
                             st.plotly_chart(style_plotly(fig, height=320), width='stretch')
 
                     st.markdown(f"**{picked} — Product Line Detail**")
                     detail_cols = [c for c in ["case_number", "doctor_name", "patient_last",
-                                                "date_in", "product_category", "remake_reason",
-                                                "total_charge", "status"]
+                                                "date_in", "product_category", "product_department",
+                                                "remake_reason", "total_charge", "status"]
                                    if c in drill.columns]
                     show = drill[detail_cols].copy()
                     if "total_charge" in show.columns:
