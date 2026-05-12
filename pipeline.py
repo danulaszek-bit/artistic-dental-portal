@@ -604,6 +604,35 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
         "remakes_30d":          len(remakes_df) if not remakes_df.empty else 0,
     }])
 
+    # ── 9. 13-month historical remake trend (from case_history.csv) ─────────
+    try:
+        ch_path = CACHE_DIR / "case_history.csv"
+        if ch_path.exists():
+            ch = pd.read_csv(ch_path, encoding="utf-8", low_memory=False)
+            if not ch.empty and "date_in" in ch.columns and "remake" in ch.columns:
+                ch["date_in"] = pd.to_datetime(ch["date_in"], errors="coerce")
+                ch = ch.dropna(subset=["date_in"])
+                ch["yearmonth"] = ch["date_in"].dt.to_period("M").astype(str)
+                ch["is_remake"] = ch["remake"].fillna("").astype(str).str.strip().ne("")
+                today_m = pd.Timestamp.today().to_period("M")
+                months_keep = [(today_m - i).strftime("%Y-%m") for i in range(13)]
+                ch_recent = ch[ch["yearmonth"].isin(months_keep)]
+                hist = (
+                    ch_recent.groupby("yearmonth")
+                    .agg(total_cases=("case_number", "count"),
+                         total_remakes=("is_remake", "sum"))
+                    .reset_index()
+                )
+                hist["remake_rate_pct"] = (
+                    hist["total_remakes"] / hist["total_cases"] * 100
+                ).round(2)
+                hist = hist.sort_values("yearmonth")
+                kpis["remake_history_monthly"] = hist
+                log.info("Remake history: %d months computed (last 13 from case_history.csv)",
+                         len(hist))
+    except Exception as exc:
+        log.warning("Could not compute remake_history_monthly: %s", exc)
+
     return kpis
 
 

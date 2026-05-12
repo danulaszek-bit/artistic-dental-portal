@@ -438,27 +438,67 @@ def render_active(active_df):
         st.dataframe(display.head(20), width='stretch', height=400, hide_index=True)
 
 
-def render_remakes(remakes_detail, reason_df):
+def render_remakes(remakes_detail, reason_df, history_df=None):
     section("🔁 Remakes (Last 30 Days)")
     if remakes_detail.empty:
         st.info("No remakes in the last 30 days.")
-        return
-    c1, c2 = st.columns([1, 2])
-    with c1:
-        if not reason_df.empty and "remake_reason" in reason_df.columns:
-            fig = px.pie(reason_df, names="remake_reason", values="count",
-                         color_discrete_sequence=[COLORS['acc'], COLORS['pur'],
-                                                   COLORS['gold'], COLORS['red']])
-            fig.update_traces(textposition="inside", textinfo="percent+label",
-                              textfont=dict(color="white"))
-            fig.update_layout(showlegend=False)
-            st.plotly_chart(style_plotly(fig, height=260), width='stretch')
-        st.metric("Total Remakes", len(remakes_detail))
-    with c2:
-        display = remakes_detail.copy()
-        if "total_charge" in display.columns:
-            display["total_charge"] = display["total_charge"].apply(lambda v: f"${v:,.2f}")
-        st.dataframe(display, width='stretch', height=300, hide_index=True)
+    else:
+        c1, c2 = st.columns([1, 2])
+        with c1:
+            if not reason_df.empty and "remake_reason" in reason_df.columns:
+                fig = px.pie(reason_df, names="remake_reason", values="count",
+                             color_discrete_sequence=[COLORS['acc'], COLORS['pur'],
+                                                       COLORS['gold'], COLORS['red']])
+                fig.update_traces(textposition="inside", textinfo="percent+label",
+                                  textfont=dict(color="white"))
+                fig.update_layout(showlegend=False)
+                st.plotly_chart(style_plotly(fig, height=260), width='stretch')
+            st.metric("Total Remakes", len(remakes_detail))
+        with c2:
+            display = remakes_detail.copy()
+            if "total_charge" in display.columns:
+                display["total_charge"] = display["total_charge"].apply(lambda v: f"${v:,.2f}")
+            st.dataframe(display, width='stretch', height=300, hide_index=True)
+
+    # ── 13-month historical trend ────────────────────────────────────────────
+    if history_df is not None and not history_df.empty:
+        st.divider()
+        section("📈 13-Month Remake Trend")
+        st.caption("Click any legend item to toggle that line on/off. "
+                   "Remake Rate is on the right-hand axis.")
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
+        fig.add_trace(
+            go.Scatter(
+                x=history_df["yearmonth"], y=history_df["total_cases"],
+                name="Total Cases", mode="lines+markers",
+                line=dict(color=COLORS['acc'], width=2),
+                marker=dict(size=7),
+            ),
+            secondary_y=False,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=history_df["yearmonth"], y=history_df["total_remakes"],
+                name="Total Remakes", mode="lines+markers",
+                line=dict(color=COLORS['gold'], width=2),
+                marker=dict(size=7),
+            ),
+            secondary_y=False,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=history_df["yearmonth"], y=history_df["remake_rate_pct"],
+                name="Remake Rate %", mode="lines+markers",
+                line=dict(color=COLORS['red'], width=2, dash="dot"),
+                marker=dict(size=7),
+            ),
+            secondary_y=True,
+        )
+        fig.update_xaxes(title_text="Month")
+        fig.update_yaxes(title_text="Count (Cases / Remakes)", secondary_y=False)
+        fig.update_yaxes(title_text="Remake Rate %", secondary_y=True)
+        fig.update_layout(hovermode="x unified")
+        st.plotly_chart(style_plotly(fig, height=420), width='stretch')
 
 
 def render_implants(impl_df):
@@ -492,6 +532,7 @@ wip_detail = data.get("wip_detail", pd.DataFrame())
 active_30d = data.get("active_accounts_30d", pd.DataFrame())
 remakes_detail = data.get("remakes_detail", pd.DataFrame())
 remake_reason = data.get("remake_by_reason", pd.DataFrame())
+remake_history = data.get("remake_history_monthly", pd.DataFrame())
 
 render_header()
 st.divider()
@@ -508,7 +549,7 @@ with tabs[0]: render_profitability(prof)
 with tabs[1]: render_pareto(pareto, prof)
 with tabs[2]: render_wip(wip_summary, wip_detail)
 with tabs[3]: render_active(active_30d)
-with tabs[4]: render_remakes(remakes_detail, remake_reason)
+with tabs[4]: render_remakes(remakes_detail, remake_reason, remake_history)
 with tabs[5]: render_implants(implants)
 
 st.divider()
