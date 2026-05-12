@@ -463,40 +463,36 @@ def render_remakes(remakes_detail, reason_df, history_df=None):
     # ── 13-month historical trend ────────────────────────────────────────────
     if history_df is not None and not history_df.empty:
         st.divider()
-        section("📈 13-Month Remake Trend")
-        st.caption("Click any legend item to toggle that line on/off. "
-                   "Remake Rate is on the right-hand axis.")
-        fig = make_subplots(specs=[[{"secondary_y": True}]])
-        fig.add_trace(
-            go.Scatter(
-                x=history_df["yearmonth"], y=history_df["total_cases"],
-                name="Total Cases", mode="lines+markers",
-                line=dict(color=COLORS['acc'], width=2),
-                marker=dict(size=7),
-            ),
-            secondary_y=False,
+        section("📈 13-Month Remake Rate Trend")
+        st.caption("Click any legend item to toggle that line on/off.")
+
+        # Compute 3-month rolling average of remake rate
+        hist = history_df.copy().sort_values("yearmonth")
+        hist["remake_rate_3mo_avg"] = (
+            hist["remake_rate_pct"]
+            .rolling(window=3, min_periods=1)
+            .mean()
+            .round(2)
         )
+
+        fig = go.Figure()
         fig.add_trace(
             go.Scatter(
-                x=history_df["yearmonth"], y=history_df["total_remakes"],
-                name="Total Remakes", mode="lines+markers",
-                line=dict(color=COLORS['gold'], width=2),
-                marker=dict(size=7),
-            ),
-            secondary_y=False,
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=history_df["yearmonth"], y=history_df["remake_rate_pct"],
+                x=hist["yearmonth"], y=hist["remake_rate_pct"],
                 name="Remake Rate %", mode="lines+markers",
-                line=dict(color=COLORS['red'], width=2, dash="dot"),
+                line=dict(color=COLORS['red'], width=2),
                 marker=dict(size=7),
-            ),
-            secondary_y=True,
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=hist["yearmonth"], y=hist["remake_rate_3mo_avg"],
+                name="3-Month Rolling Avg", mode="lines",
+                line=dict(color=COLORS['gold'], width=2, dash="dash"),
+            )
         )
         fig.update_xaxes(title_text="Month")
-        fig.update_yaxes(title_text="Count (Cases / Remakes)", secondary_y=False)
-        fig.update_yaxes(title_text="Remake Rate %", secondary_y=True)
+        fig.update_yaxes(title_text="Remake Rate %", ticksuffix="%")
         fig.update_layout(hovermode="x unified")
         st.plotly_chart(style_plotly(fig, height=420), width='stretch')
 
