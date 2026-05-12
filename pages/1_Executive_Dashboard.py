@@ -438,27 +438,92 @@ def render_active(active_df):
         st.dataframe(display.head(20), width='stretch', height=400, hide_index=True)
 
 
-def render_remakes(remakes_detail, reason_df, history_df=None):
+def render_remakes(remakes_detail, reason_df, history_df=None,
+                   dept_df=None, dept_reason_df=None):
     section("🔁 Remakes (Last 30 Days)")
     if remakes_detail.empty:
         st.info("No remakes in the last 30 days.")
     else:
-        c1, c2 = st.columns([1, 2])
-        with c1:
-            if not reason_df.empty and "remake_reason" in reason_df.columns:
-                fig = px.pie(reason_df, names="remake_reason", values="count",
-                             color_discrete_sequence=[COLORS['acc'], COLORS['pur'],
-                                                       COLORS['gold'], COLORS['red']])
-                fig.update_traces(textposition="inside", textinfo="percent+label",
-                                  textfont=dict(color="white"))
-                fig.update_layout(showlegend=False)
-                st.plotly_chart(style_plotly(fig, height=260), width='stretch')
-            st.metric("Total Remakes", len(remakes_detail))
-        with c2:
-            display = remakes_detail.copy()
-            if "total_charge" in display.columns:
-                display["total_charge"] = display["total_charge"].apply(lambda v: f"${v:,.2f}")
-            st.dataframe(display, width='stretch', height=300, hide_index=True)
+        # ── Top: by-department $ bar + overall pie ──────────────────────────
+        if dept_df is not None and not dept_df.empty:
+            c1, c2 = st.columns([3, 2])
+            with c1:
+                dept_sorted = dept_df.sort_values("remake_dollars", ascending=True)
+                fig = px.bar(
+                    dept_sorted, x="remake_dollars", y="product_department",
+                    orientation="h",
+                    text=dept_sorted["remake_dollars"].apply(lambda v: f"${v:,.0f}"),
+                    color="remake_dollars",
+                    color_continuous_scale=[[0, COLORS['acc']], [1, COLORS['red']]],
+                )
+                fig.update_traces(textposition="outside", textfont=dict(color="white"))
+                fig.update_xaxes(title_text="Remake $", tickprefix="$")
+                fig.update_yaxes(title_text="")
+                fig.update_layout(showlegend=False, coloraxis_showscale=False)
+                st.markdown("**Remake $ by Department**")
+                st.plotly_chart(style_plotly(fig, height=300), width='stretch')
+            with c2:
+                if not reason_df.empty and "remake_reason" in reason_df.columns:
+                    fig = px.pie(reason_df, names="remake_reason", values="count",
+                                 color_discrete_sequence=[COLORS['acc'], COLORS['pur'],
+                                                           COLORS['gold'], COLORS['red']])
+                    fig.update_traces(textposition="inside", textinfo="percent+label",
+                                      textfont=dict(color="white"))
+                    fig.update_layout(showlegend=False)
+                    st.markdown("**All Reasons (overall)**")
+                    st.plotly_chart(style_plotly(fig, height=260), width='stretch')
+                st.metric("Total Remakes", len(remakes_detail))
+        else:
+            # Old layout fallback if dept data isn't present
+            c1, c2 = st.columns([1, 2])
+            with c1:
+                if not reason_df.empty and "remake_reason" in reason_df.columns:
+                    fig = px.pie(reason_df, names="remake_reason", values="count",
+                                 color_discrete_sequence=[COLORS['acc'], COLORS['pur'],
+                                                           COLORS['gold'], COLORS['red']])
+                    fig.update_traces(textposition="inside", textinfo="percent+label",
+                                      textfont=dict(color="white"))
+                    fig.update_layout(showlegend=False)
+                    st.plotly_chart(style_plotly(fig, height=260), width='stretch')
+                st.metric("Total Remakes", len(remakes_detail))
+            with c2:
+                pass  # detail table rendered below regardless
+
+        # ── Per-department reason pies (top 6 depts by case count) ──────────
+        if dept_reason_df is not None and not dept_reason_df.empty and dept_df is not None and not dept_df.empty:
+            top_depts = dept_df.sort_values("remake_cases", ascending=False).head(6)
+            top_dept_names = top_depts["product_department"].tolist()
+            st.markdown("**Reason Breakdown by Department**")
+            cols_per_row = 3
+            pie_palette = [COLORS['acc'], COLORS['pur'], COLORS['gold'],
+                           COLORS['red'], "#5fa8d3", "#9eb574",
+                           "#d1495b", "#e8a87c"]
+            for row_start in range(0, len(top_dept_names), cols_per_row):
+                cols = st.columns(cols_per_row)
+                for i, dept_name in enumerate(top_dept_names[row_start:row_start+cols_per_row]):
+                    sub = dept_reason_df[dept_reason_df["product_department"] == dept_name]
+                    if sub.empty:
+                        continue
+                    case_ct = int(top_depts[top_depts["product_department"] == dept_name]["remake_cases"].iloc[0])
+                    dollars = float(top_depts[top_depts["product_department"] == dept_name]["remake_dollars"].iloc[0])
+                    with cols[i]:
+                        fig = px.pie(sub, names="remake_reason", values="count",
+                                     color_discrete_sequence=pie_palette)
+                        fig.update_traces(textposition="inside",
+                                          textinfo="percent+label",
+                                          textfont=dict(color="white", size=10))
+                        fig.update_layout(showlegend=False,
+                                          title=dict(text=f"{dept_name}<br>"
+                                                          f"<sub>{case_ct} cases · ${dollars:,.0f}</sub>",
+                                                     font=dict(size=13)))
+                        st.plotly_chart(style_plotly(fig, height=240), width='stretch')
+
+        # ── Detail table ────────────────────────────────────────────────────
+        st.markdown("**Case Detail**")
+        display = remakes_detail.copy()
+        if "total_charge" in display.columns:
+            display["total_charge"] = display["total_charge"].apply(lambda v: f"${v:,.2f}")
+        st.dataframe(display, width='stretch', height=280, hide_index=True)
 
     # ── 13-month historical trend ────────────────────────────────────────────
     if history_df is not None and not history_df.empty:
@@ -529,6 +594,8 @@ active_30d = data.get("active_accounts_30d", pd.DataFrame())
 remakes_detail = data.get("remakes_detail", pd.DataFrame())
 remake_reason = data.get("remake_by_reason", pd.DataFrame())
 remake_history = data.get("remake_history_monthly", pd.DataFrame())
+remake_by_dept = data.get("remake_by_dept", pd.DataFrame())
+remake_by_dept_reason = data.get("remake_by_dept_reason", pd.DataFrame())
 
 render_header()
 st.divider()
@@ -545,7 +612,8 @@ with tabs[0]: render_profitability(prof)
 with tabs[1]: render_pareto(pareto, prof)
 with tabs[2]: render_wip(wip_summary, wip_detail)
 with tabs[3]: render_active(active_30d)
-with tabs[4]: render_remakes(remakes_detail, remake_reason, remake_history)
+with tabs[4]: render_remakes(remakes_detail, remake_reason, remake_history,
+                              remake_by_dept, remake_by_dept_reason)
 with tabs[5]: render_implants(implants)
 
 st.divider()

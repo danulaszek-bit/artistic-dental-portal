@@ -282,8 +282,11 @@ def _clean_cases(df: pd.DataFrame) -> pd.DataFrame:
         "Cases_LabName":       "lab_name",
         "Cases_PanNumber":     "pan_number",
         "Cases_PatientFullName": "patient_name",
+        "Cases_PatientLast":   "patient_last",
         "Cases_ShipDate":      "ship_date",
         "Cases_InvoiceDate":   "invoice_date",
+        "Products_Department": "product_department",
+        "Products_Type":       "product_category",
     }
     df = df.rename(columns={k: v for k, v in rename.items() if k in df.columns})
     if "total_charge" in df.columns:
@@ -563,18 +566,70 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
         kpis["active_accounts_30d"] = pd.DataFrame()
 
     # ── 7d. Remakes detail ────────────────────────────────────
+    # New schema: remakes.csv now has one row PER product line per case, so a
+    # case with multiple products spans multiple rows. Dedupe by case_number
+    # for case-level totals and the detail table. Department-level breakdowns
+    # use the raw (multi-row) data so a multi-product case can attribute to
+    # more than one department.
     remakes_df = tables.get("remakes", pd.DataFrame())
     if not remakes_df.empty:
-        kpis["remakes_detail"] = remakes_df[[c for c in ["case_number","account_id",
-                                                            "doctor_name","date_in",
-                                                            "remake_reason","total_charge",
-                                                            "status"] 
-                                               if c in remakes_df.columns]].copy()
-        remake_by_reason = remakes_df.groupby("remake_reason").size().reset_index(name="count")
-        kpis["remake_by_reason"] = remake_by_reason
+        # Case-level detail: one row per case_number (take first product line)
+        if "case_number" in remakes_df.columns:
+            cases_unique = remakes_df.drop_duplicates(subset=["case_number"], keep="first").copy()
+        else:
+            cases_unique = remakes_df.copy()
+
+        detail_cols = [c for c in ["case_number","account_id","doctor_name","date_in",
+                                    "remake_reason","total_charge","status",
+                                    "product_department","product_category"]
+                       if c in cases_unique.columns]
+        kpis["remakes_detail"] = cases_unique[detail_cols].copy()
+
+        # Overall remakes-by-reason (count distinct cases per reason)
+        if "remake_reason" in cases_unique.columns:
+            kpis["remake_by_reason"] = (
+                cases_unique.groupby("remake_reason").size().reset_index(name="count")
+            )
+        else:
+            kpis["remake_by_reason"] = pd.DataFrame()
+
+        # NEW: Remakes by department — count + $ totals (case-level, deduped)
+        # plus reason breakdown (one row per case × dept × reason).
+        if "product_department" in remakes_df.columns:
+            # Department totals: each case counted once per department it touches.
+            dept_rows = remakes_df.drop_duplicates(
+                subset=["case_number", "product_department"]
+            )
+            # For dollars, attribute each case's full TotalCharge to every dept
+            # it has work in — typically a case is single-dept; multi-dept
+            # cases are rare. (Cleaner per-line allocation would require a
+            # per-product price field we don't have.)
+            dept_totals = (
+                dept_rows.groupby("product_department")
+                .agg(remake_cases=("case_number", "nunique"),
+                     remake_dollars=("total_charge", "sum"))
+                .reset_index()
+                .sort_values("remake_cases", ascending=False)
+            )
+            kpis["remake_by_dept"] = dept_totals
+
+            # Department × reason cross-table
+            if "remake_reason" in remakes_df.columns:
+                kpis["remake_by_dept_reason"] = (
+                    dept_rows.groupby(["product_department", "remake_reason"])
+                    .size().reset_index(name="count")
+                    .sort_values(["product_department", "count"], ascending=[True, False])
+                )
+            else:
+                kpis["remake_by_dept_reason"] = pd.DataFrame()
+        else:
+            kpis["remake_by_dept"] = pd.DataFrame()
+            kpis["remake_by_dept_reason"] = pd.DataFrame()
     else:
         kpis["remakes_detail"] = pd.DataFrame()
         kpis["remake_by_reason"] = pd.DataFrame()
+        kpis["remake_by_dept"] = pd.DataFrame()
+        kpis["remake_by_dept_reason"] = pd.DataFrame()
 
     # ── 8. KPI gauges ─────────────────────────────────────────────────────
     overall_remake = (ytd_remake / ytd_total * 100) if ytd_total else 0
