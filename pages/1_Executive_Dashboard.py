@@ -245,12 +245,19 @@ def style_plotly(fig, height=280):
     fig.update_layout(
         plot_bgcolor=COLORS["sfc"],
         paper_bgcolor=COLORS["sfc"],
-        font=dict(color=COLORS["txt"], family="DM Sans"),
-        margin=dict(l=10, r=10, t=20, b=10),
+        font=dict(color=COLORS["txt"], family="DM Sans", size=13),
+        title_font_color=COLORS["txt"],
+        title_font_size=15,
+        margin=dict(l=10, r=10, t=40, b=10),
         height=height,
-        xaxis=dict(gridcolor=COLORS["bdr2"], color=COLORS["txt2"]),
-        yaxis=dict(gridcolor=COLORS["bdr2"], color=COLORS["txt2"]),
-        legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color=COLORS["txt"])),
+        xaxis=dict(gridcolor=COLORS["bdr2"], color=COLORS["txt"],
+                   tickfont=dict(color=COLORS["txt"]),
+                   title=dict(font=dict(color=COLORS["txt"]))),
+        yaxis=dict(gridcolor=COLORS["bdr2"], color=COLORS["txt"],
+                   tickfont=dict(color=COLORS["txt"]),
+                   title=dict(font=dict(color=COLORS["txt"]))),
+        legend=dict(bgcolor="rgba(0,0,0,0)",
+                    font=dict(color=COLORS["txt"], size=13)),
     )
     return fig
 
