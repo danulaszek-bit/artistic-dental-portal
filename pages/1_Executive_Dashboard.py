@@ -184,6 +184,22 @@ h1, h2, h3 {{
 .kpi-label {{ font-size: 11px !important; }}
 .kpi-value {{ font-size: 26px !important; }}
 .kpi-sub   {{ font-size: 12px !important; }}
+
+/* ── Selectbox / dropdown menu: dark text on its light popover ─────────── */
+/* The selectbox open menu uses a light background regardless of our theme.
+   Force readable dark text inside the open dropdown popover only. */
+div[data-baseweb="popover"] *,
+div[data-baseweb="popover"] li,
+div[data-baseweb="popover"] [role="option"],
+ul[role="listbox"] *,
+ul[role="listbox"] li {{
+    color: #0d1117 !important;
+}}
+/* Hover/highlight state on dropdown items */
+div[data-baseweb="popover"] li:hover,
+div[data-baseweb="popover"] [aria-selected="true"] {{
+    color: #0d1117 !important;
+}}
 </style>
 """, unsafe_allow_html=True)
 
