@@ -439,7 +439,7 @@ def render_active(active_df):
 
 
 def render_remakes(remakes_detail, reason_df, history_df=None,
-                   dept_df=None, dept_reason_df=None):
+                   dept_df=None, dept_reason_df=None, full_df=None):
     section("🔁 Remakes (Last 30 Days)")
     if remakes_detail.empty:
         st.info("No remakes in the last 30 days.")
@@ -518,8 +518,93 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
                                                      font=dict(size=13)))
                         st.plotly_chart(style_plotly(fig, height=240), width='stretch')
 
-        # ── Detail table ────────────────────────────────────────────────────
-        st.markdown("**Case Detail**")
+        # ── Drill-down by department ────────────────────────────────────────
+        if full_df is not None and not full_df.empty and "product_department" in full_df.columns:
+            st.divider()
+            st.markdown("**🔍 Drill Into a Department**")
+            dept_options = ["(all departments)"] + sorted(
+                [d for d in full_df["product_department"].dropna().unique()
+                 if str(d).strip()]
+            )
+            picked = st.selectbox(
+                "Pick a department to see its remakes — reasons + the specific products that were remade:",
+                options=dept_options,
+                key="remake_dept_picker",
+            )
+
+            if picked != "(all departments)":
+                drill = full_df[full_df["product_department"] == picked].copy()
+                if drill.empty:
+                    st.info(f"No remakes recorded for {picked} in the last 30 days.")
+                else:
+                    case_count = drill["case_number"].nunique() if "case_number" in drill.columns else len(drill)
+                    line_count = len(drill)
+                    dollars = drill.drop_duplicates(subset=["case_number"])["total_charge"].sum() \
+                              if "case_number" in drill.columns and "total_charge" in drill.columns \
+                              else drill.get("total_charge", pd.Series([0])).sum()
+
+                    m1, m2, m3 = st.columns(3)
+                    m1.metric(f"{picked} — Cases", f"{case_count}")
+                    m2.metric("Product Lines", f"{line_count}")
+                    m3.metric("Total Remake $", f"${dollars:,.2f}")
+
+                    g1, g2 = st.columns([1, 1])
+                    with g1:
+                        if "remake_reason" in drill.columns:
+                            reason_breakdown = (
+                                drill.drop_duplicates(subset=["case_number"])
+                                     .groupby("remake_reason").size()
+                                     .reset_index(name="count")
+                                     .sort_values("count", ascending=False)
+                            )
+                            fig = px.pie(reason_breakdown, names="remake_reason",
+                                         values="count",
+                                         color_discrete_sequence=[COLORS['acc'], COLORS['pur'],
+                                                                   COLORS['gold'], COLORS['red'],
+                                                                   "#5fa8d3", "#9eb574"])
+                            fig.update_traces(textposition="inside",
+                                              textinfo="percent+label",
+                                              textfont=dict(color="white"))
+                            fig.update_layout(showlegend=False,
+                                              title=f"{picked} — Reasons")
+                            st.plotly_chart(style_plotly(fig, height=320), width='stretch')
+                    with g2:
+                        if "product_category" in drill.columns:
+                            prod_breakdown = (
+                                drill.groupby("product_category").size()
+                                     .reset_index(name="lines")
+                                     .sort_values("lines", ascending=True)
+                            )
+                            fig = px.bar(prod_breakdown, x="lines", y="product_category",
+                                         orientation="h",
+                                         text="lines",
+                                         color="lines",
+                                         color_continuous_scale=[[0, COLORS['acc']],
+                                                                 [1, COLORS['gold']]])
+                            fig.update_traces(textposition="outside",
+                                              textfont=dict(color="white"))
+                            fig.update_xaxes(title_text="# Product Lines Remade")
+                            fig.update_yaxes(title_text="")
+                            fig.update_layout(showlegend=False,
+                                              coloraxis_showscale=False,
+                                              title=f"{picked} — Products")
+                            st.plotly_chart(style_plotly(fig, height=320), width='stretch')
+
+                    st.markdown(f"**{picked} — Product Line Detail**")
+                    detail_cols = [c for c in ["case_number", "doctor_name", "patient_last",
+                                                "date_in", "product_category", "remake_reason",
+                                                "total_charge", "status"]
+                                   if c in drill.columns]
+                    show = drill[detail_cols].copy()
+                    if "total_charge" in show.columns:
+                        show["total_charge"] = show["total_charge"].apply(lambda v: f"${v:,.2f}")
+                    if "date_in" in show.columns:
+                        show["date_in"] = pd.to_datetime(show["date_in"], errors="coerce").dt.strftime("%Y-%m-%d")
+                    st.dataframe(show, width='stretch', height=320, hide_index=True)
+
+        # ── Detail table (all departments) ──────────────────────────────────
+        st.divider()
+        st.markdown("**Case Detail (all departments)**")
         display = remakes_detail.copy()
         if "total_charge" in display.columns:
             display["total_charge"] = display["total_charge"].apply(lambda v: f"${v:,.2f}")
@@ -596,6 +681,7 @@ remake_reason = data.get("remake_by_reason", pd.DataFrame())
 remake_history = data.get("remake_history_monthly", pd.DataFrame())
 remake_by_dept = data.get("remake_by_dept", pd.DataFrame())
 remake_by_dept_reason = data.get("remake_by_dept_reason", pd.DataFrame())
+remakes_full = data.get("remakes_full", pd.DataFrame())
 
 render_header()
 st.divider()
@@ -613,7 +699,7 @@ with tabs[1]: render_pareto(pareto, prof)
 with tabs[2]: render_wip(wip_summary, wip_detail)
 with tabs[3]: render_active(active_30d)
 with tabs[4]: render_remakes(remakes_detail, remake_reason, remake_history,
-                              remake_by_dept, remake_by_dept_reason)
+                              remake_by_dept, remake_by_dept_reason, remakes_full)
 with tabs[5]: render_implants(implants)
 
 st.divider()

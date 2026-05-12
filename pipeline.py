@@ -573,6 +573,18 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     # more than one department.
     remakes_df = tables.get("remakes", pd.DataFrame())
     if not remakes_df.empty:
+        # Full multi-row remakes data (one row per product line per case) —
+        # needed by the dashboard's drill-down so a user can click into a
+        # department and see the individual products.
+        full_cols = [c for c in ["case_number", "account_id", "doctor_name",
+                                  "patient_last", "date_in", "due_date",
+                                  "ship_date", "status", "total_charge",
+                                  "remake_reason", "product_department",
+                                  "product_category"]
+                     if c in remakes_df.columns]
+        if full_cols:
+            kpis["remakes_full"] = remakes_df[full_cols].copy()
+
         # Case-level detail: one row per case_number (take first product line)
         if "case_number" in remakes_df.columns:
             cases_unique = remakes_df.drop_duplicates(subset=["case_number"], keep="first").copy()
