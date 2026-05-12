@@ -128,23 +128,62 @@ h1, h2, h3 {{
     font-weight: 700;
 }}
 
-.last-updated {{ color: {COLORS['txt2']}; font-size: 11px; text-align: right; }}
+.last-updated {{ color: #ffffff; font-size: 12px; text-align: right; }}
 
 /* Streamlit dataframe / metric tweaks for dark */
-[data-testid="stMetricValue"] {{ font-size: 22px !important; color: {COLORS['txt']} !important; }}
-[data-testid="stMetricLabel"]  {{ color: {COLORS['txt2']} !important; }}
+[data-testid="stMetricValue"] {{ font-size: 24px !important; color: #ffffff !important; }}
+[data-testid="stMetricLabel"]  {{ color: #ffffff !important; font-size: 14px !important; }}
+[data-testid="stMetricDelta"]  {{ color: #ffffff !important; }}
 .stTabs [data-baseweb="tab-list"] {{ gap: 4px; }}
 .stTabs [data-baseweb="tab"] {{
     background: {COLORS['sfc']};
-    color: {COLORS['txt2']};
+    color: #ffffff !important;
     border-radius: 6px 6px 0 0;
     padding: 8px 16px;
+    font-size: 15px !important;
 }}
+.stTabs [data-baseweb="tab"] p {{ color: #ffffff !important; font-size: 15px !important; }}
 .stTabs [aria-selected="true"] {{
     background: {COLORS['sfc2']};
-    color: {COLORS['acc']};
+    color: {COLORS['acc']} !important;
 }}
+.stTabs [aria-selected="true"] p {{ color: {COLORS['acc']} !important; }}
 .stPlotlyChart, .stDataFrame {{ background-color: {COLORS['sfc']}; border-radius: 10px; }}
+
+/* ── Aggressive white-text overrides on Streamlit widgets ───────────────── */
+.stRadio > label,
+.stRadio label p,
+.stRadio div p,
+.stRadio div[role="radiogroup"] label,
+.stCheckbox label, .stCheckbox label p,
+.stSelectbox label, .stSelectbox label p,
+.stSelectbox div[data-baseweb="select"] *,
+.stMultiSelect label, .stMultiSelect label p,
+.stTextInput label, .stNumberInput label,
+.stDateInput label, .stSlider label,
+.stTextArea label,
+[data-testid="stWidgetLabel"], [data-testid="stWidgetLabel"] *,
+[data-testid="stCaptionContainer"], [data-testid="stCaptionContainer"] *,
+.stCaption, .stCaption *,
+[data-baseweb="radio"] div, [data-baseweb="radio"] label,
+.stMarkdown p, .stMarkdown span, .stMarkdown li,
+.stDataFrame * {{
+    color: #ffffff !important;
+}}
+
+/* ── Font-size bump ~10% on common widget text ──────────────────────────── */
+.stRadio label p, .stRadio div[role="radiogroup"] label,
+.stCheckbox label p,
+.stSelectbox label p, .stMultiSelect label p,
+.stTextInput label p, .stNumberInput label p,
+[data-testid="stWidgetLabel"] p,
+.stMarkdown p, .stCaption {{
+    font-size: 15px !important;
+}}
+.section-head {{ font-size: 18px !important; }}
+.kpi-label {{ font-size: 11px !important; }}
+.kpi-value {{ font-size: 26px !important; }}
+.kpi-sub   {{ font-size: 12px !important; }}
 </style>
 """, unsafe_allow_html=True)
 
