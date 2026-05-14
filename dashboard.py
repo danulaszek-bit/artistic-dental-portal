@@ -234,10 +234,11 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# Three navigation cards
-c1, c2, c3 = st.columns(3)
+# Navigation cards — 2x2 grid
+row1_c1, row1_c2 = st.columns(2)
+row2_c1, row2_c2 = st.columns(2)
 
-with c1:
+with row1_c1:
     st.markdown("""
     <a class="nav-card" href="/Executive_Dashboard" target="_self">
       <div class="nav-icon">📊</div>
@@ -248,7 +249,7 @@ with c1:
     </a>
     """, unsafe_allow_html=True)
 
-with c2:
+with row1_c2:
     st.markdown("""
     <a class="nav-card" href="/Doctor_Retention" target="_self">
       <div class="nav-icon">🦷</div>
@@ -259,7 +260,18 @@ with c2:
     </a>
     """, unsafe_allow_html=True)
 
-with c3:
+with row2_c1:
+    st.markdown("""
+    <a class="nav-card" href="/Logistics" target="_self">
+      <div class="nav-icon">🚚</div>
+      <div class="nav-title">Logistics</div>
+      <div class="nav-desc">Open cases, where they're stuck, and what's falling behind schedule.
+      Department breakdown, aging buckets, and a filterable case detail table.</div>
+      <div style="margin-top:14px;color:#58a6ff;font-size:13px;font-weight:600">Open →</div>
+    </a>
+    """, unsafe_allow_html=True)
+
+with row2_c2:
     st.markdown("""
     <div class="nav-card disabled">
       <div class="nav-icon">🔧</div>
