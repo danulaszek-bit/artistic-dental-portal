@@ -180,7 +180,14 @@ a.nav-card, a.nav-card:hover, a.nav-card:visited {{
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 def fmt_currency(v):
-    if v is None or v == 0:
+    """Format a number as $X.XXM / $X.XK / $X. Defensive against None, NaN, strings, pd.NA."""
+    try:
+        v = float(v) if v is not None else 0.0
+        if v != v:   # catches NaN (NaN != NaN is True)
+            v = 0.0
+    except (TypeError, ValueError):
+        v = 0.0
+    if v == 0:
         return "—"
     if v >= 1_000_000:
         return f"${v/1_000_000:.2f}M"

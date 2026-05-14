@@ -233,7 +233,14 @@ def _read_csv_folder(folder: str) -> dict[str, pd.DataFrame]:
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 def fmt_currency(val):
-    if val is None or val == 0:
+    """Format a number as $X.XXM / $X.XK / $X. Defensive against None, NaN, strings, pd.NA."""
+    try:
+        val = float(val) if val is not None else 0.0
+        if val != val:   # catches NaN (NaN != NaN is True)
+            val = 0.0
+    except (TypeError, ValueError):
+        val = 0.0
+    if val == 0:
         return "—"
     if val >= 1_000_000:
         return f"${val/1_000_000:.2f}M"
@@ -309,37 +316,37 @@ def render_kpi_row(gauges: pd.DataFrame):
     cols = st.columns(6)
 
     with cols[0]:
-        kpi_card("YTD Revenue", fmt_currency(g.get("ytd_revenue", 0)),
-                 f"Prior year: {fmt_currency(g.get('ytd_prior_revenue', 0))}",
+        kpi_card("YTD Revenue", fmt_currency(g.get("ytd_revenue", 0) or 0),
+                 f"Prior year: {fmt_currency(g.get('ytd_prior_revenue', 0) or 0)}",
                  status="ok")
 
-    growth = g.get("actual_growth_pct", 0)
-    target = g.get("target_growth_pct", 7)
+    growth = float(g.get("actual_growth_pct", 0) or 0)
+    target = float(g.get("target_growth_pct", 7) or 7)
     with cols[1]:
         kpi_card("Revenue Growth", f"{growth:+.1f}%",
                  f"Target: +{target:.0f}%",
                  status="ok" if growth >= target else "warn")
 
-    remake = g.get("remake_rate", 0)
-    alert = g.get("remake_alert_pct", 5)
+    remake = float(g.get("remake_rate", 0) or 0)
+    alert = float(g.get("remake_alert_pct", 5) or 5)
     with cols[2]:
         kpi_card("Remake Rate", f"{remake:.1f}%",
                  f"Alert threshold: {alert:.0f}%",
                  status="ok" if remake < alert else "warn")
 
     with cols[3]:
-        kpi_card("Avg Margin", f"{g.get('avg_margin_pct', 0):.1f}%",
+        kpi_card("Avg Margin", f"{float(g.get('avg_margin_pct', 0) or 0):.1f}%",
                  "Gross margin (placeholder)")
 
-    wip_val = g.get("wip_value", 0)
-    wip_ov = int(g.get("wip_overdue", 0))
+    wip_val = g.get("wip_value", 0) or 0
+    wip_ov = int(g.get("wip_overdue", 0) or 0)
     with cols[4]:
         kpi_card("WIP Value", fmt_currency(wip_val),
-                 f"{int(g.get('wip_count',0))} cases · {wip_ov} overdue",
+                 f"{int(g.get('wip_count', 0) or 0)} cases · {wip_ov} overdue",
                  status="warn" if wip_ov > 0 else "ok")
 
-    active_30 = int(g.get("active_accounts_30d", 0))
-    remakes_30 = int(g.get("remakes_30d", 0))
+    active_30 = int(g.get("active_accounts_30d", 0) or 0)
+    remakes_30 = int(g.get("remakes_30d", 0) or 0)
     with cols[5]:
         kpi_card("Active Accounts", str(active_30),
                  f"last 30 days · {remakes_30} remakes")
@@ -350,12 +357,12 @@ def render_mtd(gauges: pd.DataFrame):
     if gauges.empty:
         return
     g = gauges.iloc[0]
-    mtd = g.get("mtd_revenue", 0)
-    projected = g.get("mtd_projected_month", 0)
-    days_elapsed = int(g.get("mtd_days_elapsed", 1))
-    days_in_month = int(g.get("mtd_days_in_month", 30))
+    mtd = float(g.get("mtd_revenue", 0) or 0)
+    projected = float(g.get("mtd_projected_month", 0) or 0)
+    days_elapsed = int(g.get("mtd_days_elapsed", 1) or 1)
+    days_in_month = int(g.get("mtd_days_in_month", 30) or 30)
     days_remaining = max(days_in_month - days_elapsed, 0)
-    ly_total = g.get("ytd_prior_revenue", 0)
+    ly_total = float(g.get("ytd_prior_revenue", 0) or 0)
     ly_monthly_avg = ly_total / 12 if ly_total else 0
     ly_target = ly_monthly_avg * 1.07
     on_pace = projected >= ly_target

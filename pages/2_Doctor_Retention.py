@@ -311,7 +311,15 @@ def empty_state(icon: str, title: str, body: str = ""):
     </div>""", unsafe_allow_html=True)
 
 
-def fmt_pct(num: int, den: int) -> str:
+def fmt_pct(num, den) -> str:
+    """Percent formatter. Defensive against None/NaN/strings in either arg."""
+    try:
+        num = float(num) if num is not None else 0.0
+        den = float(den) if den is not None else 0.0
+        if num != num: num = 0.0
+        if den != den: den = 0.0
+    except (TypeError, ValueError):
+        return "—"
     if den == 0:
         return "—"
     return f"{num/den*100:.0f}%"
