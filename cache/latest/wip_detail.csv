@@ -35,7 +35,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 449404,SAMJACSTC,Jacob Samuel,2026-05-05 13:18:00,2026-05-15 17:00:00,In Production,79.79,8.0,False,No
 449297,TAPGAR,Gary Tapak,2026-05-04 12:41:00,2026-05-18 17:00:00,In Production,375.24,9.0,False,No
 449203,HOLMARLA,Mary Ann Hollis,2026-05-01 14:56:00,2026-05-12 17:00:00,In Production,112.7,12.0,True,No
-449849,SIETOM,Tom Siewert,2026-05-11 11:11:00,2026-05-18 17:00:00,In Production,141.17,2.0,False,No
+449849,SIETOM,Tom Siewert,2026-05-11 11:11:00,2026-05-18 17:00:00,In Production,141.17,3.0,False,No
 449527,BERDERCP,Derek Berquist,2026-05-06 12:31:50,,Sent for TryIn,0.0,7.0,False,No
 446764,KMADAN,Daniel Kmak,2026-04-03 11:20:00,2026-04-20 17:00:00,On Hold,92.06,40.0,True,No
 449767,RHICAT,Catherine Rhim,2026-05-08 12:26:00,2026-05-19 17:00:00,In Production,84.91,5.0,False,No
@@ -227,7 +227,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 449831,PATAME,Amee Patel,2026-05-11 08:56:00,2026-05-18 17:00:00,In Production,92.06,3.0,False,No
 449172,ATHJOH,John Athos,2026-05-01 12:32:36,,Sent for TryIn,0.0,12.0,False,No
 449556,BERDERCP,Derek Berquist,2026-05-06 13:32:00,2026-05-14 17:00:00,In Production,129.74,7.0,False,No
-449270,SLAMICHOM,Michael Slavin,2026-05-04 11:13:00,2026-05-08 17:00:00,In Production,341.86,9.0,True,No
+449270,SLAMICHOM,Michael Slavin,2026-05-04 11:13:00,2026-05-08 17:00:00,In Production,341.86,10.0,True,No
 449472,OGRLIS,Lisa O'Grady,2026-05-05 16:57:00,2026-05-26 17:00:00,In Production,1536.38,8.0,False,No
 449004,MACHAZ,Hazel Santiago-Macanip,2026-04-30 12:38:00,2026-05-15 17:00:00,In Production,111.46,13.0,False,No
 449823,NISLIN,Linora Nissan,2026-05-11 08:41:00,2026-05-20 17:00:00,In Production,159.59,3.0,False,No
@@ -265,7 +265,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 440538,TADSIM,Simon Tadros,2026-01-21 14:26:52,,Sent for TryIn,0.0,112.0,False,No
 449252,SUKMAJ,Maja Sukovic,2026-05-04 10:40:00,2026-05-12 17:00:00,In Production,839.68,10.0,True,No
 449685,CREJASTP,Jason Crescenzo,2026-05-07 14:14:00,2026-06-12 17:00:00,In Production,797.4,6.0,False,No
-449630,RYASEA,Sean Ryan,2026-05-07 11:13:00,2026-05-14 17:00:00,In Production,91.05,6.0,False,No
+449630,RYASEA,Sean Ryan,2026-05-07 11:13:00,2026-05-14 17:00:00,In Production,91.05,7.0,False,No
 449390,DOUBRI,Brian Douts,2026-05-05 11:38:00,2026-05-13 17:00:00,In Production,242.45,8.0,True,No
 449302,PAGCAR,Carlo Pagni,2026-05-04 12:53:00,2026-05-18 17:00:00,On Hold,630.04,9.0,False,No
 448941,ALLFAH,Fahimeh Allahdadi,2026-04-29 17:12:00,2026-05-19 17:00:00,In Production,1129.14,14.0,False,No
@@ -280,7 +280,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 449488,OBEGAR,Garrett Obenauf,2026-05-06 09:03:00,2026-05-14 17:00:00,In Production,129.74,8.0,False,No
 449607,AUSMIC,Michaelangelo Aust,2026-05-07 08:55:00,2026-05-18 17:00:00,In Production,79.79,7.0,False,No
 449796,KEAMICEL,Michelle Kearney,2026-05-08 13:33:00,2026-05-20 17:00:00,In Production,181.04,5.0,False,No
-449753,KMADAN,Daniel Kmak,2026-05-08 11:13:39,2026-05-26 10:55:00,Submitted,0.0,5.0,False,No
+449753,KMADAN,Daniel Kmak,2026-05-08 11:13:39,2026-05-26 10:55:00,Submitted,0.0,6.0,False,No
 449749,KMADAN,Daniel Kmak,2026-05-08 11:08:07,2026-05-22 10:55:00,Submitted,0.0,6.0,False,No
 448245,KMADAN,Daniel Kmak,2026-04-22 09:03:46,2026-05-06 09:02:00,Submitted,0.0,22.0,True,No
 449093,ABRORL,Orlando Abreu,2026-05-01 10:02:00,2026-05-18 17:00:00,In Production,160.43,13.0,False,No
@@ -349,7 +349,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 447708,RASMOSFL,Moses Rasberry,2026-04-15 14:23:00,2026-04-24 17:00:00,On Hold,0.0,28.0,True,No
 449605,SEHSTE,Stephen Seheult,2026-05-07 08:14:00,2026-05-15 17:00:00,In Production,97.19,7.0,False,No
 449683,YIANIC,Nicas Yiannias,2026-05-07 14:10:00,2026-05-15 17:00:00,In Production,91.05,6.0,False,No
-449265,KHASUM,Sumayyah Khan,2026-05-04 11:13:25,,Sent for TryIn,0.0,9.0,False,No
+449265,KHASUM,Sumayyah Khan,2026-05-04 11:13:25,,Sent for TryIn,0.0,10.0,False,No
 449400,HANMIR,Mirette Hanna,2026-05-05 13:14:00,2026-05-18 17:00:00,In Production,84.91,8.0,False,No
 449766,GALPET,Peter Gallos,2026-05-08 12:26:00,2026-05-21 17:00:00,In Production,0.0,5.0,False,No
 449784,REMTHO,Thomas Remijas,2026-05-08 13:25:00,2026-05-18 17:00:00,In Production,119.51,5.0,False,No
@@ -388,7 +388,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 449298,GATGUY,Guy Henry Gattone,2026-05-04 12:43:00,2026-05-13 17:00:00,In Production,119.51,9.0,True,No
 449821,KHAALI,Ali Khan,2026-05-11 08:37:00,2026-05-18 17:00:00,In Production,368.24,3.0,False,No
 449406,LIGLAU,Lauryn Ligocki,2026-05-05 13:23:00,2026-05-19 17:00:00,In Production,324.1,8.0,False,No
-448024,SLAMICHOM,Michael Slavin,2026-04-20 11:14:00,2026-04-24 17:00:00,In Production,236.48,23.0,True,No
+448024,SLAMICHOM,Michael Slavin,2026-04-20 11:14:00,2026-04-24 17:00:00,In Production,236.48,24.0,True,No
 448859,PAIADI,Aditya Pai,2026-04-29 12:00:00,2026-05-13 17:00:00,In Production,2255.72,14.0,True,No
 449359,ANDMAR,Mark Anderson,2026-05-04 17:59:00,2026-05-13 17:00:00,In Production,118.07,9.0,True,No
 449621,RASMOSFL,Moses Rasberry,2026-05-07 10:14:00,2026-05-20 17:00:00,In Production,634.04,7.0,False,No
@@ -422,7 +422,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 449722,GARLIN,Lina Garcia,2026-05-08 09:03:00,2026-05-18 17:00:00,In Production,0.0,6.0,False,No
 449373,SALNICLAW,Nicholas Salava,2026-05-05 09:19:00,2026-05-19 17:00:00,In Production,174.08,9.0,False,No
 449505,RIYTARCHI,Tariq Riyal,2026-05-06 10:08:00,2026-05-19 17:00:00,In Production,347.7,8.0,False,No
-449752,KMADAN,Daniel Kmak,2026-05-08 11:11:57,2026-05-26 10:55:00,Submitted,0.0,5.0,False,No
+449752,KMADAN,Daniel Kmak,2026-05-08 11:11:57,2026-05-26 10:55:00,Submitted,0.0,6.0,False,No
 449044,BENKAT,Katie Benka,2026-04-30 14:04:00,2026-05-22 17:00:00,In Production,1705.74,13.0,False,No
 447311,KMADAN,Daniel Kmak,2026-04-10 09:47:05,2026-04-24 09:44:00,Submitted,0.0,34.0,True,No
 445009,KMADAN,Daniel Kmak,2026-03-13 11:16:00,2026-04-17 17:00:00,On Hold,92.06,61.0,True,No
@@ -545,11 +545,11 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 440529,KMADAN,Daniel Kmak,2026-01-21 14:04:00,2026-02-27 17:00:00,On Hold,89.99,112.0,True,No
 446127,GEOCHR,Chrisoula Georgacopoulos,2026-03-27 07:38:33,,Sent for TryIn,0.0,48.0,False,No
 448806,KMADAN,Daniel Kmak,2026-04-28 16:03:14,2026-05-13 16:01:00,Submitted,0.0,15.0,True,No
-446269,PATKRURO,Krupa Patel,2026-03-30 11:14:36,,Sent for TryIn,0.0,44.0,False,No
+446269,PATKRURO,Krupa Patel,2026-03-30 11:14:36,,Sent for TryIn,0.0,45.0,False,No
 449673,JUEDAV,David Juel,2026-05-07 13:50:00,2026-05-15 17:00:00,In Production,159.42,6.0,False,No
 449495,BOYMIC,Michael Boyle,2026-05-06 09:21:00,2026-05-20 17:00:00,In Production,314.59,8.0,False,No
 449710,TADSIM,Simon Tadros,2026-05-07 17:50:00,2026-05-18 17:00:00,In Production,100.42,6.0,False,No
-449266,KHASUM,Sumayyah Khan,2026-05-04 11:12:00,2026-05-18 17:00:00,In Production,285.43,9.0,False,No
+449266,KHASUM,Sumayyah Khan,2026-05-04 11:12:00,2026-05-18 17:00:00,In Production,285.43,10.0,False,No
 449034,RAIMAN,Mansi Raina,2026-04-30 13:39:00,2026-05-20 17:00:00,In Production,629.03,13.0,False,No
 441002,KMADAN,Daniel Kmak,2026-01-27 15:13:00,2026-02-27 17:00:00,On Hold,89.99,106.0,True,No
 449576,TAPGAR,Gary Tapak,2026-05-06 14:07:00,2026-05-14 17:00:00,In Production,0.0,7.0,False,No
@@ -581,7 +581,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 442473,LAWMUR,Murrphy Lawston,2026-02-12 10:52:00,2026-02-26 17:00:00,In Production,272.98,91.0,True,No
 449701,SHESABRV,Saba Sheikh,2026-05-07 16:06:00,2026-05-18 17:00:00,In Production,103.48,6.0,False,No
 449728,GARLIN,Lina Garcia,2026-05-08 09:22:20,,Sent for TryIn,0.0,6.0,False,No
-449751,KMADAN,Daniel Kmak,2026-05-08 11:10:41,2026-05-26 10:55:00,Submitted,0.0,5.0,False,No
+449751,KMADAN,Daniel Kmak,2026-05-08 11:10:41,2026-05-26 10:55:00,Submitted,0.0,6.0,False,No
 448353,PATUMA,Umang Patel,2026-05-01 14:49:00,2026-05-11 17:00:00,In Production,3065.76,12.0,True,No
 449554,CUARACMOK,Rachel Cuadros,2026-05-06 13:30:00,2026-05-14 17:00:00,In Production,158.55,7.0,False,No
 449847,DARNAT,Nathan Darling,2026-05-11 11:05:13,,Sent for TryIn,10.0,3.0,False,No
@@ -665,7 +665,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 449910,NIEMAR,Mark Niemiec,2026-05-11 16:12:00,2026-05-19 17:00:00,In Production,107.42,2.0,False,No
 449665,MORCHR,Chris Morfas,2026-05-07 13:42:00,2026-05-15 17:00:00,In Production,119.51,6.0,False,No
 449681,MASJOH,John Mastrud,2026-05-07 14:10:00,2026-05-15 17:00:00,In Production,135.02,6.0,False,No
-449754,RYASEA,Sean Ryan,2026-05-08 11:14:00,2026-05-18 17:00:00,In Production,102.69,5.0,False,No
+449754,RYASEA,Sean Ryan,2026-05-08 11:14:00,2026-05-18 17:00:00,In Production,102.69,6.0,False,No
 444753,KMADAN,Daniel Kmak,2026-03-11 09:18:00,2026-04-17 17:00:00,On Hold,92.06,64.0,True,No
 449502,PERLUI,Luis Peralta,2026-05-06 09:53:00,2026-05-19 17:00:00,In Production,347.7,8.0,False,No
 449424,SKRLEO,Leo Skrypkun,2026-05-05 14:07:00,2026-05-13 17:00:00,In Production,119.51,8.0,True,No
