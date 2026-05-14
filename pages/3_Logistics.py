@@ -178,15 +178,48 @@ with cols[5]:
 
 # ── Filters ───────────────────────────────────────────────────────────────────
 section("Filters")
-f1, f2, f3 = st.columns([2, 2, 1])
-with f1:
-    depts_available = sorted(cases["pseudo_dept"].dropna().unique().tolist())
-    selected_depts = st.multiselect("Department", depts_available, default=depts_available)
+
+depts_available = sorted(cases["pseudo_dept"].dropna().unique().tolist())
+
+# Initialize per-department checkbox state (default: all on)
+for d in depts_available:
+    key = f"dept_chk_{d}"
+    if key not in st.session_state:
+        st.session_state[key] = True
+
+# Header row: label + All / None convenience buttons
+hdr = st.columns([6, 1, 1])
+with hdr[0]:
+    st.markdown("**Departments** &nbsp;<span style='color:#7d8590;font-size:12px'>"
+                "click a checkbox to toggle</span>", unsafe_allow_html=True)
+with hdr[1]:
+    if st.button("All", use_container_width=True, key="dept_all_btn"):
+        for d in depts_available:
+            st.session_state[f"dept_chk_{d}"] = True
+        st.rerun()
+with hdr[2]:
+    if st.button("None", use_container_width=True, key="dept_none_btn"):
+        for d in depts_available:
+            st.session_state[f"dept_chk_{d}"] = False
+        st.rerun()
+
+# One checkbox per department in a horizontal row
+dept_cols = st.columns(max(len(depts_available), 1))
+for i, d in enumerate(depts_available):
+    with dept_cols[i]:
+        st.checkbox(d, key=f"dept_chk_{d}")
+selected_depts = [d for d in depts_available
+                  if st.session_state.get(f"dept_chk_{d}", True)]
+
+# Status + behind-only on the next row
+f2, f3 = st.columns([4, 1])
 with f2:
     statuses_available = sorted(cases["Cases_Status"].dropna().unique().tolist())
-    selected_statuses = st.multiselect("Status", statuses_available, default=statuses_available)
+    selected_statuses = st.multiselect("Status", statuses_available,
+                                       default=statuses_available)
 with f3:
-    show_behind_only = st.checkbox("Behind only", value=False)
+    show_behind_only = st.checkbox("Behind only", value=False,
+                                    key="behind_only_chk")
 
 view = cases[
     cases["pseudo_dept"].isin(selected_depts) &
