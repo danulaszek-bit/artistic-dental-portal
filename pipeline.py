@@ -793,6 +793,34 @@ def run_pipeline():
 
     log.info("Saved local cache: %s", latest_dir)
 
+    # ── Logistics module: per-case station tracking + KPIs ──────────────────
+    # Reads raw cases (un-renamed Cases_* columns) and writes:
+    #   cache/latest/cases_logistics.csv
+    #   cache/latest/logistics_summary.csv
+    try:
+        from pipeline_logistics import compute_logistics
+        raw_cases = pd.DataFrame()
+        all_cases_path = watch_folder / "AllCasesByDateIn.csv"
+        active_raw_path = watch_folder / "Active_30_day.csv"
+        if all_cases_path.exists():
+            raw_cases = pd.read_csv(all_cases_path, encoding="latin-1", low_memory=False)
+            log.info("Logistics: loaded AllCasesByDateIn.csv (%d rows)", len(raw_cases))
+        elif active_raw_path.exists():
+            raw_cases = pd.read_csv(active_raw_path, encoding="latin-1", low_memory=False)
+            log.info("Logistics: loaded Active_30_day.csv as fallback (%d rows)", len(raw_cases))
+        else:
+            log.warning("Logistics: no raw cases file found — skipping")
+        if not raw_cases.empty:
+            compute_logistics(
+                cases_df=raw_cases,
+                base_dir=BASE_DIR,
+                cache_dir=CACHE_DIR,
+                latest_dir=latest_dir,
+            )
+            log.info("Logistics: cache/latest/cases_logistics.csv + logistics_summary.csv written")
+    except Exception as exc:
+        log.error("Logistics module failed (other outputs unaffected): %s", exc)
+
     try:
         service   = get_drive_service()
         folder_id = CFG["google_drive"]["folder_id"]

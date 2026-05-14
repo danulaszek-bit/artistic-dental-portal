@@ -1,0 +1,65 @@
+# ============================================================
+# Logistics Dashboard — Configuration
+# ============================================================
+# Defines how Cases_LastLocation values are grouped into pseudo-departments
+# until Products_Department is available from AllCasesByDateIn.
+#
+# Matching order (first match wins):
+#   1. exact match against `names`
+#   2. starts-with match against `prefixes`
+#   3. otherwise → "Unknown"
+#
+# Refine freely. Add new departments, move locations between them.
+# Anything you don't recognize, leave in Unknown — iterate.
+
+departments:
+
+  Fixed:
+    # Crown, bridge, finishing, glazing — fixed restorations
+    prefixes: [FIXED, STAIN, PORCWALL, BRUX, SPLFINISH]
+    names:    [CEMENT, FRED, HENRY, KEVIN]
+    threshold_days: 3   # alert if case at a Fixed station > 3 days
+
+  Implants:
+    # Porcelain implants, milling implants
+    prefixes: [PORCIP, MILLINGIP, REMIP]   # REMIP* = removable implant techs
+    names:    []
+    threshold_days: 5
+
+  Removable:
+    # Dentures, partials — but NOT removable implants (those go to Implants above)
+    prefixes: [REM]                         # catches REMQC, REMOUT, REMPREP — REMIP* already claimed above
+    names:    []
+    threshold_days: 5
+
+  CAD_CAM:
+    # Digital fabrication
+    prefixes: []
+    names:    [PRINTING, SINTERING, MILLING, CADOUT, CADSTALL, CADSTALLED]
+    threshold_days: 2
+
+  Surgical:
+    # CT scans, surgical guides, intraoral scans
+    prefixes: [CTS, GUIDES]
+    names:    [IOS, CBSCAN, SCANNING, DIGITALR]
+    threshold_days: 7
+
+  Hold_Stalled:
+    # Workflow states where cases aren't actively moving — should be rare
+    prefixes: []
+    names:    [HOLDWALL, 2HOURRUS, SENTFORD, PREP, SPLINTS]
+    threshold_days: 1   # anything stalled > 1 day is concerning
+
+# Department shown when location doesn't match any rule above
+unknown_threshold_days: 5
+
+# ============================================================
+# Backlog flags
+# ============================================================
+# A case is flagged "behind" if ANY of the following are true:
+behind_criteria:
+  past_due_date: true              # Cases_DueDate < today (open cases only)
+  stuck_at_station: true           # days_at_current_station > department threshold
+  high_value_aged: false           # optional: $X case open > Y days (set to true to enable)
+  high_value_threshold_usd: 1000
+  high_value_age_days: 14
