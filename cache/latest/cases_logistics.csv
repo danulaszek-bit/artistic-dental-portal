@@ -1,582 +1,590 @@
 Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,Cases_DueDate,Cases_Status,Cases_LastLocation,Cases_TotalCharge,pseudo_dept,days_at_station,dept_threshold_days,age_days,days_overdue,flag_past_due,flag_stuck,flag_high_value_aged,is_behind
-449422,MCCJOS,Joseph McCartin,H287,2026-05-05 14:06:00,2026-05-13 17:00:00,In Production,SINTERING,119.51,CAD_CAM,0,2,8,0,False,False,False,False
-449798,TADSIM,Simon Tadros,E121,2026-05-08 14:16:00,2026-05-18 17:00:00,In Production,PREP,159.59,Hold_Stalled,0,1,5,0,False,False,False,False
-449564,ZIEELI,Elise Ziegenhorn,F195,2026-05-06 13:42:00,2026-05-18 17:00:00,In Production,PREP,83.72,Hold_Stalled,0,1,7,0,False,False,False,False
+450250,TADSIM,Simon Tadros,P488,2026-05-14 14:10:00,2026-05-27 17:00:00,In Production,,366.87,Unknown,0,5,-1,0,False,False,False,False
+449564,ZIEELI,Elise Ziegenhorn,F195,2026-05-06 13:42:00,2026-05-18 17:00:00,In Production,SPLFINISH,83.72,Fixed,0,3,7,0,False,False,False,False
 449216,SZASCO,Scott Szatkowski,D280*,2026-05-01 15:36:27,,Sent for TryIn,,0.0,Unknown,0,5,12,0,False,False,False,False
-443340,TOKNIC,Nicholas Tokarski,E227,2026-02-23 14:37:50,,Sent for TryIn,,0.0,Unknown,0,5,79,0,False,False,False,False
-449715,NISLIN,Linora Nissan,E160,2026-05-08 08:42:00,2026-05-19 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,5,0,False,False,False,False
-449511,CHANHWA,Hwaiyin Chang,F226,2026-05-06 10:43:00,2026-05-14 17:00:00,In Production,MILLING BRUX,119.51,Unknown,0,5,7,0,False,False,False,False
+443340,TOKNIC,Nicholas Tokarski,E227,2026-05-14 14:37:00,2026-05-28 17:00:00,In Production,,6.99,Unknown,0,5,-1,0,False,False,False,False
+449715,NISLIN,Linora Nissan,E160,2026-05-08 08:42:00,2026-05-19 17:00:00,In Production,MILLING EZ,79.79,Unknown,0,5,5,0,False,False,False,False
 449846,PANANE,Aneta Paniczko,D321$,2026-05-11 11:02:51,,Sent for TryIn,,0.0,Unknown,0,5,2,0,False,False,False,False
-449446,GORJOH,John Gordon,H180,2026-05-05 14:43:00,2026-05-15 17:00:00,In Production,REMTRYINWALL,620.77,Removable,0,5,8,0,False,False,False,False
-449263,HOGTIM,Timothy Hogan,V254*,2026-05-04 10:59:00,2026-05-18 17:00:00,In Production,PRINTING,0.0,CAD_CAM,0,2,9,0,False,False,False,False
-449725,GARLIN,Lina Garcia,E100,2026-05-08 09:11:00,2026-05-22 17:00:00,In Production,,190.11,Unknown,0,5,5,0,False,False,False,False
-449469,LOMANTM,Anthony Lombardi,EVQC-050526839215,2026-05-05 16:05:00,2026-05-13 17:00:00,In Production,PRINTING,211.76,CAD_CAM,0,2,8,0,False,False,False,False
-449727,TUCELILV,Elizabeth Tucker,E72,2026-05-08 09:20:00,2026-05-22 17:00:00,In Production,PREP,533.81,Hold_Stalled,0,1,5,0,False,False,False,False
-449739,JUNROB,Robin Jungblut,D306*,2026-05-08 10:17:00,2026-05-22 17:00:00,In Production,GUIDES,4214.74,Surgical,0,7,5,0,False,False,False,False
-449553,BERDERCP,Derek Berquist,F15,2026-05-06 13:31:00,2026-05-14 17:00:00,In Production,SHADEMATCHCART,221.81,Unknown,0,5,7,0,False,False,False,False
-448965,MALRYA,Ryann Maloney,P371*,2026-04-30 10:33:00,2026-05-13 17:00:00,In Production,STAINGLAZE,79.79,Fixed,0,3,13,0,False,False,False,False
-449787,AHMSAN,Sana Ahmed,E307,2026-05-08 13:28:00,2026-05-15 17:00:00,In Production,REMPREP,73.49,Removable,0,5,5,0,False,False,False,False
-446653,KOLMARFF,Mark Kolozenski,D269$,2026-04-28 10:42:00,2026-05-19 17:00:00,In Production,RUSHMILLINGSHELF,1233.57,Unknown,0,5,15,0,False,False,False,False
+450053,PAPAMI,Amiel Pappas,EVDSGN-051326839201,2026-05-13 09:10:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,100.03,Unknown,0,5,0,0,False,False,False,False
+450201,SANJAM,James Santarelli,EVDSGN-051426839109,2026-05-14 11:39:00,2026-05-21 17:00:00,In Production,,91.05,Unknown,0,5,-1,0,False,False,False,False
+450265,SALNICLAW,Nicholas Salava,P810*,2026-05-14 15:03:00,2026-06-01 17:00:00,In Production,,174.08,Unknown,0,5,-1,0,False,False,False,False
+450210,CHANHWA,Hwaiyin Chang,P829,2026-05-14 12:06:00,2026-05-22 17:00:00,In Production,,119.51,Unknown,0,5,-1,0,False,False,False,False
+449725,GARLIN,Lina Garcia,E100,2026-05-08 09:11:00,2026-05-22 17:00:00,In Production,REMOUT,190.11,Removable,0,5,5,0,False,False,False,False
+450001,MALRYA,Ryann Maloney,H81,2026-05-12 14:15:00,2026-05-27 17:00:00,In Production,PREP,1013.82,Hold_Stalled,0,1,1,0,False,False,False,False
+450037,COPMAR,Mario Copello,F174*,2026-05-12 16:25:00,2026-05-19 17:00:00,In Production,,103.48,Unknown,0,5,1,0,False,False,False,False
+449727,TUCELILV,Elizabeth Tucker,E72,2026-05-08 09:20:00,2026-05-22 17:00:00,In Production,MILLING IMPLANT,533.81,Unknown,0,5,5,0,False,False,False,False
+449961,FELNIC,Nick Feller,EVDSGN-051226839506,2026-05-12 11:34:00,2026-05-19 17:00:00,In Production,CADSTALLED,273.14,CAD_CAM,0,2,1,0,False,False,False,False
+449739,JUNROB,Robin Jungblut,D306*,2026-05-08 10:17:00,2026-05-22 17:00:00,In Production,DIGITALREMOVABLE,4214.74,Unknown,0,5,5,0,False,False,False,False
+450038,KHASAMNA,Samia Khan,EVDSGN-051226839527,2026-05-12 16:31:00,2026-05-27 17:00:00,In Production,EVD SUBMITTED,66.5,Unknown,0,5,1,0,False,False,False,False
+450223,HANMIR,Mirette Hanna,P42,2026-05-14 12:29:00,2026-05-22 17:00:00,In Production,,84.91,Unknown,0,5,-1,0,False,False,False,False
+450188,PERLUI,Luis Peralta,EVDSGN-051426839105,2026-05-14 10:26:00,2026-05-21 17:00:00,In Production,,204.59,Unknown,0,5,-1,0,False,False,False,False
+450252,YIANIC,Nicas Yiannias,P585*,2026-05-14 14:10:00,2026-05-29 17:00:00,In Production,,1113.81,Unknown,0,5,-1,0,False,False,False,False
+446653,KOLMARFF,Mark Kolozenski,D269$,2026-04-28 10:42:00,2026-05-19 17:00:00,In Production,PORCIP DEAN,1233.57,Implants,0,5,15,0,False,False,False,False
+449991,RUDOLIBA,Olivia Rudnicki,V92!,2026-05-14 13:52:00,2026-05-26 17:00:00,In Production,,177.58,Unknown,0,5,-1,0,False,False,False,False
+449970,OLCVAN,Vania Olcay,EVDSGN-051226839511,2026-05-12 12:19:00,2026-05-20 17:00:00,In Production,MILLING EMAX,153.44,Unknown,0,5,1,0,False,False,False,False
+450206,CHUMAN,Manas Chug,P27,2026-05-14 12:02:00,2026-05-22 17:00:00,In Production,,84.91,Unknown,0,5,-1,0,False,False,False,False
 449451,GEOCHR,Chrisoula Georgacopoulos,P856*,2026-05-05 14:52:42,,Sent for TryIn,,0.0,Unknown,0,5,8,0,False,False,False,False
-449661,KEAMICEL,Michelle Kearney,P815,2026-05-07 13:07:00,2026-05-19 17:00:00,In Production,SPLFINISH,191.27,Fixed,0,3,6,0,False,False,False,False
-449888,GAFMEG,Meghan Gaffney,V275,2026-05-11 13:32:00,2026-05-19 17:00:00,In Production,,240.73,Unknown,0,5,2,0,False,False,False,False
-449364,NIEJOS,Joseph Nierzwicki,H308!,2026-05-05 08:51:00,2026-05-14 17:00:00,In Production,MILLINGIP,249.44,Implants,0,5,8,0,False,False,False,False
-449822,NISLIN,Linora Nissan,V42,2026-05-11 08:40:00,2026-05-21 17:00:00,In Production,,79.79,Unknown,0,5,2,0,False,False,False,False
-449440,SAMJACSTC,Jacob Samuel,H106,2026-05-05 14:33:00,2026-05-19 17:00:00,In Production,MILLING BRUX,284.38,Unknown,0,5,8,0,False,False,False,False
+450241,GAFMEG,Meghan Gaffney,P97,2026-05-14 13:47:00,2026-05-19 17:00:00,In Production,,216.62,Unknown,0,5,-1,0,False,False,False,False
+449888,GAFMEG,Meghan Gaffney,V275,2026-05-11 13:32:00,2026-05-19 17:00:00,In Production,REMIPLIZ,240.73,Implants,0,5,2,0,False,False,False,False
+449593,OLCVAN,Vania Olcay,F150*,2026-05-06 16:56:00,2026-05-21 17:00:00,In Production,CTSIOSHOLDING,80.82,Surgical,0,7,7,0,False,False,False,False
+450023,SIETOM,Tom Siewert,EVDSGN-051226839519,2026-05-12 15:27:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,141.17,Unknown,0,5,1,0,False,False,False,False
+449822,NISLIN,Linora Nissan,V42,2026-05-11 08:40:00,2026-05-21 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,2,0,False,False,False,False
+449935,OBEGAR,Garrett Obenauf,H154,2026-05-12 08:55:00,2026-05-27 17:00:00,In Production,SCANNING,533.81,Surgical,0,7,1,0,False,False,False,False
+450237,KAPSIMHIN,Simmi Kapur,P503,2026-05-14 13:28:00,2026-05-21 17:00:00,In Production,,119.51,Unknown,0,5,-1,0,False,False,False,False
+449940,PLAROB,Robert Placzek,H56,2026-05-12 09:16:00,2026-05-21 17:00:00,In Production,REMIPBLERTA,78.59,Implants,0,5,1,0,False,False,False,False
+449440,SAMJACSTC,Jacob Samuel,H106,2026-05-05 14:33:00,2026-05-19 17:00:00,In Production,STAINGLAZE,284.38,Fixed,0,3,8,0,False,False,False,False
+450108,SKRLEO,Leo Skrypkun,F90,2026-05-13 13:32:00,2026-05-21 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,0,0,False,False,False,False
 441788,SOLLUK,Luckas Soliday,D177$,2026-02-04 14:23:19,,Sent for TryIn,,0.0,Unknown,0,5,98,0,False,False,False,False
-449830,LEBRAF,Raffi Leblebijian,EVDSGN-051126839460,2026-05-11 08:51:00,2026-05-18 17:00:00,In Production,,364.19,Unknown,0,5,2,0,False,False,False,False
-449404,SAMJACSTC,Jacob Samuel,H104,2026-05-05 13:18:00,2026-05-15 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,8,0,False,False,False,False
-449297,TAPGAR,Gary Tapak,V289,2026-05-04 12:41:00,2026-05-18 17:00:00,In Production,MILLING BRIDGE,375.24,Unknown,0,5,9,0,False,False,False,False
-449203,HOLMARLA,Mary Ann Hollis,E89*,2026-05-01 14:56:00,2026-05-12 17:00:00,In Production,SPLFINISH,112.7,Fixed,0,3,12,1,True,False,False,True
-449849,SIETOM,Tom Siewert,EVDSGN-051126839470,2026-05-11 11:11:00,2026-05-18 17:00:00,In Production,,141.17,Unknown,0,5,2,0,False,False,False,False
+450102,RIYTARCHI,Tariq Riyal,F173*,2026-05-13 12:55:00,2026-05-28 17:00:00,In Production,CTS,438.74,Surgical,0,7,0,0,False,False,False,False
+450039,DOUBRI,Brian Douts,EVDSGN-051226839528,2026-05-12 16:50:00,2026-05-20 17:00:00,In Production,PORCIP DEAN,80.82,Implants,0,5,1,0,False,False,False,False
+449962,LUKPAU,Paul Lukawski,H238,2026-05-12 11:37:00,2026-05-21 17:00:00,In Production,SCANNING,232.03,Surgical,0,7,1,0,False,False,False,False
+449947,DOUBRI,Brian Douts,EVDSGN-051226839501,2026-05-12 10:13:00,2026-05-19 17:00:00,In Production,STAINGLAZE,80.82,Fixed,0,3,1,0,False,False,False,False
+449967,KORJAMEP,Jamie Korolyov,EVDSGN-051226839508,2026-05-12 11:57:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,159.76,Unknown,0,5,1,0,False,False,False,False
+450219,PETCHR,Christine Petrilla,P574,2026-05-14 12:15:00,2026-05-22 17:00:00,In Production,,291.29,Unknown,0,5,-1,0,False,False,False,False
 449527,BERDERCP,Derek Berquist,E144,2026-05-06 12:31:50,,Sent for TryIn,,0.0,Unknown,0,5,7,0,False,False,False,False
-449767,RHICAT,Catherine Rhim,E237,2026-05-08 12:26:00,2026-05-19 17:00:00,In Production,PREP,84.91,Hold_Stalled,0,1,5,0,False,False,False,False
-449534,AHMSAN,Sana Ahmed,F250,2026-05-06 12:41:00,2026-05-14 17:00:00,In Production,MILLING BRUX,73.49,Unknown,0,5,7,0,False,False,False,False
-449620,BERDANLAP,Daniel Berquist,P410,2026-05-07 10:04:00,2026-05-20 17:00:00,In Production,,170.43,Unknown,0,5,6,0,False,False,False,False
-449654,CHUMANRV,Manas Chug,P560,2026-05-07 13:05:00,2026-05-20 17:00:00,In Production,SENTFORDESIGN,297.9,Unknown,0,5,6,0,False,False,False,False
-449256,ALSEMA,Eman Alsahlani,V28*,2026-05-04 10:46:00,2026-05-15 17:00:00,In Production,MILLING BRUX,1292.84,Unknown,0,5,9,0,False,False,False,False
-449666,FELNIC,Nick Feller,EVDSGN-050726839274,2026-05-07 13:41:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,91.05,Unknown,0,5,6,0,False,False,False,False
-448920,GRAVICDES,Victor Grandinetti,F148,2026-04-29 14:14:00,2026-05-13 17:00:00,In Production,REMOUT,289.33,Removable,0,5,14,0,False,False,False,False
-449774,JOUCYN,Cynthia Jourdan,E357,2026-05-08 12:53:00,2026-05-20 17:00:00,In Production,,289.33,Unknown,0,5,5,0,False,False,False,False
-449547,OGAVIN,Vincent Oganwu,F112,2026-05-06 13:25:00,2026-05-14 17:00:00,In Production,SINTERING,79.79,CAD_CAM,0,2,7,0,False,False,False,False
-449559,FELNIC,Nick Feller,EVDSGN-050626839238,2026-05-06 13:33:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,91.05,Unknown,0,5,7,0,False,False,False,False
-449597,CUARACMOK,Rachel Cuadros,EVDSGN-050626839253,2026-05-06 17:15:00,2026-05-14 17:00:00,In Production,FIXEDQC,108.0,Fixed,0,3,7,0,False,False,False,False
-449679,RASMOSFL,Moses Rasberry,E224*,2026-05-07 14:04:00,2026-05-14 17:00:00,In Production,SENTFORDESIGN,70.59,Unknown,0,5,6,0,False,False,False,False
+450185,DOUBRI,Brian Douts,EVDSGN-051426839103,2026-05-14 10:00:00,2026-05-21 17:00:00,In Production,,242.45,Unknown,0,5,-1,0,False,False,False,False
+449943,HANPATSK,Patrick Hann,H286,2026-05-12 09:24:00,2026-05-27 17:00:00,In Production,SCANNING,498.01,Surgical,0,7,1,0,False,False,False,False
+449767,RHICAT,Catherine Rhim,E237,2026-05-08 12:26:00,2026-05-19 17:00:00,In Production,MILLINGIP,84.91,Implants,0,5,5,0,False,False,False,False
+450248,SINPAUNV,Paul Singh,P582*,2026-05-14 14:05:00,2026-05-21 17:00:00,In Production,,53.1,Unknown,0,5,-1,0,False,False,False,False
+450092,SOHMUHHW,Muhammad Sohail,F46*,2026-05-13 12:13:00,2026-06-02 17:00:00,In Production,GUIDES,286.87,Surgical,0,7,0,0,False,False,False,False
+450174,AUSMIC,Michaelangelo Aust,P831,2026-05-14 09:29:00,2026-05-22 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
+449620,BERDANLAP,Daniel Berquist,P410,2026-05-07 10:04:00,2026-05-20 17:00:00,In Production,SPLFINISH,170.43,Fixed,0,3,6,0,False,False,False,False
+449654,CHUMANRV,Manas Chug,P560,2026-05-07 13:05:00,2026-05-20 17:00:00,In Production,PORCIP NINI,297.9,Implants,0,5,6,0,False,False,False,False
+450161,TOKNIC,Nicholas Tokarski,P442,2026-05-14 08:43:00,2026-05-27 17:00:00,In Production,,119.51,Unknown,0,5,-1,0,False,False,False,False
+450096,FELNIC,Nick Feller,EVDSGN-051326839206,2026-05-13 12:32:00,2026-05-21 17:00:00,In Production,EVD SUBMITTED,91.05,Unknown,0,5,0,0,False,False,False,False
+449923,LEURIN,Ringo Leung,F62*,2026-05-12 08:16:00,2026-05-27 17:00:00,In Production,SENTFORDESIGN,583.07,Unknown,0,5,1,0,False,False,False,False
+449774,JOUCYN,Cynthia Jourdan,E357,2026-05-08 12:53:00,2026-05-20 17:00:00,In Production,REMOUT,289.33,Removable,0,5,5,0,False,False,False,False
+450229,YERPAT,Patrick Yerkes,P806,2026-05-14 12:41:00,2026-05-26 17:00:00,In Production,,92.06,Unknown,0,5,-1,0,False,False,False,False
+450061,POSBRI,Brian Post,F9,2026-05-13 09:27:00,2026-05-22 17:00:00,In Production,,159.42,Unknown,0,5,0,0,False,False,False,False
+450232,GIRBET,Betsy Giron,E374!,2026-05-14 12:54:27,,Sent for TryIn,,0.0,Unknown,0,5,-1,0,False,False,False,False
+450066,PETCHR,Christine Petrilla,F236,2026-05-13 10:24:00,2026-05-26 17:00:00,In Production,SCANNING,93.95,Surgical,0,7,0,0,False,False,False,False
+449978,NUCMAG,Magdaleno Nucum,H270,2026-05-12 12:34:00,2026-05-20 17:00:00,In Production,SCANNING,73.49,Surgical,0,7,1,0,False,False,False,False
+450069,BERDANCP,Daniel Berquist,H110,2026-05-13 10:26:00,2026-05-21 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,0,0,False,False,False,False
 447784,RHICAT,Catherine Rhim,P70,2026-04-16 12:39:00,2026-04-24 17:00:00,In Production,CTS,0.0,Surgical,0,7,27,19,True,False,False,True
-449416,GRAALE,Alexander Grabavoy,H27,2026-05-05 13:57:00,2026-05-14 17:00:00,In Production,SPLFINISH,163.0,Fixed,0,3,8,0,False,False,False,False
-449568,KORMIK,Mikhail Korolyov,EVDSGN-050626839241,2026-05-06 13:48:00,2026-05-14 17:00:00,In Production,STAINGLAZE,79.79,Fixed,0,3,7,0,False,False,False,False
-449086,WYLDUS,Dustin Wylde,D333$,2026-05-01 09:48:00,2026-05-22 17:00:00,In Production,MILLING AO4,1536.38,Unknown,0,5,12,0,False,False,False,False
-449524,KASMIK,Michael Kasper,H232*,2026-05-06 12:21:18,,Sent for TryIn,,0.0,Unknown,0,5,7,0,False,False,False,False
-449853,MCCSCO,Scott McCarty,V138,2026-05-11 11:21:00,2026-05-20 17:00:00,In Production,,110.44,Unknown,0,5,2,0,False,False,False,False
-449512,DOUJASVA,Jason Douts,F175,2026-05-06 10:44:00,2026-05-15 17:00:00,In Production,MILLING BRUX,129.51,Unknown,0,5,7,0,False,False,False,False
-449458,PATPINNV,Pinal Patel,F245*,2026-05-05 15:04:00,2026-05-13 17:00:00,In Production,PRINTING,182.09,CAD_CAM,0,2,8,0,False,False,False,False
-449059,KUCMAR,Mark Kuchta,E166*,2026-04-30 15:55:00,2026-05-14 17:00:00,In Production,2HOURRUSHCART,567.49,Unknown,0,5,13,0,False,False,False,False
-449072,LOPSARST,Sarah Lopez,E16*,2026-05-08 07:59:00,2026-05-19 17:00:00,In Production,REMOUT,6.99,Removable,0,5,5,0,False,False,False,False
-449887,JONSYR,Syreeta Jones,EVDSGN-051126839477,2026-05-11 13:29:00,2026-05-19 17:00:00,In Production,,92.06,Unknown,0,5,2,0,False,False,False,False
-449548,LUKPAU,Paul Lukawski,F149,2026-05-06 13:26:00,2026-05-15 17:00:00,In Production,MILLING BRUX,112.52,Unknown,0,5,7,0,False,False,False,False
+450175,KORMIK,Mikhail Korolyov,EVDSGN-051426839102,2026-05-14 09:28:00,2026-05-21 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
+450183,LEEJIW,Jiwoo Lee,P536,2026-05-14 09:50:00,2026-05-29 17:00:00,In Production,,189.35,Unknown,0,5,-1,0,False,False,False,False
+449086,WYLDUS,Dustin Wylde,D333$,2026-05-01 09:48:00,2026-05-22 17:00:00,In Production,PORCIP DEAN,1536.38,Implants,0,5,12,0,False,False,False,False
+449524,KASMIK,Michael Kasper,H232*,2026-05-14 12:21:00,2026-06-04 17:00:00,In Production,,202.52,Unknown,0,5,-1,0,False,False,False,False
+450100,ABUSIM,Simon Abu-Aita,F59,2026-05-13 12:55:00,2026-05-27 17:00:00,In Production,REMPREP,620.77,Removable,0,5,0,0,False,False,False,False
+449458,PATPINNV,Pinal Patel,F245*,2026-05-05 15:04:00,2026-05-18 17:00:00,In Production,HENRY,182.09,Fixed,0,3,8,0,False,False,False,False
+449887,JONSYR,Syreeta Jones,EVDSGN-051126839477,2026-05-11 13:29:00,2026-05-19 17:00:00,In Production,PORCWALL,92.06,Fixed,0,3,2,0,False,False,False,False
+450055,GAFMEG,Meghan Gaffney,F224,2026-05-13 09:15:00,2026-05-21 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,0,0,False,False,False,False
 449471,OGRLIS,Lisa O'Grady,D329*,2026-05-05 16:20:00,2026-05-27 17:00:00,In Production,CADSTALLED,0.0,CAD_CAM,0,2,8,0,False,False,False,False
-449494,KUCMAR,Mark Kuchta,F221*,2026-05-06 09:17:00,2026-05-19 17:00:00,In Production,EVD SUBMITTED,348.71,Unknown,0,5,7,0,False,False,False,False
-449815,ABUSIM,Simon Abu-Aita,V267*,2026-05-09 11:22:00,2026-05-26 17:00:00,In Production,,301.87,Unknown,0,5,4,0,False,False,False,False
-449848,SCHJON,Jonathan Schulze,D113*$,2026-05-11 11:02:00,2026-06-01 17:00:00,In Production,,1802.34,Unknown,0,5,2,0,False,False,False,False
-449413,CHUMANRV,Manas Chug,H108,2026-05-05 13:29:00,2026-05-19 17:00:00,In Production,REMOUT,290.28,Removable,0,5,8,0,False,False,False,False
-449824,GIUMIC,Michael Giuliano,V287,2026-05-11 08:43:00,2026-05-19 17:00:00,In Production,,129.74,Unknown,0,5,2,0,False,False,False,False
-449079,LEEANT,Anthony Lee,E35,2026-05-01 09:17:00,2026-05-19 17:00:00,In Production,FRED,487.78,Fixed,0,3,12,0,False,False,False,False
-449295,DARDAVSB,David Dardick,H37*,2026-05-04 12:37:00,2026-05-14 17:00:00,In Production,PRINTINGIP,286.81,Unknown,0,5,9,0,False,False,False,False
-449868,GRAALE,Alexander Grabavoy,V86,2026-05-11 12:40:00,2026-05-14 17:00:00,In Production,,163.0,Unknown,0,5,2,0,False,False,False,False
-449415,LUKPAU,Paul Lukawski,H218,2026-05-05 13:56:00,2026-05-13 17:00:00,In Production,SINTERING,119.51,CAD_CAM,0,2,8,0,False,False,False,False
+450051,AUSMIC,Michaelangelo Aust,F235,2026-05-13 09:11:00,2026-05-22 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,0,0,False,False,False,False
+449494,KUCMAR,Mark Kuchta,F221*,2026-05-06 09:17:00,2026-05-19 17:00:00,In Production,FRED,348.71,Fixed,0,3,7,0,False,False,False,False
+450103,LUKPAU,Paul Lukawski,F115,2026-05-13 13:12:00,2026-05-21 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,0,0,False,False,False,False
+449815,ABUSIM,Simon Abu-Aita,V267*,2026-05-09 11:22:00,2026-05-26 17:00:00,In Production,GUIDES,301.87,Surgical,0,7,4,0,False,False,False,False
+449848,SCHJON,Jonathan Schulze,D113*$,2026-05-11 11:02:00,2026-06-01 17:00:00,In Production,MILLING AO4,1802.34,Unknown,0,5,2,0,False,False,False,False
+449824,GIUMIC,Michael Giuliano,V287,2026-05-11 08:43:00,2026-05-19 17:00:00,In Production,MILLINGIP,129.74,Implants,0,5,2,0,False,False,False,False
+450215,ALIFAT,Fatjona Aliaj,P143,2026-05-14 12:11:00,2026-05-29 17:00:00,In Production,,349.59,Unknown,0,5,-1,0,False,False,False,False
 448940,KHAOMDG,Omer Khan,F126!,2026-04-29 17:11:00,2026-05-21 17:00:00,In Production,MILLING BRUX,856.08,Unknown,0,5,14,0,False,False,False,False
-449635,DOUBRI,Brian Douts,E364*,2026-05-07 11:32:00,2026-05-14 17:00:00,In Production,SENTFORDESIGN,223.26,Unknown,0,5,6,0,False,False,False,False
-449478,LOMANTM,Anthony Lombardi,F165*,2026-05-05 17:31:00,2026-05-13 17:00:00,In Production,PRINTING,0.0,CAD_CAM,0,2,8,0,False,False,False,False
-449533,NUCMAG,Magdaleno Nucum,F242,2026-05-06 12:41:00,2026-05-14 17:00:00,In Production,SINTERING,66.5,CAD_CAM,0,2,7,0,False,False,False,False
-449625,SINMAN,Manpreet Singh,E329*,2026-05-07 10:28:00,2026-05-14 17:00:00,In Production,SENTFORDESIGN,92.06,Unknown,0,5,6,0,False,False,False,False
-449428,MALRYA,Ryann Maloney,H97,2026-05-05 14:13:00,2026-05-13 17:00:00,In Production,SINTERING,79.79,CAD_CAM,0,2,8,0,False,False,False,False
+450258,ARONIN,Nina Arora,P513*,2026-05-14 14:28:00,2026-05-21 17:00:00,In Production,,103.48,Unknown,0,5,-1,0,False,False,False,False
+450114,LUCPAULYO,Paulette Lucario,F156,2026-05-13 13:38:00,2026-05-21 17:00:00,In Production,PREP,129.74,Hold_Stalled,0,1,0,0,False,False,False,False
+449964,PATUMA,Umang Patel,F209,2026-05-12 11:40:00,2026-05-22 17:00:00,In Production,REMTRYINWALL,6.99,Removable,0,5,1,0,False,False,False,False
+449922,TYSMONLB,Monika Tyszkowski,EVQC-051126839490,2026-05-11 06:14:00,2026-05-19 18:00:00,In Production,EVD SUBMITTED,153.44,Unknown,0,5,2,0,False,False,False,False
 447988,VOHSAF,Safia Vohra,E304*,2026-04-17 15:05:34,,Sent for TryIn,,10.0,Unknown,0,5,26,0,False,False,False,False
-449856,GAMBRI,Brian Gambla,D79$,2026-05-11 11:32:00,2026-06-01 17:00:00,In Production,,568.62,Unknown,0,5,2,0,False,False,False,False
-449799,SLAMICJOL,Michael Slavin,E318,2026-05-08 14:20:00,2026-05-21 17:00:00,In Production,REMPREP,277.91,Removable,0,5,5,0,False,False,False,False
+449856,GAMBRI,Brian Gambla,D79$,2026-05-11 11:32:00,2026-06-01 17:00:00,In Production,REMIPBLERTA,568.62,Implants,0,5,2,0,False,False,False,False
+449799,SLAMICJOL,Michael Slavin,E318,2026-05-08 14:20:00,2026-05-21 17:00:00,In Production,GUIDES,277.91,Surgical,0,7,5,0,False,False,False,False
 446784,THADEVHOM,Devang Thakkar,E180,2026-04-03 12:56:00,2026-04-20 17:00:00,In Production,GUIDES,396.28,Surgical,0,7,40,23,True,False,False,True
-449906,LOPSARST,Sarah Lopez,V278*,2026-05-11 15:49:00,2026-05-18 17:00:00,In Production,,201.92,Unknown,0,5,2,0,False,False,False,False
-449652,HANMIR,Mirette Hanna,P846,2026-05-07 13:03:00,2026-05-15 17:00:00,In Production,SCANNING,84.91,Surgical,0,7,6,0,False,False,False,False
-449042,TOKNIC,Nicholas Tokarski,H240,2026-04-30 14:01:38,,Sent for TryIn,,0.0,Unknown,0,5,13,0,False,False,False,False
-449560,MORCHR,Chris Morfas,F91,2026-05-06 13:36:00,2026-05-14 17:00:00,In Production,MILLING EZ,119.51,Unknown,0,5,7,0,False,False,False,False
-449306,DOUBRI,Brian Douts,EVDSGN-050426839199,2026-05-04 13:14:00,2026-05-18 17:00:00,In Production,MILLING BRUX,484.9,Unknown,0,5,9,0,False,False,False,False
-449188,MACHAZ,Hazel Santiago-Macanip,E355,2026-05-01 14:24:00,2026-05-18 17:00:00,In Production,REMOUT,358.04,Removable,0,5,12,0,False,False,False,False
-448984,ANKSHA,Shaan Ankola,E128*,2026-04-30 11:21:00,2026-05-13 17:00:00,In Production,PRINTING,347.7,CAD_CAM,0,2,13,0,False,False,False,False
-449180,HANMIR,Mirette Hanna,E362,2026-05-01 13:57:00,2026-05-13 17:00:00,In Production,PORCWALL,175.96,Fixed,0,3,12,0,False,False,False,False
+449906,LOPSARST,Sarah Lopez,V278*,2026-05-11 15:49:00,2026-05-18 17:00:00,In Production,REMPREP,201.92,Removable,0,5,2,0,False,False,False,False
+450135,SAFTAR,Tarek Safadi,P572*,2026-05-13 15:10:00,2026-05-22 17:00:00,In Production,,103.48,Unknown,0,5,0,0,False,False,False,False
+449936,KORMIK,Mikhail Korolyov,H44,2026-05-12 09:07:00,2026-05-20 17:00:00,In Production,MILLING EZ,159.59,Unknown,0,5,1,0,False,False,False,False
+449042,TOKNIC,Nicholas Tokarski,H240,2026-05-14 14:01:00,2026-05-28 17:00:00,In Production,,6.99,Unknown,0,5,-1,0,False,False,False,False
+450256,MALRYA,Ryann Maloney,P378,2026-05-14 14:22:00,2026-05-22 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
+449306,DOUBRI,Brian Douts,EVDSGN-050426839199,2026-05-04 13:14:00,2026-05-18 17:00:00,In Production,PORCIP NINI,484.9,Implants,0,5,9,0,False,False,False,False
 446467,PERLUI,Luis Peralta,D266$*,2026-04-01 07:43:51,,Sent for TryIn,,0.0,Unknown,0,5,42,0,False,False,False,False
-449509,MCCSCO,Scott McCarty,F205,2026-05-06 10:40:00,2026-05-14 17:00:00,In Production,MILLINGIP,344.55,Implants,0,5,7,0,False,False,False,False
-449865,GRAALE,Alexander Grabavoy,V142,2026-05-11 12:38:00,2026-05-19 17:00:00,In Production,,163.0,Unknown,0,5,2,0,False,False,False,False
-449699,LAPANT,Anthony LaPorte,E232*,2026-05-07 15:53:00,2026-05-21 17:00:00,Outsourced,,292.97,Unknown,0,5,6,0,False,False,False,False
-449765,JURAND,Andrew Jursik,E202*,2026-05-08 12:23:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,101.28,Unknown,0,5,5,0,False,False,False,False
-449875,RHICAT,Catherine Rhim,V238,2026-05-11 12:51:00,2026-05-26 17:00:00,In Production,,111.46,Unknown,0,5,2,0,False,False,False,False
+449865,GRAALE,Alexander Grabavoy,V142,2026-05-11 12:38:00,2026-05-19 17:00:00,In Production,SPLFINISH,163.0,Fixed,0,3,2,0,False,False,False,False
+449699,LAPANT,Anthony LaPorte,E232*,2026-05-07 15:53:00,2026-05-21 17:00:00,Outsourced,REMOUT,292.97,Removable,0,5,6,0,False,False,False,False
+449765,JURAND,Andrew Jursik,E202*,2026-05-08 12:23:00,2026-05-18 17:00:00,In Production,PRINTINGIP,101.28,Unknown,0,5,5,0,False,False,False,False
+449948,MACMAR,Mark Macak,H949,2026-05-12 10:22:00,2026-05-22 17:00:00,In Production,CTS,260.38,Surgical,0,7,1,0,False,False,False,False
+449875,RHICAT,Catherine Rhim,V238,2026-05-11 12:51:00,2026-05-26 17:00:00,In Production,SCANNING,111.46,Surgical,0,7,2,0,False,False,False,False
 448352,KONKEV,Kevin Konstant,D319$,2026-04-22 14:49:05,,Sent for TryIn,,0.0,Unknown,0,5,21,0,False,False,False,False
-448507,RHICAT,Catherine Rhim,E88&*,2026-04-23 17:39:00,2026-05-07 17:00:00,In Production,DIGITALREMOVABLE,265.51,Unknown,0,5,20,6,True,False,False,True
-448758,GAFMEG,Meghan Gaffney,P758,2026-04-30 11:51:00,2026-05-12 17:00:00,In Production,REMOUT,317.73,Removable,0,5,13,1,True,False,False,True
-449680,EARWIL,William Earley,P517,2026-05-07 14:09:00,2026-05-20 17:00:00,In Production,REMPREP,160.43,Removable,0,5,6,0,False,False,False,False
-449408,CHUMAN,Manas Chug,H129,2026-05-05 13:25:00,2026-05-13 17:00:00,In Production,SINTERING,84.91,CAD_CAM,0,2,8,0,False,False,False,False
-449499,TOKNIC,Nicholas Tokarski,F103,2026-05-06 09:33:00,2026-05-19 17:00:00,In Production,REMIPBLERTA,313.88,Implants,0,5,7,0,False,False,False,False
-449835,ABUSIM,Simon Abu-Aita,V33*,2026-05-11 09:33:00,2026-05-26 17:00:00,In Production,,301.87,Unknown,0,5,2,0,False,False,False,False
-449354,LUKPAU,Paul Lukawski,E305,2026-05-06 17:39:00,2026-05-15 17:00:00,In Production,MILLING BRIDGE,457.07,Unknown,0,5,7,0,False,False,False,False
-449489,NISLIN,Linora Nissan,F24,2026-05-06 09:08:00,2026-05-15 17:00:00,In Production,SINTERING,79.79,CAD_CAM,0,2,7,0,False,False,False,False
+450157,LEBRAF,Raffi Leblebijian,EVDSGN-051326839218,2026-05-13 18:03:00,2026-05-21 17:00:00,In Production,,91.05,Unknown,0,5,0,0,False,False,False,False
+449680,EARWIL,William Earley,P517,2026-05-07 14:09:00,2026-05-20 17:00:00,In Production,SPLFINISH,160.43,Fixed,0,3,6,0,False,False,False,False
+450246,WALBRIOP,Brian Walczak,P815,2026-05-14 13:56:00,2026-05-20 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+449916,GIUMIC,Michael Giuliano,EVDSGN-051126839487,2026-05-11 17:36:00,2026-05-19 17:00:00,In Production,EVD SUBMITTED,108.43,Unknown,0,5,2,0,False,False,False,False
+450266,SALNICLAW,Nicholas Salava,P323*,2026-05-14 15:07:00,2026-06-01 17:00:00,In Production,,174.08,Unknown,0,5,-1,0,False,False,False,False
+449985,CHUMAN,Manas Chug,H300,2026-05-12 12:39:00,2026-05-20 17:00:00,In Production,SCANNING,84.91,Surgical,0,7,1,0,False,False,False,False
+449835,ABUSIM,Simon Abu-Aita,V33*,2026-05-11 09:33:00,2026-05-26 17:00:00,In Production,GUIDES,301.87,Surgical,0,7,2,0,False,False,False,False
 447081,ZANMAT,Matthew Zander,D224*,2026-04-08 12:39:00,2026-04-23 17:00:00,In Production,GUIDES,0.0,Surgical,0,7,35,20,True,False,False,True
-449706,ALSEMA,Eman Alsahlani,EVDSGN-050726839279,2026-05-07 17:14:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,92.06,Unknown,0,5,6,0,False,False,False,False
-447711,SABANARO,Sababa Anan,V229,2026-05-06 14:38:00,2026-05-20 17:00:00,In Production,REMPROCESSSHELF,202.52,Removable,0,5,7,0,False,False,False,False
-449570,LOVJAM,James Lovelace,F34,2026-05-06 13:46:00,2026-05-21 17:00:00,In Production,SCANNING,989.03,Surgical,0,7,7,0,False,False,False,False
-449634,CASLEN,Lena J. Casimir,EVDSGN-050726839264,2026-05-07 11:26:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,232.8,Unknown,0,5,6,0,False,False,False,False
-449050,CALSAM,Sam Calabrese,P179*,2026-05-01 15:12:00,2026-05-13 17:00:00,In Production,GUIDES,31.88,Surgical,0,7,12,0,False,False,False,False
-449707,PARKRURO,Krupa Parikh,E63*,2026-05-07 17:19:00,2026-05-22 17:00:00,In Production,CTS,263.72,Surgical,0,7,6,0,False,False,False,False
-449053,SUDAMINAP,Amit Sud,E95*,2026-04-30 15:33:00,2026-05-12 17:00:00,In Production,MILLINGIP,234.91,Implants,0,5,13,1,True,False,False,True
+449977,SAMJACSTC,Jacob Samuel,H280,2026-05-12 12:32:00,2026-05-20 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,1,0,False,False,False,False
+449931,SOOANUHE,Anu Sood,H200,2026-05-12 08:47:00,2026-05-21 17:00:00,In Production,MILLING BRUX,119.51,Unknown,0,5,1,0,False,False,False,False
+447711,SABANARO,Sababa Anan,V229,2026-05-06 14:38:00,2026-05-20 17:00:00,In Production,REMIPLIZ,202.52,Implants,0,5,7,0,False,False,False,False
+449570,LOVJAM,James Lovelace,F34,2026-05-06 13:46:00,2026-05-21 17:00:00,In Production,CTS,989.03,Surgical,0,7,7,0,False,False,False,False
+450071,SYLCOLBL,Colton Sylvester,F125,2026-05-13 10:54:00,2026-05-20 17:00:00,In Production,MILLING BRUX,129.51,Unknown,0,5,0,0,False,False,False,False
+450016,TZAALE,Alexander Tzanos,H927*!,2026-05-12 15:12:00,2026-05-19 17:00:00,In Production,DIGITALREMOVABLE,106.99,Unknown,0,5,1,0,False,False,False,False
+450224,CHUMAN,Manas Chug,P601,2026-05-14 12:12:00,2026-05-22 17:00:00,In Production,,84.91,Unknown,0,5,-1,0,False,False,False,False
+449951,MCCSCO,Scott McCarty,H284,2026-05-12 10:55:00,2026-05-20 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,1,0,False,False,False,False
+450054,AUSMIC,Michaelangelo Aust,F14,2026-05-13 09:13:00,2026-05-20 17:00:00,In Production,HENRY,63.75,Fixed,0,3,0,0,False,False,False,False
+450253,PERLUI,Luis Peralta,P586,2026-05-14 14:15:00,2026-05-21 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+449421,MALRYA,Ryann Maloney,H22,2026-05-05 14:04:00,2026-05-21 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,8,0,False,False,False,False
+450031,MALRYA,Ryann Maloney,EVDSGN-051226839523,2026-05-12 16:01:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,1,0,False,False,False,False
+449907,TRALUA,Luan Tran,H26*,2026-05-11 15:56:00,2026-05-22 17:00:00,In Production,CTS,781.42,Surgical,0,7,2,0,False,False,False,False
+449707,PARKRURO,Krupa Parikh,E63*,2026-05-07 17:19:00,2026-05-22 17:00:00,In Production,PRINTINGIP,263.72,Unknown,0,5,6,0,False,False,False,False
 448019,SLAMICHOM,Michael Slavin,V260,2026-04-20 10:54:00,2026-05-12 17:00:00,In Production,GUIDES,220.53,Surgical,0,7,23,1,True,False,False,True
-449173,LEURINSV,Ringo Leung,F65*,2026-05-01 13:10:00,2026-05-14 17:00:00,In Production,PRINTING,214.83,CAD_CAM,0,2,12,0,False,False,False,False
-449781,CORABI,Abigail Cortis,E309!,2026-05-08 13:22:00,2026-05-18 17:00:00,In Production,PREP,79.79,Hold_Stalled,0,1,5,0,False,False,False,False
-449090,MACMAR,Mark Macak,E325,2026-05-01 09:59:00,2026-05-20 17:00:00,In Production,REMPREP,435.46,Removable,0,5,12,0,False,False,False,False
+449781,CORABI,Abigail Cortis,E309!,2026-05-08 13:22:00,2026-05-18 17:00:00,In Production,MILLINGIP,79.79,Implants,0,5,5,0,False,False,False,False
+449090,MACMAR,Mark Macak,E325,2026-05-01 09:59:00,2026-05-20 17:00:00,In Production,REMOUT,435.46,Removable,0,5,12,0,False,False,False,False
+449960,HANMIR,Mirette Hanna,H245,2026-05-12 11:36:00,2026-05-20 17:00:00,In Production,SCANNING,84.91,Surgical,0,7,1,0,False,False,False,False
 446260,ATHJOH,John Athos,F162*,2026-03-30 10:56:47,,Sent for TryIn,,0.0,Unknown,0,5,44,0,False,False,False,False
-447633,ADAAMMDYE,Ammar Adam,F44*,2026-04-15 10:20:00,2026-05-05 17:00:00,In Production,GUIDES,236.48,Surgical,0,7,28,8,True,False,False,True
+450245,ANDMAR,Mark Anderson,P484,2026-05-14 13:54:00,2026-05-19 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+450006,MACHAZ,Hazel Santiago-Macanip,EVDSGN-051226839514,2026-05-12 14:19:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,91.05,Unknown,0,5,1,0,False,False,False,False
+450074,SYLCOLBL,Colton Sylvester,F83,2026-05-13 10:55:00,2026-05-19 17:00:00,In Production,MILLING EZ,122.52,Unknown,0,5,0,0,False,False,False,False
+450070,MCCSCO,Scott McCarty,F26,2026-05-13 10:27:00,2026-05-21 17:00:00,In Production,REMPREP,87.71,Removable,0,5,0,0,False,False,False,False
+447633,ADAAMMDYE,Ammar Adam,F44*,2026-04-15 10:20:00,2026-05-05 17:00:00,In Production,GUIDES,215.94,Surgical,0,7,28,8,True,False,False,True
 438970,TOKNIC,Nicholas Tokarski,H219,2026-01-05 14:41:52,,Sent for TryIn,,0.0,Unknown,0,5,128,0,False,False,False,False
+450147,SAFTAR,Tarek Safadi,P855*,2026-05-13 17:17:00,2026-05-22 17:00:00,In Production,,103.48,Unknown,0,5,0,0,False,False,False,False
+450226,PARANG,Angela Paros,P555,2026-05-14 12:28:00,2026-05-21 17:00:00,In Production,,313.88,Unknown,0,5,-1,0,False,False,False,False
+450189,ATHJOH,John Athos,D322$,2026-05-14 10:50:37,,Sent for TryIn,,0.0,Unknown,0,5,-1,0,False,False,False,False
+449933,TOKNIC,Nicholas Tokarski,H157,2026-05-12 08:50:00,2026-05-21 17:00:00,In Production,MILLING BRIDGE,344.55,Unknown,0,5,1,0,False,False,False,False
+449353,SUDAMINAP,Amit Sud,H255*,2026-05-04 17:33:00,2026-05-22 17:00:00,In Production,PRINTINGIP,536.67,Unknown,0,5,9,0,False,False,False,False
 448224,TESTDANN,DANNY ULASZEK,EVDSGN-042226061019,2026-04-21 18:04:00,2026-05-05 17:00:00,In Production,HENRY,0.0,Fixed,0,3,22,8,True,False,False,True
-449714,NISLIN,Linora Nissan,E376,2026-05-08 08:40:00,2026-05-19 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,5,0,False,False,False,False
-449841,DOUJASVA,Jason Douts,EVDSGN-051126839468,2026-05-11 10:37:00,2026-05-18 17:00:00,In Production,,92.06,Unknown,0,5,2,0,False,False,False,False
-449861,HANMIR,Mirette Hanna,V280,2026-05-11 12:35:00,2026-05-20 17:00:00,In Production,,254.73,Unknown,0,5,2,0,False,False,False,False
-449893,SAMAND,Andrew Sampalis,D324,2026-05-11 13:59:00,2026-05-19 17:00:00,In Production,,0.0,Unknown,0,5,2,0,False,False,False,False
-447543,PERLUI,Luis Peralta,E188,2026-05-08 11:37:00,2026-05-28 17:00:00,In Production,REMPREP,180.9,Removable,0,5,5,0,False,False,False,False
-449656,HANMIR,Mirette Hanna,P734,2026-05-07 13:07:00,2026-05-15 17:00:00,In Production,SENTFORDESIGN,169.82,Unknown,0,5,6,0,False,False,False,False
-448738,SOHMUHLA,Muhammad Sohail,E343*,2026-04-28 10:46:00,2026-05-05 17:00:00,In Production,PRINTING,200.0,CAD_CAM,0,2,15,8,True,False,False,True
-449558,TADSIM,Simon Tadros,F132,2026-05-06 13:27:00,2026-05-14 17:00:00,In Production,SHADEMATCHCART,79.79,Unknown,0,5,7,0,False,False,False,False
-449609,AUSMIC,Michaelangelo Aust,P502,2026-05-07 08:59:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,6,0,False,False,False,False
-449719,AUSMIC,Michaelangelo Aust,E190,2026-05-08 08:51:00,2026-05-19 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,5,0,False,False,False,False
-449786,TAPGAR,Gary Tapak,E367,2026-05-08 13:19:00,2026-05-19 17:00:00,In Production,PREP,129.74,Hold_Stalled,0,1,5,0,False,False,False,False
-449762,SANBRA,Brandon Santelli,E98,2026-05-08 11:43:00,2026-05-18 17:00:00,In Production,REMPREP,590.48,Removable,0,5,5,0,False,False,False,False
-449828,TOKNIC,Nicholas Tokarski,V261,2026-05-11 08:48:00,2026-05-22 17:00:00,In Production,,313.88,Unknown,0,5,2,0,False,False,False,False
-449387,PETCHR,Christine Petrilla,H115,2026-05-05 11:02:00,2026-05-20 17:00:00,In Production,MILLING BRUX,93.95,Unknown,0,5,8,0,False,False,False,False
-449750,CZAAUS,Austin Czarnecki,EVDSGN-050826839205,2026-05-08 11:05:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,92.06,Unknown,0,5,5,0,False,False,False,False
-449268,PLAROB,Robert Placzek,F69,2026-05-08 11:19:00,2026-05-19 17:00:00,In Production,,352.28,Unknown,0,5,5,0,False,False,False,False
-449736,GIUMIC,Michael Giuliano,E96*,2026-05-08 10:02:00,2026-05-21 17:00:00,Outsourced,,204.59,Unknown,0,5,5,0,False,False,False,False
-449355,HASSHA,Shaista Hasan,H204*&,2026-05-04 17:39:00,2026-05-22 17:00:00,In Production,,387.6,Unknown,0,5,9,0,False,False,False,False
-446755,SOOANUHE,Anu Sood,V139,2026-05-06 10:20:00,2026-05-18 17:00:00,In Production,PRINTINGIP,6.99,Unknown,0,5,7,0,False,False,False,False
-449870,SAMJACSTC,Jacob Samuel,V2,2026-05-11 12:47:00,2026-05-19 17:00:00,In Production,,79.79,Unknown,0,5,2,0,False,False,False,False
-449608,AUSMIC,Michaelangelo Aust,P730,2026-05-07 08:58:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,6,0,False,False,False,False
+449714,NISLIN,Linora Nissan,E376,2026-05-08 08:40:00,2026-05-19 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,5,0,False,False,False,False
+447766,DARDAVSB,David Dardick,P765*,2026-04-16 11:47:00,2026-05-18 17:00:00,In Production,PRINTINGIP,265.52,Unknown,0,5,27,0,False,False,False,False
+449861,HANMIR,Mirette Hanna,V280,2026-05-11 12:35:00,2026-05-20 17:00:00,In Production,MILLING BRIDGE,254.73,Unknown,0,5,2,0,False,False,False,False
+450111,WITLEOMOK1,Leon Witkowski III,F23,2026-05-13 13:37:00,2026-05-19 17:00:00,In Production,CTS,0.0,Surgical,0,7,0,0,False,False,False,False
+449893,SAMAND,Andrew Sampalis,D324,2026-05-11 13:59:00,2026-05-19 17:00:00,In Production,CTS,0.0,Surgical,0,7,2,0,False,False,False,False
+450225,GRAALE,Alexander Grabavoy,P427,2026-05-14 12:31:00,2026-05-22 17:00:00,In Production,,163.0,Unknown,0,5,-1,0,False,False,False,False
+447543,PERLUI,Luis Peralta,E188,2026-05-08 11:37:00,2026-05-28 17:00:00,In Production,PRINTING,180.9,CAD_CAM,0,2,5,0,False,False,False,False
+450249,MALRYA,Ryann Maloney,P825,2026-05-14 13:59:00,2026-05-28 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
+449973,SAMJACSTC,Jacob Samuel,H58,2026-05-12 12:30:00,2026-05-20 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,1,0,False,False,False,False
+449927,NIEJOS,Joseph Nierzwicki,H320,2026-05-12 08:40:00,2026-05-21 17:00:00,In Production,SCANNING,87.81,Surgical,0,7,1,0,False,False,False,False
+450015,NIEMAR,Mark Niemiec,F212*,2026-05-12 15:07:00,2026-05-22 17:00:00,In Production,DIGITALREMOVABLE,91.36,Unknown,0,5,1,0,False,False,False,False
+450240,CHINIC,Nicholas Chionis,P600,2026-05-14 13:48:00,2026-05-22 17:00:00,In Production,,119.51,Unknown,0,5,-1,0,False,False,False,False
+449719,AUSMIC,Michaelangelo Aust,E190,2026-05-08 08:51:00,2026-05-19 17:00:00,In Production,MILLINGIP,79.79,Implants,0,5,5,0,False,False,False,False
+449786,TAPGAR,Gary Tapak,E367,2026-05-08 13:19:00,2026-05-19 17:00:00,In Production,MILLING EZ,129.74,Unknown,0,5,5,0,False,False,False,False
+450254,KUCMAR,Mark Kuchta,P187*,2026-05-14 14:16:00,2026-05-28 17:00:00,In Production,,461.24,Unknown,0,5,-1,0,False,False,False,False
+449762,SANBRA,Brandon Santelli,E98,2026-05-08 11:43:00,2026-05-18 17:00:00,In Production,REMIPBLERTA,590.48,Implants,0,5,5,0,False,False,False,False
+449828,TOKNIC,Nicholas Tokarski,V261,2026-05-11 08:48:00,2026-05-22 17:00:00,In Production,REMIPDOM,313.88,Implants,0,5,2,0,False,False,False,False
+450095,STEROK,Roksana Stekala,EVDSGN-051326839205,2026-05-13 12:15:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,92.06,Unknown,0,5,0,0,False,False,False,False
+449268,PLAROB,Robert Placzek,F69,2026-05-08 11:19:00,2026-05-19 17:00:00,In Production,REMFINISHWALL,352.28,Removable,0,5,5,0,False,False,False,False
+450079,EDGBLA,Blair Edgington,F211,2026-05-13 11:02:00,2026-05-22 17:00:00,In Production,REMPREP,170.43,Removable,0,5,0,0,False,False,False,False
+449736,GIUMIC,Michael Giuliano,E96*,2026-05-08 10:02:00,2026-05-21 17:00:00,Outsourced,REMOUT,204.59,Removable,0,5,5,0,False,False,False,False
+450018,KOLMARFF,Mark Kolozenski,D156$,2026-05-12 14:55:00,2026-06-10 17:00:00,In Production,REMIPMARGARET,467.34,Implants,0,5,1,0,False,False,False,False
+450234,JONKAR,Karile Jonynas,P10,2026-05-14 13:13:00,2026-05-22 17:00:00,In Production,,143.74,Unknown,0,5,-1,0,False,False,False,False
+449355,HASSHA,Shaista Hasan,H204*&,2026-05-04 17:39:00,2026-05-22 17:00:00,In Production,IOS,387.6,Surgical,0,7,9,0,False,False,False,False
+450060,CULSEA,Sean Cullinan Jr.,F22,2026-05-13 09:25:00,2026-05-21 17:00:00,In Production,SCANNING,113.21,Surgical,0,7,0,0,False,False,False,False
+449870,SAMJACSTC,Jacob Samuel,V2,2026-05-11 12:47:00,2026-05-19 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,2,0,False,False,False,False
 449802,BRZDANI,Daniela Brzozowski,H309,2026-05-08 14:38:59,,Sent for TryIn,,0.0,Unknown,0,5,5,0,False,False,False,False
-449487,GRUKAT,Katy Grunenwald,F154,2026-05-06 09:02:00,2026-05-19 17:00:00,In Production,,129.75,Unknown,0,5,7,0,False,False,False,False
-449552,TADSIM,Simon Tadros,F45,2026-05-06 13:29:00,2026-05-14 17:00:00,In Production,MILLING EZ,79.79,Unknown,0,5,7,0,False,False,False,False
-449372,SOOANUHE,Anu Sood,H224,2026-05-05 09:16:00,2026-05-14 17:00:00,In Production,SINTERING,0.0,CAD_CAM,0,2,8,0,False,False,False,False
-449571,LOPSARST,Sarah Lopez,F189,2026-05-06 13:54:00,2026-05-28 17:00:00,In Production,SENTFORDESIGN,477.56,Unknown,0,5,7,0,False,False,False,False
-449401,SAMJACSTC,Jacob Samuel,H264,2026-05-05 13:15:00,2026-05-15 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,8,0,False,False,False,False
-449473,LOMANTM,Anthony Lombardi,EVQC-050526839264,2026-05-05 17:02:00,2026-05-13 17:00:00,In Production,CTS,70.59,Surgical,0,7,8,0,False,False,False,False
-449417,LUKPAU,Paul Lukawski,H133,2026-05-05 13:58:00,2026-05-14 17:00:00,In Production,SINTERING,306.39,CAD_CAM,0,2,8,0,False,False,False,False
+450159,ARONINROM,Nina Arora,EVDSGN-051326839220,2026-05-13 18:13:00,2026-05-27 17:00:00,In Production,,455.24,Unknown,0,5,0,0,False,False,False,False
+450021,TOKNIC,Nicholas Tokarski,F206,2026-05-12 15:22:08,,Sent for TryIn,,0.0,Unknown,0,5,1,0,False,False,False,False
+449571,LOPEST,Esther Lopez,F189,2026-05-06 13:54:00,2026-05-28 17:00:00,In Production,MILLING BRUX,546.62,Unknown,0,5,7,0,False,False,False,False
+449473,LOMANTM,Anthony Lombardi,EVQC-050526839264,2026-05-05 17:02:00,2026-05-19 17:00:00,In Production,CTSIOSHOLDING,70.59,Surgical,0,7,8,0,False,False,False,False
+450275,SAFHAY,Haytham Safi,P340*,2026-05-14 15:51:00,2026-05-21 17:00:00,In Production,,91.05,Unknown,0,5,-1,0,False,False,False,False
+450026,HASFAY,Fayda Hassan,EVDSGN-051226839521,2026-05-12 15:41:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,70.59,Unknown,0,5,1,0,False,False,False,False
+450044,SIETOM,Tom Siewert,EVDSGN-051226839531,2026-05-12 18:24:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,70.59,Unknown,0,5,1,0,False,False,False,False
 448853,JAYPOO,Poornima Jayaprakash,D256$*,2026-04-29 11:39:00,2026-05-28 17:00:00,In Production,MILLING AO4,14.88,Unknown,0,5,14,0,False,False,False,False
-449445,JAVJAM,James Javorski,H140,2026-05-05 14:41:00,2026-05-13 17:00:00,In Production,PRINTING,155.72,CAD_CAM,0,2,8,0,False,False,False,False
-449613,SUHINE,Ine Suh,P717!,2026-05-07 09:06:00,2026-05-18 17:00:00,In Production,MILLING BRUX,87.81,Unknown,0,5,6,0,False,False,False,False
-449855,BACKAT,Kathryn Bachinski,V64,2026-05-11 11:23:00,2026-05-26 17:00:00,In Production,,125.8,Unknown,0,5,2,0,False,False,False,False
-449873,GRAALE,Alexander Grabavoy,V219,2026-05-11 12:49:00,2026-05-20 17:00:00,In Production,,163.0,Unknown,0,5,2,0,False,False,False,False
-449460,MALRYA,Ryann Maloney,F74*,2026-05-05 15:13:00,2026-05-13 17:00:00,In Production,WAX,94.67,Unknown,0,5,8,0,False,False,False,False
-449492,HOLMARLA,Mary Ann Hollis,F123*,2026-05-06 09:11:00,2026-05-13 17:00:00,In Production,PRINTING,141.17,CAD_CAM,0,2,7,0,False,False,False,False
-449190,ALSEMA,Eman Alsahlani,E361*,2026-05-01 14:25:00,2026-05-14 17:00:00,In Production,PRINTING,1260.1,CAD_CAM,0,2,12,0,False,False,False,False
-449574,SHECAR,Caroline Shepherd,F164*,2026-05-06 13:59:00,2026-05-20 17:00:00,Outsourced,,215.0,Unknown,0,5,7,0,False,False,False,False
+449997,DONNOR,Nora Donatelli,D246$,2026-05-12 14:06:00,2026-05-26 17:00:00,In Production,REMIPMARGARET,2068.31,Implants,0,5,1,0,False,False,False,False
+450222,HANMIR,Mirette Hanna,P198,2026-05-14 12:15:00,2026-05-26 17:00:00,In Production,,84.91,Unknown,0,5,-1,0,False,False,False,False
+450208,NUCMAG,Magdaleno Nucum,P419,2026-05-14 12:03:00,2026-05-22 17:00:00,In Production,,73.49,Unknown,0,5,-1,0,False,False,False,False
+449855,BACKAT,Kathryn Bachinski,V64,2026-05-11 11:23:00,2026-05-26 17:00:00,In Production,SPLFINISH,125.8,Fixed,0,3,2,0,False,False,False,False
+449873,GRAALE,Alexander Grabavoy,V219,2026-05-11 12:49:00,2026-05-20 17:00:00,In Production,SPLFINISH,163.0,Fixed,0,3,2,0,False,False,False,False
+449460,MALRYA,Ryann Maloney,F74*,2026-05-05 15:13:00,2026-05-13 17:00:00,In Production,MILLING BRUX,94.67,Unknown,0,5,8,0,False,False,False,False
+449492,HOLMARLA,Mary Ann Hollis,F123*,2026-05-06 09:11:00,2026-05-18 17:00:00,In Production,PORCIP NINI,141.17,Implants,0,5,7,0,False,False,False,False
+450086,PATMON,Monal Patel,DX46$,2026-05-13 11:55:26,,Sent for TryIn,,0.0,Unknown,0,5,0,0,False,False,False,False
+450227,CHANHWA,Hwaiyin Chang,E76,2026-05-14 12:35:00,2026-05-20 17:00:00,In Production,,6.99,Unknown,0,5,-1,0,False,False,False,False
+450057,AUSMIC,Michaelangelo Aust,F121,2026-05-13 09:17:00,2026-05-22 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,0,0,False,False,False,False
 444507,MADABD,Abdalhameed Madwar,EVDSGN-030926073842,2026-03-09 09:56:00,2026-03-13 17:00:00,In Production,HENRY,71.61,Fixed,0,3,65,61,True,False,False,True
 441156,PATUMA,Umang Patel,EVDSGN-012826153126,2026-01-28 17:50:00,2026-02-05 17:00:00,In Production,,156.63,Unknown,0,5,105,97,True,False,False,True
-449764,STOMARC,Marc Stojkovich,E83*,2026-05-08 12:17:00,2026-05-22 17:00:00,In Production,CTS,512.39,Surgical,0,7,5,0,False,False,False,False
-449655,CHANHWA,Hwaiyin Chang,P821,2026-05-07 13:06:00,2026-05-15 17:00:00,In Production,SENTFORDESIGN,0.0,Unknown,0,5,6,0,False,False,False,False
-449277,LUKPAU,Paul Lukawski,V242,2026-05-04 11:31:00,2026-05-13 17:00:00,In Production,SINTERING,119.51,CAD_CAM,0,2,9,0,False,False,False,False
-449730,BOYMIC,Michael Boyle,E221*,2026-05-08 09:20:00,2026-05-15 17:00:00,In Production,,159.76,Unknown,0,5,5,0,False,False,False,False
-449825,FIEJAM,James Fieldhouse,V295*,2026-05-11 08:41:00,2026-05-18 17:00:00,In Production,,108.43,Unknown,0,5,2,0,False,False,False,False
-449433,PATKRURO,Krupa Patel,H222,2026-05-05 14:22:00,2026-05-20 17:00:00,In Production,,975.94,Unknown,0,5,8,0,False,False,False,False
-449641,HOLMARLA,Mary Ann Hollis,EVDSGN-050726839268,2026-05-07 12:03:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,70.59,Unknown,0,5,6,0,False,False,False,False
+449764,STOMARC,Marc Stojkovich,E83*,2026-05-08 12:17:00,2026-05-22 17:00:00,In Production,PRINTINGIP,512.39,Unknown,0,5,5,0,False,False,False,False
+450166,AUSMIC,Michaelangelo Aust,P641,2026-05-14 09:03:00,2026-05-27 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
+450121,FIEJAM,James Fieldhouse,F17,2026-05-13 14:08:00,2026-05-21 17:00:00,In Production,HENRY,0.0,Fixed,0,3,0,0,False,False,False,False
+450163,NIEJOS,Joseph Nierzwicki,P499,2026-05-14 08:49:00,2026-05-22 17:00:00,In Production,,87.81,Unknown,0,5,-1,0,False,False,False,False
+450148,GORJOH,John Gordon,H180,2026-05-13 17:22:11,,Sent for TryIn,,0.0,Unknown,0,5,0,0,False,False,False,False
+449825,FIEJAM,James Fieldhouse,V295*,2026-05-11 08:41:00,2026-05-18 17:00:00,In Production,PRINTINGIP,108.43,Unknown,0,5,2,0,False,False,False,False
+450013,SINMAN,Manpreet Singh,F136*,2026-05-12 14:42:00,2026-05-20 17:00:00,In Production,PRINTING,92.06,CAD_CAM,0,2,1,0,False,False,False,False
+449433,PATKRURO,Krupa Patel,H222,2026-05-05 14:22:00,2026-05-20 17:00:00,In Production,REMOUT,975.94,Removable,0,5,8,0,False,False,False,False
 448887,SYEMAZ,Mazher Syed,D330*$,2026-04-29 12:14:00,2026-05-07 17:00:00,In Production,DIGITALREMOVABLE,1175.43,Unknown,0,5,14,6,True,False,False,True
-449545,RHICAT,Catherine Rhim,F222,2026-05-06 13:25:00,2026-05-15 17:00:00,In Production,MILLING BRUX,84.91,Unknown,0,5,7,0,False,False,False,False
-449503,VANMATWS,Matt Van Beek,F33*,2026-05-06 09:59:00,2026-05-13 17:00:00,In Production,PRINTING,754.93,CAD_CAM,0,2,7,0,False,False,False,False
-449711,NIEJOS,Joseph Nierzwicki,E147!,2026-05-08 08:32:00,2026-05-19 17:00:00,In Production,SENTFORDESIGN,168.62,Unknown,0,5,5,0,False,False,False,False
-449885,CREJASTP,Jason Crescenzo,V284,2026-05-11 13:30:00,2026-05-26 17:00:00,In Production,,313.88,Unknown,0,5,2,0,False,False,False,False
-448354,KHASUM,Sumayyah Khan,F190,2026-05-08 15:15:00,2026-05-20 17:00:00,In Production,REMIPBLERTA,170.66,Implants,0,5,5,0,False,False,False,False
-449743,SUHINE,Ine Suh,E219!,2026-05-08 10:24:00,2026-05-19 17:00:00,In Production,PREP,87.81,Hold_Stalled,0,1,5,0,False,False,False,False
-449819,PATAME,Amee Patel,EVDSGN-051126839458,2026-05-11 08:32:00,2026-05-18 17:00:00,In Production,,92.06,Unknown,0,5,2,0,False,False,False,False
+450124,LEEALI,Alisa YouYeon Lee,F76,2026-05-13 14:08:00,2026-05-21 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,0,0,False,False,False,False
+449503,VANMATWS,Matt Van Beek,F33*,2026-05-06 09:59:00,2026-05-14 17:00:00,In Production,HENRY,754.93,Fixed,0,3,7,0,False,False,False,False
+450083,NAIHEM,Hema Nair,F164*,2026-05-13 11:02:00,2026-05-21 17:00:00,In Production,,0.0,Unknown,0,5,0,0,False,False,False,False
+449711,NIEJOS,Joseph Nierzwicki,E147!,2026-05-08 08:32:00,2026-05-19 17:00:00,In Production,MILLING BRUX,168.62,Unknown,0,5,5,0,False,False,False,False
+450112,SKRLEO,Leo Skrypkun,F227,2026-05-13 13:35:00,2026-05-21 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,0,0,False,False,False,False
+449885,CREJASTP,Jason Crescenzo,V284,2026-05-11 13:30:00,2026-05-26 17:00:00,In Production,REMIPDOM,313.88,Implants,0,5,2,0,False,False,False,False
+449912,DOUBRI,Brian Douts,EVDSGN-051126839486,2026-05-11 16:58:00,2026-05-19 17:00:00,In Production,,80.82,Unknown,0,5,2,0,False,False,False,False
+450068,BERDANCP,Daniel Berquist,H148,2026-05-13 10:25:00,2026-05-21 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,0,0,False,False,False,False
+448354,KHASUM,Sumayyah Khan,F190,2026-05-08 15:15:00,2026-05-20 17:00:00,In Production,REMIPLIZ,170.66,Implants,0,5,5,0,False,False,False,False
+450187,DARDAVSB,David Dardick,EVDSGN-051426839104,2026-05-14 10:20:00,2026-05-21 17:00:00,In Production,,90.42,Unknown,0,5,-1,0,False,False,False,False
+450093,CHUMAN,Manas Chug,F142,2026-05-13 12:19:00,2026-05-22 17:00:00,In Production,PREP,111.51,Hold_Stalled,0,1,0,0,False,False,False,False
+449743,SUHINE,Ine Suh,E219!,2026-05-08 10:24:00,2026-05-19 17:00:00,In Production,MILLINGIP,87.81,Implants,0,5,5,0,False,False,False,False
 447080,LOPSARST,Sarah Lopez,V233,2026-04-08 12:23:02,,Sent for TryIn,,0.0,Unknown,0,5,35,0,False,False,False,False
-449769,ALIAMJ,Amjad Ali,EVDSGN-050826839208,2026-05-08 12:27:00,2026-05-18 17:00:00,In Production,EVD SUBMITTED,182.09,Unknown,0,5,5,0,False,False,False,False
-449755,CHANHWA,Hwaiyin Chang,E366,2026-05-08 10:39:00,2026-05-15 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,5,0,False,False,False,False
-449745,BERDANLAP,Daniel Berquist,E342,2026-05-08 10:23:00,2026-05-20 17:00:00,In Production,PREP,129.51,Hold_Stalled,0,1,5,0,False,False,False,False
-440906,KMADAN,Daniel Kmak,N63*,2026-01-27 08:56:00,2026-05-13 17:00:00,In Production,PRINTING,92.06,CAD_CAM,0,2,106,0,False,False,False,False
-449867,SAMJACSTC,Jacob Samuel,V290,2026-05-11 12:45:00,2026-05-19 17:00:00,In Production,,0.0,Unknown,0,5,2,0,False,False,False,False
-448620,FIEJAM,James Fieldhouse,V943*,2026-04-27 09:46:00,2026-05-19 17:00:00,In Production,MILLING BRUX,630.04,Unknown,0,5,16,0,False,False,False,False
-449198,TAPGAR,Gary Tapak,E170,2026-05-01 14:29:00,2026-05-21 17:00:00,In Production,MILLING EZ,590.09,Unknown,0,5,12,0,False,False,False,False
-449869,SAMJACSTC,Jacob Samuel,V222,2026-05-11 12:46:00,2026-05-19 17:00:00,In Production,,79.79,Unknown,0,5,2,0,False,False,False,False
-449709,RYASEA,Sean Ryan,EVDSGN-050726839281,2026-05-07 17:30:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,101.68,Unknown,0,5,6,0,False,False,False,False
-449476,LOMANTM,Anthony Lombardi,EVQC-050526839266,2026-05-05 17:20:00,2026-05-13 17:00:00,In Production,PRINTING,70.59,CAD_CAM,0,2,8,0,False,False,False,False
-449500,BACKATBPO,Kathryn Bachinski,H79* SS,2026-05-06 09:40:00,2026-05-14 17:00:00,In Production,CTS,1162.09,Surgical,0,7,7,0,False,False,False,False
+450115,LUCPAULYO,Paulette Lucario,F25,2026-05-13 13:59:00,2026-05-21 17:00:00,In Production,PREP,129.74,Hold_Stalled,0,1,0,0,False,False,False,False
+449745,BERDANLAP,Daniel Berquist,E342,2026-05-08 10:23:00,2026-05-20 17:00:00,In Production,MILLING BRUX,129.51,Unknown,0,5,5,0,False,False,False,False
+449917,KORMIK,Mikhail Korolyov,D262$*,2026-05-11 17:40:00,2026-05-26 17:00:00,In Production,GUIDES,3948.77,Surgical,0,7,2,0,False,False,False,False
+440906,KMADAN,Daniel Kmak,N63*,2026-01-27 08:56:00,2026-05-13 17:00:00,In Production,PORCIP NINI,92.06,Implants,0,5,106,0,False,False,False,False
+449867,SAMJACSTC,Jacob Samuel,V290,2026-05-11 12:45:00,2026-05-19 17:00:00,In Production,MILLING BRUX,0.0,Unknown,0,5,2,0,False,False,False,False
+449198,TAPGAR,Gary Tapak,E170,2026-05-01 14:29:00,2026-05-21 17:00:00,In Production,PORCWALL,590.09,Fixed,0,3,12,0,False,False,False,False
+449959,GRAALE,Alexander Grabavoy,H5,2026-05-12 11:37:00,2026-05-22 17:00:00,In Production,SPLFINISH,163.0,Fixed,0,3,1,0,False,False,False,False
+449869,SAMJACSTC,Jacob Samuel,V222,2026-05-11 12:46:00,2026-05-19 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,2,0,False,False,False,False
+450162,SUHINE,Ine Suh,P804,2026-05-14 08:44:00,2026-05-27 17:00:00,In Production,,87.81,Unknown,0,5,-1,0,False,False,False,False
+450228,SUKMAJ,Maja Sukovic,P722,2026-05-14 12:39:00,2026-05-27 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+450211,AHMSAN,Sana Ahmed,P550,2026-05-14 12:06:00,2026-05-27 17:00:00,In Production,,73.49,Unknown,0,5,-1,0,False,False,False,False
 449603,SULKHAFL,Khadija Sulemanjee,P772*,2026-05-07 07:14:00,2026-05-21 17:00:00,In Production,GUIDES,280.62,Surgical,0,7,6,0,False,False,False,False
-449895,YIANIC,Nicas Yiannias,V105*,2026-05-11 14:06:00,2026-05-26 17:00:00,In Production,,347.7,Unknown,0,5,2,0,False,False,False,False
-449737,SARDEMRI,Demetrios Sarantopoulos,DX20$,2026-05-08 10:05:00,2026-05-13 17:00:00,In Production,REMPROCESSSHELF,1331.78,Removable,0,5,5,0,False,False,False,False
-449432,KORNAT,Natalie Korolis,H242,2026-05-05 14:21:00,2026-05-13 17:00:00,In Production,SINTERING,457.07,CAD_CAM,0,2,8,0,False,False,False,False
+450077,DOUJASVA,Jason Douts,F177,2026-05-13 11:00:00,2026-05-22 17:00:00,In Production,PREP,129.51,Hold_Stalled,0,1,0,0,False,False,False,False
+450123,PASKAR,Kara Passolt-Kung,F122,2026-05-13 14:18:00,2026-05-26 17:00:00,In Production,REMOUT,210.57,Removable,0,5,0,0,False,False,False,False
+450000,TADSIM,Simon Tadros,H49,2026-05-12 14:12:00,2026-05-22 17:00:00,In Production,SCANNING,551.01,Surgical,0,7,1,0,False,False,False,False
+450173,LEINIR,Nirvana Leix,P135,2026-05-14 09:25:00,2026-05-27 17:00:00,In Production,,313.88,Unknown,0,5,-1,0,False,False,False,False
+450262,RYASEA,Sean Ryan,P732*,2026-05-14 14:49:00,2026-05-22 17:00:00,In Production,,175.08,Unknown,0,5,-1,0,False,False,False,False
+450099,MALRYA,Ryann Maloney,F183,2026-05-13 12:54:00,2026-05-21 17:00:00,In Production,PREP,141.42,Hold_Stalled,0,1,0,0,False,False,False,False
+449934,TOKNIC,Nicholas Tokarski,H19,2026-05-12 08:53:00,2026-05-21 17:00:00,In Production,SENTFORDESIGN,119.51,Unknown,0,5,1,0,False,False,False,False
 449525,RYCJUAFL,Juana Ryckowski,E228*,2026-05-06 12:21:27,,Sent for TryIn,,0.0,Unknown,0,5,7,0,False,False,False,False
 447098,LESSTE,Steven Lesmeister,D297*,2026-04-08 10:50:00,2026-04-24 17:00:00,In Production,GUIDES,717.27,Surgical,0,7,35,19,True,False,False,True
-449775,ALSEMA,Eman Alsahlani,EVDSGN-050826839210,2026-05-08 12:53:00,2026-05-18 17:00:00,In Production,EVD SUBMITTED,92.06,Unknown,0,5,5,0,False,False,False,False
-449840,DOUJASVA,Jason Douts,EVDSGN-051126839467,2026-05-11 10:33:00,2026-05-18 17:00:00,In Production,,92.06,Unknown,0,5,2,0,False,False,False,False
-449831,PATAME,Amee Patel,EVDSGN-051126839461,2026-05-11 08:56:00,2026-05-18 17:00:00,In Production,,92.06,Unknown,0,5,2,0,False,False,False,False
+449901,LOMANTM,Anthony Lombardi,H237*,2026-05-11 15:14:00,2026-05-18 17:00:00,In Production,PRINTINGIP,211.76,Unknown,0,5,2,0,False,False,False,False
+449840,DOUJASVA,Jason Douts,EVDSGN-051126839467,2026-05-11 10:33:00,2026-05-18 17:00:00,In Production,PRINTINGIP,92.06,Unknown,0,5,2,0,False,False,False,False
+449980,CHUMAN,Manas Chug,H122,2026-05-12 12:35:00,2026-05-21 17:00:00,In Production,SCANNING,84.91,Surgical,0,7,1,0,False,False,False,False
 449172,ATHJOH,John Athos,F113,2026-05-01 12:32:36,,Sent for TryIn,,0.0,Unknown,0,5,12,0,False,False,False,False
-449556,BERDERCP,Derek Berquist,F70,2026-05-06 13:32:00,2026-05-14 17:00:00,In Production,MILLING BRUX,129.74,Unknown,0,5,7,0,False,False,False,False
-449270,SLAMICHOM,Michael Slavin,V135*,2026-05-04 11:13:00,2026-05-08 17:00:00,In Production,GUIDES,341.86,Surgical,0,7,9,5,True,False,False,True
+450217,SAMJACSTC,Jacob Samuel,P145,2026-05-14 12:14:00,2026-05-27 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
 449472,OGRLIS,Lisa O'Grady,D82*,2026-05-05 16:57:00,2026-05-26 17:00:00,In Production,MILLING AO4,1536.38,Unknown,0,5,8,0,False,False,False,False
-449004,MACHAZ,Hazel Santiago-Macanip,P173,2026-04-30 12:38:00,2026-05-15 17:00:00,In Production,MILLING BRUX,111.46,Unknown,0,5,13,0,False,False,False,False
-449823,NISLIN,Linora Nissan,V59,2026-05-11 08:41:00,2026-05-20 17:00:00,In Production,,159.59,Unknown,0,5,2,0,False,False,False,False
-449903,VERANI,Anita Verma,EVDSGN-051126839480,2026-05-11 15:18:00,2026-05-19 17:00:00,In Production,,91.05,Unknown,0,5,2,0,False,False,False,False
-449672,TADSIM,Simon Tadros,P34,2026-05-07 13:48:00,2026-05-15 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,6,0,False,False,False,False
-449604,KORMIK,Mikhail Korolyov,EVDSGN-050726839258,2026-05-07 08:09:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,6,0,False,False,False,False
-449646,SAMJACSTC,Jacob Samuel,P47,2026-05-07 12:25:00,2026-05-15 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,6,0,False,False,False,False
-449287,KAKMON,Monika Kak,H263*,2026-05-04 12:00:00,2026-05-14 17:00:00,In Production,FRED,0.0,Fixed,0,3,9,0,False,False,False,False
-449698,LITALY,Alyssa Litkowski,D304$,2026-05-07 15:37:00,2026-05-19 17:00:00,In Production,REMTRYINWALL,6.99,Removable,0,5,6,0,False,False,False,False
-449351,SINPAU,Paul Singh,H40*,2026-05-04 17:23:00,2026-05-26 17:00:00,In Production,PRINTING,1601.69,CAD_CAM,0,2,9,0,False,False,False,False
-448904,TYSMONLB,Monika Tyszkowski,F188,2026-04-29 13:34:00,2026-05-15 17:00:00,In Production,REMPREP,170.84,Removable,0,5,14,0,False,False,False,False
-449732,KORMIK,Mikhail Korolyov,EVDSGN-050826839203,2026-05-08 09:37:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,5,0,False,False,False,False
-449405,NUCMAG,Magdaleno Nucum,H118,2026-05-05 13:20:00,2026-05-15 17:00:00,In Production,SINTERING,73.49,CAD_CAM,0,2,8,0,False,False,False,False
-449883,TADSIM,Simon Tadros,V224,2026-05-11 12:48:00,2026-05-19 17:00:00,In Production,,79.79,Unknown,0,5,2,0,False,False,False,False
-449644,PATGIA,Giana Paterno,P743,2026-05-07 12:24:00,2026-05-20 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,6,0,False,False,False,False
-449771,GALPET,Peter Gallos,E94*,2026-05-08 12:36:00,2026-05-15 17:00:00,In Production,CADSTALLED,251.05,CAD_CAM,0,2,5,0,False,False,False,False
-449070,MACHAZ,Hazel Santiago-Macanip,E306*,2026-04-30 18:21:00,2026-05-13 17:00:00,In Production,MILLINGIP,312.02,Implants,0,5,13,0,False,False,False,False
-449643,CHUMAN,Manas Chug,EVDSGN-050726839270,2026-05-07 12:13:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,85.1,Unknown,0,5,6,0,False,False,False,False
-449019,SINSUN,Sunil Sinha,E136*,2026-04-30 13:10:00,2026-05-14 17:00:00,In Production,SINTERING,695.4,CAD_CAM,0,2,13,0,False,False,False,False
-449640,KORMIK,Mikhail Korolyov,EVDSGN-050726839267,2026-05-07 11:59:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,6,0,False,False,False,False
-449542,HOLMARLA,Mary Ann Hollis,F243*,2026-05-06 13:01:00,2026-05-20 17:00:00,In Production,REMPREP,254.9,Removable,0,5,7,0,False,False,False,False
-449267,FELNIC,Nick Feller,V32,2026-05-11 11:17:00,2026-05-22 17:00:00,In Production,,181.29,Unknown,0,5,2,0,False,False,False,False
-449649,CHAROB,Robert Charbonneau,P802,2026-05-07 12:53:00,2026-05-15 17:00:00,In Production,SENTFORDESIGN,129.74,Unknown,0,5,6,0,False,False,False,False
-449317,KEAMICEL,Michelle Kearney,V131,2026-05-04 13:54:00,2026-05-19 17:00:00,In Production,SPLFINISH,187.75,Fixed,0,3,9,0,False,False,False,False
-449779,SLAMICJOL,Michael Slavin,E206*,2026-05-08 13:21:00,2026-06-01 17:00:00,In Production,REMPREP,231.88,Removable,0,5,5,0,False,False,False,False
-449773,SINSUN,Sunil Sinha,E336*,2026-05-08 12:47:00,2026-05-22 17:00:00,In Production,,0.0,Unknown,0,5,5,0,False,False,False,False
-449778,SLAMICJOL,Michael Slavin,E64*,2026-05-08 13:18:00,2026-05-21 17:00:00,In Production,,286.87,Unknown,0,5,5,0,False,False,False,False
-449838,IWAAGG,Aggie Iwaszczyszyn,D323$,2026-05-11 10:15:00,2026-05-19 17:00:00,In Production,,0.0,Unknown,0,5,2,0,False,False,False,False
+449823,NISLIN,Linora Nissan,V59,2026-05-11 08:41:00,2026-05-20 17:00:00,In Production,MILLING BRUX,159.59,Unknown,0,5,2,0,False,False,False,False
+449971,JONSYR,Syreeta Jones,EVDSGN-051226839512,2026-05-12 12:24:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,92.06,Unknown,0,5,1,0,False,False,False,False
+449903,VERANI,Anita Verma,EVDSGN-051126839480,2026-05-11 15:18:00,2026-05-19 17:00:00,In Production,PORCWALL,91.05,Fixed,0,3,2,0,False,False,False,False
+449941,MUNALE,Alexandra Arrich Munoz,H276*,2026-05-12 09:16:00,2026-05-19 17:00:00,In Production,PRINTINGIP,536.67,Unknown,0,5,1,0,False,False,False,False
+449287,KAKMON,Monika Kak,H263*,2026-05-04 12:00:00,2026-05-15 17:00:00,In Production,FRED,0.0,Fixed,0,3,9,0,False,False,False,False
+449698,LITALY,Alyssa Litkowski,D304$,2026-05-07 15:37:00,2026-05-21 17:00:00,In Production,CTS,377.97,Surgical,0,7,6,0,False,False,False,False
+449937,AUSMIC,Michaelangelo Aust,H60,2026-05-12 09:05:00,2026-05-21 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,1,0,False,False,False,False
+449351,SINPAU,Paul Singh,H40*,2026-05-04 17:23:00,2026-05-26 17:00:00,In Production,GUIDES,1601.69,Surgical,0,7,9,0,False,False,False,False
+449883,TADSIM,Simon Tadros,V224,2026-05-11 12:48:00,2026-05-19 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,2,0,False,False,False,False
+449542,HOLMARLA,Mary Ann Hollis,F243*,2026-05-06 13:01:00,2026-05-20 17:00:00,In Production,REMQC,193.75,Removable,0,5,7,0,False,False,False,False
+449267,FELNIC,Nick Feller,V32,2026-05-11 11:17:00,2026-05-22 17:00:00,In Production,REMIPLIZ,181.29,Implants,0,5,2,0,False,False,False,False
+450109,TAPGAR,Gary Tapak,F19,2026-05-13 13:33:00,2026-05-22 17:00:00,In Production,PREP,129.74,Hold_Stalled,0,1,0,0,False,False,False,False
+450027,YERPAT,Patrick Yerkes,EVDSGN-051226839515,2026-05-12 15:46:00,2026-05-26 17:00:00,In Production,EVD SUBMITTED,552.36,Unknown,0,5,1,0,False,False,False,False
+449779,SLAMICJOL,Michael Slavin,E206*,2026-05-08 13:21:00,2026-06-01 17:00:00,In Production,GUIDES,231.88,Surgical,0,7,5,0,False,False,False,False
+449773,SINSUN,Sunil Sinha,E336*,2026-05-08 12:47:00,2026-05-22 17:00:00,In Production,CTS,0.0,Surgical,0,7,5,0,False,False,False,False
+449778,SLAMICJOL,Michael Slavin,E64*,2026-05-08 13:18:00,2026-05-21 17:00:00,In Production,GUIDES,286.87,Surgical,0,7,5,0,False,False,False,False
+450073,SYLCOLBL,Colton Sylvester,F79,2026-05-13 10:55:00,2026-05-20 17:00:00,In Production,MILLING BRUX,129.51,Unknown,0,5,0,0,False,False,False,False
+449838,IWAAGG,Aggie Iwaszczyszyn,D323$,2026-05-11 10:15:00,2026-05-19 17:00:00,In Production,REMIPMARGARET,0.0,Implants,0,5,2,0,False,False,False,False
+449945,ROEAND,Andrew Roechner,V108,2026-05-12 09:34:00,2026-05-20 17:00:00,In Production,CTS,0.0,Surgical,0,7,1,0,False,False,False,False
 440538,TADSIM,Simon Tadros,H229,2026-01-21 14:26:52,,Sent for TryIn,,0.0,Unknown,0,5,112,0,False,False,False,False
-449252,SUKMAJ,Maja Sukovic,V74,2026-05-04 10:40:00,2026-05-12 17:00:00,In Production,SENTFORDESIGN,839.68,Unknown,0,5,9,1,True,False,False,True
+450098,PATNEE,Neeva Patel,F47,2026-05-13 12:54:00,2026-05-21 17:00:00,In Production,PREP,79.79,Hold_Stalled,0,1,0,0,False,False,False,False
+449944,ALBMONWA,Monim Albazzaz,V56,2026-05-12 09:26:00,2026-05-20 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,1,0,False,False,False,False
+450257,GAFMEG,Meghan Gaffney,P371,2026-05-14 14:25:00,2026-05-29 17:00:00,In Production,,324.1,Unknown,0,5,-1,0,False,False,False,False
+449252,SUKMAJ,Maja Sukovic,V74,2026-05-04 10:40:00,2026-05-18 17:00:00,In Production,MILLING BRUX,839.68,Unknown,0,5,9,0,False,False,False,False
 449685,CREJASTP,Jason Crescenzo,P859,2026-05-07 14:14:00,2026-06-12 17:00:00,In Production,REMIPMARY,797.4,Implants,0,5,6,0,False,False,False,False
-449630,RYASEA,Sean Ryan,EVDSGN-050726839262,2026-05-07 11:13:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,91.05,Unknown,0,5,6,0,False,False,False,False
-449390,DOUBRI,Brian Douts,H247*,2026-05-05 11:38:00,2026-05-13 17:00:00,In Production,CADSTALLED,242.45,CAD_CAM,0,2,8,0,False,False,False,False
-448941,ALLFAH,Fahimeh Allahdadi,P328*,2026-04-29 17:12:00,2026-05-19 17:00:00,In Production,MILLING BRUX,1129.14,Unknown,0,5,14,0,False,False,False,False
-449776,SINMAN,Manpreet Singh,EVDSGN-050826839211,2026-05-08 12:59:00,2026-05-18 17:00:00,In Production,EVD SUBMITTED,92.06,Unknown,0,5,5,0,False,False,False,False
-449381,ALSEMA,Eman Alsahlani,F96*,2026-05-05 09:53:00,2026-05-18 17:00:00,In Production,MILLING BRUX,1260.1,Unknown,0,5,8,0,False,False,False,False
-449657,WONANJ,Anjanetta Wonderlick,P133,2026-05-07 13:08:00,2026-05-19 17:00:00,In Production,REMPREP,181.04,Removable,0,5,6,0,False,False,False,False
-449820,AUSMIC,Michaelangelo Aust,V286,2026-05-11 08:39:00,2026-05-20 17:00:00,In Production,PREP,79.79,Hold_Stalled,0,1,2,0,False,False,False,False
-449740,RYCJUAFL,Juana Ryckowski,EVDSGN-050826839200,2026-05-08 10:12:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,70.59,Unknown,0,5,5,0,False,False,False,False
-449662,TYSMONLB,Monika Tyszkowski,EVDSGN-050726839272,2026-05-07 13:32:00,2026-05-15 14:12:00,In Production,EVD SUBMITTED,153.44,Unknown,0,5,6,0,False,False,False,False
-449488,OBEGAR,Garrett Obenauf,F127,2026-05-06 09:03:00,2026-05-14 17:00:00,In Production,SINTERING,129.74,CAD_CAM,0,2,7,0,False,False,False,False
-449607,AUSMIC,Michaelangelo Aust,P843,2026-05-07 08:55:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,6,0,False,False,False,False
-449796,KEAMICEL,Michelle Kearney,E198,2026-05-08 13:33:00,2026-05-20 17:00:00,In Production,REMPREP,181.04,Removable,0,5,5,0,False,False,False,False
-449093,ABRORL,Orlando Abreu,E57,2026-05-01 10:02:00,2026-05-18 17:00:00,In Production,SPLFINISH,160.43,Fixed,0,3,12,0,False,False,False,False
-449047,PICGIN,Gina Piccioni,E66*,2026-04-30 14:40:00,2026-05-14 17:00:00,In Production,PRINTINGIP,165.41,Unknown,0,5,13,0,False,False,False,False
-449664,ABUSIM,Simon Abu-Aita,P509,2026-05-07 13:42:00,2026-05-15 17:00:00,In Production,MILLING BRUX,172.4,Unknown,0,5,6,0,False,False,False,False
-449531,AHMSAN,Sana Ahmed,F207,2026-05-06 12:39:00,2026-05-14 17:00:00,In Production,MILLING EZ,73.49,Unknown,0,5,7,0,False,False,False,False
-449720,AUSMIC,Michaelangelo Aust,E199,2026-05-08 08:53:00,2026-05-19 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,5,0,False,False,False,False
-448492,KOLMARFF,Mark Kolozenski,D162$,2026-04-23 16:15:00,2026-05-22 17:00:00,In Production,REMPROCESSSHELF,1234.59,Removable,0,5,20,0,False,False,False,False
-449327,ZMEMAG,Magdalena Zmek,D146$,2026-05-04 15:02:58,,Sent for TryIn,,0.0,Unknown,0,5,9,0,False,False,False,False
-449843,FRAMIC,Michael Frantal,V273,2026-05-11 10:46:00,2026-05-15 17:00:00,In Production,,0.0,Unknown,0,5,2,0,False,False,False,False
-449385,WALBRIOP,Brian Walczak,F163*,2026-05-05 10:46:00,2026-05-18 17:00:00,In Production,PRINTING,0.0,CAD_CAM,0,2,8,0,False,False,False,False
-449716,NIEJOS,Joseph Nierzwicki,E137!,2026-05-08 08:43:00,2026-05-19 17:00:00,In Production,SCANNING,87.81,Surgical,0,7,5,0,False,False,False,False
-449882,MADABD,Abdalhameed Madwar,EVDSGN-051126839476,2026-05-11 13:25:00,2026-05-14 17:00:00,In Production,,70.59,Unknown,0,5,2,0,False,False,False,False
-449386,BREWIL,William Brennan Jr.,H142&,2026-05-05 11:01:00,2026-05-19 17:00:00,In Production,REMQC,232.03,Removable,0,5,8,0,False,False,False,False
-449382,SATHARNA,Harvey Satz,F230*,2026-05-05 09:58:00,2026-05-20 17:00:00,In Production,REMPREP,164.07,Removable,0,5,8,0,False,False,False,False
-448929,SIETOM,Tom Siewert,EVDSGN-042926194673,2026-04-29 15:34:00,2026-05-13 17:00:00,In Production,MILLINGIP,352.94,Implants,0,5,14,0,False,False,False,False
-449412,PATGIA,Giana Paterno,H481,2026-05-05 13:28:00,2026-05-13 17:00:00,In Production,SINTERING,79.79,CAD_CAM,0,2,8,0,False,False,False,False
-449757,KHASUM,Sumayyah Khan,E186,2026-05-08 11:35:00,2026-05-22 17:00:00,In Production,PREP,0.0,Hold_Stalled,0,1,5,0,False,False,False,False
-449858,FELNIC,Nick Feller,EVDSGN-051126839471,2026-05-11 12:10:00,2026-05-19 17:00:00,In Production,,91.05,Unknown,0,5,2,0,False,False,False,False
+449302,PAGCAR,Carlo Pagni,H294*,2026-05-04 12:53:00,2026-05-27 17:00:00,In Production,GUIDES,512.39,Surgical,0,7,9,0,False,False,False,False
+449776,SINMAN,Manpreet Singh,EVDSGN-050826839211,2026-05-08 12:59:00,2026-05-18 17:00:00,In Production,PRINTINGIP,92.06,Unknown,0,5,5,0,False,False,False,False
+449657,WONANJ,Anjanetta Wonderlick,P133,2026-05-07 13:08:00,2026-05-19 17:00:00,In Production,SPLFINISH,181.04,Fixed,0,3,6,0,False,False,False,False
+449820,AUSMIC,Michaelangelo Aust,V286,2026-05-11 08:39:00,2026-05-20 17:00:00,In Production,MILLING EZ,79.79,Unknown,0,5,2,0,False,False,False,False
+449662,TYSMONLB,Monika Tyszkowski,EVDSGN-050726839272,2026-05-07 13:32:00,2026-05-15 14:12:00,In Production,PORCIP DEAN,153.44,Implants,0,5,6,0,False,False,False,False
+450251,MORCHR,Chris Morfas,P834,2026-05-14 14:12:00,2026-05-21 17:00:00,In Production,,55.85,Unknown,0,5,-1,0,False,False,False,False
+449047,PICGIN,Gina Piccioni,E66*,2026-04-30 14:40:00,2026-05-19 17:00:00,In Production,MILLING BRUX,165.41,Unknown,0,5,13,0,False,False,False,False
+450110,SKRLEO,Leo Skrypkun,F86,2026-05-13 13:33:00,2026-05-21 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,0,0,False,False,False,False
+449720,AUSMIC,Michaelangelo Aust,E199,2026-05-08 08:53:00,2026-05-19 17:00:00,In Production,MILLINGIP,79.79,Implants,0,5,5,0,False,False,False,False
+450170,NIEJOS,Joseph Nierzwicki,P47,2026-05-14 09:12:00,2026-05-22 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+450178,LEURINSV,Ringo Leung,P835*,2026-05-14 09:39:00,2026-05-21 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+449327,ZMEMAG,Magdalena Zmek,D146$,2026-05-04 15:02:00,2026-05-27 17:00:00,In Production,,143.22,Unknown,0,5,9,0,False,False,False,False
+449843,FRAMIC,Michael Frantal,V273,2026-05-11 10:46:00,2026-05-15 17:00:00,In Production,GUIDES,0.0,Surgical,0,7,2,0,False,False,False,False
+449716,NIEJOS,Joseph Nierzwicki,E137!,2026-05-08 08:43:00,2026-05-19 17:00:00,In Production,MILLINGIP,87.81,Implants,0,5,5,0,False,False,False,False
+449942,EXONAT,Natacha Exorphe,EVDSGN-051226839500,2026-05-12 09:21:00,2026-05-19 17:00:00,In Production,MATCHING TABLE,70.59,Unknown,0,5,1,0,False,False,False,False
+449975,LOMANTM,Anthony Lombardi,H303*,2026-05-12 12:29:00,2026-05-20 17:00:00,In Production,CADSTALLED,0.0,CAD_CAM,0,2,1,0,False,False,False,False
+450007,RANMAR,Mary Ranieli,V80,2026-05-12 14:22:00,2026-05-20 17:00:00,In Production,SCANNING,0.0,Surgical,0,7,1,0,False,False,False,False
+449757,KHASUM,Sumayyah Khan,E186,2026-05-08 11:35:00,2026-05-22 17:00:00,In Production,MILLING BRUX,0.0,Unknown,0,5,5,0,False,False,False,False
+449932,OBEGAR,Garrett Obenauf,H273,2026-05-12 08:49:00,2026-05-21 17:00:00,In Production,MILLING BRUX,129.74,Unknown,0,5,1,0,False,False,False,False
+448573,THADEVHOM,Devang Thakkar,E345*,2026-04-24 13:07:00,2026-05-22 17:00:00,In Production,CTS,200.23,Surgical,0,7,19,0,False,False,False,False
 449844,BERDANLAP,Daniel Berquist,P839,2026-05-11 11:00:28,,Sent for TryIn,,10.0,Unknown,0,5,2,0,False,False,False,False
-449465,VANLAU,Lauryne Vanderhoof,EVDSGN-050526839216,2026-05-05 15:36:00,2026-05-18 17:00:00,In Production,SPLFINISH,163.85,Fixed,0,3,8,0,False,False,False,False
-448913,LUCPAULYO,Paulette Lucario,F179,2026-04-29 13:29:00,2026-05-14 17:00:00,In Production,FRED,470.57,Fixed,0,3,14,0,False,False,False,False
-449037,RYCJUAFL,Juana Ryckowski,E106*,2026-05-08 13:50:00,2026-05-19 17:00:00,In Production,,398.06,Unknown,0,5,5,0,False,False,False,False
-449599,FELNIC,Nick Feller,EVDSGN-050626839255,2026-05-06 17:35:00,2026-05-14 17:00:00,In Production,SHADEMATCHCART,273.14,Unknown,0,5,7,0,False,False,False,False
-449529,AHMSAN,Sana Ahmed,F106,2026-05-06 12:38:00,2026-05-14 17:00:00,In Production,MILLING BRUX,73.49,Unknown,0,5,7,0,False,False,False,False
-449583,SULKHAFL,Khadija Sulemanjee,P844*,2026-05-06 15:16:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,634.04,Unknown,0,5,7,0,False,False,False,False
-449633,SINPAU,Paul Singh,E381*,2026-05-07 11:20:00,2026-05-15 17:00:00,In Production,PRINTING,84.91,CAD_CAM,0,2,6,0,False,False,False,False
-448852,BREKEVEL,Kevin Breen,V129,2026-04-29 11:37:54,,Sent for TryIn,,0.0,Unknown,0,5,14,0,False,False,False,False
-449615,NIEJOS,Joseph Nierzwicki,P188!,2026-05-07 09:09:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,87.81,Unknown,0,5,6,0,False,False,False,False
-449510,MCCSCO,Scott McCarty,F166,2026-05-06 10:41:00,2026-05-14 17:00:00,In Production,SINTERING,119.51,CAD_CAM,0,2,7,0,False,False,False,False
-449782,TAPGAR,Gary Tapak,E86,2026-05-08 13:23:00,2026-05-13 17:00:00,In Production,PREP,252.49,Hold_Stalled,0,1,5,0,False,False,False,False
-449580,PRODON,Donald Provenzale,E126*,2026-05-08 15:09:00,2026-05-18 17:00:00,In Production,,405.39,Unknown,0,5,5,0,False,False,False,False
+449037,RYCJUAFL,Juana Ryckowski,E106*,2026-05-08 13:50:00,2026-05-19 17:00:00,In Production,REMPROCESSSHELF,398.06,Removable,0,5,5,0,False,False,False,False
+449583,SULKHAFL,Khadija Sulemanjee,P844*,2026-05-06 15:16:00,2026-05-20 17:00:00,In Production,CADSTALLED,634.04,CAD_CAM,0,2,7,0,False,False,False,False
+449974,SAMJACSTC,Jacob Samuel,H162,2026-05-12 12:32:00,2026-05-21 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,1,0,False,False,False,False
+450209,CHUMAN,Manas Chug,P44,2026-05-14 12:04:00,2026-05-27 17:00:00,In Production,,84.91,Unknown,0,5,-1,0,False,False,False,False
+449963,GRAALE,Alexander Grabavoy,H96,2026-05-12 11:38:00,2026-05-22 17:00:00,In Production,SPLFINISH,163.0,Fixed,0,3,1,0,False,False,False,False
+450197,KUCMAR,Mark Kuchta,EVDSGN-051426839108,2026-05-14 11:17:00,2026-05-21 17:00:00,In Production,,108.43,Unknown,0,5,-1,0,False,False,False,False
+450137,KORMIK,Mikhail Korolyov,EVDSGN-051326839213,2026-05-13 16:08:00,2026-05-21 17:00:00,In Production,,79.79,Unknown,0,5,0,0,False,False,False,False
+449782,TAPGAR,Gary Tapak,E86,2026-05-08 13:23:00,2026-05-19 17:00:00,In Production,MILLINGIP,252.49,Implants,0,5,5,0,False,False,False,False
+449580,PRODON,Donald Provenzale,E126*,2026-05-08 15:09:00,2026-05-18 17:00:00,In Production,REMIPSABRINA,405.39,Implants,0,5,5,0,False,False,False,False
 448213,TESTDANN,DANNY ULASZEK,EVDSGN-042226050419,2026-04-21 16:08:00,2026-05-05 17:00:00,In Production,HENRY,0.0,Fixed,0,3,22,8,True,False,False,True
-449610,AUSMIC,Michaelangelo Aust,P750,2026-05-07 09:00:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,6,0,False,False,False,False
-449794,GIRBET,Betsy Giron,E97!,2026-05-08 13:34:00,2026-05-19 17:00:00,In Production,,191.63,Unknown,0,5,5,0,False,False,False,False
-449748,DARDAVSB,David Dardick,EVDSGN-050826839204,2026-05-08 11:00:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,102.69,Unknown,0,5,5,0,False,False,False,False
-449674,SLAMICJOL,Michael Slavin,P832,2026-05-07 13:48:00,2026-05-14 17:00:00,In Production,REMPREP,222.92,Removable,0,5,6,0,False,False,False,False
-449729,KORMIK,Mikhail Korolyov,E88,2026-05-08 09:22:00,2026-05-22 17:00:00,In Production,CTS,364.18,Surgical,0,7,5,0,False,False,False,False
-449713,TUCELILV,Elizabeth Tucker,E107,2026-05-08 08:39:00,2026-05-19 17:00:00,In Production,SCANNING,129.74,Surgical,0,7,5,0,False,False,False,False
-449668,TADSIM,Simon Tadros,P516,2026-05-07 13:44:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,446.67,Unknown,0,5,6,0,False,False,False,False
+450186,DOUBRI,Brian Douts,P602*,2026-05-14 10:14:00,2026-05-28 17:00:00,In Production,,404.09,Unknown,0,5,-1,0,False,False,False,False
+450133,ZIEELI,Elise Ziegenhorn,F88,2026-05-13 14:30:00,2026-05-26 17:00:00,In Production,,613.78,Unknown,0,5,0,0,False,False,False,False
+449794,GIRBET,Betsy Giron,E97!,2026-05-08 13:34:00,2026-05-19 17:00:00,In Production,REMIPMARY,191.63,Implants,0,5,5,0,False,False,False,False
+449729,KORMIK,Mikhail Korolyov,E88,2026-05-08 09:22:00,2026-05-22 17:00:00,In Production,MILLING EZ,364.18,Unknown,0,5,5,0,False,False,False,False
+449713,TUCELILV,Elizabeth Tucker,E107,2026-05-08 08:39:00,2026-05-19 17:00:00,In Production,MILLINGIP,129.74,Implants,0,5,5,0,False,False,False,False
 447638,MADABD,Abdalhameed Madwar,H100,2026-04-15 10:39:45,,Sent for TryIn,,0.0,Unknown,0,5,28,0,False,False,False,False
-449628,SATHARNA,Harvey Satz,E149*,2026-05-07 11:01:00,2026-05-21 17:00:00,In Production,CADSTALLED,164.07,CAD_CAM,0,2,6,0,False,False,False,False
+450202,YIANIC,Nicas Yiannias,P357*,2026-05-14 11:57:00,2026-05-27 17:00:00,In Production,,629.03,Unknown,0,5,-1,0,False,False,False,False
+449628,SATHARNA,Harvey Satz,E149*,2026-05-07 11:01:00,2026-05-21 17:00:00,In Production,SPLFINISH,164.07,Fixed,0,3,6,0,False,False,False,False
 449260,GAFCOL,Colleen Gaffney,V297,2026-05-04 11:05:02,,Sent for TryIn,,0.0,Unknown,0,5,9,0,False,False,False,False
+450090,SOHMUHHW,Muhammad Sohail,F232*,2026-05-13 12:06:00,2026-06-01 17:00:00,In Production,GUIDES,341.86,Surgical,0,7,0,0,False,False,False,False
 448243,ATHJOH,John Athos,EVQC-042026052214,2026-04-22 08:51:00,2026-04-30 17:00:00,In Production,,0.0,Unknown,0,5,21,13,True,False,False,True
-449911,ARANAD,Nadia Arain,EVDSGN-051126839485,2026-05-11 16:36:00,2026-05-19 17:00:00,In Production,,80.82,Unknown,0,5,2,0,False,False,False,False
-449791,CHUMAN,Manas Chug,E315,2026-05-08 13:30:00,2026-05-18 17:00:00,In Production,PREP,84.91,Hold_Stalled,0,1,5,0,False,False,False,False
-449852,PETCHR,Christine Petrilla,V38,2026-05-11 11:21:00,2026-05-19 17:00:00,In Production,,93.95,Unknown,0,5,2,0,False,False,False,False
-449377,CHANHWA,Hwaiyin Chang,H136,2026-05-05 09:40:00,2026-05-14 17:00:00,In Production,MILLING BRUX,0.0,Unknown,0,5,8,0,False,False,False,False
+449911,ARANAD,Nadia Arain,EVDSGN-051126839485,2026-05-11 16:36:00,2026-05-19 17:00:00,In Production,PORCWALL,80.82,Fixed,0,3,2,0,False,False,False,False
+449791,CHUMAN,Manas Chug,E315,2026-05-08 13:30:00,2026-05-18 17:00:00,In Production,MILLINGIP,84.91,Implants,0,5,5,0,False,False,False,False
+450207,SUKMAJ,Maja Sukovic,p808,2026-05-14 12:02:00,2026-05-15 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+450156,WALBRIOP,Brian Walczak,P830*,2026-05-13 17:56:00,2026-05-27 17:00:00,Outsourced,,676.46,Unknown,0,5,0,0,False,False,False,False
+449969,DOUBRI,Brian Douts,EVDSGN-051226839507,2026-05-12 12:08:00,2026-05-19 17:00:00,In Production,STAINGLAZE,80.82,Fixed,0,3,1,0,False,False,False,False
+449852,PETCHR,Christine Petrilla,V38,2026-05-11 11:21:00,2026-05-19 17:00:00,In Production,MILLINGIP,93.95,Implants,0,5,2,0,False,False,False,False
+449377,CHANHWA,Hwaiyin Chang,H136,2026-05-05 09:40:00,2026-05-14 17:00:00,In Production,FRED,0.0,Fixed,0,3,8,0,False,False,False,False
 448218,TESTDANN,DANNY ULASZEK,EVDSGN-042226054921,2026-04-21 16:56:00,2026-05-05 17:00:00,In Production,HENRY,0.0,Fixed,0,3,22,8,True,False,False,True
-449829,CORKAT,Katy Correa,EVDSGN-051126839459,2026-05-11 08:47:00,2026-05-18 17:00:00,In Production,,70.59,Unknown,0,5,2,0,False,False,False,False
-449678,SKRLEO,Leo Skrypkun,P705,2026-05-07 14:08:00,2026-05-15 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,6,0,False,False,False,False
-449427,SKRLEO,Leo Skrypkun,H101,2026-05-05 14:11:00,2026-05-13 17:00:00,In Production,SINTERING,119.51,CAD_CAM,0,2,8,0,False,False,False,False
-449403,NUCMAG,Magdaleno Nucum,H351,2026-05-05 13:17:00,2026-05-15 17:00:00,In Production,MILLING EZ,73.49,Unknown,0,5,8,0,False,False,False,False
-449892,CREJASTP,Jason Crescenzo,V251,2026-05-11 13:34:00,2026-05-26 17:00:00,In Production,,1002.0,Unknown,0,5,2,0,False,False,False,False
-449605,SEHSTE,Stephen Seheult,EVDSGN-050726839257,2026-05-07 08:14:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,97.19,Unknown,0,5,6,0,False,False,False,False
-449683,YIANIC,Nicas Yiannias,EVDSGN-050726839275,2026-05-07 14:10:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,91.05,Unknown,0,5,6,0,False,False,False,False
+450041,COPMAR,Mario Copello,F4*,2026-05-12 17:10:00,2026-05-19 17:00:00,In Production,DIGITALREMOVABLE,103.48,Unknown,0,5,1,0,False,False,False,False
+450058,GAFCOL,Colleen Gaffney,F192,2026-05-13 09:18:00,2026-05-21 17:00:00,In Production,SCANNING,0.0,Surgical,0,7,0,0,False,False,False,False
+450049,MADABD,Abdalhameed Madwar,F184*,2026-05-13 09:05:00,2026-05-26 17:00:00,In Production,CTS,614.87,Surgical,0,7,0,0,False,False,False,False
+450216,AHMSAN,Sana Ahmed,P580,2026-05-14 12:13:00,2026-05-26 17:00:00,In Production,,73.49,Unknown,0,5,-1,0,False,False,False,False
+449892,CREJASTP,Jason Crescenzo,V251,2026-05-11 13:34:00,2026-05-26 17:00:00,In Production,REMIPDOM,1002.0,Implants,0,5,2,0,False,False,False,False
+450138,LEURINSV,Ringo Leung,F116*,2026-05-13 16:14:00,2026-05-29 17:00:00,In Production,SENTFORDESIGN,91.05,Unknown,0,5,0,0,False,False,False,False
+450236,LEVROR,Rory Levitan,EVDSGN-051426839110,2026-05-14 13:13:00,2026-05-22 17:00:00,In Production,,613.77,Unknown,0,5,-1,0,False,False,False,False
+450036,OLCVAN,Vania Olcay,EVDSGN-051226839526,2026-05-12 16:21:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,80.82,Unknown,0,5,1,0,False,False,False,False
 449265,KHASUM,Sumayyah Khan,F68,2026-05-04 11:13:25,,Sent for TryIn,,0.0,Unknown,0,5,9,0,False,False,False,False
-449400,HANMIR,Mirette Hanna,H241,2026-05-05 13:14:00,2026-05-18 17:00:00,In Production,MILLING EZ,84.91,Unknown,0,5,8,0,False,False,False,False
-449766,GALPET,Peter Gallos,E196,2026-05-08 12:26:00,2026-05-21 17:00:00,In Production,REMPREP,0.0,Removable,0,5,5,0,False,False,False,False
-449784,REMTHO,Thomas Remijas,E155,2026-05-08 13:25:00,2026-05-18 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,5,0,False,False,False,False
-449523,THOJAM,James Thomas Iii,F119*,2026-05-06 12:17:00,2026-05-20 17:00:00,In Production,CTS,572.48,Surgical,0,7,7,0,False,False,False,False
-449880,COPMAR,Mario Copello,V52*,2026-05-11 13:15:00,2026-05-18 17:00:00,In Production,,103.48,Unknown,0,5,2,0,False,False,False,False
-449700,WALBRIOP,Brian Walczak,E73*,2026-05-07 15:58:00,2026-05-21 17:00:00,Outsourced,,409.18,Unknown,0,5,6,0,False,False,False,False
-449521,SALNICLAW,Nicholas Salava,P816*,2026-05-06 11:45:00,2026-05-21 17:00:00,In Production,,174.08,Unknown,0,5,7,0,False,False,False,False
-449550,TADSIM,Simon Tadros,F238,2026-05-06 12:46:00,2026-05-14 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,7,0,False,False,False,False
+449766,GALPET,Peter Gallos,E196,2026-05-08 12:26:00,2026-05-28 17:00:00,Outsourced,REMOUT,0.0,Removable,0,5,5,0,False,False,False,False
+450094,CHUMAN,Manas Chug,F1,2026-05-13 12:21:00,2026-05-27 17:00:00,In Production,REMOUT,358.04,Removable,0,5,0,0,False,False,False,False
+449968,SINMAN,Manpreet Singh,EVDSGN-051226839509,2026-05-12 12:02:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,184.12,Unknown,0,5,1,0,False,False,False,False
+450158,FELNIC,Nick Feller,EVDSGN-051326839219,2026-05-13 18:07:00,2026-05-21 17:00:00,In Production,,273.14,Unknown,0,5,0,0,False,False,False,False
+449700,WALBRIOP,Brian Walczak,E73*,2026-05-07 15:58:00,2026-05-21 17:00:00,Outsourced,REMOUT,409.18,Removable,0,5,6,0,False,False,False,False
+449521,SALNICLAW,Nicholas Salava,P816*,2026-05-06 11:45:00,2026-05-21 17:00:00,In Production,SPLFINISH,174.08,Fixed,0,3,7,0,False,False,False,False
+450143,DOUJASVA,Jason Douts,EVDSGN-051326839212,2026-05-13 16:26:00,2026-05-21 17:00:00,In Production,,92.06,Unknown,0,5,0,0,False,False,False,False
 448641,SWEMAT,Matt Sweeney,H261*,2026-04-27 11:58:26,,Sent for TryIn,,0.0,Unknown,0,5,16,0,False,False,False,False
-449695,MACHAZ,Hazel Santiago-Macanip,EVDSGN-050726839278,2026-05-07 15:04:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,6,0,False,False,False,False
-449721,KORMIK,Mikhail Korolyov,E311,2026-05-08 08:54:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,5,0,False,False,False,False
-449456,NIEMAR,Mark Niemiec,F241*,2026-05-05 14:59:00,2026-05-18 17:00:00,In Production,PRINTINGIP,316.51,Unknown,0,5,8,0,False,False,False,False
-449670,TADSIM,Simon Tadros,P369,2026-05-07 13:46:00,2026-05-15 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,6,0,False,False,False,False
-449788,GAFCOL,Colleen Gaffney,E140,2026-05-08 13:28:00,2026-05-20 17:00:00,In Production,PREP,252.49,Hold_Stalled,0,1,5,0,False,False,False,False
-449647,PATGIA,Giana Paterno,P551,2026-05-07 12:27:00,2026-05-15 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,6,0,False,False,False,False
-449211,PAPAMI,Amiel Pappas,E378,2026-05-01 15:19:00,2026-05-11 17:00:00,In Production,SENTFORDESIGN,302.23,Unknown,0,5,12,2,True,False,False,True
-449761,KUCMAR,Mark Kuchta,EVDSGN-050826839207,2026-05-08 11:52:00,2026-05-18 17:00:00,In Production,EVD SUBMITTED,92.06,Unknown,0,5,5,0,False,False,False,False
-449851,LEZBEA,Beata Lezerkiewicz,V20,2026-05-11 11:20:00,2026-05-18 17:00:00,In Production,,119.51,Unknown,0,5,2,0,False,False,False,False
-449624,SIETOM,Tom Siewert,EVDSGN-050726839261,2026-05-07 10:24:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,70.59,Unknown,0,5,6,0,False,False,False,False
-446210,GOYRINLV,Rinkle Goyal,E193!,2026-03-27 14:30:31,,Sent for TryIn,,0.0,Unknown,0,5,47,0,False,False,False,False
-449611,SUHINE,Ine Suh,P941!,2026-05-07 09:02:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,87.81,Unknown,0,5,6,0,False,False,False,False
-449426,REMTHO,Thomas Remijas,H119,2026-05-05 14:08:00,2026-05-13 17:00:00,In Production,MILLINGIP,497.99,Implants,0,5,8,0,False,False,False,False
-449393,RIYTARCHI,Tariq Riyal,F225*,2026-05-05 11:55:00,2026-05-18 17:00:00,In Production,EVD SUBMITTED,644.25,Unknown,0,5,8,0,False,False,False,False
-449596,FELNIC,Nick Feller,EVDSGN-050626839252,2026-05-06 17:10:00,2026-05-14 17:00:00,In Production,SHADEMATCHCART,91.05,Unknown,0,5,7,0,False,False,False,False
-449863,RHICAT,Catherine Rhim,V282,2026-05-11 12:36:00,2026-05-22 17:00:00,In Production,,0.0,Unknown,0,5,2,0,False,False,False,False
-449011,SANJAM,James Santarelli,E157*,2026-04-30 13:00:00,2026-05-14 17:00:00,In Production,SINTERING,347.7,CAD_CAM,0,2,13,0,False,False,False,False
-448840,FIEJAM,James Fieldhouse,F198,2026-04-29 09:41:00,2026-05-13 17:00:00,In Production,CADOUT,776.79,CAD_CAM,0,2,14,0,False,False,False,False
-449506,DANBRI,Brian Danielewicz,D148$,2026-05-06 10:22:19,,Sent for TryIn,,0.0,Unknown,0,5,7,0,False,False,False,False
-449705,ATHJOH,John Athos,E340*,2026-05-07 16:59:00,2026-05-14 17:00:00,In Production,CADSTALLED,59.49,CAD_CAM,0,2,6,0,False,False,False,False
-449626,COPMAR,Mario Copello,E67*,2026-05-07 10:32:00,2026-05-14 17:00:00,In Production,CADSTALLED,103.48,CAD_CAM,0,2,6,0,False,False,False,False
-449320,JURAND,Andrew Jursik,F199*,2026-05-04 14:12:00,2026-05-15 17:00:00,In Production,PRINTING,159.76,CAD_CAM,0,2,9,0,False,False,False,False
-449837,CZAAUS,Austin Czarnecki,EVDSGN-051126839464,2026-05-11 09:49:00,2026-05-18 17:00:00,In Production,,92.06,Unknown,0,5,2,0,False,False,False,False
-449298,GATGUY,Guy Henry Gattone,V72,2026-05-04 12:43:00,2026-05-13 17:00:00,In Production,MILLINGIP,119.51,Implants,0,5,9,0,False,False,False,False
-449821,KHAALI,Ali Khan,EVDSGN-051126839457,2026-05-11 08:37:00,2026-05-18 17:00:00,In Production,,368.24,Unknown,0,5,2,0,False,False,False,False
-449406,LIGLAU,Lauryn Ligocki,H301,2026-05-05 13:23:00,2026-05-19 17:00:00,In Production,MILLING BRUX,324.1,Unknown,0,5,8,0,False,False,False,False
-448024,SLAMICHOM,Michael Slavin,V217*,2026-04-20 11:14:00,2026-04-24 17:00:00,In Production,GUIDES,236.48,Surgical,0,7,23,19,True,False,False,True
-448859,PAIADI,Aditya Pai,F56*,2026-04-29 12:00:00,2026-05-13 17:00:00,In Production,PORCIP NINI,2255.72,Implants,0,5,14,0,False,False,False,False
-449359,ANDMAR,Mark Anderson,H206*,2026-05-04 17:59:00,2026-05-13 17:00:00,In Production,REMPREP,118.07,Removable,0,5,9,0,False,False,False,False
-449621,RASMOSFL,Moses Rasberry,E176*,2026-05-07 10:14:00,2026-05-20 17:00:00,In Production,CTS,634.04,Surgical,0,7,6,0,False,False,False,False
-449563,JONSYR,Syreeta Jones,EVDSGN-050626839239,2026-05-06 13:39:00,2026-05-14 17:00:00,In Production,,92.06,Unknown,0,5,7,0,False,False,False,False
-449092,POLNIC,Nicholas Polito,E328,2026-05-01 10:05:00,2026-05-15 17:00:00,In Production,PORCIP DEAN,1081.12,Implants,0,5,12,0,False,False,False,False
-449886,THADEVOP,Devang Thakkar,V240,2026-05-11 13:31:00,2026-05-26 17:00:00,In Production,,222.92,Unknown,0,5,2,0,False,False,False,False
-449777,SLAMICJOL,Michael Slavin,E75*,2026-05-08 13:15:00,2026-06-04 17:00:00,In Production,REMPREP,286.87,Removable,0,5,5,0,False,False,False,False
-449271,NIEJOS,Joseph Nierzwicki,E181,2026-05-04 11:21:00,2026-05-12 17:00:00,In Production,MILLINGIP,87.81,Implants,0,5,9,1,True,False,False,True
-449878,SHAATI,Atish Shah,V5*,2026-05-11 12:59:00,2026-05-22 17:00:00,In Production,,127.44,Unknown,0,5,2,0,False,False,False,False
-449676,ANDMAR,Mark Anderson,E220*,2026-05-07 13:58:00,2026-05-18 17:00:00,In Production,FIXEDINCOMINGCTS,513.31,Fixed,0,3,6,0,False,False,False,False
+449987,JAVJAM,James Javorski,H212,2026-05-12 12:42:00,2026-05-21 17:00:00,In Production,SCANNING,81.35,Surgical,0,7,1,0,False,False,False,False
+450192,DOUJASVA,Jason Douts,EVDSGN-051426839106,2026-05-14 10:51:00,2026-05-21 17:00:00,In Production,,102.69,Unknown,0,5,-1,0,False,False,False,False
+450176,NIEJOS,Joseph Nierzwicki,P374,2026-05-14 08:47:00,2026-05-27 17:00:00,In Production,,249.44,Unknown,0,5,-1,0,False,False,False,False
+449456,NIEMAR,Mark Niemiec,F241*,2026-05-05 14:59:00,2026-05-18 17:00:00,In Production,DIGITALREMOVABLE,316.51,Unknown,0,5,8,0,False,False,False,False
+450213,PATGIA,Giana Paterno,P817,2026-05-14 12:08:00,2026-05-21 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
+450273,SANJAM,James Santarelli,P570*,2026-05-14 15:41:00,2026-05-28 17:00:00,Outsourced,,102.29,Unknown,0,5,-1,0,False,False,False,False
+449788,GAFCOL,Colleen Gaffney,E140,2026-05-08 13:28:00,2026-05-20 17:00:00,In Production,MILLING BRUX,252.49,Unknown,0,5,5,0,False,False,False,False
+449989,MACHAZ,Hazel Santiago-Macanip,E355,2026-05-12 12:54:47,,Sent for TryIn,,0.0,Unknown,0,5,1,0,False,False,False,False
+449211,PAPAMI,Amiel Pappas,E378,2026-05-01 15:19:00,2026-05-28 17:00:00,In Production,CADOUT,302.23,CAD_CAM,0,2,12,0,False,False,False,False
+450235,SINPAU,Paul Singh,P823,2026-05-14 13:15:00,2026-05-22 17:00:00,In Production,,182.09,Unknown,0,5,-1,0,False,False,False,False
+449851,LEZBEA,Beata Lezerkiewicz,V20,2026-05-11 11:20:00,2026-05-18 17:00:00,In Production,MILLINGIP,119.51,Implants,0,5,2,0,False,False,False,False
+450128,KORMIK,Mikhail Korolyov,EVDSGN-051326839209,2026-05-13 14:20:00,2026-05-21 17:00:00,In Production,,79.79,Unknown,0,5,0,0,False,False,False,False
+450030,SAFTAR,Tarek Safadi,EVDSGN-051226839522,2026-05-12 15:56:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,276.18,Unknown,0,5,1,0,False,False,False,False
+446210,GOYRINLV,Rinkle Goyal,E193!,2026-05-13 14:30:00,2026-05-21 17:00:00,In Production,REMPREP,282.34,Removable,0,5,0,0,False,False,False,False
+450165,SUHINE,Ine Suh,P578,2026-05-14 08:55:00,2026-05-22 17:00:00,In Production,,87.81,Unknown,0,5,-1,0,False,False,False,False
+450056,SOOANUHE,Anu Sood,V139,2026-05-13 09:16:52,,Sent for TryIn,,0.0,Unknown,0,5,0,0,False,False,False,False
+449393,RIYTARCHI,Tariq Riyal,F225*,2026-05-05 11:55:00,2026-05-18 17:00:00,In Production,PORCIP DEAN,644.25,Implants,0,5,8,0,False,False,False,False
+449863,RHICAT,Catherine Rhim,V282,2026-05-11 12:36:00,2026-05-22 17:00:00,In Production,MILLING BRIDGE,273.14,Unknown,0,5,2,0,False,False,False,False
+449506,DANBRI,Brian Danielewicz,D148$,2026-05-06 10:22:00,2026-05-28 17:00:00,In Production,,1536.38,Unknown,0,5,7,0,False,False,False,False
+449950,TANFRA,Francis Tan,H145,2026-05-12 10:50:00,2026-05-20 17:00:00,In Production,SCANNING,129.74,Surgical,0,7,1,0,False,False,False,False
+449320,JURAND,Andrew Jursik,F199*,2026-05-04 14:12:00,2026-05-15 17:00:00,In Production,SPLFINISH,159.76,Fixed,0,3,9,0,False,False,False,False
+450130,DARDAVSB,David Dardick,EVDSGN-051326839210,2026-05-13 14:25:00,2026-05-21 17:00:00,In Production,,90.42,Unknown,0,5,0,0,False,False,False,False
+450127,GRAVICDES,Victor Grandinetti,F205,2026-05-13 14:22:00,2026-05-21 17:00:00,In Production,REMPREP,83.72,Removable,0,5,0,0,False,False,False,False
+449406,LIGLAU,Lauryn Ligocki,H301,2026-05-05 13:23:00,2026-05-19 17:00:00,In Production,STAINGLAZE,324.1,Fixed,0,3,8,0,False,False,False,False
+450076,DOUJASVA,Jason Douts,F158,2026-05-13 10:58:00,2026-05-21 17:00:00,In Production,PREP,129.51,Hold_Stalled,0,1,0,0,False,False,False,False
+450028,JAGSAM,Sameera Jagirdar,F11*,2026-05-12 15:51:00,2026-05-20 17:00:00,In Production,PRINTING,91.05,CAD_CAM,0,2,1,0,False,False,False,False
+450181,BALJOS,Joseph Balice,P919*,2026-05-14 09:44:00,2026-05-21 17:00:00,In Production,,70.59,Unknown,0,5,-1,0,False,False,False,False
+450032,HASFAY,Fayda Hassan,EVDSGN-051226839524,2026-05-12 16:05:00,2026-05-26 17:00:00,In Production,EVD SUBMITTED,423.52,Unknown,0,5,1,0,False,False,False,False
+450072,SYLCOLBL,Colton Sylvester,F29,2026-05-13 10:53:00,2026-05-21 17:00:00,In Production,PREP,130.14,Hold_Stalled,0,1,0,0,False,False,False,False
+449621,RASMOSFL,Moses Rasberry,E176*,2026-05-07 10:14:00,2026-05-20 17:00:00,In Production,PRINTINGIP,634.04,Unknown,0,5,6,0,False,False,False,False
+449777,SLAMICJOL,Michael Slavin,E75*,2026-05-08 13:15:00,2026-06-04 17:00:00,In Production,GUIDES,286.87,Surgical,0,7,5,0,False,False,False,False
+450180,SLAMIC,Michael Slavin,P324,2026-05-14 09:41:00,2026-05-27 17:00:00,In Production,,292.91,Unknown,0,5,-1,0,False,False,False,False
+450003,PERLUI,Luis Peralta,H139,2026-05-12 14:18:00,2026-05-20 17:00:00,In Production,SENTFORDESIGN,0.0,Unknown,0,5,1,0,False,False,False,False
+449676,ANDMAR,Mark Anderson,E220*,2026-05-07 13:58:00,2026-05-18 17:00:00,In Production,PRINTINGIP,1474.93,Unknown,0,5,6,0,False,False,False,False
 446054,TOKNIC,Nicholas Tokarski,H246,2026-03-26 11:29:29,,Sent for TryIn,,0.0,Unknown,0,5,48,0,False,False,False,False
-449642,CASLEN,Lena J. Casimir,EVDSGN-050726839269,2026-05-07 12:07:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,232.8,Unknown,0,5,6,0,False,False,False,False
-449894,PATUMA,Umang Patel,V68*,2026-05-11 14:01:00,2026-05-20 17:00:00,In Production,,82.23,Unknown,0,5,2,0,False,False,False,False
-449561,RHICAT,Catherine Rhim,F134,2026-05-06 13:37:00,2026-05-14 17:00:00,In Production,MILLING BRUX,84.91,Unknown,0,5,7,0,False,False,False,False
-449696,LEEAND,Andrew Lee,P167,2026-05-07 15:22:53,,Sent for TryIn,,0.0,Unknown,0,5,6,0,False,False,False,False
-449742,VANMATWS,Matt Van Beek,E369*,2026-05-08 10:18:00,2026-05-18 17:00:00,In Production,CADSTALLED,180.46,CAD_CAM,0,2,5,0,False,False,False,False
-449419,SAMJACSTC,Jacob Samuel,H30,2026-05-05 13:19:00,2026-05-15 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,8,0,False,False,False,False
-449807,PATUMA,Umang Patel,V14*,2026-05-08 16:24:00,2026-05-19 17:00:00,In Production,,82.23,Unknown,0,5,5,0,False,False,False,False
+449982,SKRLEO,Leo Skrypkun,H220,2026-05-12 12:37:00,2026-05-20 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,1,0,False,False,False,False
+450087,NIEMAR,Mark Niemiec,F85*,2026-05-13 11:47:00,2026-05-26 17:00:00,In Production,MILLING BRIDGE,214.83,Unknown,0,5,0,0,False,False,False,False
+450205,SOHMUHLA,Muhammad Sohail,P853*,2026-05-14 12:01:00,2026-05-22 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+450075,DOUJASVA,Jason Douts,F141,2026-05-13 10:56:00,2026-05-21 17:00:00,In Production,PREP,0.0,Hold_Stalled,0,1,0,0,False,False,False,False
+450184,TUCELILV,Elizabeth Tucker,P92,2026-05-14 09:52:00,2026-05-29 17:00:00,In Production,,477.56,Unknown,0,5,-1,0,False,False,False,False
+449696,LEEAND,Andrew Lee,P167,2026-05-13 15:22:00,2026-05-22 17:00:00,In Production,,6.99,Unknown,0,5,0,0,False,False,False,False
+450067,MCCSCO,Scott McCarty,F223,2026-05-13 10:25:00,2026-05-21 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,0,0,False,False,False,False
+450088,JANUPA,Upasna Janu,F7*,2026-05-13 12:02:00,2026-07-15 17:00:00,In Production,GUIDES,231.88,Surgical,0,7,0,0,False,False,False,False
+449742,VANMATWS,Matt Van Beek,E369*,2026-05-08 10:18:00,2026-05-20 17:00:00,In Production,DIGITALREMOVABLE,207.01,Unknown,0,5,5,0,False,False,False,False
 447709,KHASUM,Sumayyah Khan,F102,2026-04-15 14:36:02,,Sent for TryIn,,0.0,Unknown,0,5,28,0,False,False,False,False
+450264,ANDMAR,Mark Anderson,P322*,2026-05-14 14:58:00,2026-05-22 17:00:00,In Production,,93.25,Unknown,0,5,-1,0,False,False,False,False
 449497,PRAMAR,Mark Prakash,F244,2026-05-06 09:27:00,2026-05-19 17:00:00,In Production,REMTRYINWALL,501.01,Removable,0,5,7,0,False,False,False,False
-449763,LAPANT,Anthony LaPorte,E211*,2026-05-08 11:58:00,2026-05-15 17:00:00,In Production,FIXEDINCOMINGCTS,0.0,Fixed,0,3,5,0,False,False,False,False
-449908,MADABD,Abdalhameed Madwar,V79*,2026-05-11 16:01:00,2026-05-15 17:00:00,In Production,,70.59,Unknown,0,5,2,0,False,False,False,False
-449329,FARYAS,Yasmin Farid,D313*,2026-05-04 15:04:00,2026-05-20 17:00:00,In Production,REMTRYINWALL,271.08,Removable,0,5,9,0,False,False,False,False
-449896,BALJOS,Joseph Balice,V69*,2026-05-11 14:16:00,2026-05-20 17:00:00,In Production,,79.17,Unknown,0,5,2,0,False,False,False,False
-449227,RYCJUAFL,Juana Ryckowski,V99*,2026-05-04 09:16:00,2026-05-15 17:00:00,In Production,CTS,704.63,Surgical,0,7,9,0,False,False,False,False
-449722,GARLIN,Lina Garcia,E93,2026-05-08 09:03:00,2026-05-18 17:00:00,In Production,,0.0,Unknown,0,5,5,0,False,False,False,False
-449373,SALNICLAW,Nicholas Salava,F6*,2026-05-05 09:19:00,2026-05-19 17:00:00,In Production,,174.08,Unknown,0,5,8,0,False,False,False,False
-449505,RIYTARCHI,Tariq Riyal,F109*,2026-05-06 10:08:00,2026-05-19 17:00:00,In Production,EVD SUBMITTED,347.7,Unknown,0,5,7,0,False,False,False,False
-449044,BENKAT,Katie Benka,D283$*,2026-04-30 14:04:00,2026-05-22 17:00:00,In Production,,1705.74,Unknown,0,5,13,0,False,False,False,False
-449904,CZAAUS,Austin Czarnecki,EVDSGN-051126839481,2026-05-11 15:22:00,2026-05-19 17:00:00,In Production,,92.06,Unknown,0,5,2,0,False,False,False,False
-449738,BAPBEN,Ben Baptist,E352*,2026-05-08 10:07:00,2026-05-21 17:00:00,In Production,CTS,337.47,Surgical,0,7,5,0,False,False,False,False
-448469,KOLMARFF,Mark Kolozenski,D299$,2026-04-23 14:37:00,2026-05-14 17:00:00,In Production,HENRY,1458.63,Fixed,0,3,20,0,False,False,False,False
-449648,HANMIR,Mirette Hanna,P712,2026-05-07 12:26:00,2026-05-19 17:00:00,In Production,SENTFORDESIGN,84.91,Unknown,0,5,6,0,False,False,False,False
-449795,GIRBET,Betsy Giron,E374!,2026-05-08 13:35:00,2026-05-15 17:00:00,In Production,REMIPSABRINA,6.99,Implants,0,5,5,0,False,False,False,False
-449636,CASLEN,Lena J. Casimir,EVDSGN-050726839265,2026-05-07 11:40:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,341.22,Unknown,0,5,6,0,False,False,False,False
-449380,LAPANT,Anthony LaPorte,F185*,2026-05-05 09:46:00,2026-05-19 17:00:00,Outsourced,,292.97,Unknown,0,5,8,0,False,False,False,False
-449690,BAPBEN,Ben Baptist,EVDSGN-050726839276,2026-05-07 14:48:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,80.82,Unknown,0,5,6,0,False,False,False,False
-448982,FIEJAM,James Fieldhouse,P24*,2026-04-30 11:16:00,2026-05-20 17:00:00,In Production,PRINTING,512.39,CAD_CAM,0,2,13,0,False,False,False,False
-449876,KHASAMNA,Samia Khan,V35*,2026-05-11 12:55:00,2026-05-19 17:00:00,In Production,,0.0,Unknown,0,5,2,0,False,False,False,False
-448892,CORJER,Jerome Correa,F49,2026-04-29 12:51:00,2026-05-14 17:00:00,In Production,MILLINGIP,437.83,Implants,0,5,14,0,False,False,False,False
-449557,BERDERCP,Derek Berquist,F176,2026-05-06 13:34:00,2026-05-14 17:00:00,In Production,MILLING BRUX,129.74,Unknown,0,5,7,0,False,False,False,False
-448478,LEBRAFB,Raffi Leblebijian,H92,2026-05-07 15:32:00,2026-05-15 17:00:00,In Production,REMPROCESSSHELF,175.32,Removable,0,5,6,0,False,False,False,False
-449041,KUSJOR,Jordan Kushner,D8$*,2026-04-30 14:01:00,2026-05-19 17:00:00,In Production,REMIPDOM,6.99,Implants,0,5,13,0,False,False,False,False
+450151,BRERIC,Richard Brenner,P824*,2026-05-13 17:32:00,2026-05-21 17:00:00,In Production,,218.46,Unknown,0,5,0,0,False,False,False,False
+450233,KAMTHO,Thomas Kaminski,P515*,2026-05-14 13:04:10,,Sent for TryIn,,0.0,Unknown,0,5,-1,0,False,False,False,False
+449329,FARYAS,Yasmin Farid,D313*,2026-05-04 15:04:00,2026-05-20 17:00:00,In Production,REMIPBLERTA,271.08,Implants,0,5,9,0,False,False,False,False
+449227,RYCJUAFL,Juana Ryckowski,V99*,2026-05-04 09:16:00,2026-05-18 17:00:00,In Production,PRINTINGIP,704.63,Unknown,0,5,9,0,False,False,False,False
+449722,GARLIN,Lina Garcia,E93,2026-05-08 09:03:00,2026-05-20 17:00:00,In Production,REMIPMARY,0.0,Implants,0,5,5,0,False,False,False,False
+449373,SALNICLAW,Nicholas Salava,F6*,2026-05-05 09:19:00,2026-05-20 17:00:00,In Production,REMIPSABRINA,174.08,Implants,0,5,8,0,False,False,False,False
+449505,RIYTARCHI,Tariq Riyal,F109*,2026-05-06 10:08:00,2026-05-19 17:00:00,In Production,PRINTINGIP,347.7,Unknown,0,5,7,0,False,False,False,False
+450050,TUCELILV,Elizabeth Tucker,F16,2026-05-13 09:10:00,2026-05-22 17:00:00,In Production,SCANNING,129.74,Surgical,0,7,0,0,False,False,False,False
+450179,WALBRIOP,Brian Walczak,P857*,2026-05-14 09:39:00,2026-05-27 17:00:00,In Production,,204.59,Unknown,0,5,-1,0,False,False,False,False
+449044,BENKAT,Katie Benka,D283$*,2026-04-30 14:04:00,2026-05-22 17:00:00,In Production,REMIPSABRINA,1705.74,Implants,0,5,13,0,False,False,False,False
+450168,AUSMIC,Michaelangelo Aust,P751,2026-05-14 09:08:00,2026-05-22 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
+450136,GOEPAN,Pankhuri Goel,F175*,2026-05-13 16:06:00,2026-05-15 17:00:00,In Production,MILLINGIP,0.0,Implants,0,5,0,0,False,False,False,False
+450116,JOUCYN,Cynthia Jourdan,F133,2026-05-13 13:56:00,2026-05-27 17:00:00,In Production,REMOUT,289.33,Removable,0,5,0,0,False,False,False,False
+449738,BAPBEN,Ben Baptist,E352*,2026-05-08 10:07:00,2026-05-21 17:00:00,In Production,PRINTINGIP,337.47,Unknown,0,5,5,0,False,False,False,False
+450008,CUARACMOK,Rachel Cuadros,H256,2026-05-12 14:23:00,2026-05-20 17:00:00,In Production,PRINTING,0.0,CAD_CAM,0,2,1,0,False,False,False,False
+449648,HANMIR,Mirette Hanna,P712,2026-05-07 12:26:00,2026-05-19 17:00:00,In Production,MILLINGIP,84.91,Implants,0,5,6,0,False,False,False,False
+448982,FIEJAM,James Fieldhouse,P24*,2026-04-30 11:16:00,2026-05-20 17:00:00,In Production,MATCHING TABLE,512.39,Unknown,0,5,13,0,False,False,False,False
+450160,NIEMAR,Mark Niemiec,P848*,2026-05-13 18:19:00,2026-05-27 17:00:00,In Production,,364.06,Unknown,0,5,0,0,False,False,False,False
+450177,MATJOSLOW,Joseph Mattingly,P819*,2026-05-14 09:34:00,2026-05-22 17:00:00,In Production,,153.83,Unknown,0,5,-1,0,False,False,False,False
 449039,ABUSIM,Simon Abu-Aita,F172,2026-04-30 13:58:18,,Sent for TryIn,,0.0,Unknown,0,5,13,0,False,False,False,False
-448811,GERTHO,Thomas Germino,P641,2026-04-28 16:30:00,2026-05-14 17:00:00,In Production,CADOUT,675.17,CAD_CAM,0,2,15,0,False,False,False,False
-449363,JURAND,Andrew Jursik,F138*,2026-05-04 19:07:00,2026-05-14 17:00:00,In Production,PRINTINGIP,79.79,Unknown,0,5,9,0,False,False,False,False
+449986,REMTHO,Thomas Remijas,H71,2026-05-12 12:41:00,2026-05-20 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,1,0,False,False,False,False
+450085,PICGIN,Gina Piccioni,EVDSGN-051326839203,2026-05-13 11:42:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,273.14,Unknown,0,5,0,0,False,False,False,False
+450005,RANMAR,Mary Ranieli,P838,2026-05-12 14:20:00,2026-05-20 17:00:00,In Production,,0.0,Unknown,0,5,1,0,False,False,False,False
+450022,LOPSARST,Sarah Lopez,F157*,2026-05-12 15:21:00,2026-05-19 17:00:00,In Production,,204.48,Unknown,0,5,1,0,False,False,False,False
+450012,ENAHORLA,Horatio Enacopol,H315,2026-05-12 14:24:00,2026-05-15 17:00:00,In Production,REMIPMARY,251.22,Implants,0,5,1,0,False,False,False,False
 449308,KOLMARFF,Mark Kolozenski,X81$,2026-05-04 13:45:00,2026-05-29 17:00:00,In Production,MILLING AO4,1233.57,Unknown,0,5,9,0,False,False,False,False
 449262,ATHJOH,John Athos,D34$*,2026-05-04 11:07:41,,Sent for TryIn,,0.0,Unknown,0,5,9,0,False,False,False,False
-449684,CHUMANRV,Manas Chug,P386,2026-05-07 12:57:00,2026-05-21 17:00:00,In Production,,713.32,Unknown,0,5,6,0,False,False,False,False
+449684,CHUMANRV,Manas Chug,P386,2026-05-07 12:57:00,2026-05-21 17:00:00,In Production,REMOUT,713.32,Removable,0,5,6,0,False,False,False,False
 443849,TADSIM,Simon Tadros,H216,2026-03-02 09:40:05,,Sent for TryIn,,0.0,Unknown,0,5,72,0,False,False,False,False
-449595,WALBRIOP,Brian Walczak,P820*,2026-05-06 17:04:00,2026-05-20 17:00:00,Outsourced,,267.28,Unknown,0,5,7,0,False,False,False,False
-449638,OLCVAN,Vania Olcay,E145*,2026-05-07 11:50:00,2026-05-14 17:00:00,In Production,SENTFORDESIGN,80.82,Unknown,0,5,6,0,False,False,False,False
-449637,CZAAUS,Austin Czarnecki,EVDSGN-050726839266,2026-05-07 11:45:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,92.06,Unknown,0,5,6,0,False,False,False,False
-449005,BALJOS,Joseph Balice,P503,2026-04-30 12:39:00,2026-05-14 17:00:00,In Production,FRED,905.16,Fixed,0,3,13,0,False,False,False,False
-449785,SAMJACSTC,Jacob Samuel,E370,2026-05-08 13:26:00,2026-05-18 17:00:00,In Production,PREP,79.79,Hold_Stalled,0,1,5,0,False,False,False,False
-446492,TOKNIC,Nicholas Tokarski,P19,2026-05-06 10:51:00,2026-05-20 17:00:00,In Production,,289.33,Unknown,0,5,7,0,False,False,False,False
-449792,CORJER,Jerome Correa,E207,2026-05-08 13:32:00,2026-05-21 17:00:00,In Production,PREP,483.87,Hold_Stalled,0,1,5,0,False,False,False,False
+450011,DOUBRI,Brian Douts,EVDSGN-051226839516,2026-05-12 14:37:00,2026-05-20 17:00:00,In Production,,80.82,Unknown,0,5,1,0,False,False,False,False
+449928,SUHINE,Ine Suh,H98,2026-05-12 08:42:00,2026-05-21 17:00:00,In Production,MILLING BRUX,87.81,Unknown,0,5,1,0,False,False,False,False
+449785,SAMJACSTC,Jacob Samuel,E370,2026-05-08 13:26:00,2026-05-18 17:00:00,In Production,MILLINGIP,79.79,Implants,0,5,5,0,False,False,False,False
+450119,JOUCYN,Cynthia Jourdan,F171,2026-05-13 14:04:00,2026-05-28 17:00:00,In Production,,233.84,Unknown,0,5,0,0,False,False,False,False
+446492,TOKNIC,Nicholas Tokarski,P19,2026-05-06 10:51:00,2026-05-20 17:00:00,In Production,REMOUT,289.33,Removable,0,5,7,0,False,False,False,False
+449792,CORJER,Jerome Correa,E207,2026-05-08 13:32:00,2026-05-21 17:00:00,In Production,MILLING IMPLANT,483.87,Unknown,0,5,5,0,False,False,False,False
 445079,KHASAMNA,Samia Khan,V237*,2026-03-16 08:58:00,2026-03-27 17:00:00,In Production,DIGITALREMOVABLE,0.0,Unknown,0,5,58,47,True,False,False,True
-449772,CUARACMOK,Rachel Cuadros,E320*,2026-05-08 12:42:00,2026-05-19 17:00:00,In Production,CADSTALLED,103.48,CAD_CAM,0,2,5,0,False,False,False,False
-448960,SIETOM,Tom Siewert,P343,2026-04-30 09:28:00,2026-05-20 17:00:00,In Production,SINTERING,0.0,CAD_CAM,0,2,13,0,False,False,False,False
-449718,AUSMIC,Michaelangelo Aust,E179,2026-05-08 08:49:00,2026-05-19 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,5,0,False,False,False,False
-449805,GOVMON,Monika Govoni,EVDSGN-050826839212,2026-05-08 16:20:00,2026-05-18 17:00:00,In Production,,101.68,Unknown,0,5,5,0,False,False,False,False
-449365,GRUKAT,Katy Grunenwald,H68,2026-05-05 08:55:00,2026-05-18 17:00:00,In Production,REMOUT,129.75,Removable,0,5,8,0,False,False,False,False
-449708,LEBRAF,Raffi Leblebijian,E372*,2026-05-07 17:24:00,2026-05-21 17:00:00,In Production,CTS,347.7,Surgical,0,7,6,0,False,False,False,False
-449783,GAFCOL,Colleen Gaffney,E360,2026-05-08 13:23:00,2026-05-18 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,5,0,False,False,False,False
-449839,FELNIC,Nick Feller,EVDSGN-051126839466,2026-05-11 10:16:00,2026-05-18 17:00:00,In Production,,91.05,Unknown,0,5,2,0,False,False,False,False
-449826,AUSMIC,Michaelangelo Aust,V67,2026-05-11 08:45:00,2026-05-20 17:00:00,In Production,,79.79,Unknown,0,5,2,0,False,False,False,False
-449311,MALRYA,Ryann Maloney,V75,2026-05-04 13:53:00,2026-05-14 17:00:00,In Production,SINTERING,79.79,CAD_CAM,0,2,9,0,False,False,False,False
-449520,NEWDAV,David Newkirk,F37*,2026-05-06 11:34:00,2026-05-18 17:00:00,In Production,PRINTINGIP,423.72,Unknown,0,5,7,0,False,False,False,False
-449702,YIANIC,Nicas Yiannias,E163*,2026-05-07 16:11:00,2026-05-21 17:00:00,In Production,CTS,511.38,Surgical,0,7,6,0,False,False,False,False
-449890,BALJOS,Joseph Balice,V97*,2026-05-11 13:33:00,2026-05-20 17:00:00,In Production,,82.23,Unknown,0,5,2,0,False,False,False,False
-449612,HANPATSK,Patrick Hann,P10,2026-05-07 09:04:00,2026-05-15 17:00:00,In Production,SCANNING,129.74,Surgical,0,7,6,0,False,False,False,False
+450019,FRAMIC,Michael Frantal,P96*,2026-05-12 15:19:10,,Sent for TryIn,,10.0,Unknown,0,5,1,0,False,False,False,False
+450042,LEURIN,Ringo Leung,F95*,2026-05-12 17:33:00,2026-05-28 17:00:00,In Production,SENTFORDESIGN,273.14,Unknown,0,5,1,0,False,False,False,False
+450029,ENAHORLA,Horatio Enacopol,D235$,2026-05-12 15:54:00,2026-05-18 17:00:00,In Production,CTS,38.84,Surgical,0,7,1,0,False,False,False,False
+448960,SIETOM,Tom Siewert,P343,2026-04-30 09:28:00,2026-05-20 17:00:00,In Production,STAINGLAZECART,0.0,Fixed,0,3,13,0,False,False,False,False
+449718,AUSMIC,Michaelangelo Aust,E179,2026-05-08 08:49:00,2026-05-19 17:00:00,In Production,MILLINGIP,79.79,Implants,0,5,5,0,False,False,False,False
+449708,LEBRAF,Raffi Leblebijian,E372*,2026-05-07 17:24:00,2026-05-21 17:00:00,In Production,PRINTINGIP,347.7,Unknown,0,5,6,0,False,False,False,False
+449783,GAFCOL,Colleen Gaffney,E360,2026-05-08 13:23:00,2026-05-18 17:00:00,In Production,MILLINGIP,119.51,Implants,0,5,5,0,False,False,False,False
+449826,AUSMIC,Michaelangelo Aust,V67,2026-05-11 08:45:00,2026-05-20 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,2,0,False,False,False,False
+449520,NEWDAV,David Newkirk,F37*,2026-05-06 11:34:00,2026-05-18 17:00:00,In Production,REMFINISHWALL,423.72,Removable,0,5,7,0,False,False,False,False
+449702,YIANIC,Nicas Yiannias,E163*,2026-05-07 16:11:00,2026-05-21 17:00:00,In Production,PRINTINGIP,511.38,Unknown,0,5,6,0,False,False,False,False
+449890,BALJOS,Joseph Balice,V97*,2026-05-11 13:33:00,2026-05-20 17:00:00,In Production,REMPREP,82.23,Removable,0,5,2,0,False,False,False,False
+450105,GRAALE,Alexander Grabavoy,F40,2026-05-13 13:18:00,2026-05-22 17:00:00,In Production,REMPREP,163.0,Removable,0,5,0,0,False,False,False,False
 441597,CERGAI,Gaile Cerniauskas,D170$,2026-02-03 11:55:17,,Sent for TryIn,,0.0,Unknown,0,5,99,0,False,False,False,False
-448974,FRAMIC,Michael Frantal,P96*,2026-04-30 10:54:00,2026-05-20 17:00:00,In Production,REMPREP,933.25,Removable,0,5,13,0,False,False,False,False
-449675,ENAHORLA,Horatio Enacopol,P702,2026-05-07 13:52:00,2026-05-18 17:00:00,In Production,REMIPMARY,520.42,Implants,0,5,6,0,False,False,False,False
-449360,KOSERI,Eric Kosnic,H4*,2026-05-04 18:06:00,2026-05-13 17:00:00,In Production,SPLFINISH,185.32,Fixed,0,3,9,0,False,False,False,False
-449658,WONANJ,Anjanetta Wonderlick,P177,2026-05-07 13:14:00,2026-05-19 17:00:00,In Production,REMPREP,191.27,Removable,0,5,6,0,False,False,False,False
-449436,KOSERI,Eric Kosnic,F28*,2026-05-05 14:27:00,2026-05-21 17:00:00,In Production,REMPREP,185.32,Removable,0,5,8,0,False,False,False,False
+450081,CUARACMOK,Rachel Cuadros,EVDSGN-051326839202,2026-05-13 11:18:00,2026-05-20 17:00:00,In Production,MILLING EMAX,169.38,Unknown,0,5,0,0,False,False,False,False
+449992,PATNEE,Neeva Patel,H137,2026-05-12 13:54:00,2026-05-20 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,1,0,False,False,False,False
+449675,ENAHORLA,Horatio Enacopol,P702,2026-05-07 13:52:00,2026-05-18 17:00:00,In Production,REMFINISHWALL,520.42,Removable,0,5,6,0,False,False,False,False
+450220,PETCHR,Christine Petrilla,P705,2026-05-14 12:18:00,2026-05-22 17:00:00,In Production,,93.95,Unknown,0,5,-1,0,False,False,False,False
+450212,CHANHWA,Hwaiyin Chang,P138,2026-05-14 12:09:00,2026-05-20 17:00:00,In Production,,119.51,Unknown,0,5,-1,0,False,False,False,False
+449658,WONANJ,Anjanetta Wonderlick,P177,2026-05-07 13:14:00,2026-05-19 17:00:00,In Production,SPLFINISH,191.27,Fixed,0,3,6,0,False,False,False,False
+449998,TADSIM,Simon Tadros,H274,2026-05-12 14:10:00,2026-05-20 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,1,0,False,False,False,False
+450089,YIANIC,Nicas Yiannias,EVDSGN-051326839204,2026-05-13 12:04:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,91.05,Unknown,0,5,0,0,False,False,False,False
 448676,THADEVOL,Devang Thakkar,V91,2026-04-27 13:49:00,2026-05-12 17:00:00,In Production,GUIDES,222.92,Surgical,0,7,16,1,True,False,False,True
-449677,SKRLEO,Leo Skrypkun,P574,2026-05-07 14:07:00,2026-05-15 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,6,0,False,False,False,False
-449420,AHMSAN,Sana Ahmed,H134,2026-05-05 14:02:00,2026-05-15 17:00:00,In Production,MILLING EZ,339.47,Unknown,0,5,8,0,False,False,False,False
-449591,FELNIC,Nick Feller,EVDSGN-050626839250,2026-05-06 16:48:00,2026-05-14 17:00:00,In Production,SHADEMATCHCART,182.09,Unknown,0,5,7,0,False,False,False,False
-449196,SINMAN,Manpreet Singh,E70,2026-05-01 13:17:00,2026-05-13 17:00:00,In Production,RKHOLDING,391.2,Unknown,0,5,12,0,False,False,False,False
-448730,KOLMARFF,Mark Kolozenski,D255$,2026-04-28 10:02:00,2026-05-29 17:00:00,In Production,,927.69,Unknown,0,5,15,0,False,False,False,False
+450255,MALRYA,Ryann Maloney,P774,2026-05-14 14:21:00,2026-05-22 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
+450132,MARROM,Roman Marszalek,F38,2026-05-13 14:29:00,2026-05-27 17:00:00,In Production,,128.69,Unknown,0,5,0,0,False,False,False,False
+450167,NISLIN,Linora Nissan,P842,2026-05-14 09:06:00,2026-05-22 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
+450238,JUEDAV,David Juel,P820,2026-05-14 13:30:00,2026-05-26 17:00:00,In Production,,159.42,Unknown,0,5,-1,0,False,False,False,False
+448989,COOJAN,Jane Cooney,E358*,2026-04-30 11:31:00,2026-05-20 17:00:00,In Production,CADSTALLED,348.71,CAD_CAM,0,2,13,0,False,False,False,False
+448730,KOLMARFF,Mark Kolozenski,D255$,2026-04-28 10:02:00,2026-05-29 17:00:00,In Production,REMIPMARGARET,927.69,Implants,0,5,15,0,False,False,False,False
 449464,KOWKARDG,Karen Kowalesik,F169*,2026-05-05 15:34:00,2026-05-20 17:00:00,In Production,DIGITALREMOVABLE,0.0,Unknown,0,5,8,0,False,False,False,False
-448364,FIEJAM,James Fieldhouse,F99*,2026-04-22 19:25:00,2026-05-18 17:00:00,In Production,MILLING BRUX,630.04,Unknown,0,5,21,0,False,False,False,False
-449578,TOKNIC,Nicholas Tokarski,E99,2026-05-06 14:57:56,,Sent for TryIn,,0.0,Unknown,0,5,7,0,False,False,False,False
-449866,KHASUM,Sumayyah Khan,V112*& black tub,2026-05-11 12:40:00,2026-05-26 17:00:00,In Production,,645.65,Unknown,0,5,2,0,False,False,False,False
+448364,FIEJAM,James Fieldhouse,F99*,2026-04-22 19:25:00,2026-05-18 17:00:00,In Production,PORCIP DEAN,630.04,Implants,0,5,21,0,False,False,False,False
+449578,TOKNIC,Nicholas Tokarski,E99,2026-05-12 14:57:00,2026-05-27 17:00:00,In Production,REMIPSABRINA,6.99,Implants,0,5,1,0,False,False,False,False
+449866,KHASUM,Sumayyah Khan,V112*& black tub,2026-05-11 12:40:00,2026-05-26 17:00:00,Outsourced,REMPREP,645.65,Removable,0,5,2,0,False,False,False,False
 439554,KHASUM,Sumayyah Khan,P95,2026-01-09 14:41:25,,Sent for TryIn,,0.0,Unknown,0,5,124,0,False,False,False,False
-449455,LIGLAU,Lauryn Ligocki,H128,2026-05-05 14:09:00,2026-05-15 17:00:00,In Production,MILLING BRUX,324.1,Unknown,0,5,8,0,False,False,False,False
-449498,TOKNIC,Nicholas Tokarski,F206,2026-05-06 09:32:00,2026-05-19 17:00:00,In Production,REMIPBLERTA,313.88,Implants,0,5,7,0,False,False,False,False
-449399,HANMIR,Mirette Hanna,H24,2026-05-05 13:00:00,2026-05-18 17:00:00,In Production,MILLING BRUX,84.91,Unknown,0,5,8,0,False,False,False,False
-449667,JAGGAR,Gary Jagmin,P18,2026-05-07 13:45:00,2026-05-15 17:00:00,In Production,SENTFORDESIGN,119.51,Unknown,0,5,6,0,False,False,False,False
-449833,OLCVAN,Vania Olcay,EVDSGN-051126839462,2026-05-11 09:05:00,2026-05-18 17:00:00,In Production,,80.82,Unknown,0,5,2,0,False,False,False,False
-449850,LEZBEA,Beata Lezerkiewicz,V141,2026-05-11 11:20:00,2026-05-18 17:00:00,In Production,,119.51,Unknown,0,5,2,0,False,False,False,False
-449803,LUCPAULYO,Paulette Lucario,E368,2026-05-08 15:34:00,2026-05-18 17:00:00,In Production,PORCIP DEAN,0.0,Implants,0,5,5,0,False,False,False,False
-449884,GATGUY,Guy Henry Gattone,V281,2026-05-11 13:29:00,2026-05-20 17:00:00,In Production,,119.51,Unknown,0,5,2,0,False,False,False,False
-449454,SATHARNA,Harvey Satz,F210*,2026-05-05 14:55:00,2026-05-20 17:00:00,In Production,REMPREP,164.07,Removable,0,5,8,0,False,False,False,False
-449689,KAMTHO,Thomas Kaminski,P515*,2026-05-07 14:48:00,2026-05-15 17:00:00,In Production,DIGITALREMOVABLE,31.88,Unknown,0,5,6,0,False,False,False,False
-449551,TADSIM,Simon Tadros,F104,2026-05-06 13:29:00,2026-05-14 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,7,0,False,False,False,False
-449222,LEBRAFB,Raffi Leblebijian,V211*,2026-05-04 08:34:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,347.7,Unknown,0,5,9,0,False,False,False,False
-449398,TYSMONLB,Monika Tyszkowski,F71*,2026-05-05 13:09:00,2026-05-14 00:20:00,In Production,REMPREP,163.85,Removable,0,5,8,0,False,False,False,False
-449854,MCCSCO,Scott McCarty,V256,2026-05-11 11:23:00,2026-05-19 17:00:00,In Production,,110.44,Unknown,0,5,2,0,False,False,False,False
-449845,PATAME,Amee Patel,EVDSGN-051126839469,2026-05-11 10:58:00,2026-05-18 17:00:00,In Production,,92.06,Unknown,0,5,2,0,False,False,False,False
-449622,KORMIK,Mikhail Korolyov,EVDSGN-050726839260,2026-05-07 10:19:00,2026-05-14 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,6,0,False,False,False,False
-449897,SIETOM,Tom Siewert,EVDSGN-051126839479,2026-05-11 15:08:00,2026-05-19 17:00:00,In Production,,70.59,Unknown,0,5,2,0,False,False,False,False
-449864,AHMSAN,Sana Ahmed,V213,2026-05-11 12:38:00,2026-05-19 17:00:00,In Production,,73.49,Unknown,0,5,2,0,False,False,False,False
-449310,MALRYA,Ryann Maloney,V41,2026-05-04 12:44:00,2026-05-13 17:00:00,In Production,SINTERING,239.38,CAD_CAM,0,2,9,0,False,False,False,False
-449307,DARDAVSB,David Dardick,H233*,2026-05-04 13:42:00,2026-05-13 17:00:00,In Production,REMPREP,297.03,Removable,0,5,9,0,False,False,False,False
-449862,KORMIK,Mikhail Korolyov,EVDSGN-051126839473,2026-05-11 12:35:00,2026-05-19 17:00:00,In Production,,79.79,Unknown,0,5,2,0,False,False,False,False
-449836,EXONAT,Natacha Exorphe,EVDSGN-051126839465,2026-05-11 09:43:00,2026-05-18 17:00:00,In Production,,141.17,Unknown,0,5,2,0,False,False,False,False
-449780,TAPGAR,Gary Tapak,E154,2026-05-08 11:30:00,2026-05-26 17:00:00,In Production,PREP,379.98,Hold_Stalled,0,1,5,0,False,False,False,False
-449411,PATGIA,Giana Paterno,H93,2026-05-05 13:26:00,2026-05-13 17:00:00,In Production,SINTERING,79.79,CAD_CAM,0,2,8,0,False,False,False,False
+449918,ZHAVIV,Vivienne Zhang,H223*,2026-05-11 17:44:00,2026-05-19 17:00:00,In Production,PRINTING,243.47,CAD_CAM,0,2,2,0,False,False,False,False
+450004,GLOANT,Anthony Glorioso,H80,2026-05-12 14:16:00,2026-05-20 17:00:00,In Production,MILLING EZ,129.74,Unknown,0,5,1,0,False,False,False,False
+450169,SULKHAFL,Khadija Sulemanjee,P303*,2026-05-14 09:04:00,2026-05-21 17:00:00,In Production,,327.25,Unknown,0,5,-1,0,False,False,False,False
+449850,LEZBEA,Beata Lezerkiewicz,V141,2026-05-11 11:20:00,2026-05-18 17:00:00,In Production,RUSHMILLINGSHELF,119.51,Unknown,0,5,2,0,False,False,False,False
+449803,LUCPAULYO,Paulette Lucario,E368,2026-05-08 15:34:00,2026-05-18 17:00:00,In Production,FRED,0.0,Fixed,0,3,5,0,False,False,False,False
+449375,ZHAVIV,Vivienne Zhang,H38*,2026-05-05 09:27:00,2026-05-20 17:00:00,In Production,MILLING BRUX,285.41,Unknown,0,5,8,0,False,False,False,False
+450146,ANKSHA,Shaan Ankola,P128*,2026-05-13 16:56:00,2026-05-20 17:00:00,In Production,,347.7,Unknown,0,5,0,0,False,False,False,False
+449884,GATGUY,Guy Henry Gattone,V281,2026-05-11 13:29:00,2026-05-20 17:00:00,In Production,MILLING EZ,119.51,Unknown,0,5,2,0,False,False,False,False
+449930,SOOANUHE,Anu Sood,H203,2026-05-12 08:46:00,2026-05-21 17:00:00,In Production,SCANNING,129.74,Surgical,0,7,1,0,False,False,False,False
+450002,STOMARC,Marc Stojkovich,H291,2026-05-12 14:15:00,2026-05-18 17:00:00,In Production,SCANNING,0.0,Surgical,0,7,1,0,False,False,False,False
+450149,DOUBRI,Brian Douts,EVDSGN-051326839214,2026-05-13 17:22:00,2026-05-21 17:00:00,In Production,,161.63,Unknown,0,5,0,0,False,False,False,False
+449864,AHMSAN,Sana Ahmed,V213,2026-05-11 12:38:00,2026-05-19 17:00:00,In Production,MILLING BRUX,73.49,Unknown,0,5,2,0,False,False,False,False
+450150,GIUMIC,Michael Giuliano,EVDSGN-051326839215,2026-05-13 17:27:00,2026-05-21 17:00:00,In Production,,70.59,Unknown,0,5,0,0,False,False,False,False
+449780,TAPGAR,Gary Tapak,E154,2026-05-08 11:30:00,2026-05-26 17:00:00,In Production,MILLING BRUX,379.98,Unknown,0,5,5,0,False,False,False,False
+450191,LOPSARST,Sarah Lopez,H83,2026-05-14 10:53:34,,Sent for TryIn,,0.0,Unknown,0,5,-1,0,False,False,False,False
+449952,MCCSCO,Scott McCarty,H275,2026-05-12 10:59:00,2026-05-27 17:00:00,In Production,SCANNING,477.55,Surgical,0,7,1,0,False,False,False,False
+450204,GLOANT,Anthony Glorioso,P733,2026-05-14 12:01:00,2026-05-27 17:00:00,In Production,,112.52,Unknown,0,5,-1,0,False,False,False,False
+450017,CZAAUS,Austin Czarnecki,EVDSGN-051226839517,2026-05-12 15:12:00,2026-05-20 17:00:00,In Production,MATCHING TABLE,92.06,Unknown,0,5,1,0,False,False,False,False
 447333,AHMSAN,Sana Ahmed,H124*,2026-04-10 11:39:32,,Sent for TryIn,,0.0,Unknown,0,5,33,0,False,False,False,False
-449616,NIEJOS,Joseph Nierzwicki,P554!,2026-05-07 09:10:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,87.81,Unknown,0,5,6,0,False,False,False,False
-449431,SAMJACSTC,Jacob Samuel,H87,2026-05-05 14:20:00,2026-05-13 17:00:00,In Production,SPLFINISH,127.88,Fixed,0,3,8,0,False,False,False,False
+450107,PATUMA,Umang Patel,D282$,2026-05-13 13:24:00,2026-06-01 17:00:00,In Production,DIGITALREMOVABLE,0.0,Unknown,0,5,0,0,False,False,False,False
+449953,KHASUM,Sumayyah Khan,H89,2026-05-12 11:01:00,2026-05-27 17:00:00,In Production,SCANNING,324.1,Surgical,0,7,1,0,False,False,False,False
+449616,NIEJOS,Joseph Nierzwicki,P554!,2026-05-07 09:10:00,2026-05-18 17:00:00,In Production,PORCIP NINI,87.81,Implants,0,5,6,0,False,False,False,False
 449900,MACMAR,Mark Macak,E338,2026-05-11 15:15:16,,Sent for TryIn,,10.0,Unknown,0,5,2,0,False,False,False,False
-449588,ANKSHA,Shaan Ankola,P583*,2026-05-06 15:45:00,2026-05-20 17:00:00,In Production,CTS,2386.18,Surgical,0,7,7,0,False,False,False,False
+450261,GHARAM,Rami Ghandour,P121*,2026-05-14 14:43:00,2026-05-22 17:00:00,In Production,,81.22,Unknown,0,5,-1,0,False,False,False,False
+449588,ANKSHA,Shaan Ankola,P583*,2026-05-06 15:45:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,2386.18,Unknown,0,5,7,0,False,False,False,False
 449234,LEBRAFB,Raffi Leblebijian,V266*,2026-05-04 09:49:00,2026-05-11 17:00:00,In Production,GUIDES,10.63,Surgical,0,7,9,2,True,False,False,True
-448721,PRAMAR,Mark Prakash,H244,2026-04-28 09:24:00,2026-05-11 17:00:00,In Production,REMOUT,660.33,Removable,0,5,15,2,True,False,False,True
-449490,AUSMIC,Michaelangelo Aust,F57,2026-05-06 09:09:00,2026-05-15 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,7,0,False,False,False,False
-449731,JURAND,Andrew Jursik,EVDSGN-050826839202,2026-05-08 09:31:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,5,0,False,False,False,False
-449768,MACHAZ,Hazel Santiago-Macanip,E303,2026-05-08 12:27:00,2026-05-18 17:00:00,In Production,PREP,169.82,Hold_Stalled,0,1,5,0,False,False,False,False
+449913,ROSMELCH,Melinda Rosen,H211*,2026-05-11 17:04:00,2026-05-19 17:00:00,In Production,PRINTINGIP,243.86,Unknown,0,5,2,0,False,False,False,False
+450104,MACHAZ,Hazel Santiago-Macanip,F30,2026-05-13 12:56:00,2026-05-26 17:00:00,In Production,REMOUT,241.42,Removable,0,5,0,0,False,False,False,False
+450131,BOYMIC,Michael Boyle,F228,2026-05-13 14:21:00,2026-05-28 17:00:00,In Production,PREP,583.11,Hold_Stalled,0,1,0,0,False,False,False,False
+449768,MACHAZ,Hazel Santiago-Macanip,E303,2026-05-08 12:27:00,2026-05-18 17:00:00,In Production,MILLINGIP,169.82,Implants,0,5,5,0,False,False,False,False
 449818,GALPET,Peter Gallos,H153*,2026-05-11 07:47:54,,Sent for TryIn,,0.0,Unknown,0,5,2,0,False,False,False,False
-449789,SAMJACSTC,Jacob Samuel,E210,2026-05-08 13:29:00,2026-05-18 17:00:00,In Production,PREP,79.79,Hold_Stalled,0,1,5,0,False,False,False,False
-449300,GATGUY,Guy Henry Gattone,V45,2026-05-04 12:45:00,2026-05-13 17:00:00,In Production,FRED,324.1,Fixed,0,3,9,0,False,False,False,False
-449575,CORJER,Jerome Correa,F105,2026-05-06 14:02:00,2026-05-21 17:00:00,In Production,MILLING BRIDGE,483.87,Unknown,0,5,7,0,False,False,False,False
-449712,NISLIN,Linora Nissan,E371,2026-05-08 08:35:00,2026-05-18 17:00:00,In Production,SCANNING,159.59,Surgical,0,7,5,0,False,False,False,False
+449575,CORJER,Jerome Correa,F105,2026-05-06 14:02:00,2026-05-21 17:00:00,In Production,MILLING IMPLANT,483.87,Unknown,0,5,7,0,False,False,False,False
+450091,GIUMIC,Michael Giuliano,F39*,2026-05-13 12:10:00,2026-05-27 17:00:00,Outsourced,REMOUT,204.59,Removable,0,5,0,0,False,False,False,False
 446127,GEOCHR,Chrisoula Georgacopoulos,V34*,2026-03-27 07:38:33,,Sent for TryIn,,0.0,Unknown,0,5,47,0,False,False,False,False
+450117,JOUCYN,Cynthia Jourdan,F55,2026-05-13 14:00:00,2026-05-28 17:00:00,In Production,REMPREP,160.43,Removable,0,5,0,0,False,False,False,False
 446269,PATKRURO,Krupa Patel,E87,2026-03-30 11:14:36,,Sent for TryIn,,0.0,Unknown,0,5,44,0,False,False,False,False
-449673,JUEDAV,David Juel,P148,2026-05-07 13:50:00,2026-05-15 17:00:00,In Production,SPLFINISH,159.42,Fixed,0,3,6,0,False,False,False,False
-449495,BOYMIC,Michael Boyle,F178,2026-05-06 09:21:00,2026-05-20 17:00:00,In Production,REMIPDOM,314.59,Implants,0,5,7,0,False,False,False,False
-449710,TADSIM,Simon Tadros,E350*,2026-05-07 17:50:00,2026-05-18 17:00:00,In Production,CADSTALLED,100.42,CAD_CAM,0,2,6,0,False,False,False,False
-449266,KHASUM,Sumayyah Khan,H72*,2026-05-04 11:12:00,2026-05-18 17:00:00,In Production,REMTRYINWALL,285.43,Removable,0,5,9,0,False,False,False,False
-449034,RAIMAN,Mansi Raina,E341*,2026-04-30 13:39:00,2026-05-20 17:00:00,In Production,CADSTALLED,629.03,CAD_CAM,0,2,13,0,False,False,False,False
-449576,TAPGAR,Gary Tapak,F98,2026-05-06 14:07:00,2026-05-14 17:00:00,In Production,FRED,0.0,Fixed,0,3,7,0,False,False,False,False
-449349,PATAME,Amee Patel,H131*,2026-05-04 17:13:00,2026-05-13 17:00:00,In Production,STAINGLAZE,92.06,Fixed,0,3,9,0,False,False,False,False
-449793,SAMJACSTC,Jacob Samuel,E185,2026-05-08 13:32:00,2026-05-18 17:00:00,In Production,PREP,79.79,Hold_Stalled,0,1,5,0,False,False,False,False
-449663,LEVROR,Rory Levitan,EVDSGN-050726839273,2026-05-07 13:36:00,2026-05-15 17:00:00,In Production,CTS,91.05,Surgical,0,7,6,0,False,False,False,False
+449495,BOYMIC,Michael Boyle,F178,2026-05-06 09:21:00,2026-05-20 17:00:00,In Production,REMFINISHWALL,314.59,Removable,0,5,7,0,False,False,False,False
+449266,KHASUM,Sumayyah Khan,H72*,2026-05-04 11:12:00,2026-05-18 17:00:00,In Production,REMPROCESSSHELF,285.43,Removable,0,5,9,0,False,False,False,False
+450120,LIGMAR,Mark Ligocki,F194,2026-05-13 14:06:00,2026-05-28 17:00:00,In Production,CTS,641.21,Surgical,0,7,0,0,False,False,False,False
+449034,RAIMAN,Mansi Raina,E341*,2026-04-30 13:39:00,2026-05-20 17:00:00,In Production,PORCWALL,629.03,Fixed,0,3,13,0,False,False,False,False
+450242,ATHJOH,John Athos,P858,2026-05-14 13:50:00,2026-05-22 17:00:00,In Production,,306.89,Unknown,0,5,-1,0,False,False,False,False
+449984,THADEVOP,Devang Thakkar,H262,2026-05-12 12:38:00,2026-06-03 17:00:00,In Production,SCANNING,277.91,Surgical,0,7,1,0,False,False,False,False
 449631,DIBARMROS,Armand Dibenedetto,D174*$,2026-05-07 11:17:00,2026-05-28 17:00:00,In Production,GUIDES,3682.8,Surgical,0,7,6,0,False,False,False,False
-449283,VANLAU,Lauryne Vanderhoof,EVDSGN-050426839193,2026-05-04 11:48:00,2026-05-13 17:00:00,In Production,PRINTING,295.81,CAD_CAM,0,2,9,0,False,False,False,False
+450126,SOOANUHE,Anu Sood,F135,2026-05-13 14:21:00,2026-05-21 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,0,0,False,False,False,False
+450272,FELNIC,Nick Feller,P805*,2026-05-14 15:39:00,2026-05-22 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
 442704,GARLIN,Lina Garcia,V11*,2026-02-16 10:31:00,2026-03-03 17:00:00,In Production,,6.99,Unknown,0,5,86,71,True,False,False,True
-449555,NAIHEM,Hema Nair,EVDSGN-050626839237,2026-05-06 13:28:00,2026-05-15 17:00:00,In Production,PRINTING,142.6,CAD_CAM,0,2,7,0,False,False,False,False
-448172,HANMIR,Mirette Hanna,H236,2026-04-21 13:27:00,2026-05-14 17:00:00,In Production,REMOUT,405.36,Removable,0,5,22,0,False,False,False,False
-449241,RUDOLIBA,Olivia Rudnicki,V92!,2026-05-04 10:12:00,2026-05-14 17:00:00,In Production,REMIPMARY,313.88,Implants,0,5,9,0,False,False,False,False
-449530,CORABI,Abigail Cortis,F202,2026-05-06 12:39:00,2026-05-18 17:00:00,In Production,SPLFINISH,127.88,Fixed,0,3,7,0,False,False,False,False
-448731,ATHJOH,John Athos,D322$,2026-04-28 10:06:00,2026-05-20 17:00:00,In Production,REMPREP,271.08,Removable,0,5,15,0,False,False,False,False
-449808,SHESABRV,Saba Sheikh,EVDSGN-050826839213,2026-05-08 16:30:00,2026-05-18 17:00:00,In Production,,182.09,Unknown,0,5,5,0,False,False,False,False
-449549,TADSIM,Simon Tadros,F92,2026-05-06 13:27:00,2026-05-15 17:00:00,In Production,MILLING BRIDGE,239.38,Unknown,0,5,7,0,False,False,False,False
-449423,MALRYA,Ryann Maloney,H152,2026-05-05 14:06:00,2026-05-15 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,8,0,False,False,False,False
-449321,SINPAU,Paul Singh,H249*,2026-05-04 14:17:00,2026-05-19 17:00:00,In Production,PRINTING,1710.01,CAD_CAM,0,2,9,0,False,False,False,False
-449340,BRERIC,Richard Brenner,H149*,2026-05-04 16:23:00,2026-05-19 17:00:00,In Production,REMTRYINWALL,251.3,Removable,0,5,9,0,False,False,False,False
+450164,CHAROB,Robert Charbonneau,P717,2026-05-14 08:51:00,2026-05-22 17:00:00,In Production,,129.74,Unknown,0,5,-1,0,False,False,False,False
+449808,SHESABRV,Saba Sheikh,EVDSGN-050826839213,2026-05-08 16:30:00,2026-05-18 17:00:00,In Production,STAINGLAZE,182.09,Fixed,0,3,5,0,False,False,False,False
+450172,ARANAD,Nadia Arain,EVDSGN-051426839101,2026-05-14 09:17:00,2026-05-21 17:00:00,In Production,,80.82,Unknown,0,5,-1,0,False,False,False,False
+449321,SINPAU,Paul Singh,H249*,2026-05-04 14:17:00,2026-05-19 17:00:00,In Production,GUIDES,1710.01,Surgical,0,7,9,0,False,False,False,False
+449996,ABUSIM,Simon Abu-Aita,H295,2026-05-12 14:07:00,2026-05-20 17:00:00,In Production,PREP,98.04,Hold_Stalled,0,1,1,0,False,False,False,False
 449453,ATHJOH,John Athos,F131,2026-05-05 14:59:17,,Sent for TryIn,,0.0,Unknown,0,5,8,0,False,False,False,False
-449651,CHANHWA,Hwaiyin Chang,P125,2026-05-07 12:55:00,2026-05-27 17:00:00,In Production,SENTFORDESIGN,605.43,Unknown,0,5,6,0,False,False,False,False
-449832,HOLMARLA,Mary Ann Hollis,V285*,2026-05-11 09:01:00,2026-05-18 17:00:00,In Production,,70.59,Unknown,0,5,2,0,False,False,False,False
-449418,PATGIA,Giana Paterno,H243,2026-05-05 14:01:00,2026-05-13 17:00:00,In Production,SINTERING,79.79,CAD_CAM,0,2,8,0,False,False,False,False
-449474,KASNIK,Niki Demakakos-Kasper,F94*,2026-05-05 17:09:00,2026-05-13 17:00:00,In Production,REMPREP,0.0,Removable,0,5,8,0,False,False,False,False
-449726,TUCELILV,Elizabeth Tucker,E353,2026-05-08 09:18:00,2026-05-22 17:00:00,In Production,PREP,533.81,Hold_Stalled,0,1,5,0,False,False,False,False
-449701,SHESABRV,Saba Sheikh,E496*,2026-05-07 16:06:00,2026-05-18 17:00:00,In Production,CADSTALLED,103.48,CAD_CAM,0,2,6,0,False,False,False,False
-449728,GARLIN,Lina Garcia,V208,2026-05-08 09:22:20,,Sent for TryIn,,0.0,Unknown,0,5,5,0,False,False,False,False
-448353,PATUMA,Umang Patel,D282$,2026-05-01 14:49:00,2026-05-11 17:00:00,In Production,DIGITALREMOVABLE,3065.76,Unknown,0,5,12,2,True,False,False,True
-449554,CUARACMOK,Rachel Cuadros,F72,2026-05-06 13:30:00,2026-05-14 17:00:00,In Production,SINTERING,158.55,CAD_CAM,0,2,7,0,False,False,False,False
+449651,CHANHWA,Hwaiyin Chang,P125,2026-05-07 12:55:00,2026-05-27 17:00:00,In Production,MILLING BRUX,605.43,Unknown,0,5,6,0,False,False,False,False
+449832,HOLMARLA,Mary Ann Hollis,V285*,2026-05-11 09:01:00,2026-05-18 17:00:00,In Production,PRINTINGIP,70.59,Unknown,0,5,2,0,False,False,False,False
+450047,SUHINE,Ine Suh,F58,2026-05-13 09:04:00,2026-05-22 17:00:00,In Production,SCANNING,87.81,Surgical,0,7,0,0,False,False,False,False
+449726,TUCELILV,Elizabeth Tucker,E353,2026-05-08 09:18:00,2026-05-22 17:00:00,In Production,MILLING IMPLANT,533.81,Unknown,0,5,5,0,False,False,False,False
+450009,RANMAR,Mary Ranieli,V258,2026-05-12 14:23:00,2026-05-20 17:00:00,In Production,SCANNING,129.74,Surgical,0,7,1,0,False,False,False,False
+449728,GARLIN,Lina Garcia,V208,2026-05-14 09:22:00,2026-05-28 17:00:00,In Production,,203.54,Unknown,0,5,-1,0,False,False,False,False
+450078,FRATER,Terrence Frantal,F159*,2026-05-13 11:01:00,2026-05-21 17:00:00,In Production,MILLING BRUX,0.0,Unknown,0,5,0,0,False,False,False,False
+450059,NISLIN,Linora Nissan,F77,2026-05-13 09:22:00,2026-05-27 17:00:00,In Production,PREP,483.87,Hold_Stalled,0,1,0,0,False,False,False,False
 449847,DARNAT,Nathan Darling,DX28$,2026-05-11 11:05:13,,Sent for TryIn,,10.0,Unknown,0,5,2,0,False,False,False,False
-449909,NIEMAR,Mark Niemiec,EVDSGN-051126839483,2026-05-11 16:07:00,2026-05-19 17:00:00,In Production,,107.42,Unknown,0,5,2,0,False,False,False,False
 446757,ATHJOH,John Athos,X14$*,2026-04-03 10:22:53,,Sent for TryIn,,0.0,Unknown,0,5,40,0,False,False,False,False
-449871,MACHAZ,Hazel Santiago-Macanip,V202,2026-05-11 12:47:00,2026-05-26 17:00:00,In Production,,482.84,Unknown,0,5,2,0,False,False,False,False
-448971,FRAMIC,Michael Frantal,P723*,2026-04-30 10:51:00,2026-05-20 17:00:00,In Production,SINTERING,678.97,CAD_CAM,0,2,13,0,False,False,False,False
-449790,GAFCOL,Colleen Gaffney,E138,2026-05-08 13:30:00,2026-05-13 17:00:00,In Production,REMPREP,155.72,Removable,0,5,5,0,False,False,False,False
-449659,RASMOSFL,Moses Rasberry,E359*,2026-05-07 13:16:00,2026-05-14 17:00:00,In Production,CTS,317.02,Surgical,0,7,6,0,False,False,False,False
-449905,LEVROR,Rory Levitan,EVDSGN-051126839482,2026-05-11 15:27:00,2026-05-22 17:00:00,In Production,,613.77,Unknown,0,5,2,0,False,False,False,False
-449623,GOEPAN,Pankhuri Goel,F168*,2026-05-07 10:18:00,2026-05-14 17:00:00,In Production,MILLING EZ,0.0,Unknown,0,5,6,0,False,False,False,False
-449220,NISLIN,Linora Nissan,V272,2026-05-04 08:37:00,2026-05-14 17:00:00,In Production,MILLINGIP,0.0,Implants,0,5,9,0,False,False,False,False
-448202,GERGRE,Greg Germino,D221$&,2026-04-30 14:57:00,2026-05-14 17:00:00,In Production,REMIPDOM,1557.62,Implants,0,5,13,0,False,False,False,False
-449660,NIEMAR,Mark Niemiec,EVDSGN-050726839271,2026-05-07 13:27:00,2026-05-19 17:00:00,In Production,EVD SUBMITTED,107.42,Unknown,0,5,6,0,False,False,False,False
-449572,BOYMIC,Michael Boyle,F114*,2026-05-06 13:53:00,2026-05-15 17:00:00,In Production,PRINTING,159.76,CAD_CAM,0,2,7,0,False,False,False,False
-449481,ZMEMAG,Magdalena Zmek,F229*,2026-05-05 17:45:00,2026-05-19 17:00:00,In Production,REMPREP,163.06,Removable,0,5,8,0,False,False,False,False
-449735,SYLCOLBL,Colton Sylvester,E348,2026-05-08 10:02:00,2026-05-22 17:00:00,In Production,,130.14,Unknown,0,5,5,0,False,False,False,False
-449734,BOYMIC,Michael Boyle,E151*,2026-05-08 09:49:00,2026-05-15 17:00:00,In Production,SENTFORDESIGN,116.62,Unknown,0,5,5,0,False,False,False,False
-449881,SHECAR,Caroline Shepherd,V90*,2026-05-11 13:20:00,2026-05-22 17:00:00,Outsourced,,215.0,Unknown,0,5,2,0,False,False,False,False
-449693,CHUMAN,Manas Chug,E91*,2026-05-07 14:54:00,2026-05-15 17:00:00,In Production,,133.16,Unknown,0,5,6,0,False,False,False,False
-449889,ROEAND,Andrew Roechner,D317$,2026-05-11 13:31:00,2026-06-01 17:00:00,In Production,,3065.76,Unknown,0,5,2,0,False,False,False,False
-449879,DOUBRI,Brian Douts,EVDSGN-051126839475,2026-05-11 13:09:00,2026-05-19 17:00:00,In Production,,80.82,Unknown,0,5,2,0,False,False,False,False
-449669,PATNEE,Neeva Patel,P578,2026-05-07 13:47:00,2026-05-15 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,6,0,False,False,False,False
-449746,LEEJIW,Jiwoo Lee,E61,2026-05-08 10:29:00,2026-05-26 17:00:00,In Production,REMPREP,205.27,Removable,0,5,5,0,False,False,False,False
-449804,JURAND,Andrew Jursik,V4*,2026-05-08 16:14:00,2026-05-18 17:00:00,In Production,,79.79,Unknown,0,5,5,0,False,False,False,False
-449614,NAPSTE,Steven Napier,P713,2026-05-07 09:07:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,87.81,Unknown,0,5,6,0,False,False,False,False
-449632,DABHAZMAN,Hazem Dabbour,E135*,2026-05-07 11:18:00,2026-05-15 17:00:00,In Production,CADSTALLED,103.48,CAD_CAM,0,2,6,0,False,False,False,False
-448846,NICJEF,Jeffrey Nickas,F143,2026-04-29 10:47:00,2026-05-19 17:00:00,In Production,FRED,502.51,Fixed,0,3,14,0,False,False,False,False
-449741,HENSHA,Shary Henderson,E230,2026-05-08 10:21:00,2026-05-28 17:00:00,In Production,,0.0,Unknown,0,5,5,0,False,False,False,False
-447730,BAPBRI,Brian Baptist,P561,2026-04-15 16:52:00,2026-04-23 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,28,20,True,False,False,True
-449514,BRZDANI,Daniela Brzozowski,F21,2026-05-06 10:45:00,2026-05-14 17:00:00,In Production,MILLING EZ,314.12,Unknown,0,5,7,0,False,False,False,False
-449756,MCCSCO,Scott McCarty,E162,2026-05-08 11:31:00,2026-05-22 17:00:00,In Production,PREP,477.55,Hold_Stalled,0,1,5,0,False,False,False,False
-449208,KUCMAR,Mark Kuchta,E104*,2026-05-01 15:05:00,2026-05-15 17:00:00,In Production,PRINTINGIP,921.49,Unknown,0,5,12,0,False,False,False,False
-449569,GAFMEG,Meghan Gaffney,F50,2026-05-06 13:32:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,994.14,Unknown,0,5,7,0,False,False,False,False
-449694,SIETOM,Tom Siewert,EVDSGN-050726839277,2026-05-07 14:59:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,70.59,Unknown,0,5,6,0,False,False,False,False
-449717,AUSMIC,Michaelangelo Aust,E324,2026-05-08 08:48:00,2026-05-19 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,5,0,False,False,False,False
-449618,CULSEA,Sean Cullinan Jr.,P548,2026-05-07 09:23:00,2026-05-18 17:00:00,In Production,DIGITALREMOVABLE,187.57,Unknown,0,5,6,0,False,False,False,False
+449871,MACHAZ,Hazel Santiago-Macanip,V202,2026-05-11 12:47:00,2026-05-26 17:00:00,In Production,REMOUT,482.84,Removable,0,5,2,0,False,False,False,False
+448971,FRAMIC,Michael Frantal,P723*,2026-04-30 10:51:00,2026-05-20 17:00:00,In Production,MATCHING TABLE,678.97,Unknown,0,5,13,0,False,False,False,False
+449905,LEVROR,Rory Levitan,EVDSGN-051126839482,2026-05-11 15:27:00,2026-05-22 17:00:00,In Production,MATCHING TABLE,613.77,Unknown,0,5,2,0,False,False,False,False
+449925,SUHINE,Ine Suh,H32,2026-05-12 08:37:00,2026-05-20 17:00:00,In Production,MILLING BRUX,87.81,Unknown,0,5,1,0,False,False,False,False
+449686,YIANIC,Nicas Yiannias,E300*,2026-05-07 14:15:00,2026-05-21 17:00:00,In Production,EVD SUBMITTED,347.7,Unknown,0,5,6,0,False,False,False,False
+448202,GERGRE,Greg Germino,D221$&,2026-04-30 14:57:00,2026-05-21 17:00:00,In Production,REMIPDOM,1791.25,Implants,0,5,13,0,False,False,False,False
+449734,BOYMIC,Michael Boyle,E151*,2026-05-08 09:49:00,2026-05-18 17:00:00,In Production,RUSHMILLINGSHELF,116.62,Unknown,0,5,5,0,False,False,False,False
+449881,SHECAR,Caroline Shepherd,V90*,2026-05-11 13:20:00,2026-05-22 17:00:00,Outsourced,REMOUT,215.0,Removable,0,5,2,0,False,False,False,False
+449055,JANAAR,Aaron Janes,D285$*,2026-04-30 15:39:00,2026-05-28 17:00:00,In Production,DIGITALREMOVABLE,561.63,Unknown,0,5,13,0,False,False,False,False
+449889,ROEAND,Andrew Roechner,D317$,2026-05-11 13:31:00,2026-06-01 17:00:00,In Production,SCANNINGAO4CART,3065.76,Unknown,0,5,2,0,False,False,False,False
+450195,PAPAMI,Amiel Pappas,EVDSGN-051426839107,2026-05-14 11:06:00,2026-05-21 17:00:00,In Production,,100.03,Unknown,0,5,-1,0,False,False,False,False
+450239,LOVJAM,James Lovelace,P758,2026-05-14 13:31:00,2026-05-29 17:00:00,In Production,,282.34,Unknown,0,5,-1,0,False,False,False,False
+449879,DOUBRI,Brian Douts,EVDSGN-051126839475,2026-05-11 13:09:00,2026-05-19 17:00:00,In Production,PORCIP NINI,80.82,Implants,0,5,2,0,False,False,False,False
+450101,TADSIM,Simon Tadros,F140,2026-05-13 12:56:00,2026-05-20 17:00:00,In Production,CTS,0.0,Surgical,0,7,0,0,False,False,False,False
+449804,JURAND,Andrew Jursik,V4*,2026-05-08 16:14:00,2026-05-18 17:00:00,In Production,PRINTINGIP,79.79,Unknown,0,5,5,0,False,False,False,False
+449949,KORMIK,Mikhail Korolyov,EVDSGN-051226839502,2026-05-12 10:38:00,2026-05-19 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,1,0,False,False,False,False
+449741,HENSHA,Shary Henderson,E230,2026-05-08 10:21:00,2026-05-28 17:00:00,In Production,REMIPSABRINA,0.0,Implants,0,5,5,0,False,False,False,False
+450230,PETCHR,Christine Petrilla,P489,2026-05-14 12:45:00,2026-05-20 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+449756,MCCSCO,Scott McCarty,E162,2026-05-08 11:31:00,2026-05-22 17:00:00,In Production,CADSTALLED,605.43,CAD_CAM,0,2,5,0,False,False,False,False
+449569,GAFMEG,Meghan Gaffney,F50,2026-05-06 13:32:00,2026-05-18 17:00:00,In Production,RUSHMILLINGSHELF,994.14,Unknown,0,5,7,0,False,False,False,False
+450084,TADSIM,Simon Tadros,F201*,2026-05-13 11:39:00,2026-05-22 17:00:00,In Production,CTS,168.22,Surgical,0,7,0,0,False,False,False,False
+450243,TAPGAR,Gary Tapak,P801,2026-05-14 13:50:00,2026-05-27 17:00:00,In Production,,375.24,Unknown,0,5,-1,0,False,False,False,False
+449717,AUSMIC,Michaelangelo Aust,E324,2026-05-08 08:48:00,2026-05-19 17:00:00,In Production,MILLINGIP,79.79,Implants,0,5,5,0,False,False,False,False
+450244,ATHJOH,John Athos,P189,2026-05-14 13:51:00,2026-05-20 17:00:00,In Production,,71.78,Unknown,0,5,-1,0,False,False,False,False
+450065,MCCSCO,Scott McCarty,F61,2026-05-13 10:24:00,2026-05-28 17:00:00,Outsourced,REMOUT,321.18,Removable,0,5,0,0,False,False,False,False
 449759,CHANHWA,Hwaiyin Chang,E141,2026-05-08 11:37:52,,Sent for TryIn,,0.0,Unknown,0,5,5,0,False,False,False,False
-449334,VITGAI,Gail Vittori,H146*,2026-05-04 15:33:00,2026-05-13 04:30:00,In Production,REMPREP,108.86,Removable,0,5,9,0,False,False,False,False
 447271,HUBMAR,Mark Huberty,F51,2026-04-09 16:01:17,,Sent for TryIn,,10.0,Unknown,0,5,34,0,False,False,False,False
-448679,ATHJOH,John Athos,E112,2026-05-08 14:13:00,2026-05-20 17:00:00,In Production,REMPREP,187.59,Removable,0,5,5,0,False,False,False,False
+449924,CHAROB,Robert Charbonneau,H39,2026-05-12 08:34:00,2026-05-20 17:00:00,In Production,MILLING BRUX,129.74,Unknown,0,5,1,0,False,False,False,False
+448679,ATHJOH,John Athos,E112,2026-05-08 14:13:00,2026-05-20 17:00:00,In Production,REMPROCESSSHELF,187.59,Removable,0,5,5,0,False,False,False,False
 448148,THADEVOP,Devang Thakkar,H292,2026-04-21 12:27:00,2026-05-05 17:00:00,In Production,GUIDES,283.77,Surgical,0,7,22,8,True,False,False,True
 442903,PERLUI,Luis Peralta,D266$,2026-02-17 14:55:58,,Sent for TryIn,,0.0,Unknown,0,5,85,0,False,False,False,False
-449581,BRERIC,Richard Brenner,P835*,2026-05-06 15:06:00,2026-05-20 17:00:00,Outsourced,,215.0,Unknown,0,5,7,0,False,False,False,False
-449877,YIANIC,Nicas Yiannias,V136*,2026-05-11 12:54:00,2026-05-26 17:00:00,In Production,,547.18,Unknown,0,5,2,0,False,False,False,False
-449697,LOPSARST,Sarah Lopez,E139,2026-05-07 15:30:06,,Sent for TryIn,,0.0,Unknown,0,5,6,0,False,False,False,False
+449955,BALJOS,Joseph Balice,EVDSGN-051226839503,2026-05-12 11:16:00,2026-05-19 17:00:00,In Production,EVD SUBMITTED,141.17,Unknown,0,5,1,0,False,False,False,False
+449877,YIANIC,Nicas Yiannias,V136*,2026-05-11 12:54:00,2026-05-26 17:00:00,In Production,EVD SUBMITTED,547.18,Unknown,0,5,2,0,False,False,False,False
+449697,LOPSARST,Sarah Lopez,E139,2026-05-12 15:30:00,2026-05-27 17:00:00,In Production,REMOUT,6.99,Removable,0,5,1,0,False,False,False,False
+449981,CHUMAN,Manas Chug,H214,2026-05-12 12:36:00,2026-05-20 17:00:00,In Production,SCANNING,84.91,Surgical,0,7,1,0,False,False,False,False
+449926,SUHINE,Ine Suh,H288,2026-05-12 08:38:00,2026-05-21 17:00:00,In Production,MILLING BRUX,87.81,Unknown,0,5,1,0,False,False,False,False
+450196,LOPSARST,Sarah Lopez,P408*,2026-05-14 11:12:00,2026-05-21 17:00:00,In Production,,192.71,Unknown,0,5,-1,0,False,False,False,False
 448787,NISLIN,Linora Nissan,H66,2026-04-28 13:37:19,,Sent for TryIn,,0.0,Unknown,0,5,15,0,False,False,False,False
-448052,ATHJOH,John Athos,P600,2026-05-01 13:26:00,2026-05-13 17:00:00,In Production,REMPROCESSSHELF,171.68,Removable,0,5,12,0,False,False,False,False
-449491,NISLIN,Linora Nissan,F219,2026-05-06 09:11:00,2026-05-15 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,7,0,False,False,False,False
-449366,AUSMIC,Michaelangelo Aust,H202,2026-05-05 08:57:00,2026-05-14 17:00:00,In Production,SINTERING,79.79,CAD_CAM,0,2,8,0,False,False,False,False
-449275,HANMIR,Mirette Hanna,V283,2026-05-04 11:30:00,2026-05-13 17:00:00,In Production,MILLINGIP,169.82,Implants,0,5,9,0,False,False,False,False
-445067,RYASEA,Sean Ryan,V210* SS,2026-03-13 16:14:00,2026-03-27 17:00:00,In Production,CTS,561.63,Surgical,0,7,61,47,True,False,False,True
-449797,MALRYA,Ryann Maloney,E222,2026-05-08 13:38:00,2026-05-19 17:00:00,In Production,PREP,79.79,Hold_Stalled,0,1,5,0,False,False,False,False
+450046,SUHINE,Ine Suh,F107,2026-05-13 09:02:00,2026-05-22 17:00:00,In Production,SCANNING,87.81,Surgical,0,7,0,0,False,False,False,False
+449915,YERPAT,Patrick Yerkes,EVDSGN-051126839488,2026-05-11 17:29:00,2026-05-19 17:00:00,In Production,CADSTALLED,216.86,CAD_CAM,0,2,2,0,False,False,False,False
+448623,SHADHALA,Dhaval Shah,F234,2026-04-30 10:01:00,2026-05-21 17:00:00,In Production,PRINTING,173.91,CAD_CAM,0,2,13,0,False,False,False,False
+449976,PATGIA,Giana Paterno,H234,2026-05-12 12:33:00,2026-05-20 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,1,0,False,False,False,False
+450125,BOYMIC,Michael Boyle,F218,2026-05-13 14:20:00,2026-05-21 17:00:00,In Production,REMPREP,100.39,Removable,0,5,0,0,False,False,False,False
+449797,MALRYA,Ryann Maloney,E222,2026-05-08 13:38:00,2026-05-19 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,5,0,False,False,False,False
+450214,PATGIA,Giana Paterno,P563,2026-05-14 12:10:00,2026-05-21 17:00:00,In Production,,79.79,Unknown,0,5,-1,0,False,False,False,False
 440029,DARDAVSB,David Dardick,EVDSGN-011526121059,2026-01-15 15:17:00,2026-01-23 17:00:00,In Production,CTS,226.15,Surgical,0,7,118,110,True,False,False,True
-449811,RYASEA,Sean Ryan,EVDSGN-050826839214,2026-05-08 16:41:00,2026-05-18 17:00:00,In Production,,92.06,Unknown,0,5,5,0,False,False,False,False
 449902,CALSAM,Sam Calabrese,P571*,2026-05-11 15:18:13,,Sent for TryIn,,0.0,Unknown,0,5,2,0,False,False,False,False
-448461,ATHJOH,John Athos,D215*,2026-04-23 14:07:00,2026-05-27 17:00:00,In Production,REMIPMARY,1130.24,Implants,0,5,20,0,False,False,False,False
-448477,KHASUM,Sumayyah Khan,P759,2026-05-08 15:32:00,2026-05-22 17:00:00,In Production,,231.02,Unknown,0,5,5,0,False,False,False,False
-449645,NUCMAG,Magdaleno Nucum,P324,2026-05-07 12:25:00,2026-05-15 17:00:00,In Production,SCANNING,73.49,Surgical,0,7,6,0,False,False,False,False
-448845,NIEMAR,Mark Niemiec,F31,2026-04-29 10:52:00,2026-05-13 17:00:00,In Production,CTS,0.0,Surgical,0,7,14,0,False,False,False,False
-448704,ATHJOH,John Athos,F201*,2026-05-01 07:40:00,2026-05-13 17:00:00,In Production,REMIPLIZ,170.66,Implants,0,5,12,0,False,False,False,False
+448461,ATHJOH,John Athos,D215*,2026-04-23 14:07:00,2026-05-27 17:00:00,In Production,REMIPBLERTA,1130.24,Implants,0,5,20,0,False,False,False,False
+448477,KHASUM,Sumayyah Khan,P759,2026-05-08 15:32:00,2026-05-22 17:00:00,In Production,REMOUT,231.02,Removable,0,5,5,0,False,False,False,False
+450269,TOKNIC,Nicholas Tokarski,F103,2026-05-14 15:28:37,,Sent for TryIn,,0.0,Unknown,0,5,-1,0,False,False,False,False
+448845,NIEMAR,Mark Niemiec,F31,2026-04-29 10:52:00,2026-05-29 17:00:00,In Production,MATCHING TABLE,0.0,Unknown,0,5,14,0,False,False,False,False
 448108,ATHJOH,John Athos,H281*,2026-04-20 19:21:00,2026-05-04 17:00:00,In Production,GUIDES,316.51,Surgical,0,7,23,9,True,False,False,True
-449874,SINMAN,Manpreet Singh,EVDSGN-051126839474,2026-05-11 12:50:00,2026-05-19 17:00:00,In Production,,92.06,Unknown,0,5,2,0,False,False,False,False
-449629,LOPSARST,Sarah Lopez,E327*,2026-05-07 11:06:00,2026-05-14 17:00:00,In Production,CADSTALLED,192.71,CAD_CAM,0,2,6,0,False,False,False,False
-449910,NIEMAR,Mark Niemiec,EVDSGN-051126839484,2026-05-11 16:12:00,2026-05-19 17:00:00,In Production,,107.42,Unknown,0,5,2,0,False,False,False,False
-449665,MORCHR,Chris Morfas,P393,2026-05-07 13:42:00,2026-05-15 17:00:00,In Production,SENTFORDESIGN,119.51,Unknown,0,5,6,0,False,False,False,False
-449681,MASJOH,John Mastrud,P801,2026-05-07 14:10:00,2026-05-15 17:00:00,In Production,SPLFINISH,135.02,Fixed,0,3,6,0,False,False,False,False
-449754,RYASEA,Sean Ryan,EVDSGN-050826839206,2026-05-08 11:14:00,2026-05-18 17:00:00,In Production,EVD SUBMITTED,102.69,Unknown,0,5,5,0,False,False,False,False
-449502,PERLUI,Luis Peralta,F100*,2026-05-06 09:53:00,2026-05-19 17:00:00,In Production,EVD SUBMITTED,347.7,Unknown,0,5,7,0,False,False,False,False
-449424,SKRLEO,Leo Skrypkun,H208,2026-05-05 14:07:00,2026-05-13 17:00:00,In Production,SINTERING,119.51,CAD_CAM,0,2,8,0,False,False,False,False
-448132,SAFTAR,Tarek Safadi,H221,2026-05-04 11:05:00,2026-05-18 17:00:00,In Production,REMOUT,6.99,Removable,0,5,9,0,False,False,False,False
-449703,BOYMIC,Michael Boyle,EVDSGN-050726839280,2026-05-07 16:49:00,2026-05-15 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,6,0,False,False,False,False
-449834,KUCMAR,Mark Kuchta,EVDSGN-051126839463,2026-05-11 09:10:00,2026-05-18 17:00:00,In Production,,108.43,Unknown,0,5,2,0,False,False,False,False
-449650,HANMIR,Mirette Hanna,P753,2026-05-07 12:54:00,2026-05-18 17:00:00,In Production,SENTFORDESIGN,84.91,Unknown,0,5,6,0,False,False,False,False
-449872,OLCVAN,Vania Olcay,EVDSGN-051126839472,2026-05-11 12:45:00,2026-05-19 17:00:00,In Production,,80.82,Unknown,0,5,2,0,False,False,False,False
-449653,PETCHR,Christine Petrilla,P69,2026-05-07 12:57:00,2026-05-29 17:00:00,In Production,SCANNING,855.04,Surgical,0,7,6,0,False,False,False,False
-449842,RYASEA,Sean Ryan,V263,2026-05-11 10:41:00,2026-05-20 17:00:00,In Production,,139.74,Unknown,0,5,2,0,False,False,False,False
-449532,FRAMIC,Michael Frantal,F120*,2026-05-06 12:37:00,2026-05-20 17:00:00,In Production,CADSTALLED,245.91,CAD_CAM,0,2,7,0,False,False,False,False
+449910,NIEMAR,Mark Niemiec,EVDSGN-051126839484,2026-05-11 16:12:00,2026-05-22 17:00:00,In Production,PRINTINGIP,107.42,Unknown,0,5,2,0,False,False,False,False
+449972,PATGIA,Giana Paterno,H258,2026-05-12 12:30:00,2026-05-26 17:00:00,In Production,SCANNING,239.38,Surgical,0,7,1,0,False,False,False,False
+450231,HATUZM,Uzma Hatia,P850,2026-05-14 12:48:00,2026-05-22 17:00:00,In Production,,0.0,Unknown,0,5,-1,0,False,False,False,False
+450182,DOUJASVA,Jason Douts,P828,2026-05-14 09:49:00,2026-05-26 17:00:00,In Production,,129.51,Unknown,0,5,-1,0,False,False,False,False
+450122,TYSMONLB,Monika Tyszkowski,F87,2026-05-13 14:09:00,2026-05-27 17:00:00,In Production,PREP,0.0,Hold_Stalled,0,1,0,0,False,False,False,False
+450153,NICJEF,Jeffrey Nickas,EVDSGN-051326839216,2026-05-13 17:42:00,2026-05-21 17:00:00,In Production,,81.22,Unknown,0,5,0,0,False,False,False,False
+449966,PATSHEDO,Sheena Patel,EVDSGN-051226839505,2026-05-12 11:50:00,2026-05-19 17:00:00,In Production,MATCHING TABLE,79.79,Unknown,0,5,1,0,False,False,False,False
+450043,TRALUA,Luan Tran,EVDSGN-051226839530,2026-05-12 18:04:00,2026-05-20 17:00:00,In Production,MILLING EMAX,0.0,Unknown,0,5,1,0,False,False,False,False
+450203,NUCMAG,Magdaleno Nucum,P556,2026-05-14 11:59:00,2026-05-26 17:00:00,In Production,,73.49,Unknown,0,5,-1,0,False,False,False,False
+449979,SAMJACSTC,Jacob Samuel,H150,2026-05-12 12:35:00,2026-05-20 17:00:00,In Production,SCANNING,0.0,Surgical,0,7,1,0,False,False,False,False
+449653,PETCHR,Christine Petrilla,P69,2026-05-07 12:57:00,2026-05-29 17:00:00,In Production,MILLING BRUX,855.04,Unknown,0,5,6,0,False,False,False,False
+449842,RYASEA,Sean Ryan,V263,2026-05-11 10:41:00,2026-05-20 17:00:00,In Production,MILLING BRUX,139.74,Unknown,0,5,2,0,False,False,False,False
+449532,FRAMIC,Michael Frantal,F120*,2026-05-06 12:37:00,2026-05-20 17:00:00,In Production,DIGITALREMOVABLE,245.91,Unknown,0,5,7,0,False,False,False,False
+449939,LEEALI,Alisa YouYeon Lee,H51,2026-05-12 09:12:00,2026-05-20 17:00:00,In Production,MILLING BRUX,119.51,Unknown,0,5,1,0,False,False,False,False
+449995,MALRYA,Ryann Maloney,H155,2026-05-12 14:06:00,2026-05-20 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,1,0,False,False,False,False
 446192,THADEVOP,Devang Thakkar,E105,2026-03-27 12:51:00,2026-04-14 17:00:00,In Production,GUIDES,267.84,Surgical,0,7,47,29,True,False,False,True
-449891,ZAIZAC,Zack Zaibak,V201,2026-05-11 13:39:00,2026-05-13 17:00:00,In Production,,506.47,Unknown,0,5,2,0,False,False,False,False
-449606,KORJAMEP,Jamie Korolyov,EVDSGN-050726839259,2026-05-07 08:25:00,2026-05-15 17:00:00,In Production,PRINTING,159.76,CAD_CAM,0,2,6,0,False,False,False,False
-449565,ABUSIM,Simon Abu-Aita,F36,2026-05-06 13:44:00,2026-05-15 17:00:00,In Production,CTS,0.0,Surgical,0,7,7,0,False,False,False,False
-448975,MARROM,Roman Marszalek,D318*,2026-04-30 10:56:00,2026-05-21 17:00:00,In Production,GUIDES,3058.77,Surgical,0,7,13,0,False,False,False,False
-449536,CHUMAN,Manas Chug,F27,2026-05-06 12:44:00,2026-05-14 17:00:00,In Production,MILLING BRUX,84.91,Unknown,0,5,7,0,False,False,False,False
-449513,CALSAM,Sam Calabrese,E120*,2026-05-06 10:51:00,2026-05-20 17:00:00,Outsourced,CTS,102.29,Surgical,0,7,7,0,False,False,False,False
-449369,NISLIN,Linora Nissan,H305,2026-05-05 09:04:00,2026-05-14 17:00:00,In Production,MILLING EZ,0.0,Unknown,0,5,8,0,False,False,False,False
-449770,MACHAZ,Hazel Santiago-Macanip,EVDSGN-050826839209,2026-05-08 12:31:00,2026-05-18 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,5,0,False,False,False,False
-449001,LAWSTE,Stephen Law,P512,2026-04-30 12:06:00,2026-05-18 17:00:00,In Production,MILLING EZ,661.3,Unknown,0,5,13,0,False,False,False,False
-449501,TUCELILV,Elizabeth Tucker,F216,2026-05-06 09:42:00,2026-05-20 17:00:00,In Production,MILLING BRIDGE,948.13,Unknown,0,5,7,0,False,False,False,False
-449760,LOPSARST,Sarah Lopez,H83,2026-05-08 11:41:42,,Sent for TryIn,,0.0,Unknown,0,5,5,0,False,False,False,False
+450134,BAPBENNR,Benjamin Baptist,EVDSGN-051326839211,2026-05-13 14:31:00,2026-05-21 17:00:00,In Production,,80.82,Unknown,0,5,0,0,False,False,False,False
+450045,ZAIZAC,Zack Zaibak,V201,2026-05-13 07:42:00,2026-05-21 17:00:00,In Production,DIGITALREMOVABLE,483.55,Unknown,0,5,0,0,False,False,False,False
+449565,ABUSIM,Simon Abu-Aita,F36,2026-05-06 13:44:00,2026-05-18 17:00:00,In Production,FRED,0.0,Fixed,0,3,7,0,False,False,False,False
+448975,MARROM,Roman Marszalek,DX17*$,2026-04-30 10:56:00,2026-05-21 17:00:00,In Production,GUIDES,3186.27,Surgical,0,7,13,0,False,False,False,False
+449513,CALSAM,Sam Calabrese,E120*,2026-05-06 10:51:00,2026-05-20 17:00:00,Outsourced,REMOUT,102.29,Removable,0,5,7,0,False,False,False,False
+450052,KOLMARFF,Mark Kolozenski,D162$,2026-05-13 09:13:38,,Sent for TryIn,,0.0,Unknown,0,5,0,0,False,False,False,False
+450097,CUARACMOK,Rachel Cuadros,EVDSGN-051326839207,2026-05-13 12:49:00,2026-05-21 17:00:00,In Production,,108.0,Unknown,0,5,0,0,False,False,False,False
+449001,LAWSTE,Stephen Law,P512,2026-04-30 12:06:00,2026-05-18 17:00:00,In Production,PORCIP DEAN,661.3,Implants,0,5,13,0,False,False,False,False
+449929,NIEJOS,Joseph Nierzwicki,H293,2026-05-12 08:43:00,2026-05-21 17:00:00,In Production,MILLING EZ,87.81,Unknown,0,5,1,0,False,False,False,False
+449938,AUSMIC,Michaelangelo Aust,H33,2026-05-12 09:11:00,2026-05-21 17:00:00,In Production,MILLING BRIDGE,239.38,Unknown,0,5,1,0,False,False,False,False
+449501,TUCELILV,Elizabeth Tucker,F216,2026-05-06 09:42:00,2026-05-20 17:00:00,In Production,MILLING IMPLANT,948.13,Unknown,0,5,7,0,False,False,False,False
 448295,ZBOANN,Anna Zborek,V40,2026-04-22 12:11:05,,Sent for TryIn,,0.0,Unknown,0,5,21,0,False,False,False,False
-449467,ANDMAR,Mark Anderson,D131$,2026-05-05 16:04:00,2026-05-22 17:00:00,In Production,,1536.38,Unknown,0,5,8,0,False,False,False,False
-449535,NUCMAG,Magdaleno Nucum,F170,2026-05-06 12:43:00,2026-05-14 17:00:00,In Production,MILLING BRUX,73.49,Unknown,0,5,7,0,False,False,False,False
-449537,SOHMUHLA,Muhammad Sohail,P603*,2026-05-06 12:47:00,2026-05-21 17:00:00,In Production,GUIDES,231.88,Surgical,0,7,7,0,False,False,False,False
+449758,SYLCOLBL,Colton Sylvester,F60,2026-05-08 11:36:00,2026-05-22 17:00:00,In Production,PREP,130.14,Hold_Stalled,0,1,5,0,False,False,False,False
+450113,BAPBEN,Ben Baptist,EVDSGN-051326839208,2026-05-13 13:48:00,2026-05-21 17:00:00,In Production,,80.82,Unknown,0,5,0,0,False,False,False,False
+450025,EXONAT,Natacha Exorphe,EVDSGN-051226839520,2026-05-12 15:36:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,70.59,Unknown,0,5,1,0,False,False,False,False
+449467,ANDMAR,Mark Anderson,D131$,2026-05-05 16:04:00,2026-05-22 17:00:00,In Production,REMIPMARGARET,1536.38,Implants,0,5,8,0,False,False,False,False
