@@ -370,10 +370,10 @@ def render_mtd(gauges: pd.DataFrame):
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         kpi_card("MTD Revenue", fmt_currency(mtd),
-                 f"{days_elapsed} of {days_in_month} days", status="ok")
+                 f"{days_elapsed} of {days_in_month} biz days", status="ok")
     with c2:
         kpi_card("Projected Month End", fmt_currency(projected),
-                 "at current run rate",
+                 "at current biz-day run rate",
                  status="ok" if on_pace else "warn")
     with c3:
         kpi_card("Last Year Monthly Avg", fmt_currency(ly_monthly_avg),
@@ -381,7 +381,7 @@ def render_mtd(gauges: pd.DataFrame):
     with c4:
         daily_needed = (ly_target - mtd) / days_remaining if days_remaining > 0 else 0
         kpi_card("Daily Revenue Needed", fmt_currency(max(daily_needed, 0)),
-                 f"to hit 7% · {days_remaining} days left",
+                 f"to hit 7% · {days_remaining} biz days left",
                  status="ok" if daily_needed <= (mtd / max(days_elapsed,1)) else "warn")
 
     pct = min(projected / ly_target * 100, 150) if ly_target else 0
@@ -780,6 +780,41 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
         st.plotly_chart(style_plotly(fig, height=420), width='stretch')
 
 
+def _lab_holidays(year: int) -> set:
+    """Lab closures — keep in sync with pipeline.py get_lab_holidays()."""
+    out = set()
+    for month, day in [(1, 1), (7, 4), (12, 25)]:
+        d = pd.Timestamp(year=year, month=month, day=day)
+        if d.weekday() == 5: d -= pd.Timedelta(days=1)
+        elif d.weekday() == 6: d += pd.Timedelta(days=1)
+        out.add(d.normalize())
+    d = pd.Timestamp(year=year, month=5, day=31)
+    while d.weekday() != 0: d -= pd.Timedelta(days=1)
+    out.add(d.normalize())
+    d = pd.Timestamp(year=year, month=9, day=1)
+    while d.weekday() != 0: d += pd.Timedelta(days=1)
+    out.add(d.normalize())
+    d = pd.Timestamp(year=year, month=11, day=1)
+    while d.weekday() != 3: d += pd.Timedelta(days=1)
+    thx = d + pd.Timedelta(days=21)
+    out.add(thx.normalize()); out.add((thx + pd.Timedelta(days=1)).normalize())
+    return out
+
+
+def _biz_days_elapsed_in_month(yearmonth: str) -> int:
+    """Business days elapsed in the given YYYY-MM (full month if it's past,
+    today-to-month-start if it's current, 0 if future)."""
+    period = pd.Period(yearmonth, freq="M")
+    start = period.start_time.normalize()
+    today = pd.Timestamp.today().normalize()
+    end = min(period.end_time.normalize(), today)
+    if end < start:
+        return 0
+    holidays = _lab_holidays(start.year) | _lab_holidays(end.year)
+    weekdays = pd.bdate_range(start, end)
+    return sum(1 for d in weekdays if d.normalize() not in holidays)
+
+
 def render_daily_sales(daily_df):
     section("📅 Daily Sales — Cases In vs. Cases Out")
     if daily_df is None or daily_df.empty:
@@ -818,19 +853,24 @@ def render_daily_sales(daily_df):
     out_gross  = float(month_df["dollars_invoiced"].sum())
     out_net    = float(month_df["dollars_net"].sum())
 
-    # KPI strip — six tiles split by In / Out
+    # Business-day divisor (weekends + lab holidays excluded)
+    biz_days = _biz_days_elapsed_in_month(pick)
+    div = max(biz_days, 1)
+
+    # KPI strip — six tiles, each with per-business-day average in the subtitle
     k = st.columns(6)
-    with k[0]: kpi_card("Cases In",  f"{in_cases:,}",   f"{pick} • date_in")
+    with k[0]: kpi_card("Cases In",  f"{in_cases:,}",
+                        f"avg {in_cases/div:,.1f} / biz day  ·  {biz_days} days")
     with k[1]: kpi_card("$ In",      fmt_currency(in_dol),
-                        f"{pick} • TotalCharge")
+                        f"avg {fmt_currency(in_dol/div)} / biz day")
     with k[2]: kpi_card("Cases Out", f"{out_cases:,}",
-                        f"{pick} • new invoices")
+                        f"avg {out_cases/div:,.1f} / biz day")
     with k[3]: kpi_card("Units Out", f"{out_units:,}",
-                        f"{pick} • new+credit+remake")
+                        f"avg {out_units/div:,.1f} / biz day")
     with k[4]: kpi_card("$ Invoiced",fmt_currency(out_gross),
-                        "Gross (incl. tax)")
+                        f"avg {fmt_currency(out_gross/div)} / biz day")
     with k[5]: kpi_card("$ Net Sales", fmt_currency(out_net),
-                        "ties to monthly tile")
+                        f"avg {fmt_currency(out_net/div)} / biz day")
 
     # Daily chart: cases in vs cases out per day
     fig = go.Figure()

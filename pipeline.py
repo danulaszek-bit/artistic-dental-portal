@@ -170,6 +170,65 @@ CACHE_DIR.mkdir(exist_ok=True)
 EXCLUDED_ACCOUNT_IDS = {"LAWMUR"}
 
 
+# ── Lab business-day calendar ─────────────────────────────────────────────────
+# Holidays the lab is closed. Fixed-date holidays falling on a weekend shift
+# to the nearest business day (Sat → Fri, Sun → Mon) so monthly averaging
+# divides by the right count of working days.
+def get_lab_holidays(year: int) -> list[pd.Timestamp]:
+    """Return Timestamps the lab is closed for the given year."""
+    out = []
+    # Fixed-date with nearest-workday observance
+    for month, day in [(1, 1), (7, 4), (12, 25)]:
+        d = pd.Timestamp(year=year, month=month, day=day)
+        if d.weekday() == 5:        # Saturday → observed Friday
+            d = d - pd.Timedelta(days=1)
+        elif d.weekday() == 6:      # Sunday → observed Monday
+            d = d + pd.Timedelta(days=1)
+        out.append(d)
+    # Memorial Day — last Monday of May
+    d = pd.Timestamp(year=year, month=5, day=31)
+    while d.weekday() != 0:
+        d -= pd.Timedelta(days=1)
+    out.append(d)
+    # Labor Day — first Monday of September
+    d = pd.Timestamp(year=year, month=9, day=1)
+    while d.weekday() != 0:
+        d += pd.Timedelta(days=1)
+    out.append(d)
+    # Thanksgiving — fourth Thursday of November (1st Thursday + 21 days)
+    d = pd.Timestamp(year=year, month=11, day=1)
+    while d.weekday() != 3:
+        d += pd.Timedelta(days=1)
+    thanksgiving = d + pd.Timedelta(days=21)
+    out.append(thanksgiving)
+    # Day after Thanksgiving (Black Friday)
+    out.append(thanksgiving + pd.Timedelta(days=1))
+    return out
+
+
+def business_days_between(start, end) -> int:
+    """Inclusive count of business days between two dates, lab-holiday aware."""
+    start = pd.Timestamp(start).normalize()
+    end   = pd.Timestamp(end).normalize()
+    if end < start:
+        return 0
+    holidays = set()
+    for y in range(start.year, end.year + 1):
+        holidays.update(d.normalize() for d in get_lab_holidays(y))
+    weekdays = pd.bdate_range(start, end)  # Mon–Fri inclusive
+    return sum(1 for d in weekdays if d not in holidays)
+
+
+def business_days_in_month(year: int, month: int) -> int:
+    """Total business days in the given calendar month."""
+    import calendar as _cal
+    last_day = _cal.monthrange(year, month)[1]
+    return business_days_between(
+        pd.Timestamp(year=year, month=month, day=1),
+        pd.Timestamp(year=year, month=month, day=last_day),
+    )
+
+
 def _drop_excluded_accounts(df: pd.DataFrame, col: str = "account_id") -> pd.DataFrame:
     """Drop rows whose account_id matches a dummy/test account."""
     if df.empty or col not in df.columns:
@@ -676,9 +735,15 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
         "all_account_count":    len(prof),
         "mtd_revenue":          mtd_sales,
         "mtd_remake_rate":      round(mtd_remake / mtd_sales * 100, 2) if mtd_sales else 0,
-        "mtd_projected_month":  round(mtd_sales / date.today().day * __import__('calendar').monthrange(date.today().year, date.today().month)[1], 2) if mtd_sales and date.today().day > 0 else 0,
-        "mtd_days_elapsed":     date.today().day,
-        "mtd_days_in_month":    __import__('calendar').monthrange(date.today().year, date.today().month)[1],
+        # MTD projection uses BUSINESS days (lab calendar), not calendar days:
+        # weekends + lab holidays excluded so the per-day rate isn't diluted.
+        "mtd_projected_month":  round(
+            mtd_sales / max(business_days_between(date.today().replace(day=1), date.today()), 1)
+                      * business_days_in_month(date.today().year, date.today().month),
+            2
+        ) if mtd_sales else 0,
+        "mtd_days_elapsed":     business_days_between(date.today().replace(day=1), date.today()),
+        "mtd_days_in_month":    business_days_in_month(date.today().year, date.today().month),
         "wip_value":            wip_value,
         "wip_count":            wip_count,
         "wip_overdue":          wip_overdue,
