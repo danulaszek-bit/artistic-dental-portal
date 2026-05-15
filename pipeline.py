@@ -735,24 +735,35 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
 
 
 def compute_daily_sales(folder: Path, days_back: int = 90) -> pd.DataFrame:
-    """Build a daily in/out summary from AllCasesByDateIn.csv.
+    """Build a daily in/out summary.
 
-    Returns a DataFrame with one row per day:
-        date, cases_in, dollars_in, cases_out, dollars_out
-    "In" = Cases_DateIn falls on that day.
+    Source: Active_30_day.csv first (has fresh Cases_InvoiceDate). Fallback:
+    AllCasesByDateIn.csv — but note its Cases_InvoiceDate column is stale on
+    that file, so daily "out" numbers will under-count if Active_30_day is
+    unavailable.
+
+    No exclusions — every case with a date_in / invoice_date is counted
+    (including dummy accounts) so the totals reconcile to the raw Magic Touch
+    figures.
+
+    Returns one row per day with: date, cases_in, dollars_in, cases_out, dollars_out.
+    "In"  = Cases_DateIn falls on that day.
     "Out" = Cases_InvoiceDate falls on that day.
     """
-    path = folder / "AllCasesByDateIn.csv"
-    if not path.exists():
-        log.warning("AllCasesByDateIn.csv not found — daily_sales skipped")
+    active_path = folder / "Active_30_day.csv"
+    all_path    = folder / "AllCasesByDateIn.csv"
+
+    if active_path.exists():
+        df = pd.read_csv(active_path, encoding="latin-1",
+                         engine="python", on_bad_lines="skip")
+        source_name = "Active_30_day.csv"
+    elif all_path.exists():
+        df = pd.read_csv(all_path, encoding="latin-1",
+                         engine="python", on_bad_lines="skip")
+        source_name = "AllCasesByDateIn.csv (fallback — InvoiceDate may be stale)"
+    else:
+        log.warning("No source for daily_sales — skipped")
         return pd.DataFrame()
-
-    df = pd.read_csv(path, encoding="latin-1", low_memory=False)
-
-    # Exclude dummy / test accounts (LAWMUR etc.)
-    if "Cases_CustomerID" in df.columns:
-        norm = df["Cases_CustomerID"].fillna("").astype(str).str.strip().str.upper()
-        df = df[~norm.isin(EXCLUDED_ACCOUNT_IDS)].copy()
 
     df["date_in"]      = pd.to_datetime(df.get("Cases_DateIn"),      errors="coerce").dt.normalize()
     df["invoice_date"] = pd.to_datetime(df.get("Cases_InvoiceDate"), errors="coerce").dt.normalize()
@@ -782,6 +793,7 @@ def compute_daily_sales(folder: Path, days_back: int = 90) -> pd.DataFrame:
     daily["dollars_in"]  = daily["dollars_in"].round(2)
     daily["dollars_out"] = daily["dollars_out"].round(2)
     daily = daily.sort_values("date", ascending=False).reset_index(drop=True)
+    log.info("Daily sales source: %s", source_name)
     return daily
 
 
