@@ -734,66 +734,162 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     return kpis
 
 
-def compute_daily_sales(folder: Path, days_back: int = 90) -> pd.DataFrame:
-    """Build a daily in/out summary.
+def _parse_money(s) -> float:
+    """Parse a money string like '$1,234.56' or '($89.60)' → float."""
+    if s is None:
+        return 0.0
+    s = str(s).strip()
+    if not s or s.lower() == "nan":
+        return 0.0
+    neg = s.startswith("(") and s.endswith(")")
+    s = s.strip("()$").replace(",", "").strip()
+    try:
+        v = float(s) if s else 0.0
+    except ValueError:
+        return 0.0
+    return -v if neg else v
 
-    Source: Active_30_day.csv first (has fresh Cases_InvoiceDate). Fallback:
-    AllCasesByDateIn.csv — but note its Cases_InvoiceDate column is stale on
-    that file, so daily "out" numbers will under-count if Active_30_day is
-    unavailable.
 
-    No exclusions — every case with a date_in / invoice_date is counted
-    (including dummy accounts) so the totals reconcile to the raw Magic Touch
-    figures.
+def _parse_int(s) -> int:
+    if s is None:
+        return 0
+    s = str(s).strip().replace(",", "")
+    if not s or s.lower() == "nan":
+        return 0
+    try:
+        return int(float(s))
+    except ValueError:
+        return 0
 
-    Returns one row per day with: date, cases_in, dollars_in, cases_out, dollars_out.
-    "In"  = Cases_DateIn falls on that day.
-    "Out" = Cases_InvoiceDate falls on that day.
+
+def _parse_sales_summary(path: Path) -> pd.DataFrame:
+    """Parse Magic Touch's Sales Summary By Date Crystal Report CSV.
+
+    Authoritative source for daily billing — matches the printed Sales Summary
+    Report By Date exactly. Returns one row per date with:
+        date, customers, inv_new, inv_credit, inv_remake,
+        units_new, units_credit, units_remake,
+        credit_dollars, discounts, remake_sales, metal_charges, total_tax,
+        total_invoiced, net_sales
     """
-    active_path = folder / "Active_30_day.csv"
-    all_path    = folder / "AllCasesByDateIn.csv"
+    import csv
+    rows_out = []
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        reader = csv.reader(f)
+        for r in reader:
+            if not r:
+                continue
+            first = r[0].strip() if r else ""
+            try:
+                d = pd.to_datetime(first, errors="raise").normalize()
+            except Exception:
+                continue
+            # Expect 15 fields per data row (date + 14 metrics)
+            if len(r) < 15:
+                continue
+            rows_out.append({
+                "date":           d,
+                "customers":      _parse_int(r[1]),
+                "inv_new":        _parse_int(r[2]),
+                "inv_credit":     _parse_int(r[3]),
+                "inv_remake":     _parse_int(r[4]),
+                "units_new":      _parse_int(r[5]),
+                "units_credit":   _parse_int(r[6]),
+                "units_remake":   _parse_int(r[7]),
+                "credit_dollars": _parse_money(r[8]),
+                "discounts":      _parse_money(r[9]),
+                "remake_sales":   _parse_money(r[10]),
+                "metal_charges":  _parse_money(r[11]),
+                "total_tax":      _parse_money(r[12]),
+                "total_invoiced": _parse_money(r[13]),
+                "net_sales":      _parse_money(r[14]),
+            })
+    return pd.DataFrame(rows_out)
 
-    if active_path.exists():
-        df = pd.read_csv(active_path, encoding="latin-1",
-                         engine="python", on_bad_lines="skip")
-        source_name = "Active_30_day.csv"
-    elif all_path.exists():
-        df = pd.read_csv(all_path, encoding="latin-1",
-                         engine="python", on_bad_lines="skip")
-        source_name = "AllCasesByDateIn.csv (fallback — InvoiceDate may be stale)"
-    else:
-        log.warning("No source for daily_sales — skipped")
-        return pd.DataFrame()
 
-    df["date_in"]      = pd.to_datetime(df.get("Cases_DateIn"),      errors="coerce").dt.normalize()
-    df["invoice_date"] = pd.to_datetime(df.get("Cases_InvoiceDate"), errors="coerce").dt.normalize()
-    df["total_charge"] = pd.to_numeric(df.get("Cases_TotalCharge"),  errors="coerce").fillna(0)
+def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
+    """Build daily in/out summary reconciling to Magic Touch's authoritative report.
 
+    Out side (billing):
+        SalesSummaryByDate.csv — the CSV form of the Sales Summary By Date
+        report. Numbers match the printed report exactly. Provides:
+        cases_out (= new invoices), units_out (= new + credit + remake units),
+        dollars_invoiced (= Total Invoiced gross), dollars_net (= Net Sales,
+        the figure that ties to the monthly sales tile).
+    In side (cases received):
+        Active_30_day.csv — only source with fresh Cases_DateIn going back
+        ~5 months. Provides cases_in and dollars_in (sum of TotalCharge).
+
+    No account exclusions — totals must reconcile to the raw Magic Touch
+    figures, dummy accounts included.
+
+    Returns one row per day, sorted most-recent first.
+    """
     cutoff = pd.Timestamp.today().normalize() - pd.Timedelta(days=days_back)
 
-    in_grp = (
-        df[df["date_in"] >= cutoff]
-        .groupby("date_in")
-        .agg(cases_in=("Cases_CaseNumber", "count"),
-             dollars_in=("total_charge", "sum"))
-        .reset_index().rename(columns={"date_in": "date"})
-    )
-    out_grp = (
-        df[df["invoice_date"] >= cutoff]
-        .groupby("invoice_date")
-        .agg(cases_out=("Cases_CaseNumber", "count"),
-             dollars_out=("total_charge", "sum"))
-        .reset_index().rename(columns={"invoice_date": "date"})
-    )
+    # ── OUT: from Sales Summary By Date (authoritative) ─────────────────────
+    summary_path = folder / "SalesSummaryByDate.csv"
+    if summary_path.exists():
+        try:
+            summary = _parse_sales_summary(summary_path)
+        except Exception as exc:
+            log.warning("SalesSummaryByDate.csv parse failed: %s", exc)
+            summary = pd.DataFrame()
+    else:
+        summary = pd.DataFrame()
+
+    if not summary.empty:
+        summary = summary[summary["date"] >= cutoff].copy()
+        # Map to the unified daily schema
+        out_grp = pd.DataFrame({
+            "date":              summary["date"],
+            "cases_out":         summary["inv_new"],
+            "units_out":         summary["units_new"] + summary["units_credit"]
+                                 + summary["units_remake"],
+            "dollars_invoiced":  summary["total_invoiced"].round(2),
+            "dollars_net":       summary["net_sales"].round(2),
+        })
+        out_source = "SalesSummaryByDate.csv"
+    else:
+        out_grp = pd.DataFrame(columns=["date","cases_out","units_out",
+                                         "dollars_invoiced","dollars_net"])
+        out_source = "(missing — out side will be empty)"
+
+    # ── IN: from Active_30_day.csv (only fresh DateIn source) ───────────────
+    active_path = folder / "Active_30_day.csv"
+    if active_path.exists():
+        try:
+            act = pd.read_csv(active_path, encoding="latin-1",
+                              engine="python", on_bad_lines="skip")
+            act["date_in"]      = pd.to_datetime(act.get("Cases_DateIn"),
+                                                  errors="coerce").dt.normalize()
+            act["total_charge"] = pd.to_numeric(act.get("Cases_TotalCharge"),
+                                                  errors="coerce").fillna(0)
+            act = act[act["date_in"] >= cutoff]
+            in_grp = (
+                act.groupby("date_in")
+                   .agg(cases_in=("Cases_CaseNumber", "count"),
+                        dollars_in=("total_charge", "sum"))
+                   .reset_index().rename(columns={"date_in": "date"})
+            )
+            in_grp["dollars_in"] = in_grp["dollars_in"].round(2)
+            in_source = "Active_30_day.csv"
+        except Exception as exc:
+            log.warning("Active_30_day.csv read failed: %s", exc)
+            in_grp = pd.DataFrame(columns=["date","cases_in","dollars_in"])
+            in_source = "(failed)"
+    else:
+        in_grp = pd.DataFrame(columns=["date","cases_in","dollars_in"])
+        in_source = "(missing — in side will be empty)"
+
     daily = pd.merge(in_grp, out_grp, on="date", how="outer").fillna(0)
     if daily.empty:
         return daily
-    daily["cases_in"]    = daily["cases_in"].astype(int)
-    daily["cases_out"]   = daily["cases_out"].astype(int)
-    daily["dollars_in"]  = daily["dollars_in"].round(2)
-    daily["dollars_out"] = daily["dollars_out"].round(2)
+    for col in ("cases_in", "cases_out", "units_out"):
+        if col in daily.columns:
+            daily[col] = daily[col].astype(int)
     daily = daily.sort_values("date", ascending=False).reset_index(drop=True)
-    log.info("Daily sales source: %s", source_name)
+    log.info("Daily sales sources — out: %s, in: %s", out_source, in_source)
     return daily
 
 
