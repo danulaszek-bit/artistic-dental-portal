@@ -60,7 +60,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450066,PETCHR,Christine Petrilla,F236,2026-05-13 10:24:00,2026-05-26 17:00:00,In Production,SCANNING,93.95,Surgical,0,7,1,0,False,False,False,False
 449978,NUCMAG,Magdaleno Nucum,H270,2026-05-12 12:34:00,2026-05-20 17:00:00,In Production,SCANNING,73.49,Surgical,0,7,2,0,False,False,False,False
 450069,BERDANCP,Daniel Berquist,H110,2026-05-13 10:26:00,2026-05-21 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,1,0,False,False,False,False
-447784,RHICAT,Catherine Rhim,P70,2026-04-16 12:39:00,2026-04-24 17:00:00,In Production,CTS,0.0,Surgical,0,7,28,20,True,False,False,True
+447784,RHICAT,Catherine Rhim,P70,2026-04-16 12:39:00,2026-04-24 17:00:00,In Production,CTS,0.0,Surgical,1,7,28,20,True,False,False,True
 450175,KORMIK,Mikhail Korolyov,EVDSGN-051426839102,2026-05-14 09:28:00,2026-05-21 17:00:00,In Production,,79.79,Unknown,0,5,0,0,False,False,False,False
 450183,LEEJIW,Jiwoo Lee,P536,2026-05-14 09:50:00,2026-05-29 17:00:00,In Production,,189.35,Unknown,0,5,0,0,False,False,False,False
 449086,WYLDUS,Dustin Wylde,D333$,2026-05-01 09:48:00,2026-05-22 17:00:00,In Production,PORCIP DEAN,1536.38,Implants,0,5,13,0,False,False,False,False
@@ -69,7 +69,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449458,PATPINNV,Pinal Patel,F245*,2026-05-05 15:04:00,2026-05-18 17:00:00,In Production,HENRY,182.09,Fixed,0,3,9,0,False,False,False,False
 449887,JONSYR,Syreeta Jones,EVDSGN-051126839477,2026-05-11 13:29:00,2026-05-19 17:00:00,In Production,PORCWALL,92.06,Fixed,0,3,3,0,False,False,False,False
 450055,GAFMEG,Meghan Gaffney,F224,2026-05-13 09:15:00,2026-05-21 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,1,0,False,False,False,False
-449471,OGRLIS,Lisa O'Grady,D329*,2026-05-05 16:20:00,2026-05-27 17:00:00,In Production,CADSTALLED,0.0,CAD_CAM,0,2,9,0,False,False,False,False
+449471,OGRLIS,Lisa O'Grady,D329*,2026-05-05 16:20:00,2026-05-27 17:00:00,In Production,CADSTALLED,0.0,CAD_CAM,1,2,9,0,False,False,False,False
 450051,AUSMIC,Michaelangelo Aust,F235,2026-05-13 09:11:00,2026-05-22 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,1,0,False,False,False,False
 449494,KUCMAR,Mark Kuchta,F221*,2026-05-06 09:17:00,2026-05-19 17:00:00,In Production,FRED,348.71,Fixed,0,3,8,0,False,False,False,False
 450103,LUKPAU,Paul Lukawski,F115,2026-05-13 13:12:00,2026-05-21 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,1,0,False,False,False,False
@@ -77,7 +77,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449848,SCHJON,Jonathan Schulze,D113*$,2026-05-11 11:02:00,2026-06-01 17:00:00,In Production,MILLING AO4,1802.34,Unknown,0,5,3,0,False,False,False,False
 449824,GIUMIC,Michael Giuliano,V287,2026-05-11 08:43:00,2026-05-19 17:00:00,In Production,MILLINGIP,129.74,Implants,0,5,3,0,False,False,False,False
 450215,ALIFAT,Fatjona Aliaj,P143,2026-05-14 12:11:00,2026-05-29 17:00:00,In Production,,349.59,Unknown,0,5,0,0,False,False,False,False
-448940,KHAOMDG,Omer Khan,F126!,2026-04-29 17:11:00,2026-05-21 17:00:00,In Production,MILLING BRUX,856.08,Unknown,0,5,15,0,False,False,False,False
+448940,KHAOMDG,Omer Khan,F126!,2026-04-29 17:11:00,2026-05-21 17:00:00,In Production,MILLING BRUX,856.08,Unknown,1,5,15,0,False,False,False,False
 450258,ARONIN,Nina Arora,P513*,2026-05-14 14:28:00,2026-05-21 17:00:00,In Production,,103.48,Unknown,0,5,0,0,False,False,False,False
 450114,LUCPAULYO,Paulette Lucario,F156,2026-05-13 13:38:00,2026-05-21 17:00:00,In Production,PREP,129.74,Hold_Stalled,0,1,1,0,False,False,False,False
 449964,PATUMA,Umang Patel,F209,2026-05-12 11:40:00,2026-05-22 17:00:00,In Production,REMTRYINWALL,6.99,Removable,0,5,2,0,False,False,False,False
@@ -85,7 +85,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 447988,VOHSAF,Safia Vohra,E304*,2026-04-17 15:05:34,,Sent for TryIn,,10.0,Unknown,0,5,27,0,False,False,False,False
 449856,GAMBRI,Brian Gambla,D79$,2026-05-11 11:32:00,2026-06-01 17:00:00,In Production,REMIPBLERTA,568.62,Implants,0,5,3,0,False,False,False,False
 449799,SLAMICJOL,Michael Slavin,E318,2026-05-08 14:20:00,2026-05-21 17:00:00,In Production,GUIDES,277.91,Surgical,0,7,6,0,False,False,False,False
-446784,THADEVHOM,Devang Thakkar,E180,2026-04-03 12:56:00,2026-04-20 17:00:00,In Production,GUIDES,396.28,Surgical,0,7,41,24,True,False,False,True
+446784,THADEVHOM,Devang Thakkar,E180,2026-04-03 12:56:00,2026-04-20 17:00:00,In Production,GUIDES,396.28,Surgical,1,7,41,24,True,False,False,True
 449906,LOPSARST,Sarah Lopez,V278*,2026-05-11 15:49:00,2026-05-18 17:00:00,In Production,REMPREP,201.92,Removable,0,5,3,0,False,False,False,False
 450135,SAFTAR,Tarek Safadi,P572*,2026-05-13 15:10:00,2026-05-22 17:00:00,In Production,,103.48,Unknown,0,5,1,0,False,False,False,False
 449936,KORMIK,Mikhail Korolyov,H44,2026-05-12 09:07:00,2026-05-20 17:00:00,In Production,MILLING EZ,159.59,Unknown,0,5,2,0,False,False,False,False
@@ -106,7 +106,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450266,SALNICLAW,Nicholas Salava,P323*,2026-05-14 15:07:00,2026-06-01 17:00:00,In Production,,174.08,Unknown,0,5,0,0,False,False,False,False
 449985,CHUMAN,Manas Chug,H300,2026-05-12 12:39:00,2026-05-20 17:00:00,In Production,SCANNING,84.91,Surgical,0,7,2,0,False,False,False,False
 449835,ABUSIM,Simon Abu-Aita,V33*,2026-05-11 09:33:00,2026-05-26 17:00:00,In Production,GUIDES,301.87,Surgical,0,7,3,0,False,False,False,False
-447081,ZANMAT,Matthew Zander,D224*,2026-04-08 12:39:00,2026-04-23 17:00:00,In Production,GUIDES,0.0,Surgical,0,7,36,21,True,False,False,True
+447081,ZANMAT,Matthew Zander,D224*,2026-04-08 12:39:00,2026-04-23 17:00:00,In Production,GUIDES,0.0,Surgical,1,7,36,21,True,False,False,True
 449977,SAMJACSTC,Jacob Samuel,H280,2026-05-12 12:32:00,2026-05-20 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,2,0,False,False,False,False
 449931,SOOANUHE,Anu Sood,H200,2026-05-12 08:47:00,2026-05-21 17:00:00,In Production,MILLING BRUX,119.51,Unknown,0,5,2,0,False,False,False,False
 447711,SABANARO,Sababa Anan,V229,2026-05-06 14:38:00,2026-05-20 17:00:00,In Production,REMIPLIZ,202.52,Implants,0,5,8,0,False,False,False,False
@@ -121,7 +121,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450031,MALRYA,Ryann Maloney,EVDSGN-051226839523,2026-05-12 16:01:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,79.79,Unknown,0,5,2,0,False,False,False,False
 449907,TRALUA,Luan Tran,H26*,2026-05-11 15:56:00,2026-05-22 17:00:00,In Production,CTS,781.42,Surgical,0,7,3,0,False,False,False,False
 449707,PARKRURO,Krupa Parikh,E63*,2026-05-07 17:19:00,2026-05-22 17:00:00,In Production,PRINTINGIP,263.72,Unknown,0,5,7,0,False,False,False,False
-448019,SLAMICHOM,Michael Slavin,V260,2026-04-20 10:54:00,2026-05-12 17:00:00,In Production,GUIDES,220.53,Surgical,0,7,24,2,True,False,False,True
+448019,SLAMICHOM,Michael Slavin,V260,2026-04-20 10:54:00,2026-05-12 17:00:00,In Production,GUIDES,220.53,Surgical,1,7,24,2,True,False,False,True
 449781,CORABI,Abigail Cortis,E309!,2026-05-08 13:22:00,2026-05-18 17:00:00,In Production,MILLINGIP,79.79,Implants,0,5,6,0,False,False,False,False
 449090,MACMAR,Mark Macak,E325,2026-05-01 09:59:00,2026-05-20 17:00:00,In Production,REMOUT,435.46,Removable,0,5,13,0,False,False,False,False
 449960,HANMIR,Mirette Hanna,H245,2026-05-12 11:36:00,2026-05-20 17:00:00,In Production,SCANNING,84.91,Surgical,0,7,2,0,False,False,False,False
@@ -130,14 +130,14 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450006,MACHAZ,Hazel Santiago-Macanip,EVDSGN-051226839514,2026-05-12 14:19:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,91.05,Unknown,0,5,2,0,False,False,False,False
 450074,SYLCOLBL,Colton Sylvester,F83,2026-05-13 10:55:00,2026-05-19 17:00:00,In Production,MILLING EZ,122.52,Unknown,0,5,1,0,False,False,False,False
 450070,MCCSCO,Scott McCarty,F26,2026-05-13 10:27:00,2026-05-21 17:00:00,In Production,REMPREP,87.71,Removable,0,5,1,0,False,False,False,False
-447633,ADAAMMDYE,Ammar Adam,F44*,2026-04-15 10:20:00,2026-05-05 17:00:00,In Production,GUIDES,215.94,Surgical,0,7,29,9,True,False,False,True
+447633,ADAAMMDYE,Ammar Adam,F44*,2026-04-15 10:20:00,2026-05-05 17:00:00,In Production,GUIDES,215.94,Surgical,1,7,29,9,True,False,False,True
 438970,TOKNIC,Nicholas Tokarski,H219,2026-01-05 14:41:52,,Sent for TryIn,,0.0,Unknown,0,5,129,0,False,False,False,False
 450147,SAFTAR,Tarek Safadi,P855*,2026-05-13 17:17:00,2026-05-22 17:00:00,In Production,,103.48,Unknown,0,5,1,0,False,False,False,False
 450226,PARANG,Angela Paros,P555,2026-05-14 12:28:00,2026-05-21 17:00:00,In Production,,313.88,Unknown,0,5,0,0,False,False,False,False
 450189,ATHJOH,John Athos,D322$,2026-05-14 10:50:37,,Sent for TryIn,,0.0,Unknown,0,5,0,0,False,False,False,False
 449933,TOKNIC,Nicholas Tokarski,H157,2026-05-12 08:50:00,2026-05-21 17:00:00,In Production,MILLING BRIDGE,344.55,Unknown,0,5,2,0,False,False,False,False
 449353,SUDAMINAP,Amit Sud,H255*,2026-05-04 17:33:00,2026-05-22 17:00:00,In Production,PRINTINGIP,536.67,Unknown,0,5,10,0,False,False,False,False
-448224,TESTDANN,DANNY ULASZEK,EVDSGN-042226061019,2026-04-21 18:04:00,2026-05-05 17:00:00,In Production,HENRY,0.0,Fixed,0,3,23,9,True,False,False,True
+448224,TESTDANN,DANNY ULASZEK,EVDSGN-042226061019,2026-04-21 18:04:00,2026-05-05 17:00:00,In Production,HENRY,0.0,Fixed,1,3,23,9,True,False,False,True
 449714,NISLIN,Linora Nissan,E376,2026-05-08 08:40:00,2026-05-19 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,6,0,False,False,False,False
 447766,DARDAVSB,David Dardick,P765*,2026-04-16 11:47:00,2026-05-18 17:00:00,In Production,PRINTINGIP,265.52,Unknown,0,5,28,0,False,False,False,False
 449861,HANMIR,Mirette Hanna,V280,2026-05-11 12:35:00,2026-05-20 17:00:00,In Production,MILLING BRIDGE,254.73,Unknown,0,5,3,0,False,False,False,False
@@ -172,7 +172,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450275,SAFHAY,Haytham Safi,P340*,2026-05-14 15:51:00,2026-05-21 17:00:00,In Production,,91.05,Unknown,0,5,0,0,False,False,False,False
 450026,HASFAY,Fayda Hassan,EVDSGN-051226839521,2026-05-12 15:41:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,70.59,Unknown,0,5,2,0,False,False,False,False
 450044,SIETOM,Tom Siewert,EVDSGN-051226839531,2026-05-12 18:24:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,70.59,Unknown,0,5,2,0,False,False,False,False
-448853,JAYPOO,Poornima Jayaprakash,D256$*,2026-04-29 11:39:00,2026-05-28 17:00:00,In Production,MILLING AO4,14.88,Unknown,0,5,15,0,False,False,False,False
+448853,JAYPOO,Poornima Jayaprakash,D256$*,2026-04-29 11:39:00,2026-05-28 17:00:00,In Production,MILLING AO4,14.88,Unknown,1,5,15,0,False,False,False,False
 449997,DONNOR,Nora Donatelli,D246$,2026-05-12 14:06:00,2026-05-26 17:00:00,In Production,REMIPMARGARET,2068.31,Implants,0,5,2,0,False,False,False,False
 450222,HANMIR,Mirette Hanna,P198,2026-05-14 12:15:00,2026-05-26 17:00:00,In Production,,84.91,Unknown,0,5,0,0,False,False,False,False
 450208,NUCMAG,Magdaleno Nucum,P419,2026-05-14 12:03:00,2026-05-22 17:00:00,In Production,,73.49,Unknown,0,5,0,0,False,False,False,False
@@ -183,7 +183,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450086,PATMON,Monal Patel,DX46$,2026-05-13 11:55:26,,Sent for TryIn,,0.0,Unknown,0,5,1,0,False,False,False,False
 450227,CHANHWA,Hwaiyin Chang,E76,2026-05-14 12:35:00,2026-05-20 17:00:00,In Production,,6.99,Unknown,0,5,0,0,False,False,False,False
 450057,AUSMIC,Michaelangelo Aust,F121,2026-05-13 09:17:00,2026-05-22 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,1,0,False,False,False,False
-444507,MADABD,Abdalhameed Madwar,EVDSGN-030926073842,2026-03-09 09:56:00,2026-03-13 17:00:00,In Production,HENRY,71.61,Fixed,0,3,66,62,True,False,False,True
+444507,MADABD,Abdalhameed Madwar,EVDSGN-030926073842,2026-03-09 09:56:00,2026-03-13 17:00:00,In Production,HENRY,71.61,Fixed,1,3,66,62,True,False,False,True
 441156,PATUMA,Umang Patel,EVDSGN-012826153126,2026-01-28 17:50:00,2026-02-05 17:00:00,In Production,,156.63,Unknown,0,5,106,98,True,False,False,True
 449764,STOMARC,Marc Stojkovich,E83*,2026-05-08 12:17:00,2026-05-22 17:00:00,In Production,PRINTINGIP,512.39,Unknown,0,5,6,0,False,False,False,False
 450166,AUSMIC,Michaelangelo Aust,P641,2026-05-14 09:03:00,2026-05-27 17:00:00,In Production,,79.79,Unknown,0,5,0,0,False,False,False,False
@@ -193,7 +193,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449825,FIEJAM,James Fieldhouse,V295*,2026-05-11 08:41:00,2026-05-18 17:00:00,In Production,PRINTINGIP,108.43,Unknown,0,5,3,0,False,False,False,False
 450013,SINMAN,Manpreet Singh,F136*,2026-05-12 14:42:00,2026-05-20 17:00:00,In Production,PRINTING,92.06,CAD_CAM,0,2,2,0,False,False,False,False
 449433,PATKRURO,Krupa Patel,H222,2026-05-05 14:22:00,2026-05-20 17:00:00,In Production,REMOUT,975.94,Removable,0,5,9,0,False,False,False,False
-448887,SYEMAZ,Mazher Syed,D330*$,2026-04-29 12:14:00,2026-05-07 17:00:00,In Production,DIGITALREMOVABLE,1175.43,Unknown,0,5,15,7,True,False,False,True
+448887,SYEMAZ,Mazher Syed,D330*$,2026-04-29 12:14:00,2026-05-07 17:00:00,In Production,DIGITALREMOVABLE,1175.43,Unknown,1,5,15,7,True,False,False,True
 450124,LEEALI,Alisa YouYeon Lee,F76,2026-05-13 14:08:00,2026-05-21 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,1,0,False,False,False,False
 449503,VANMATWS,Matt Van Beek,F33*,2026-05-06 09:59:00,2026-05-14 17:00:00,In Production,HENRY,754.93,Fixed,0,3,8,0,False,False,False,False
 450083,NAIHEM,Hema Nair,F164*,2026-05-13 11:02:00,2026-05-21 17:00:00,In Production,,0.0,Unknown,0,5,1,0,False,False,False,False
@@ -218,7 +218,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450162,SUHINE,Ine Suh,P804,2026-05-14 08:44:00,2026-05-27 17:00:00,In Production,,87.81,Unknown,0,5,0,0,False,False,False,False
 450228,SUKMAJ,Maja Sukovic,P722,2026-05-14 12:39:00,2026-05-27 17:00:00,In Production,,0.0,Unknown,0,5,0,0,False,False,False,False
 450211,AHMSAN,Sana Ahmed,P550,2026-05-14 12:06:00,2026-05-27 17:00:00,In Production,,73.49,Unknown,0,5,0,0,False,False,False,False
-449603,SULKHAFL,Khadija Sulemanjee,P772*,2026-05-07 07:14:00,2026-05-21 17:00:00,In Production,GUIDES,280.62,Surgical,0,7,7,0,False,False,False,False
+449603,SULKHAFL,Khadija Sulemanjee,P772*,2026-05-07 07:14:00,2026-05-21 17:00:00,In Production,GUIDES,280.62,Surgical,1,7,7,0,False,False,False,False
 450077,DOUJASVA,Jason Douts,F177,2026-05-13 11:00:00,2026-05-22 17:00:00,In Production,PREP,129.51,Hold_Stalled,0,1,1,0,False,False,False,False
 450123,PASKAR,Kara Passolt-Kung,F122,2026-05-13 14:18:00,2026-05-26 17:00:00,In Production,REMOUT,210.57,Removable,0,5,1,0,False,False,False,False
 450000,TADSIM,Simon Tadros,H49,2026-05-12 14:12:00,2026-05-22 17:00:00,In Production,SCANNING,551.01,Surgical,0,7,2,0,False,False,False,False
@@ -227,18 +227,18 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450099,MALRYA,Ryann Maloney,F183,2026-05-13 12:54:00,2026-05-21 17:00:00,In Production,PREP,141.42,Hold_Stalled,0,1,1,0,False,False,False,False
 449934,TOKNIC,Nicholas Tokarski,H19,2026-05-12 08:53:00,2026-05-21 17:00:00,In Production,SENTFORDESIGN,119.51,Unknown,0,5,2,0,False,False,False,False
 449525,RYCJUAFL,Juana Ryckowski,E228*,2026-05-06 12:21:27,,Sent for TryIn,,0.0,Unknown,0,5,8,0,False,False,False,False
-447098,LESSTE,Steven Lesmeister,D297*,2026-04-08 10:50:00,2026-04-24 17:00:00,In Production,GUIDES,717.27,Surgical,0,7,36,20,True,False,False,True
+447098,LESSTE,Steven Lesmeister,D297*,2026-04-08 10:50:00,2026-04-24 17:00:00,In Production,GUIDES,717.27,Surgical,1,7,36,20,True,False,False,True
 449901,LOMANTM,Anthony Lombardi,H237*,2026-05-11 15:14:00,2026-05-18 17:00:00,In Production,PRINTINGIP,211.76,Unknown,0,5,3,0,False,False,False,False
 449840,DOUJASVA,Jason Douts,EVDSGN-051126839467,2026-05-11 10:33:00,2026-05-18 17:00:00,In Production,PRINTINGIP,92.06,Unknown,0,5,3,0,False,False,False,False
 449980,CHUMAN,Manas Chug,H122,2026-05-12 12:35:00,2026-05-21 17:00:00,In Production,SCANNING,84.91,Surgical,0,7,2,0,False,False,False,False
 449172,ATHJOH,John Athos,F113,2026-05-01 12:32:36,,Sent for TryIn,,0.0,Unknown,0,5,13,0,False,False,False,False
 450217,SAMJACSTC,Jacob Samuel,P145,2026-05-14 12:14:00,2026-05-27 17:00:00,In Production,,79.79,Unknown,0,5,0,0,False,False,False,False
-449472,OGRLIS,Lisa O'Grady,D82*,2026-05-05 16:57:00,2026-05-26 17:00:00,In Production,MILLING AO4,1536.38,Unknown,0,5,9,0,False,False,False,False
+449472,OGRLIS,Lisa O'Grady,D82*,2026-05-05 16:57:00,2026-05-26 17:00:00,In Production,MILLING AO4,1536.38,Unknown,1,5,9,0,False,False,False,False
 449823,NISLIN,Linora Nissan,V59,2026-05-11 08:41:00,2026-05-20 17:00:00,In Production,MILLING BRUX,159.59,Unknown,0,5,3,0,False,False,False,False
 449971,JONSYR,Syreeta Jones,EVDSGN-051226839512,2026-05-12 12:24:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,92.06,Unknown,0,5,2,0,False,False,False,False
 449903,VERANI,Anita Verma,EVDSGN-051126839480,2026-05-11 15:18:00,2026-05-19 17:00:00,In Production,PORCWALL,91.05,Fixed,0,3,3,0,False,False,False,False
 449941,MUNALE,Alexandra Arrich Munoz,H276*,2026-05-12 09:16:00,2026-05-19 17:00:00,In Production,PRINTINGIP,536.67,Unknown,0,5,2,0,False,False,False,False
-449287,KAKMON,Monika Kak,H263*,2026-05-04 12:00:00,2026-05-15 17:00:00,In Production,FRED,0.0,Fixed,0,3,10,0,False,False,False,False
+449287,KAKMON,Monika Kak,H263*,2026-05-04 12:00:00,2026-05-15 17:00:00,In Production,FRED,0.0,Fixed,1,3,10,0,False,False,False,False
 449698,LITALY,Alyssa Litkowski,D304$,2026-05-07 15:37:00,2026-05-21 17:00:00,In Production,CTS,377.97,Surgical,0,7,7,0,False,False,False,False
 449937,AUSMIC,Michaelangelo Aust,H60,2026-05-12 09:05:00,2026-05-21 17:00:00,In Production,SENTFORDESIGN,79.79,Unknown,0,5,2,0,False,False,False,False
 449351,SINPAU,Paul Singh,H40*,2026-05-04 17:23:00,2026-05-26 17:00:00,In Production,GUIDES,1601.69,Surgical,0,7,10,0,False,False,False,False
@@ -258,7 +258,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449944,ALBMONWA,Monim Albazzaz,V56,2026-05-12 09:26:00,2026-05-20 17:00:00,In Production,SCANNING,119.51,Surgical,0,7,2,0,False,False,False,False
 450257,GAFMEG,Meghan Gaffney,P371,2026-05-14 14:25:00,2026-05-29 17:00:00,In Production,,324.1,Unknown,0,5,0,0,False,False,False,False
 449252,SUKMAJ,Maja Sukovic,V74,2026-05-04 10:40:00,2026-05-18 17:00:00,In Production,MILLING BRUX,839.68,Unknown,0,5,10,0,False,False,False,False
-449685,CREJASTP,Jason Crescenzo,P859,2026-05-07 14:14:00,2026-06-12 17:00:00,In Production,REMIPMARY,797.4,Implants,0,5,7,0,False,False,False,False
+449685,CREJASTP,Jason Crescenzo,P859,2026-05-07 14:14:00,2026-06-12 17:00:00,In Production,REMIPMARY,797.4,Implants,1,5,7,0,False,False,False,False
 449302,PAGCAR,Carlo Pagni,H294*,2026-05-04 12:53:00,2026-05-27 17:00:00,In Production,GUIDES,512.39,Surgical,0,7,10,0,False,False,False,False
 449776,SINMAN,Manpreet Singh,EVDSGN-050826839211,2026-05-08 12:59:00,2026-05-18 17:00:00,In Production,PRINTINGIP,92.06,Unknown,0,5,6,0,False,False,False,False
 449657,WONANJ,Anjanetta Wonderlick,P133,2026-05-07 13:08:00,2026-05-19 17:00:00,In Production,SPLFINISH,181.04,Fixed,0,3,7,0,False,False,False,False
@@ -289,7 +289,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450137,KORMIK,Mikhail Korolyov,EVDSGN-051326839213,2026-05-13 16:08:00,2026-05-21 17:00:00,In Production,,79.79,Unknown,0,5,1,0,False,False,False,False
 449782,TAPGAR,Gary Tapak,E86,2026-05-08 13:23:00,2026-05-19 17:00:00,In Production,MILLINGIP,252.49,Implants,0,5,6,0,False,False,False,False
 449580,PRODON,Donald Provenzale,E126*,2026-05-08 15:09:00,2026-05-18 17:00:00,In Production,REMIPSABRINA,405.39,Implants,0,5,6,0,False,False,False,False
-448213,TESTDANN,DANNY ULASZEK,EVDSGN-042226050419,2026-04-21 16:08:00,2026-05-05 17:00:00,In Production,HENRY,0.0,Fixed,0,3,23,9,True,False,False,True
+448213,TESTDANN,DANNY ULASZEK,EVDSGN-042226050419,2026-04-21 16:08:00,2026-05-05 17:00:00,In Production,HENRY,0.0,Fixed,1,3,23,9,True,False,False,True
 450186,DOUBRI,Brian Douts,P602*,2026-05-14 10:14:00,2026-05-28 17:00:00,In Production,,404.09,Unknown,0,5,0,0,False,False,False,False
 450133,ZIEELI,Elise Ziegenhorn,F88,2026-05-13 14:30:00,2026-05-26 17:00:00,In Production,,613.78,Unknown,0,5,1,0,False,False,False,False
 449794,GIRBET,Betsy Giron,E97!,2026-05-08 13:34:00,2026-05-19 17:00:00,In Production,REMIPMARY,191.63,Implants,0,5,6,0,False,False,False,False
@@ -308,7 +308,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449969,DOUBRI,Brian Douts,EVDSGN-051226839507,2026-05-12 12:08:00,2026-05-19 17:00:00,In Production,STAINGLAZE,80.82,Fixed,0,3,2,0,False,False,False,False
 449852,PETCHR,Christine Petrilla,V38,2026-05-11 11:21:00,2026-05-19 17:00:00,In Production,MILLINGIP,93.95,Implants,0,5,3,0,False,False,False,False
 449377,CHANHWA,Hwaiyin Chang,H136,2026-05-05 09:40:00,2026-05-14 17:00:00,In Production,FRED,0.0,Fixed,0,3,9,0,False,False,False,False
-448218,TESTDANN,DANNY ULASZEK,EVDSGN-042226054921,2026-04-21 16:56:00,2026-05-05 17:00:00,In Production,HENRY,0.0,Fixed,0,3,23,9,True,False,False,True
+448218,TESTDANN,DANNY ULASZEK,EVDSGN-042226054921,2026-04-21 16:56:00,2026-05-05 17:00:00,In Production,HENRY,0.0,Fixed,1,3,23,9,True,False,False,True
 450041,COPMAR,Mario Copello,F4*,2026-05-12 17:10:00,2026-05-19 17:00:00,In Production,DIGITALREMOVABLE,103.48,Unknown,0,5,2,0,False,False,False,False
 450058,GAFCOL,Colleen Gaffney,F192,2026-05-13 09:18:00,2026-05-21 17:00:00,In Production,SCANNING,0.0,Surgical,0,7,1,0,False,False,False,False
 450049,MADABD,Abdalhameed Madwar,F184*,2026-05-13 09:05:00,2026-05-26 17:00:00,In Production,CTS,614.87,Surgical,0,7,1,0,False,False,False,False
@@ -372,7 +372,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449742,VANMATWS,Matt Van Beek,E369*,2026-05-08 10:18:00,2026-05-20 17:00:00,In Production,DIGITALREMOVABLE,207.01,Unknown,0,5,6,0,False,False,False,False
 447709,KHASUM,Sumayyah Khan,F102,2026-04-15 14:36:02,,Sent for TryIn,,0.0,Unknown,0,5,29,0,False,False,False,False
 450264,ANDMAR,Mark Anderson,P322*,2026-05-14 14:58:00,2026-05-22 17:00:00,In Production,,93.25,Unknown,0,5,0,0,False,False,False,False
-449497,PRAMAR,Mark Prakash,F244,2026-05-06 09:27:00,2026-05-19 17:00:00,In Production,REMTRYINWALL,501.01,Removable,0,5,8,0,False,False,False,False
+449497,PRAMAR,Mark Prakash,F244,2026-05-06 09:27:00,2026-05-19 17:00:00,In Production,REMTRYINWALL,501.01,Removable,1,5,8,0,False,False,False,False
 450151,BRERIC,Richard Brenner,P824*,2026-05-13 17:32:00,2026-05-21 17:00:00,In Production,,218.46,Unknown,0,5,1,0,False,False,False,False
 450233,KAMTHO,Thomas Kaminski,P515*,2026-05-14 13:04:10,,Sent for TryIn,,0.0,Unknown,0,5,0,0,False,False,False,False
 449329,FARYAS,Yasmin Farid,D313*,2026-05-04 15:04:00,2026-05-20 17:00:00,In Production,REMIPBLERTA,271.08,Implants,0,5,10,0,False,False,False,False
@@ -398,7 +398,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450005,RANMAR,Mary Ranieli,P838,2026-05-12 14:20:00,2026-05-20 17:00:00,In Production,,0.0,Unknown,0,5,2,0,False,False,False,False
 450022,LOPSARST,Sarah Lopez,F157*,2026-05-12 15:21:00,2026-05-19 17:00:00,In Production,,204.48,Unknown,0,5,2,0,False,False,False,False
 450012,ENAHORLA,Horatio Enacopol,H315,2026-05-12 14:24:00,2026-05-15 17:00:00,In Production,REMIPMARY,251.22,Implants,0,5,2,0,False,False,False,False
-449308,KOLMARFF,Mark Kolozenski,X81$,2026-05-04 13:45:00,2026-05-29 17:00:00,In Production,MILLING AO4,1233.57,Unknown,0,5,10,0,False,False,False,False
+449308,KOLMARFF,Mark Kolozenski,X81$,2026-05-04 13:45:00,2026-05-29 17:00:00,In Production,MILLING AO4,1233.57,Unknown,1,5,10,0,False,False,False,False
 449262,ATHJOH,John Athos,D34$*,2026-05-04 11:07:41,,Sent for TryIn,,0.0,Unknown,0,5,10,0,False,False,False,False
 449684,CHUMANRV,Manas Chug,P386,2026-05-07 12:57:00,2026-05-21 17:00:00,In Production,REMOUT,713.32,Removable,0,5,7,0,False,False,False,False
 443849,TADSIM,Simon Tadros,H216,2026-03-02 09:40:05,,Sent for TryIn,,0.0,Unknown,0,5,73,0,False,False,False,False
@@ -408,7 +408,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450119,JOUCYN,Cynthia Jourdan,F171,2026-05-13 14:04:00,2026-05-28 17:00:00,In Production,,233.84,Unknown,0,5,1,0,False,False,False,False
 446492,TOKNIC,Nicholas Tokarski,P19,2026-05-06 10:51:00,2026-05-20 17:00:00,In Production,REMOUT,289.33,Removable,0,5,8,0,False,False,False,False
 449792,CORJER,Jerome Correa,E207,2026-05-08 13:32:00,2026-05-21 17:00:00,In Production,MILLING IMPLANT,483.87,Unknown,0,5,6,0,False,False,False,False
-445079,KHASAMNA,Samia Khan,V237*,2026-03-16 08:58:00,2026-03-27 17:00:00,In Production,DIGITALREMOVABLE,0.0,Unknown,0,5,59,48,True,False,False,True
+445079,KHASAMNA,Samia Khan,V237*,2026-03-16 08:58:00,2026-03-27 17:00:00,In Production,DIGITALREMOVABLE,0.0,Unknown,1,5,59,48,True,False,False,True
 450019,FRAMIC,Michael Frantal,P96*,2026-05-12 15:19:10,,Sent for TryIn,,10.0,Unknown,0,5,2,0,False,False,False,False
 450042,LEURIN,Ringo Leung,F95*,2026-05-12 17:33:00,2026-05-28 17:00:00,In Production,SENTFORDESIGN,273.14,Unknown,0,5,2,0,False,False,False,False
 450029,ENAHORLA,Horatio Enacopol,D235$,2026-05-12 15:54:00,2026-05-18 17:00:00,In Production,CTS,38.84,Surgical,0,7,2,0,False,False,False,False
@@ -417,7 +417,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449708,LEBRAF,Raffi Leblebijian,E372*,2026-05-07 17:24:00,2026-05-21 17:00:00,In Production,PRINTINGIP,347.7,Unknown,0,5,7,0,False,False,False,False
 449783,GAFCOL,Colleen Gaffney,E360,2026-05-08 13:23:00,2026-05-18 17:00:00,In Production,MILLINGIP,119.51,Implants,0,5,6,0,False,False,False,False
 449826,AUSMIC,Michaelangelo Aust,V67,2026-05-11 08:45:00,2026-05-20 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,3,0,False,False,False,False
-449520,NEWDAV,David Newkirk,F37*,2026-05-06 11:34:00,2026-05-18 17:00:00,In Production,REMFINISHWALL,423.72,Removable,1,5,8,0,False,False,False,False
+449520,NEWDAV,David Newkirk,F37*,2026-05-06 11:34:00,2026-05-18 17:00:00,In Production,REMFINISHWALL,423.72,Removable,0,5,8,0,False,False,False,False
 449702,YIANIC,Nicas Yiannias,E163*,2026-05-07 16:11:00,2026-05-21 17:00:00,In Production,PRINTINGIP,511.38,Unknown,0,5,7,0,False,False,False,False
 449890,BALJOS,Joseph Balice,V97*,2026-05-11 13:33:00,2026-05-20 17:00:00,In Production,REMPREP,82.23,Removable,0,5,3,0,False,False,False,False
 450105,GRAALE,Alexander Grabavoy,F40,2026-05-13 13:18:00,2026-05-22 17:00:00,In Production,REMPREP,163.0,Removable,0,5,1,0,False,False,False,False
@@ -430,14 +430,14 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449658,WONANJ,Anjanetta Wonderlick,P177,2026-05-07 13:14:00,2026-05-19 17:00:00,In Production,SPLFINISH,191.27,Fixed,0,3,7,0,False,False,False,False
 449998,TADSIM,Simon Tadros,H274,2026-05-12 14:10:00,2026-05-20 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,2,0,False,False,False,False
 450089,YIANIC,Nicas Yiannias,EVDSGN-051326839204,2026-05-13 12:04:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,91.05,Unknown,0,5,1,0,False,False,False,False
-448676,THADEVOL,Devang Thakkar,V91,2026-04-27 13:49:00,2026-05-12 17:00:00,In Production,GUIDES,222.92,Surgical,0,7,17,2,True,False,False,True
+448676,THADEVOL,Devang Thakkar,V91,2026-04-27 13:49:00,2026-05-12 17:00:00,In Production,GUIDES,222.92,Surgical,1,7,17,2,True,False,False,True
 450255,MALRYA,Ryann Maloney,P774,2026-05-14 14:21:00,2026-05-22 17:00:00,In Production,,79.79,Unknown,0,5,0,0,False,False,False,False
 450132,MARROM,Roman Marszalek,F38,2026-05-13 14:29:00,2026-05-27 17:00:00,In Production,,128.69,Unknown,0,5,1,0,False,False,False,False
 450167,NISLIN,Linora Nissan,P842,2026-05-14 09:06:00,2026-05-22 17:00:00,In Production,,79.79,Unknown,0,5,0,0,False,False,False,False
 450238,JUEDAV,David Juel,P820,2026-05-14 13:30:00,2026-05-26 17:00:00,In Production,,159.42,Unknown,0,5,0,0,False,False,False,False
 448989,COOJAN,Jane Cooney,E358*,2026-04-30 11:31:00,2026-05-20 17:00:00,In Production,CADSTALLED,348.71,CAD_CAM,0,2,14,0,False,False,False,False
 448730,KOLMARFF,Mark Kolozenski,D255$,2026-04-28 10:02:00,2026-05-29 17:00:00,In Production,REMIPMARGARET,927.69,Implants,0,5,16,0,False,False,False,False
-449464,KOWKARDG,Karen Kowalesik,F169*,2026-05-05 15:34:00,2026-05-20 17:00:00,In Production,DIGITALREMOVABLE,0.0,Unknown,0,5,9,0,False,False,False,False
+449464,KOWKARDG,Karen Kowalesik,F169*,2026-05-05 15:34:00,2026-05-20 17:00:00,In Production,DIGITALREMOVABLE,0.0,Unknown,1,5,9,0,False,False,False,False
 448364,FIEJAM,James Fieldhouse,F99*,2026-04-22 19:25:00,2026-05-18 17:00:00,In Production,PORCIP DEAN,630.04,Implants,0,5,22,0,False,False,False,False
 449578,TOKNIC,Nicholas Tokarski,E99,2026-05-12 14:57:00,2026-05-27 17:00:00,In Production,REMIPSABRINA,6.99,Implants,0,5,2,0,False,False,False,False
 449866,KHASUM,Sumayyah Khan,V112*& black tub,2026-05-11 12:40:00,2026-05-26 17:00:00,Outsourced,REMPREP,645.65,Removable,0,5,3,0,False,False,False,False
@@ -467,7 +467,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449900,MACMAR,Mark Macak,E338,2026-05-11 15:15:16,,Sent for TryIn,,10.0,Unknown,0,5,3,0,False,False,False,False
 450261,GHARAM,Rami Ghandour,P121*,2026-05-14 14:43:00,2026-05-22 17:00:00,In Production,,81.22,Unknown,0,5,0,0,False,False,False,False
 449588,ANKSHA,Shaan Ankola,P583*,2026-05-06 15:45:00,2026-05-20 17:00:00,In Production,EVD SUBMITTED,2386.18,Unknown,0,5,8,0,False,False,False,False
-449234,LEBRAFB,Raffi Leblebijian,V266*,2026-05-04 09:49:00,2026-05-11 17:00:00,In Production,GUIDES,10.63,Surgical,0,7,10,3,True,False,False,True
+449234,LEBRAFB,Raffi Leblebijian,V266*,2026-05-04 09:49:00,2026-05-11 17:00:00,In Production,GUIDES,10.63,Surgical,1,7,10,3,True,False,False,True
 449913,ROSMELCH,Melinda Rosen,H211*,2026-05-11 17:04:00,2026-05-19 17:00:00,In Production,PRINTINGIP,243.86,Unknown,0,5,3,0,False,False,False,False
 450104,MACHAZ,Hazel Santiago-Macanip,F30,2026-05-13 12:56:00,2026-05-26 17:00:00,In Production,REMOUT,241.42,Removable,0,5,1,0,False,False,False,False
 450131,BOYMIC,Michael Boyle,F228,2026-05-13 14:21:00,2026-05-28 17:00:00,In Production,PREP,583.11,Hold_Stalled,0,1,1,0,False,False,False,False
@@ -484,7 +484,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449034,RAIMAN,Mansi Raina,E341*,2026-04-30 13:39:00,2026-05-20 17:00:00,In Production,PORCWALL,629.03,Fixed,0,3,14,0,False,False,False,False
 450242,ATHJOH,John Athos,P858,2026-05-14 13:50:00,2026-05-22 17:00:00,In Production,,306.89,Unknown,0,5,0,0,False,False,False,False
 449984,THADEVOP,Devang Thakkar,H262,2026-05-12 12:38:00,2026-06-03 17:00:00,In Production,SCANNING,277.91,Surgical,0,7,2,0,False,False,False,False
-449631,DIBARMROS,Armand Dibenedetto,D174*$,2026-05-07 11:17:00,2026-05-28 17:00:00,In Production,GUIDES,3682.8,Surgical,0,7,7,0,False,False,False,False
+449631,DIBARMROS,Armand Dibenedetto,D174*$,2026-05-07 11:17:00,2026-05-28 17:00:00,In Production,GUIDES,3682.8,Surgical,1,7,7,0,False,False,False,False
 450126,SOOANUHE,Anu Sood,F135,2026-05-13 14:21:00,2026-05-21 17:00:00,In Production,PREP,119.51,Hold_Stalled,0,1,1,0,False,False,False,False
 450272,FELNIC,Nick Feller,P805*,2026-05-14 15:39:00,2026-05-22 17:00:00,In Production,,0.0,Unknown,0,5,0,0,False,False,False,False
 442704,GARLIN,Lina Garcia,V11*,2026-02-16 10:31:00,2026-03-03 17:00:00,In Production,,6.99,Unknown,0,5,87,72,True,False,False,True
@@ -509,7 +509,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449905,LEVROR,Rory Levitan,EVDSGN-051126839482,2026-05-11 15:27:00,2026-05-22 17:00:00,In Production,MATCHING TABLE,613.77,Unknown,0,5,3,0,False,False,False,False
 449925,SUHINE,Ine Suh,H32,2026-05-12 08:37:00,2026-05-20 17:00:00,In Production,MILLING BRUX,87.81,Unknown,0,5,2,0,False,False,False,False
 449686,YIANIC,Nicas Yiannias,E300*,2026-05-07 14:15:00,2026-05-21 17:00:00,In Production,EVD SUBMITTED,347.7,Unknown,0,5,7,0,False,False,False,False
-448202,GERGRE,Greg Germino,D221$&,2026-04-30 14:57:00,2026-05-21 17:00:00,In Production,REMIPDOM,1791.25,Implants,0,5,14,0,False,False,False,False
+448202,GERGRE,Greg Germino,D221$&,2026-04-30 14:57:00,2026-05-21 17:00:00,In Production,REMIPDOM,1791.25,Implants,1,5,14,0,False,False,False,False
 449734,BOYMIC,Michael Boyle,E151*,2026-05-08 09:49:00,2026-05-18 17:00:00,In Production,RUSHMILLINGSHELF,116.62,Unknown,0,5,6,0,False,False,False,False
 449881,SHECAR,Caroline Shepherd,V90*,2026-05-11 13:20:00,2026-05-22 17:00:00,Outsourced,REMOUT,215.0,Removable,0,5,3,0,False,False,False,False
 449055,JANAAR,Aaron Janes,D285$*,2026-04-30 15:39:00,2026-05-28 17:00:00,In Production,DIGITALREMOVABLE,561.63,Unknown,0,5,14,0,False,False,False,False
@@ -533,7 +533,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 447271,HUBMAR,Mark Huberty,F51,2026-04-09 16:01:17,,Sent for TryIn,,10.0,Unknown,0,5,35,0,False,False,False,False
 449924,CHAROB,Robert Charbonneau,H39,2026-05-12 08:34:00,2026-05-20 17:00:00,In Production,MILLING BRUX,129.74,Unknown,0,5,2,0,False,False,False,False
 448679,ATHJOH,John Athos,E112,2026-05-08 14:13:00,2026-05-20 17:00:00,In Production,REMPROCESSSHELF,187.59,Removable,0,5,6,0,False,False,False,False
-448148,THADEVOP,Devang Thakkar,H292,2026-04-21 12:27:00,2026-05-05 17:00:00,In Production,GUIDES,283.77,Surgical,0,7,23,9,True,False,False,True
+448148,THADEVOP,Devang Thakkar,H292,2026-04-21 12:27:00,2026-05-05 17:00:00,In Production,GUIDES,283.77,Surgical,1,7,23,9,True,False,False,True
 442903,PERLUI,Luis Peralta,D266$,2026-02-17 14:55:58,,Sent for TryIn,,0.0,Unknown,0,5,86,0,False,False,False,False
 449955,BALJOS,Joseph Balice,EVDSGN-051226839503,2026-05-12 11:16:00,2026-05-19 17:00:00,In Production,EVD SUBMITTED,141.17,Unknown,0,5,2,0,False,False,False,False
 449877,YIANIC,Nicas Yiannias,V136*,2026-05-11 12:54:00,2026-05-26 17:00:00,In Production,EVD SUBMITTED,547.18,Unknown,0,5,3,0,False,False,False,False
@@ -549,13 +549,13 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450125,BOYMIC,Michael Boyle,F218,2026-05-13 14:20:00,2026-05-21 17:00:00,In Production,REMPREP,100.39,Removable,0,5,1,0,False,False,False,False
 449797,MALRYA,Ryann Maloney,E222,2026-05-08 13:38:00,2026-05-19 17:00:00,In Production,MILLING BRUX,79.79,Unknown,0,5,6,0,False,False,False,False
 450214,PATGIA,Giana Paterno,P563,2026-05-14 12:10:00,2026-05-21 17:00:00,In Production,,79.79,Unknown,0,5,0,0,False,False,False,False
-440029,DARDAVSB,David Dardick,EVDSGN-011526121059,2026-01-15 15:17:00,2026-01-23 17:00:00,In Production,CTS,226.15,Surgical,0,7,119,111,True,False,False,True
+440029,DARDAVSB,David Dardick,EVDSGN-011526121059,2026-01-15 15:17:00,2026-01-23 17:00:00,In Production,CTS,226.15,Surgical,1,7,119,111,True,False,False,True
 449902,CALSAM,Sam Calabrese,P571*,2026-05-11 15:18:13,,Sent for TryIn,,0.0,Unknown,0,5,3,0,False,False,False,False
 448461,ATHJOH,John Athos,D215*,2026-04-23 14:07:00,2026-05-27 17:00:00,In Production,REMIPBLERTA,1130.24,Implants,0,5,21,0,False,False,False,False
 448477,KHASUM,Sumayyah Khan,P759,2026-05-08 15:32:00,2026-05-22 17:00:00,In Production,REMOUT,231.02,Removable,0,5,6,0,False,False,False,False
 450269,TOKNIC,Nicholas Tokarski,F103,2026-05-14 15:28:37,,Sent for TryIn,,0.0,Unknown,0,5,0,0,False,False,False,False
 448845,NIEMAR,Mark Niemiec,F31,2026-04-29 10:52:00,2026-05-29 17:00:00,In Production,MATCHING TABLE,0.0,Unknown,0,5,15,0,False,False,False,False
-448108,ATHJOH,John Athos,H281*,2026-04-20 19:21:00,2026-05-04 17:00:00,In Production,GUIDES,316.51,Surgical,0,7,24,10,True,False,False,True
+448108,ATHJOH,John Athos,H281*,2026-04-20 19:21:00,2026-05-04 17:00:00,In Production,GUIDES,316.51,Surgical,1,7,24,10,True,False,False,True
 449910,NIEMAR,Mark Niemiec,EVDSGN-051126839484,2026-05-11 16:12:00,2026-05-22 17:00:00,In Production,PRINTINGIP,107.42,Unknown,0,5,3,0,False,False,False,False
 449972,PATGIA,Giana Paterno,H258,2026-05-12 12:30:00,2026-05-26 17:00:00,In Production,SCANNING,239.38,Surgical,0,7,2,0,False,False,False,False
 450231,HATUZM,Uzma Hatia,P850,2026-05-14 12:48:00,2026-05-22 17:00:00,In Production,,0.0,Unknown,0,5,0,0,False,False,False,False
@@ -571,11 +571,11 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449532,FRAMIC,Michael Frantal,F120*,2026-05-06 12:37:00,2026-05-20 17:00:00,In Production,DIGITALREMOVABLE,245.91,Unknown,0,5,8,0,False,False,False,False
 449939,LEEALI,Alisa YouYeon Lee,H51,2026-05-12 09:12:00,2026-05-20 17:00:00,In Production,MILLING BRUX,119.51,Unknown,0,5,2,0,False,False,False,False
 449995,MALRYA,Ryann Maloney,H155,2026-05-12 14:06:00,2026-05-20 17:00:00,In Production,SCANNING,79.79,Surgical,0,7,2,0,False,False,False,False
-446192,THADEVOP,Devang Thakkar,E105,2026-03-27 12:51:00,2026-04-14 17:00:00,In Production,GUIDES,267.84,Surgical,0,7,48,30,True,False,False,True
+446192,THADEVOP,Devang Thakkar,E105,2026-03-27 12:51:00,2026-04-14 17:00:00,In Production,GUIDES,267.84,Surgical,1,7,48,30,True,False,False,True
 450134,BAPBENNR,Benjamin Baptist,EVDSGN-051326839211,2026-05-13 14:31:00,2026-05-21 17:00:00,In Production,,80.82,Unknown,0,5,1,0,False,False,False,False
 450045,ZAIZAC,Zack Zaibak,V201,2026-05-13 07:42:00,2026-05-21 17:00:00,In Production,DIGITALREMOVABLE,483.55,Unknown,0,5,1,0,False,False,False,False
 449565,ABUSIM,Simon Abu-Aita,F36,2026-05-06 13:44:00,2026-05-18 17:00:00,In Production,FRED,0.0,Fixed,0,3,8,0,False,False,False,False
-448975,MARROM,Roman Marszalek,DX17*$,2026-04-30 10:56:00,2026-05-21 17:00:00,In Production,GUIDES,3186.27,Surgical,0,7,14,0,False,False,False,False
+448975,MARROM,Roman Marszalek,DX17*$,2026-04-30 10:56:00,2026-05-21 17:00:00,In Production,GUIDES,3186.27,Surgical,1,7,14,0,False,False,False,False
 449513,CALSAM,Sam Calabrese,E120*,2026-05-06 10:51:00,2026-05-20 17:00:00,Outsourced,REMOUT,102.29,Removable,0,5,8,0,False,False,False,False
 450052,KOLMARFF,Mark Kolozenski,D162$,2026-05-13 09:13:38,,Sent for TryIn,,0.0,Unknown,0,5,1,0,False,False,False,False
 450097,CUARACMOK,Rachel Cuadros,EVDSGN-051326839207,2026-05-13 12:49:00,2026-05-21 17:00:00,In Production,,108.0,Unknown,0,5,1,0,False,False,False,False
