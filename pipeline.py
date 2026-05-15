@@ -164,6 +164,19 @@ SCOPES = GMAIL_SCOPES
 CACHE_DIR = BASE_DIR / CFG["output"]["local_cache_dir"]
 CACHE_DIR.mkdir(exist_ok=True)
 
+# Dummy / test accounts to exclude from every metric.
+# Matched on the customer/account ID (case- and whitespace-insensitive).
+# Keep in sync with pipeline_logistics.py and retention.py.
+EXCLUDED_ACCOUNT_IDS = {"LAWMUR"}
+
+
+def _drop_excluded_accounts(df: pd.DataFrame, col: str = "account_id") -> pd.DataFrame:
+    """Drop rows whose account_id matches a dummy/test account."""
+    if df.empty or col not in df.columns:
+        return df
+    norm = df[col].fillna("").astype(str).str.strip().str.upper()
+    return df[~norm.isin(EXCLUDED_ACCOUNT_IDS)].copy()
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  DATA INGESTION — Magic Touch Sales_Data.csv
@@ -299,6 +312,7 @@ def _clean_cases(df: pd.DataFrame) -> pd.DataFrame:
         today = pd.Timestamp.today()
         df["days_in_lab"] = (today - df["date_in"]).dt.days
         df["overdue"] = df["due_date"] < today
+    df = _drop_excluded_accounts(df)
     return df
 
 
@@ -352,6 +366,7 @@ def _clean_sales(df: pd.DataFrame) -> pd.DataFrame:
     if "account_id" in df.columns:
         df = df[df["account_id"].notna() & (df["account_id"].astype(str).str.strip() != "")].copy()
 
+    df = _drop_excluded_accounts(df)
     return df
 
 
@@ -700,7 +715,74 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     except Exception as exc:
         log.warning("Could not compute remake_history_monthly: %s", exc)
 
+    # ── 10. Product mix by type (LY / YTD / LM) ────────────────────────────
+    # Pie-chart fodder for the Executive Dashboard.
+    if "product_type" in df.columns:
+        agg_dict = {"ytd": ("ytd_sales", "sum"), "ly": ("ly_sales", "sum")}
+        if "lm_sales" in df.columns:
+            agg_dict["lm"] = ("lm_sales", "sum")
+        mix = (
+            df.groupby("product_type", dropna=False)
+              .agg(**agg_dict)
+              .reset_index()
+        )
+        mix["product_type"] = mix["product_type"].fillna("Unspecified").replace("", "Unspecified")
+        mix = mix[mix[list(agg_dict.keys())].abs().sum(axis=1) > 0]
+        mix = mix.sort_values("ytd", ascending=False)
+        kpis["product_type_summary"] = mix
+
     return kpis
+
+
+def compute_daily_sales(folder: Path, days_back: int = 90) -> pd.DataFrame:
+    """Build a daily in/out summary from AllCasesByDateIn.csv.
+
+    Returns a DataFrame with one row per day:
+        date, cases_in, dollars_in, cases_out, dollars_out
+    "In" = Cases_DateIn falls on that day.
+    "Out" = Cases_InvoiceDate falls on that day.
+    """
+    path = folder / "AllCasesByDateIn.csv"
+    if not path.exists():
+        log.warning("AllCasesByDateIn.csv not found — daily_sales skipped")
+        return pd.DataFrame()
+
+    df = pd.read_csv(path, encoding="latin-1", low_memory=False)
+
+    # Exclude dummy / test accounts (LAWMUR etc.)
+    if "Cases_CustomerID" in df.columns:
+        norm = df["Cases_CustomerID"].fillna("").astype(str).str.strip().str.upper()
+        df = df[~norm.isin(EXCLUDED_ACCOUNT_IDS)].copy()
+
+    df["date_in"]      = pd.to_datetime(df.get("Cases_DateIn"),      errors="coerce").dt.normalize()
+    df["invoice_date"] = pd.to_datetime(df.get("Cases_InvoiceDate"), errors="coerce").dt.normalize()
+    df["total_charge"] = pd.to_numeric(df.get("Cases_TotalCharge"),  errors="coerce").fillna(0)
+
+    cutoff = pd.Timestamp.today().normalize() - pd.Timedelta(days=days_back)
+
+    in_grp = (
+        df[df["date_in"] >= cutoff]
+        .groupby("date_in")
+        .agg(cases_in=("Cases_CaseNumber", "count"),
+             dollars_in=("total_charge", "sum"))
+        .reset_index().rename(columns={"date_in": "date"})
+    )
+    out_grp = (
+        df[df["invoice_date"] >= cutoff]
+        .groupby("invoice_date")
+        .agg(cases_out=("Cases_CaseNumber", "count"),
+             dollars_out=("total_charge", "sum"))
+        .reset_index().rename(columns={"invoice_date": "date"})
+    )
+    daily = pd.merge(in_grp, out_grp, on="date", how="outer").fillna(0)
+    if daily.empty:
+        return daily
+    daily["cases_in"]    = daily["cases_in"].astype(int)
+    daily["cases_out"]   = daily["cases_out"].astype(int)
+    daily["dollars_in"]  = daily["dollars_in"].round(2)
+    daily["dollars_out"] = daily["dollars_out"].round(2)
+    daily = daily.sort_values("date", ascending=False).reset_index(drop=True)
+    return daily
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -791,23 +873,37 @@ def run_pipeline():
     if not raw.empty:
         raw.to_csv(latest_dir / "raw_sales.csv", index=False)
 
+    # ── Daily in/out summary from AllCasesByDateIn.csv ──────────────────────
+    try:
+        daily = compute_daily_sales(watch_folder, days_back=90)
+        if not daily.empty:
+            daily.to_csv(latest_dir / "daily_sales.csv", index=False)
+            daily.to_csv(snapshot_dir / "daily_sales.csv", index=False)
+            log.info("Daily sales: %d days computed", len(daily))
+    except Exception as exc:
+        log.warning("Daily sales computation failed (other outputs unaffected): %s", exc)
+
     log.info("Saved local cache: %s", latest_dir)
 
     # ── Logistics module: per-case station tracking + KPIs ──────────────────
-    # Reads raw cases (un-renamed Cases_* columns) and writes:
-    #   cache/latest/cases_logistics.csv
-    #   cache/latest/logistics_summary.csv
+    # Source preference: WIP.csv (live WIP, ~1.3k rows) → Active_30_day.csv
+    # (recent 30 days incl. invoiced) → AllCasesByDateIn.csv (historical, not
+    # useful for current WIP because LastLocation is blanked post-invoice).
     try:
         from pipeline_logistics import compute_logistics
         raw_cases = pd.DataFrame()
-        all_cases_path = watch_folder / "AllCasesByDateIn.csv"
+        wip_path        = watch_folder / "WIP.csv"
         active_raw_path = watch_folder / "Active_30_day.csv"
-        if all_cases_path.exists():
-            raw_cases = pd.read_csv(all_cases_path, encoding="latin-1", low_memory=False)
-            log.info("Logistics: loaded AllCasesByDateIn.csv (%d rows)", len(raw_cases))
+        all_cases_path  = watch_folder / "AllCasesByDateIn.csv"
+        if wip_path.exists():
+            raw_cases = pd.read_csv(wip_path, encoding="utf-8-sig", low_memory=False)
+            log.info("Logistics: loaded WIP.csv (%d rows)", len(raw_cases))
         elif active_raw_path.exists():
             raw_cases = pd.read_csv(active_raw_path, encoding="latin-1", low_memory=False)
             log.info("Logistics: loaded Active_30_day.csv as fallback (%d rows)", len(raw_cases))
+        elif all_cases_path.exists():
+            raw_cases = pd.read_csv(all_cases_path, encoding="latin-1", low_memory=False)
+            log.info("Logistics: loaded AllCasesByDateIn.csv as last-resort (%d rows)", len(raw_cases))
         else:
             log.warning("Logistics: no raw cases file found — skipping")
         if not raw_cases.empty:

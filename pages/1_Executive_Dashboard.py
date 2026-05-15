@@ -780,6 +780,109 @@ def render_remakes(remakes_detail, reason_df, history_df=None,
         st.plotly_chart(style_plotly(fig, height=420), width='stretch')
 
 
+def render_daily_sales(daily_df):
+    section("📅 Daily Sales — Cases In vs. Cases Out")
+    if daily_df is None or daily_df.empty:
+        st.info("No daily sales data yet. Re-run `py pipeline.py` to populate "
+                "`cache/latest/daily_sales.csv`.")
+        return
+
+    df = daily_df.copy()
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df = df.dropna(subset=["date"]).sort_values("date", ascending=False)
+    df["yearmonth"] = df["date"].dt.to_period("M").astype(str)
+
+    # Month picker — current month first, then previous
+    months = list(df["yearmonth"].drop_duplicates())
+    if not months:
+        st.info("No daily data in cache.")
+        return
+    pick = st.selectbox("Month", months, index=0, key="daily_sales_month")
+    month_df = df[df["yearmonth"] == pick].sort_values("date").reset_index(drop=True)
+
+    # KPI strip: month totals
+    in_cases  = int(month_df["cases_in"].sum())
+    in_dol    = float(month_df["dollars_in"].sum())
+    out_cases = int(month_df["cases_out"].sum())
+    out_dol   = float(month_df["dollars_out"].sum())
+    k = st.columns(4)
+    with k[0]: kpi_card("Cases In",  f"{in_cases:,}",  pick)
+    with k[1]: kpi_card("$ In",      fmt_currency(in_dol),  pick)
+    with k[2]: kpi_card("Cases Out", f"{out_cases:,}", pick)
+    with k[3]: kpi_card("$ Out",     fmt_currency(out_dol), pick)
+
+    # Bar chart: cases in vs cases out per day
+    fig = go.Figure()
+    fig.add_bar(x=month_df["date"], y=month_df["cases_in"],
+                name="Cases In",  marker_color=COLORS["acc"])
+    fig.add_bar(x=month_df["date"], y=month_df["cases_out"],
+                name="Cases Out", marker_color=COLORS["grn"])
+    fig.update_layout(barmode="group", height=320,
+                      margin=dict(l=10, r=10, t=10, b=10),
+                      xaxis_title="", yaxis_title="Cases",
+                      legend=dict(orientation="h", y=-0.2))
+    style_plotly(fig, height=320)
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Detail table (most recent first)
+    show = month_df.sort_values("date", ascending=False).copy()
+    show["Date"]       = show["date"].dt.strftime("%a %b %d")
+    show["Cases In"]   = show["cases_in"].astype(int)
+    show["$ In"]       = show["dollars_in"].apply(fmt_currency)
+    show["Cases Out"]  = show["cases_out"].astype(int)
+    show["$ Out"]      = show["dollars_out"].apply(fmt_currency)
+    show["Net Cases"]  = show["cases_in"] - show["cases_out"]
+    show["Net $"]      = (show["dollars_in"] - show["dollars_out"]).apply(fmt_currency)
+    st.dataframe(
+        show[["Date", "Cases In", "$ In", "Cases Out", "$ Out", "Net Cases", "Net $"]],
+        use_container_width=True, hide_index=True, height=460,
+    )
+
+
+def render_product_mix(mix_df):
+    section("🥧 Product Mix by Type")
+    if mix_df is None or mix_df.empty:
+        st.info("No product mix data yet. Re-run `py pipeline.py` to populate "
+                "`cache/latest/product_type_summary.csv`.")
+        return
+
+    cols_present = [c for c in ("ytd", "ly", "lm") if c in mix_df.columns]
+    labels = {"ytd": "Year-to-Date", "ly": "Last Year", "lm": "Last Month (~30d)"}
+    cols = st.columns(len(cols_present))
+    palette = px.colors.qualitative.Set2
+
+    for i, period in enumerate(cols_present):
+        with cols[i]:
+            sub = mix_df[["product_type", period]].copy()
+            sub = sub[sub[period].abs() > 0].sort_values(period, ascending=False)
+            total = float(sub[period].sum())
+            fig = go.Figure(go.Pie(
+                labels=sub["product_type"], values=sub[period],
+                hole=0.4, sort=False, direction="clockwise",
+                marker=dict(colors=palette),
+                textinfo="percent",
+                hovertemplate="<b>%{label}</b><br>$%{value:,.0f}<br>%{percent}<extra></extra>",
+            ))
+            fig.update_layout(
+                title=dict(text=f"{labels[period]}<br><sub>{fmt_currency(total)}</sub>",
+                           x=0.5, xanchor="center", font=dict(size=14)),
+                margin=dict(l=10, r=10, t=60, b=10),
+                height=340,
+                showlegend=False,
+            )
+            style_plotly(fig, height=340)
+            st.plotly_chart(fig, use_container_width=True)
+
+    # Shared legend table beneath the pies
+    legend_cols = ["product_type"] + cols_present
+    legend = mix_df[legend_cols].copy()
+    for c in cols_present:
+        legend[c] = legend[c].apply(fmt_currency)
+    legend = legend.rename(columns={"product_type": "Product Type",
+                                     "ytd": "YTD", "ly": "Last Year", "lm": "Last Month"})
+    st.dataframe(legend, use_container_width=True, hide_index=True, height=260)
+
+
 def render_implants(impl_df):
     section("🔬 Implant Pipeline")
     if impl_df.empty:
@@ -815,6 +918,8 @@ remake_history = data.get("remake_history_monthly", pd.DataFrame())
 remake_by_dept = data.get("remake_by_dept", pd.DataFrame())
 remake_by_dept_reason = data.get("remake_by_dept_reason", pd.DataFrame())
 remakes_full = data.get("remakes_full", pd.DataFrame())
+daily_sales = data.get("daily_sales", pd.DataFrame())
+product_mix = data.get("product_type_summary", pd.DataFrame())
 
 render_header()
 st.divider()
@@ -824,16 +929,19 @@ render_mtd(gauges)
 st.divider()
 
 tabs = st.tabs([
+    "📅 Daily Sales", "🥧 Product Mix",
     "💰 Profitability", "⭐ Pareto Top 20%", "🔧 WIP",
     "👥 Active Accounts", "🔁 Remakes", "🔬 Implants",
 ])
-with tabs[0]: render_profitability(prof)
-with tabs[1]: render_pareto(pareto, prof)
-with tabs[2]: render_wip(wip_summary, wip_detail)
-with tabs[3]: render_active(active_30d)
-with tabs[4]: render_remakes(remakes_detail, remake_reason, remake_history,
+with tabs[0]: render_daily_sales(daily_sales)
+with tabs[1]: render_product_mix(product_mix)
+with tabs[2]: render_profitability(prof)
+with tabs[3]: render_pareto(pareto, prof)
+with tabs[4]: render_wip(wip_summary, wip_detail)
+with tabs[5]: render_active(active_30d)
+with tabs[6]: render_remakes(remakes_detail, remake_reason, remake_history,
                               remake_by_dept, remake_by_dept_reason, remakes_full)
-with tabs[5]: render_implants(implants)
+with tabs[7]: render_implants(implants)
 
 st.divider()
 st.caption("Artistic Dental Studio · Executive Dashboard · Data refreshed nightly at 6 AM")
