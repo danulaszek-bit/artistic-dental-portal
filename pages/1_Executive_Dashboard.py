@@ -792,7 +792,18 @@ def render_daily_sales(daily_df):
     df = df.dropna(subset=["date"]).sort_values("date", ascending=False)
     df["yearmonth"] = df["date"].dt.to_period("M").astype(str)
 
-    # Month picker — current month first, then previous
+    # Coerce columns we expect (older cache files may not have all of them)
+    for c in ["cases_in", "dollars_in", "cases_out", "units_out",
+              "dollars_invoiced", "dollars_net"]:
+        if c not in df.columns:
+            df[c] = 0
+    df["cases_in"]   = pd.to_numeric(df["cases_in"],   errors="coerce").fillna(0).astype(int)
+    df["cases_out"]  = pd.to_numeric(df["cases_out"],  errors="coerce").fillna(0).astype(int)
+    df["units_out"]  = pd.to_numeric(df["units_out"],  errors="coerce").fillna(0).astype(int)
+    for c in ["dollars_in", "dollars_invoiced", "dollars_net"]:
+        df[c] = pd.to_numeric(df[c], errors="coerce").fillna(0.0)
+
+    # Month picker
     months = list(df["yearmonth"].drop_duplicates())
     if not months:
         st.info("No daily data in cache.")
@@ -800,18 +811,28 @@ def render_daily_sales(daily_df):
     pick = st.selectbox("Month", months, index=0, key="daily_sales_month")
     month_df = df[df["yearmonth"] == pick].sort_values("date").reset_index(drop=True)
 
-    # KPI strip: month totals
-    in_cases  = int(month_df["cases_in"].sum())
-    in_dol    = float(month_df["dollars_in"].sum())
-    out_cases = int(month_df["cases_out"].sum())
-    out_dol   = float(month_df["dollars_out"].sum())
-    k = st.columns(4)
-    with k[0]: kpi_card("Cases In",  f"{in_cases:,}",  pick)
-    with k[1]: kpi_card("$ In",      fmt_currency(in_dol),  pick)
-    with k[2]: kpi_card("Cases Out", f"{out_cases:,}", pick)
-    with k[3]: kpi_card("$ Out",     fmt_currency(out_dol), pick)
+    in_cases   = int(month_df["cases_in"].sum())
+    in_dol     = float(month_df["dollars_in"].sum())
+    out_cases  = int(month_df["cases_out"].sum())
+    out_units  = int(month_df["units_out"].sum())
+    out_gross  = float(month_df["dollars_invoiced"].sum())
+    out_net    = float(month_df["dollars_net"].sum())
 
-    # Bar chart: cases in vs cases out per day
+    # KPI strip — six tiles split by In / Out
+    k = st.columns(6)
+    with k[0]: kpi_card("Cases In",  f"{in_cases:,}",   f"{pick} • date_in")
+    with k[1]: kpi_card("$ In",      fmt_currency(in_dol),
+                        f"{pick} • TotalCharge")
+    with k[2]: kpi_card("Cases Out", f"{out_cases:,}",
+                        f"{pick} • new invoices")
+    with k[3]: kpi_card("Units Out", f"{out_units:,}",
+                        f"{pick} • new+credit+remake")
+    with k[4]: kpi_card("$ Invoiced",fmt_currency(out_gross),
+                        "Gross (incl. tax)")
+    with k[5]: kpi_card("$ Net Sales", fmt_currency(out_net),
+                        "ties to monthly tile")
+
+    # Daily chart: cases in vs cases out per day
     fig = go.Figure()
     fig.add_bar(x=month_df["date"], y=month_df["cases_in"],
                 name="Cases In",  marker_color=COLORS["acc"])
@@ -824,18 +845,24 @@ def render_daily_sales(daily_df):
     style_plotly(fig, height=320)
     st.plotly_chart(fig, use_container_width=True)
 
-    # Detail table (most recent first)
+    # Detail table
     show = month_df.sort_values("date", ascending=False).copy()
-    show["Date"]       = show["date"].dt.strftime("%a %b %d")
-    show["Cases In"]   = show["cases_in"].astype(int)
-    show["$ In"]       = show["dollars_in"].apply(fmt_currency)
-    show["Cases Out"]  = show["cases_out"].astype(int)
-    show["$ Out"]      = show["dollars_out"].apply(fmt_currency)
-    show["Net Cases"]  = show["cases_in"] - show["cases_out"]
-    show["Net $"]      = (show["dollars_in"] - show["dollars_out"]).apply(fmt_currency)
+    show["Date"]         = show["date"].dt.strftime("%a %b %d")
+    show["Cases In"]     = show["cases_in"]
+    show["$ In"]         = show["dollars_in"].apply(fmt_currency)
+    show["Cases Out"]    = show["cases_out"]
+    show["Units Out"]    = show["units_out"]
+    show["$ Invoiced"]   = show["dollars_invoiced"].apply(fmt_currency)
+    show["$ Net Sales"]  = show["dollars_net"].apply(fmt_currency)
     st.dataframe(
-        show[["Date", "Cases In", "$ In", "Cases Out", "$ Out", "Net Cases", "Net $"]],
+        show[["Date", "Cases In", "$ In", "Cases Out", "Units Out",
+              "$ Invoiced", "$ Net Sales"]],
         use_container_width=True, hide_index=True, height=460,
+    )
+    st.caption(
+        "Out side sourced from Magic Touch's *Sales Summary By Date* report — "
+        "Net Sales reconciles to the monthly sales tile. Cases In sourced from "
+        "Active_30_day.csv (Cases_DateIn)."
     )
 
 
