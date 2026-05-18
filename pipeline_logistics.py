@@ -257,10 +257,19 @@ def compute_logistics(cases_df: pd.DataFrame,
     # Tier 3: CaseTasks_Department (per-case mode) for In Production w/o location
     # Tier 4: "Unknown" (should be near-zero now)
     STATUS_BUCKETS = {
-        "Submitted":      ("Intake",     2),
+        "Submitted":      ("Scheduling", 2),   # merged with Scheduling bucket
         "Sent for TryIn": ("At Doctor",  14),
         "On Hold":        ("On Hold",    3),
         "Outsourced":     ("Outsourced", 14),
+    }
+    # Tasks (case-insensitive) that should roll up into existing YAML buckets
+    # rather than becoming their own "Task: <name>" bucket.
+    TASK_ALIASES = {
+        "PRINTING":              ("CAD_CAM", 2),
+        "BRUX PORCELAIN":        ("CAD_CAM", 2),
+        "FIXED MODELS":          ("CAD_CAM", 2),
+        "CAD MILL CROWN/COPING": ("CAD_CAM", 2),
+        "SCHEDULING":            ("Scheduling", 2),
     }
     unknown_thresh = cfg.get("unknown_threshold_days", 5)
 
@@ -277,6 +286,9 @@ def compute_logistics(cases_df: pd.DataFrame,
             cid = str(row.get("Cases_CaseNumber") or "")
             task = primary_task.get(cid, "")
             if task:
+                alias = TASK_ALIASES.get(task.strip().upper())
+                if alias:
+                    return alias
                 return f"Task: {task}", 3
         return "Unknown", unknown_thresh
 

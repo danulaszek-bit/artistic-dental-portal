@@ -33,9 +33,9 @@ departments:
     threshold_days: 5
 
   CAD_CAM:
-    # Digital fabrication / design queue / milling
+    # Digital fabrication / design queue / milling / printing
     prefixes: []
-    names:    [PRINTING, SINTERING, MILLING, CADOUT, CADSTALL, CADSTALLED,
+    names:    [PRINTING, PRINTINGIP, SINTERING, MILLING, CADOUT, CADSTALL, CADSTALLED,
                SENTFORDESIGN, "MILLING EZ", "MILLING BRUX", "MILLING AO4",
                "MILLING EMAX", RUSHMILLINGSHELF]
     threshold_days: 2
@@ -44,12 +44,6 @@ departments:
     # Digital intake — cases submitted electronically, awaiting scheduling
     prefixes: []
     names:    ["EVD SUBMITTED"]
-    threshold_days: 2
-
-  Printing:
-    # 3D printing station(s)
-    prefixes: []
-    names:    [PRINTINGIP]
     threshold_days: 2
 
   Surgical:
