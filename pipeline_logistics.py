@@ -183,6 +183,17 @@ def compute_logistics(cases_df: pd.DataFrame,
         log.warning("compute_logistics called with empty cases_df")
         return {"cases_logistics": pd.DataFrame(), "logistics_summary": pd.DataFrame()}
 
+    # ── Dedupe at the source ──────────────────────────────────────────────────
+    # WIP.csv (and other Magic Touch exports) sometimes emit a case multiple
+    # times in the same file — appears to be an export quirk, not real data.
+    # Keep one row per Cases_CaseNumber.
+    if "Cases_CaseNumber" in cases_df.columns:
+        before = len(cases_df)
+        cases_df = cases_df.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
+        if before - len(cases_df):
+            log.info("Logistics: dropped %d duplicate-case-number rows from source",
+                     before - len(cases_df))
+
     cfg = load_logistics_config(base_dir)
 
     # Filter to open cases (in-flight, not invoiced/cancelled)
