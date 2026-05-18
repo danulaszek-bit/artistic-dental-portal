@@ -967,20 +967,33 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
     """
     cutoff = pd.Timestamp.today().normalize() - pd.Timedelta(days=days_back)
 
-    # ── OUT: from Sales Summary By Date (authoritative) ─────────────────────
+    # ── OUT side: prefer Sales Summary By Date (authoritative units + net),
+    #             fall back to Active_30_day.csv (always fresh, case-level only).
+    today = pd.Timestamp.today().normalize()
     summary_path = folder / "SalesSummaryByDate.csv"
+    summary = pd.DataFrame()
     if summary_path.exists():
         try:
             summary = _parse_sales_summary(summary_path)
         except Exception as exc:
             log.warning("SalesSummaryByDate.csv parse failed: %s", exc)
-            summary = pd.DataFrame()
-    else:
-        summary = pd.DataFrame()
 
+    # Decide whether the Sales Summary report is usable:
+    # - parsed successfully
+    # - latest row is within 3 days of today (otherwise it's stale)
+    use_summary = False
     if not summary.empty:
+        latest = summary["date"].max()
+        if pd.notna(latest) and (today - latest).days <= 3:
+            use_summary = True
+        else:
+            log.info(
+                "SalesSummaryByDate.csv is stale (latest %s, today %s) — falling back to Active_30_day.csv",
+                latest.date() if pd.notna(latest) else "?", today.date()
+            )
+
+    if use_summary:
         summary = summary[summary["date"] >= cutoff].copy()
-        # Map to the unified daily schema
         out_grp = pd.DataFrame({
             "date":              summary["date"],
             "cases_out":         summary["inv_new"],
@@ -991,9 +1004,38 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
         })
         out_source = "SalesSummaryByDate.csv"
     else:
-        out_grp = pd.DataFrame(columns=["date","cases_out","units_out",
-                                         "dollars_invoiced","dollars_net"])
-        out_source = "(missing — out side will be empty)"
+        # Fallback: build from Active_30_day.csv
+        active_path = folder / "Active_30_day.csv"
+        if active_path.exists():
+            try:
+                a = pd.read_csv(active_path, encoding="latin-1",
+                                engine="python", on_bad_lines="skip")
+                if "Cases_CaseNumber" in a.columns:
+                    a = a.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
+                a["inv_date"] = pd.to_datetime(a.get("Cases_InvoiceDate"),
+                                                errors="coerce").dt.normalize()
+                a["tc"]       = pd.to_numeric(a.get("Cases_TotalCharge"),
+                                                errors="coerce").fillna(0)
+                a = a[a["inv_date"].notna() & (a["inv_date"] >= cutoff)]
+                out_grp = (a.groupby("inv_date")
+                             .agg(cases_out=("Cases_CaseNumber", "count"),
+                                  dollars_invoiced=("tc", "sum"))
+                             .reset_index().rename(columns={"inv_date": "date"}))
+                # No per-line unit count in this source — proxy with case count.
+                # No tax/discount breakout — Net Sales ≈ Total Invoiced.
+                out_grp["units_out"]   = out_grp["cases_out"]
+                out_grp["dollars_net"] = out_grp["dollars_invoiced"].round(2)
+                out_grp["dollars_invoiced"] = out_grp["dollars_invoiced"].round(2)
+                out_source = "Active_30_day.csv (case-level fallback; units=cases, net=gross)"
+            except Exception as exc:
+                log.warning("Active_30_day.csv read for out side failed: %s", exc)
+                out_grp = pd.DataFrame(columns=["date","cases_out","units_out",
+                                                 "dollars_invoiced","dollars_net"])
+                out_source = "(failed)"
+        else:
+            out_grp = pd.DataFrame(columns=["date","cases_out","units_out",
+                                             "dollars_invoiced","dollars_net"])
+            out_source = "(missing — out side will be empty)"
 
     # ── IN: from Active_30_day.csv (only fresh DateIn source) ───────────────
     active_path = folder / "Active_30_day.csv"
