@@ -184,11 +184,12 @@ def compute_logistics(cases_df: pd.DataFrame,
         return {"cases_logistics": pd.DataFrame(), "logistics_summary": pd.DataFrame()}
 
     # ── Extract per-case product lines BEFORE dedup ───────────────────────────
-    # WIP.csv is product-line-level — one row per Products_ProductID. Capture
-    # those lines into case_product_lines.csv for the dig-in popup, then
-    # collapse to one row per case for the main logistics view.
+    # WIP.csv is case × product × task granularity — one row per task per
+    # product. Capture those lines into case_product_lines.csv for the dig-in
+    # popup, then collapse to one row per case for the main logistics view.
     prod_cols = [c for c in ("Cases_CaseNumber", "Products_Type",
-                              "Products_ProductID", "Products_Department")
+                              "Products_ProductID", "Products_Department",
+                              "CaseTasks_Department")
                   if c in cases_df.columns]
     if "Cases_CaseNumber" in cases_df.columns and "Products_ProductID" in cases_df.columns:
         product_lines = (
@@ -200,12 +201,25 @@ def compute_logistics(cases_df: pd.DataFrame,
     else:
         product_lines = pd.DataFrame()
 
+    # Compute per-case "primary task department" (mode across the case's rows)
+    # before dedup, so the In-Production-no-location fallback has something
+    # to use after dedup collapses the data.
+    if "CaseTasks_Department" in cases_df.columns and "Cases_CaseNumber" in cases_df.columns:
+        primary_task = (
+            cases_df.dropna(subset=["CaseTasks_Department"])
+                    .groupby(cases_df["Cases_CaseNumber"].astype(str))["CaseTasks_Department"]
+                    .agg(lambda s: s.mode().iat[0] if not s.mode().empty else "")
+                    .to_dict()
+        )
+    else:
+        primary_task = {}
+
     # Dedupe to one row per case for the rest of compute_logistics
     if "Cases_CaseNumber" in cases_df.columns:
         before = len(cases_df)
         cases_df = cases_df.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
         if before - len(cases_df):
-            log.info("Logistics: collapsed %d product-line rows → %d unique cases",
+            log.info("Logistics: collapsed %d product-line rows -> %d unique cases",
                      before, len(cases_df))
 
     cfg = load_logistics_config(base_dir)
@@ -237,21 +251,38 @@ def compute_logistics(cases_df: pd.DataFrame,
         open_cases[case_id_col].astype(str).map(days_map).fillna(0).astype(int)
     )
 
-    # Department mapping
-    # If Products_Department is available, prefer it (still fall back to mapping)
-    if "Products_Department" in open_cases.columns:
-        # Use real department, but also compute threshold from config (looking up by dept name)
-        dept_lookup = cfg.get("departments", {})
-        open_cases["pseudo_dept"] = open_cases["Products_Department"].fillna("Unknown")
-        open_cases["dept_threshold_days"] = open_cases["pseudo_dept"].apply(
-            lambda d: dept_lookup.get(d, {}).get("threshold_days", cfg["unknown_threshold_days"])
-        )
-    else:
-        mapped = open_cases["Cases_LastLocation"].apply(
-            lambda l: pd.Series(map_location_to_department(l, cfg))
-        )
-        mapped.columns = ["pseudo_dept", "dept_threshold_days"]
-        open_cases[["pseudo_dept", "dept_threshold_days"]] = mapped
+    # ── Department classification — multi-tier ───────────────────────────────
+    # Tier 1: Cases_LastLocation → YAML mapping (workstation-based, primary)
+    # Tier 2: Cases_Status → "intake-style" buckets when location is blank
+    # Tier 3: CaseTasks_Department (per-case mode) for In Production w/o location
+    # Tier 4: "Unknown" (should be near-zero now)
+    STATUS_BUCKETS = {
+        "Submitted":      ("Intake",     2),
+        "Sent for TryIn": ("At Doctor",  14),
+        "On Hold":        ("On Hold",    3),
+        "Outsourced":     ("Outsourced", 14),
+    }
+    unknown_thresh = cfg.get("unknown_threshold_days", 5)
+
+    def _classify(row):
+        loc = row.get("Cases_LastLocation")
+        if pd.notna(loc) and str(loc).strip():
+            dept, thr = map_location_to_department(loc, cfg)
+            if dept != "Unknown":
+                return dept, thr
+        status = (str(row.get("Cases_Status") or "")).strip()
+        if status in STATUS_BUCKETS:
+            return STATUS_BUCKETS[status]
+        if status == "In Production":
+            cid = str(row.get("Cases_CaseNumber") or "")
+            task = primary_task.get(cid, "")
+            if task:
+                return f"Task: {task}", 3
+        return "Unknown", unknown_thresh
+
+    classified = open_cases.apply(_classify, axis=1, result_type="expand")
+    classified.columns = ["pseudo_dept", "dept_threshold_days"]
+    open_cases[["pseudo_dept", "dept_threshold_days"]] = classified
 
     # Parse dates / numbers defensively
     open_cases["Cases_DueDate"] = pd.to_datetime(open_cases.get("Cases_DueDate"), errors="coerce")
@@ -293,6 +324,7 @@ def compute_logistics(cases_df: pd.DataFrame,
         "Cases_PanNumber",
         "Cases_DateIn", "Cases_DueDate", "Cases_ShipDate", "Cases_Status",
         "Cases_LastLocation", "Cases_TotalCharge",
+        "Products_Department", "CaseTasks_Department",
         "pseudo_dept", "days_at_station", "dept_threshold_days",
         "age_days", "days_overdue",
         "flag_past_due", "flag_stuck", "flag_high_value_aged", "is_behind",
