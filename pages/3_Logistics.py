@@ -452,30 +452,123 @@ cols_present = [(c, n) for c, n in display_cols if c in table_view.columns]
 view_display = table_view[[c for c, _ in cols_present]].copy()
 view_display.columns = [n for _, n in cols_present]
 
-# Sort by days late descending — most urgent first
+# Sort by days late descending — most urgent first; carry sort order to table_view too
+# so row-index → underlying case lookup works after selection.
 if "Days Late" in view_display.columns:
-    view_display = view_display.sort_values("Days Late", ascending=False)
+    sort_order = view_display.sort_values("Days Late", ascending=False).index
+    view_display = view_display.loc[sort_order]
+    table_view  = table_view.loc[sort_order]
+view_display = view_display.reset_index(drop=True)
+table_view   = table_view.reset_index(drop=True)
 
-# Format $ column
+# Format dollar + date columns to be compact
 if "$" in view_display.columns:
     view_display["$"] = view_display["$"].apply(fmt_currency)
+for dcol in ("Date In", "Due", "Ship"):
+    if dcol in view_display.columns:
+        view_display[dcol] = pd.to_datetime(view_display[dcol], errors="coerce").dt.strftime("%m/%d/%y")
 
-# Pretty-up the Ship Status column with colored emoji prefixes
+# Ship Status icon prefix
 if "Ship Status" in view_display.columns:
     icon = {"Past Due": "🔴", "Due Today": "🟡", "Due Next Biz Day": "🟢"}
     view_display["Ship Status"] = view_display["Ship Status"].apply(
         lambda s: f"{icon.get(s,'')} {s}".strip() if s else ""
     )
 
-st.dataframe(
-    view_display, use_container_width=True, height=500, hide_index=True,
-    column_config={
-        "Ship":        st.column_config.Column(width="medium"),
-        "Due":         st.column_config.Column(width="medium"),
-        "Date In":     st.column_config.Column(width="medium"),
-        "Ship Status": st.column_config.Column(width="medium"),
-    },
+# Tightened per-column widths (Streamlit only offers small/medium/large presets)
+_col_widths = {
+    "Case #":      "small",
+    "Ship Status": "medium",
+    "Doctor":      "medium",
+    "Pan#":        "small",
+    "Dept":        "small",
+    "Status":      "small",
+    "Location":    "medium",
+    "Date In":     "small",
+    "Due":         "small",
+    "Ship":        "small",
+    "Age":         "small",
+    "At Loc":      "small",
+    "Days Late":   "small",
+    "$":           "small",
+    "Behind":      "small",
+}
+column_config = {
+    name: st.column_config.Column(width=width)
+    for name, width in _col_widths.items() if name in view_display.columns
+}
+
+selection = st.dataframe(
+    view_display,
+    use_container_width=True, height=500, hide_index=True,
+    column_config=column_config,
+    selection_mode="single-row",
+    on_select="rerun",
+    key="case_detail_table",
 )
+
+
+# ── Case dig-in dialog ────────────────────────────────────────────────────────
+@st.dialog("🦷 Case Detail", width="large")
+def show_case_detail(row):
+    """Pop-up with full per-case details for the row that was clicked."""
+    case_no  = row.get("Cases_CaseNumber", "—")
+    doctor   = row.get("Cases_DoctorName", "—") or "—"
+    customer = row.get("Cases_CustomerID", "—") or "—"
+    pan      = row.get("Cases_PanNumber", "—") or "—"
+    status   = row.get("Cases_Status", "—") or "—"
+    dept     = row.get("pseudo_dept", "—") or "—"
+    loc      = row.get("Cases_LastLocation", "") or "(no station)"
+    charge   = row.get("Cases_TotalCharge", 0) or 0
+    age      = int(row.get("age_days", 0) or 0)
+    at_loc   = int(row.get("days_at_station", 0) or 0)
+    overdue  = int(row.get("days_overdue", 0) or 0)
+    ship_st  = row.get("ship_status", "") or "On schedule"
+
+    def _fmt_date(v):
+        d = pd.to_datetime(v, errors="coerce")
+        return d.strftime("%a %b %d, %Y") if pd.notna(d) else "—"
+
+    # Header row
+    st.markdown(f"### Case #{case_no}  ·  {doctor}")
+    st.caption(f"Customer ID {customer}  ·  Pan {pan}  ·  Status {status}  ·  Dept {dept}")
+
+    # Status banner
+    icon = {"Past Due": "🔴", "Due Today": "🟡", "Due Next Biz Day": "🟢"}.get(ship_st, "🟦")
+    st.markdown(f"**{icon} {ship_st}**")
+
+    # Two-column detail card
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("**Schedule**")
+        st.write(f"Date In: **{_fmt_date(row.get('Cases_DateIn'))}**")
+        st.write(f"Due: **{_fmt_date(row.get('Cases_DueDate'))}**")
+        st.write(f"Ship: **{_fmt_date(row.get('Cases_ShipDate'))}**")
+        st.write(f"Age in lab: **{age} days**")
+        if overdue > 0:
+            st.write(f"Days past due: **{overdue}**")
+    with c2:
+        st.markdown("**Location & Value**")
+        st.write(f"Last Location: **{loc}**")
+        st.write(f"Days at this station: **{at_loc}**")
+        st.write(f"Total charge: **{fmt_currency(charge)}**")
+        flags = []
+        if bool(row.get("flag_past_due", False)):   flags.append("Past due")
+        if bool(row.get("flag_stuck", False)):       flags.append("Stuck at station")
+        if bool(row.get("flag_high_value_aged", False)): flags.append("High-value aged")
+        st.write(f"Flags: **{', '.join(flags) if flags else 'none'}**")
+
+    st.divider()
+    st.caption(
+        "Per-case product breakdown (which products, units, $ per line) requires "
+        "ingesting case_files/*.xls — not yet wired up. Add when ready."
+    )
+
+
+# If a row was selected, open the dialog
+_sel = (selection.selection.rows if selection is not None and hasattr(selection, "selection") else [])
+if _sel:
+    show_case_detail(table_view.iloc[_sel[0]])
 
 # Download — reflects the same filters as the visible table
 csv_bytes = table_view.to_csv(index=False).encode("utf-8")
