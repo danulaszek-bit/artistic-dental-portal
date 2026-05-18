@@ -181,11 +181,15 @@ section("Filters")
 
 depts_available = sorted(cases["pseudo_dept"].dropna().unique().tolist())
 
-# Initialize per-department checkbox state (default: all on)
+# Departments that should start UNCHECKED on first load
+# (cases not physically in the lab — usually noise when scanning WIP)
+DEPTS_DEFAULT_OFF = {"At Doctor"}
+
+# Initialize per-department checkbox state
 for d in depts_available:
     key = f"dept_chk_{d}"
     if key not in st.session_state:
-        st.session_state[key] = True
+        st.session_state[key] = (d not in DEPTS_DEFAULT_OFF)
 
 # Header row: label + All / None convenience buttons
 hdr = st.columns([6, 1, 1])
