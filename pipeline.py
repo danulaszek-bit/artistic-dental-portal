@@ -936,6 +936,11 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
         try:
             act = pd.read_csv(active_path, encoding="latin-1",
                               engine="python", on_bad_lines="skip")
+            # Dedupe product-line rows → one row per case.
+            # Cases_TotalCharge is the case total repeated on each line, so
+            # summing without dedup multi-counts both case count and dollars.
+            if "Cases_CaseNumber" in act.columns:
+                act = act.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
             act["date_in"]      = pd.to_datetime(act.get("Cases_DateIn"),
                                                   errors="coerce").dt.normalize()
             act["total_charge"] = pd.to_numeric(act.get("Cases_TotalCharge"),
@@ -948,7 +953,7 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
                    .reset_index().rename(columns={"date_in": "date"})
             )
             in_grp["dollars_in"] = in_grp["dollars_in"].round(2)
-            in_source = "Active_30_day.csv"
+            in_source = "Active_30_day.csv (deduped)"
         except Exception as exc:
             log.warning("Active_30_day.csv read failed: %s", exc)
             in_grp = pd.DataFrame(columns=["date","cases_in","dollars_in"])
