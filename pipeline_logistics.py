@@ -49,6 +49,42 @@ log = logging.getLogger("logistics")
 OPEN_STATUSES = ["In Production", "On Hold", "Outsourced",
                  "Sent for TryIn", "Submitted"]
 
+# ── Product-line priority (highest = pick this line to represent the case) ────
+# WIP.csv has multiple product-line rows per case (e.g., implant + FDA
+# Infection Control + delivery fee). When we dedup, we keep the highest-
+# priority line so admin/fee items like MISC/DELIVERY don't drive department
+# classification.
+PRODUCT_DEPT_PRIORITY = {
+    "IMPLANTS":            10,
+    "IMPLANT PT":          10,
+    "Surgical Guides":      9,
+    "C&B":                  8,
+    "Alloy":                7,
+    "PARTIAL":              7,
+    "Removables":           6,
+    "SPLINTS":              5,
+    "CHAIRSIDE SERVICES":   4,
+    "ORTHO":                4,
+    "DELIVERY":             1,
+    "MISC":                 0,
+}
+
+# Map Products_Department → (dashboard bucket, threshold_days)
+# Used as the primary classifier when Products_Department is populated.
+PRODUCT_DEPT_TO_BUCKET = {
+    "IMPLANTS":            ("Implants",  5),
+    "IMPLANT PT":          ("Implants",  5),
+    "Surgical Guides":     ("Surgical",  7),
+    "C&B":                 ("Fixed",     3),
+    "Alloy":               ("Fixed",     3),
+    "PARTIAL":             ("Removable", 5),
+    "Removables":          ("Removable", 5),
+    "SPLINTS":             ("Removable", 5),
+    "CHAIRSIDE SERVICES":  ("CAD_CAM",   2),
+    "ORTHO":               ("Removable", 5),
+    # MISC and DELIVERY intentionally absent — fall through to location/status
+}
+
 
 # ── Config loading ────────────────────────────────────────────────────────────
 
@@ -214,12 +250,24 @@ def compute_logistics(cases_df: pd.DataFrame,
     else:
         primary_task = {}
 
-    # Dedupe to one row per case for the rest of compute_logistics
+    # Dedupe to one row per case — keep the HIGHEST-PRIORITY product line for
+    # each case so admin/fee lines (MISC / DELIVERY / FDA Infection Control)
+    # don't drive department classification.
     if "Cases_CaseNumber" in cases_df.columns:
         before = len(cases_df)
-        cases_df = cases_df.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
+        if "Products_Department" in cases_df.columns:
+            cases_df = cases_df.copy()
+            cases_df["_dept_prio"] = cases_df["Products_Department"].map(
+                PRODUCT_DEPT_PRIORITY).fillna(-1)
+            cases_df = (cases_df
+                        .sort_values("_dept_prio", ascending=False, kind="stable")
+                        .drop_duplicates(subset=["Cases_CaseNumber"], keep="first")
+                        .drop(columns=["_dept_prio"])
+                        .copy())
+        else:
+            cases_df = cases_df.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
         if before - len(cases_df):
-            log.info("Logistics: collapsed %d product-line rows -> %d unique cases",
+            log.info("Logistics: collapsed %d product-line rows -> %d unique cases (kept highest-priority product per case)",
                      before, len(cases_df))
 
     cfg = load_logistics_config(base_dir)
@@ -274,14 +322,23 @@ def compute_logistics(cases_df: pd.DataFrame,
     unknown_thresh = cfg.get("unknown_threshold_days", 5)
 
     def _classify(row):
+        # Tier 0: Products_Department of this case's highest-value product
+        prod_dept = row.get("Products_Department")
+        if pd.notna(prod_dept) and str(prod_dept).strip():
+            bucket = PRODUCT_DEPT_TO_BUCKET.get(str(prod_dept).strip())
+            if bucket:
+                return bucket
+        # Tier 1: Cases_LastLocation → YAML mapping (workstation)
         loc = row.get("Cases_LastLocation")
         if pd.notna(loc) and str(loc).strip():
             dept, thr = map_location_to_department(loc, cfg)
             if dept != "Unknown":
                 return dept, thr
+        # Tier 2: Cases_Status fallback
         status = (str(row.get("Cases_Status") or "")).strip()
         if status in STATUS_BUCKETS:
             return STATUS_BUCKETS[status]
+        # Tier 3: CaseTasks_Department for In-Production w/o location
         if status == "In Production":
             cid = str(row.get("Cases_CaseNumber") or "")
             task = primary_task.get(cid, "")
