@@ -17,7 +17,7 @@ departments:
   Fixed:
     # Crown, bridge, finishing, glazing — fixed restorations
     prefixes: [FIXED, STAIN, PORCWALL, BRUX, SPLFINISH]
-    names:    [CEMENT, FRED, HENRY, KEVIN]
+    names:    [CEMENT, FRED, HENRY, KEVIN, GRINDING]
     threshold_days: 3   # alert if case at a Fixed station > 3 days
 
   Implants:
@@ -29,13 +29,27 @@ departments:
   Removable:
     # Dentures, partials — but NOT removable implants (those go to Implants above)
     prefixes: [REM]                         # catches REMQC, REMOUT, REMPREP — REMIP* already claimed above
-    names:    []
+    names:    [DIGITALREMOVABLE]
     threshold_days: 5
 
   CAD_CAM:
-    # Digital fabrication
+    # Digital fabrication / design queue / milling
     prefixes: []
-    names:    [PRINTING, SINTERING, MILLING, CADOUT, CADSTALL, CADSTALLED]
+    names:    [PRINTING, SINTERING, MILLING, CADOUT, CADSTALL, CADSTALLED,
+               SENTFORDESIGN, "MILLING EZ", "MILLING BRUX", "MILLING AO4",
+               "MILLING EMAX", RUSHMILLINGSHELF]
+    threshold_days: 2
+
+  Scheduling:
+    # Digital intake — cases submitted electronically, awaiting scheduling
+    prefixes: []
+    names:    ["EVD SUBMITTED"]
+    threshold_days: 2
+
+  Printing:
+    # 3D printing station(s)
+    prefixes: []
+    names:    [PRINTINGIP]
     threshold_days: 2
 
   Surgical:
