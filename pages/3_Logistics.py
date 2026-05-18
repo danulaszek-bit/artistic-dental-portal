@@ -355,10 +355,82 @@ if not view.empty:
 
 
 # ── Case detail ───────────────────────────────────────────────────────────────
-section(f"Case detail ({len(view)} shown)")
+# Helpers — keep in sync with pipeline.py get_lab_holidays()
+def _lab_holidays(year):
+    out = []
+    for month, day in [(1, 1), (7, 4), (12, 25)]:
+        d = pd.Timestamp(year=year, month=month, day=day)
+        if d.weekday() == 5: d -= pd.Timedelta(days=1)
+        elif d.weekday() == 6: d += pd.Timedelta(days=1)
+        out.append(d.normalize())
+    d = pd.Timestamp(year=year, month=5, day=31)
+    while d.weekday() != 0: d -= pd.Timedelta(days=1)
+    out.append(d.normalize())
+    d = pd.Timestamp(year=year, month=9, day=1)
+    while d.weekday() != 0: d += pd.Timedelta(days=1)
+    out.append(d.normalize())
+    d = pd.Timestamp(year=year, month=11, day=1)
+    while d.weekday() != 3: d += pd.Timedelta(days=1)
+    thx = d + pd.Timedelta(days=21)
+    out.append(thx.normalize()); out.append((thx + pd.Timedelta(days=1)).normalize())
+    return set(out)
+
+def _next_business_day(from_date):
+    """Return the next business day strictly after from_date (skip weekends + lab holidays)."""
+    d = pd.Timestamp(from_date).normalize() + pd.Timedelta(days=1)
+    hol = _lab_holidays(d.year) | _lab_holidays(d.year + 1)
+    while d.weekday() >= 5 or d in hol:
+        d += pd.Timedelta(days=1)
+    return d
+
+# Compute due_status per row using today + lab calendar
+today = pd.Timestamp.today().normalize()
+next_biz = _next_business_day(today)
+
+def _due_status(due):
+    if pd.isna(due):
+        return ""
+    d = pd.Timestamp(due).normalize()
+    if d < today:    return "Past Due"
+    if d == today:   return "Due Today"
+    if d == next_biz: return "Due Next Biz Day"
+    return ""
+
+view = view.copy()
+view["due_status"] = pd.to_datetime(view.get("Cases_DueDate"), errors="coerce").apply(_due_status)
+
+# Filter controls — sit directly above the Case detail table
+ctl = st.columns([1, 1, 1, 2])
+with ctl[0]:
+    show_past_due  = st.checkbox("🔴 Past Due",      value=False, key="filt_past_due")
+with ctl[1]:
+    show_due_today = st.checkbox("🟡 Due Today",     value=False, key="filt_due_today")
+with ctl[2]:
+    show_due_next  = st.checkbox(f"🟢 Due Next Biz Day ({next_biz.strftime('%a %b %d')})",
+                                  value=False, key="filt_due_next")
+with ctl[3]:
+    case_search = st.text_input("🔍 Search by Case #", value="", key="case_search",
+                                 placeholder="e.g. 448962")
+
+active_buckets = []
+if show_past_due:  active_buckets.append("Past Due")
+if show_due_today: active_buckets.append("Due Today")
+if show_due_next:  active_buckets.append("Due Next Biz Day")
+
+table_view = view.copy()
+if active_buckets:
+    table_view = table_view[table_view["due_status"].isin(active_buckets)]
+if case_search.strip():
+    q = case_search.strip()
+    table_view = table_view[
+        table_view["Cases_CaseNumber"].fillna("").astype(str).str.contains(q, case=False, regex=False)
+    ]
+
+section(f"Case detail ({len(table_view)} shown of {len(view)})")
 
 display_cols = [
     ("Cases_CaseNumber", "Case #"),
+    ("due_status",       "Due Status"),
     ("Cases_DoctorName", "Doctor"),
     ("Cases_CustomerID", "Customer"),
     ("Cases_PanNumber",  "Pan#"),
@@ -373,8 +445,8 @@ display_cols = [
     ("Cases_TotalCharge","$"),
     ("is_behind",        "Behind"),
 ]
-cols_present = [(c, n) for c, n in display_cols if c in view.columns]
-view_display = view[[c for c, _ in cols_present]].copy()
+cols_present = [(c, n) for c, n in display_cols if c in table_view.columns]
+view_display = table_view[[c for c, _ in cols_present]].copy()
 view_display.columns = [n for _, n in cols_present]
 
 # Sort by days late descending — most urgent first
@@ -385,10 +457,17 @@ if "Days Late" in view_display.columns:
 if "$" in view_display.columns:
     view_display["$"] = view_display["$"].apply(fmt_currency)
 
+# Pretty-up the Due Status column with colored emoji prefixes
+if "Due Status" in view_display.columns:
+    icon = {"Past Due": "🔴", "Due Today": "🟡", "Due Next Biz Day": "🟢"}
+    view_display["Due Status"] = view_display["Due Status"].apply(
+        lambda s: f"{icon.get(s,'')} {s}".strip() if s else ""
+    )
+
 st.dataframe(view_display, use_container_width=True, height=500, hide_index=True)
 
-# Download
-csv_bytes = view.to_csv(index=False).encode("utf-8")
+# Download — reflects the same filters as the visible table
+csv_bytes = table_view.to_csv(index=False).encode("utf-8")
 st.download_button("⬇ Download filtered case list (CSV)",
                    data=csv_bytes,
                    file_name=f"logistics_cases_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
