@@ -148,7 +148,7 @@ if cases is None or cases.empty:
 # ── KPI row ───────────────────────────────────────────────────────────────────
 s = summary.iloc[0] if not summary.empty else {}
 
-cols = st.columns(6)
+cols = st.columns(4)
 with cols[0]:
     kpi_card("Open Cases", fmt_int(s.get("open_cases", len(cases))), "currently in-flight")
 with cols[1]:
@@ -166,14 +166,6 @@ with cols[3]:
     kpi_card("Behind (any reason)", fmt_int(behind),
              "union of all flags",
              status="warn" if behind > 0 else "ok")
-with cols[4]:
-    kpi_card("$ at Risk", fmt_currency(s.get("value_at_risk", 0)),
-             "TotalCharge of all behind cases")
-with cols[5]:
-    oldest = int(s.get("oldest_age_days", 0) or 0)
-    kpi_card("Oldest Case", f"{oldest} d",
-             f"median age: {int(s.get('median_age_days',0) or 0)} d",
-             status="warn" if oldest > 30 else "neutral")
 
 
 # ── Filters ───────────────────────────────────────────────────────────────────
@@ -443,7 +435,6 @@ display_cols = [
     ("Cases_CaseNumber", "Case #"),
     ("ship_status",      "Ship Status"),
     ("Cases_DoctorName", "Doctor"),
-    ("Cases_CustomerID", "Customer"),
     ("Cases_PanNumber",  "Pan#"),
     ("pseudo_dept",      "Dept"),
     ("Cases_Status",     "Status"),
@@ -476,7 +467,15 @@ if "Ship Status" in view_display.columns:
         lambda s: f"{icon.get(s,'')} {s}".strip() if s else ""
     )
 
-st.dataframe(view_display, use_container_width=True, height=500, hide_index=True)
+st.dataframe(
+    view_display, use_container_width=True, height=500, hide_index=True,
+    column_config={
+        "Ship":        st.column_config.Column(width="medium"),
+        "Due":         st.column_config.Column(width="medium"),
+        "Date In":     st.column_config.Column(width="medium"),
+        "Ship Status": st.column_config.Column(width="medium"),
+    },
+)
 
 # Download — reflects the same filters as the visible table
 csv_bytes = table_view.to_csv(index=False).encode("utf-8")
