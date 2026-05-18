@@ -397,7 +397,18 @@ def _ship_status(ship):
     return ""
 
 view = view.copy()
-view["ship_status"] = pd.to_datetime(view.get("Cases_ShipDate"), errors="coerce").apply(_ship_status)
+if "Cases_ShipDate" in view.columns:
+    ship_dates = pd.to_datetime(view["Cases_ShipDate"], errors="coerce")
+    view["ship_status"] = ship_dates.apply(_ship_status)
+else:
+    # Cache file predates the ShipDate addition — fall back to DueDate so the
+    # toggles still work until the next pipeline run updates the cache.
+    view["Cases_ShipDate"] = pd.NaT
+    if "Cases_DueDate" in view.columns:
+        fallback = pd.to_datetime(view["Cases_DueDate"], errors="coerce")
+        view["ship_status"] = fallback.apply(_ship_status)
+    else:
+        view["ship_status"] = ""
 
 # Filter controls — sit directly above the Case detail table
 ctl = st.columns([1, 1, 1, 2])
