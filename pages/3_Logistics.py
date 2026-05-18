@@ -256,7 +256,7 @@ if not _ot.empty:
     with c_chart:
         fig = go.Figure()
         fig.add_bar(x=_ot["month"], y=_ot["on_time_pct"],
-                    marker_color=[COLORS["grn"] if v >= 90 else COLORS["gold"] if v >= 80 else COLORS["red"]
+                    marker_color=[COLORS["green"] if v >= 90 else COLORS["gold"] if v >= 80 else COLORS["red"]
                                   for v in _ot["on_time_pct"]],
                     text=_ot["on_time_pct"].apply(lambda v: f"{v:.1f}%"),
                     textposition="outside")
