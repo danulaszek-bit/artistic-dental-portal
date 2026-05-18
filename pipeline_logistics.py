@@ -266,7 +266,7 @@ def compute_logistics(cases_df: pd.DataFrame,
     out_cols = [
         "Cases_CaseNumber", "Cases_CustomerID", "Cases_DoctorName",
         "Cases_PanNumber",
-        "Cases_DateIn", "Cases_DueDate", "Cases_Status",
+        "Cases_DateIn", "Cases_DueDate", "Cases_ShipDate", "Cases_Status",
         "Cases_LastLocation", "Cases_TotalCharge",
         "pseudo_dept", "days_at_station", "dept_threshold_days",
         "age_days", "days_overdue",

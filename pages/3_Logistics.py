@@ -383,30 +383,30 @@ def _next_business_day(from_date):
         d += pd.Timedelta(days=1)
     return d
 
-# Compute due_status per row using today + lab calendar
+# Compute ship_status per row using today + lab calendar (based on Cases_ShipDate)
 today = pd.Timestamp.today().normalize()
 next_biz = _next_business_day(today)
 
-def _due_status(due):
-    if pd.isna(due):
+def _ship_status(ship):
+    if pd.isna(ship):
         return ""
-    d = pd.Timestamp(due).normalize()
+    d = pd.Timestamp(ship).normalize()
     if d < today:    return "Past Due"
     if d == today:   return "Due Today"
     if d == next_biz: return "Due Next Biz Day"
     return ""
 
 view = view.copy()
-view["due_status"] = pd.to_datetime(view.get("Cases_DueDate"), errors="coerce").apply(_due_status)
+view["ship_status"] = pd.to_datetime(view.get("Cases_ShipDate"), errors="coerce").apply(_ship_status)
 
 # Filter controls — sit directly above the Case detail table
 ctl = st.columns([1, 1, 1, 2])
 with ctl[0]:
-    show_past_due  = st.checkbox("🔴 Past Due",      value=False, key="filt_past_due")
+    show_past_due  = st.checkbox("🔴 Past Due (ship)",      value=False, key="filt_past_due")
 with ctl[1]:
-    show_due_today = st.checkbox("🟡 Due Today",     value=False, key="filt_due_today")
+    show_due_today = st.checkbox("🟡 Ships Today",          value=False, key="filt_due_today")
 with ctl[2]:
-    show_due_next  = st.checkbox(f"🟢 Due Next Biz Day ({next_biz.strftime('%a %b %d')})",
+    show_due_next  = st.checkbox(f"🟢 Ships Next Biz Day ({next_biz.strftime('%a %b %d')})",
                                   value=False, key="filt_due_next")
 with ctl[3]:
     case_search = st.text_input("🔍 Search by Case #", value="", key="case_search",
@@ -419,7 +419,7 @@ if show_due_next:  active_buckets.append("Due Next Biz Day")
 
 table_view = view.copy()
 if active_buckets:
-    table_view = table_view[table_view["due_status"].isin(active_buckets)]
+    table_view = table_view[table_view["ship_status"].isin(active_buckets)]
 if case_search.strip():
     q = case_search.strip()
     table_view = table_view[
@@ -430,7 +430,7 @@ section(f"Case detail ({len(table_view)} shown of {len(view)})")
 
 display_cols = [
     ("Cases_CaseNumber", "Case #"),
-    ("due_status",       "Due Status"),
+    ("ship_status",      "Ship Status"),
     ("Cases_DoctorName", "Doctor"),
     ("Cases_CustomerID", "Customer"),
     ("Cases_PanNumber",  "Pan#"),
@@ -439,6 +439,7 @@ display_cols = [
     ("Cases_LastLocation", "Location"),
     ("Cases_DateIn",     "Date In"),
     ("Cases_DueDate",    "Due"),
+    ("Cases_ShipDate",   "Ship"),
     ("age_days",         "Age"),
     ("days_at_station",  "At Loc"),
     ("days_overdue",     "Days Late"),
@@ -457,10 +458,10 @@ if "Days Late" in view_display.columns:
 if "$" in view_display.columns:
     view_display["$"] = view_display["$"].apply(fmt_currency)
 
-# Pretty-up the Due Status column with colored emoji prefixes
-if "Due Status" in view_display.columns:
+# Pretty-up the Ship Status column with colored emoji prefixes
+if "Ship Status" in view_display.columns:
     icon = {"Past Due": "🔴", "Due Today": "🟡", "Due Next Biz Day": "🟢"}
-    view_display["Due Status"] = view_display["Due Status"].apply(
+    view_display["Ship Status"] = view_display["Ship Status"].apply(
         lambda s: f"{icon.get(s,'')} {s}".strip() if s else ""
     )
 
