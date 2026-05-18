@@ -109,6 +109,14 @@ def section(title):
 
 
 # ── Data loading ──────────────────────────────────────────────────────────────
+@st.cache_data(ttl=600)
+def load_case_product_lines():
+    p = LATEST_DIR / "case_product_lines.csv"
+    if not p.exists():
+        return pd.DataFrame(columns=["Cases_CaseNumber","Products_Type","Products_ProductID"])
+    return pd.read_csv(p, dtype={"Cases_CaseNumber": str})
+
+
 @st.cache_data(ttl=600)  # 10-minute cache
 def load_logistics_data():
     cases_path = LATEST_DIR / "cases_logistics.csv"
@@ -559,10 +567,27 @@ def show_case_detail(row):
         st.write(f"Flags: **{', '.join(flags) if flags else 'none'}**")
 
     st.divider()
-    st.caption(
-        "Per-case product breakdown (which products, units, $ per line) requires "
-        "ingesting case_files/*.xls — not yet wired up. Add when ready."
-    )
+    st.markdown("**Products on this case**")
+    lines = load_case_product_lines()
+    case_lines = lines[lines["Cases_CaseNumber"].astype(str) == str(case_no)] if not lines.empty else lines
+    if case_lines.empty:
+        st.caption("No product-line data found for this case.")
+    else:
+        show = case_lines[["Products_Type","Products_ProductID"]].copy()
+        # Group identical product entries together with a count
+        show = (show.groupby(["Products_Type","Products_ProductID"], dropna=False)
+                    .size().reset_index(name="Count")
+                    .rename(columns={"Products_Type": "Type",
+                                      "Products_ProductID": "Product ID"}))
+        show["Type"] = show["Type"].fillna("(unspecified)")
+        show["Product ID"] = show["Product ID"].fillna("(unspecified)")
+        show = show.sort_values(["Type","Product ID"])
+        st.dataframe(show, hide_index=True, use_container_width=True, height=180)
+        st.caption(
+            f"{len(case_lines)} line(s) across {show['Type'].nunique()} product type(s). "
+            "Per-line pricing isn't in the Magic Touch export, so 'most valuable product' "
+            "would require an external price lookup."
+        )
 
 
 # If a row was selected, open the dialog

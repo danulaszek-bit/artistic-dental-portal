@@ -183,16 +183,30 @@ def compute_logistics(cases_df: pd.DataFrame,
         log.warning("compute_logistics called with empty cases_df")
         return {"cases_logistics": pd.DataFrame(), "logistics_summary": pd.DataFrame()}
 
-    # ── Dedupe at the source ──────────────────────────────────────────────────
-    # WIP.csv (and other Magic Touch exports) sometimes emit a case multiple
-    # times in the same file — appears to be an export quirk, not real data.
-    # Keep one row per Cases_CaseNumber.
+    # ── Extract per-case product lines BEFORE dedup ───────────────────────────
+    # WIP.csv is product-line-level — one row per Products_ProductID. Capture
+    # those lines into case_product_lines.csv for the dig-in popup, then
+    # collapse to one row per case for the main logistics view.
+    prod_cols = [c for c in ("Cases_CaseNumber", "Products_Type",
+                              "Products_ProductID", "Products_Department")
+                  if c in cases_df.columns]
+    if "Cases_CaseNumber" in cases_df.columns and "Products_ProductID" in cases_df.columns:
+        product_lines = (
+            cases_df[prod_cols]
+            .dropna(subset=["Cases_CaseNumber"])
+            .drop_duplicates()
+            .copy()
+        )
+    else:
+        product_lines = pd.DataFrame()
+
+    # Dedupe to one row per case for the rest of compute_logistics
     if "Cases_CaseNumber" in cases_df.columns:
         before = len(cases_df)
         cases_df = cases_df.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
         if before - len(cases_df):
-            log.info("Logistics: dropped %d duplicate-case-number rows from source",
-                     before - len(cases_df))
+            log.info("Logistics: collapsed %d product-line rows → %d unique cases",
+                     before, len(cases_df))
 
     cfg = load_logistics_config(base_dir)
 
@@ -302,6 +316,15 @@ def compute_logistics(cases_df: pd.DataFrame,
     latest_dir.mkdir(parents=True, exist_ok=True)
     cases_logistics.to_csv(latest_dir / "cases_logistics.csv", index=False)
     summary.to_csv(latest_dir / "logistics_summary.csv", index=False)
+
+    # Per-case product lines — restrict to cases that survived all filters
+    if not product_lines.empty and "Cases_CaseNumber" in cases_logistics.columns:
+        keep_ids = set(cases_logistics["Cases_CaseNumber"].astype(str))
+        product_lines["Cases_CaseNumber"] = product_lines["Cases_CaseNumber"].astype(str)
+        product_lines = product_lines[product_lines["Cases_CaseNumber"].isin(keep_ids)].copy()
+        product_lines.to_csv(latest_dir / "case_product_lines.csv", index=False)
+        log.info("Case product lines: %d rows across %d cases written",
+                 len(product_lines), product_lines["Cases_CaseNumber"].nunique())
 
     log.info("Logistics computed: %d open, %d behind, $%.0f at risk",
              summary.iloc[0]["open_cases"], summary.iloc[0]["behind_total"],

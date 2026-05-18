@@ -372,6 +372,16 @@ def _clean_cases(df: pd.DataFrame) -> pd.DataFrame:
         df["days_in_lab"] = (today - df["date_in"]).dt.days
         df["overdue"] = df["due_date"] < today
     df = _drop_excluded_accounts(df)
+    # Magic Touch exports are product-line-level: one row per Products_ProductID
+    # for cases with multiple products. Cases_TotalCharge is the case total
+    # repeated on every line, so summing without dedup inflates revenue/WIP.
+    # Collapse to one row per case_number, keeping the first product line.
+    if "case_number" in df.columns:
+        before = len(df)
+        df = df.drop_duplicates(subset=["case_number"], keep="first").copy()
+        if before - len(df):
+            log.info("Dedup: %d product-line rows → %d unique cases (%d dropped)",
+                     before, len(df), before - len(df))
     return df
 
 
