@@ -156,7 +156,7 @@ if cases is None or cases.empty:
 # ── KPI row ───────────────────────────────────────────────────────────────────
 s = summary.iloc[0] if not summary.empty else {}
 
-cols = st.columns(4)
+cols = st.columns(5)
 with cols[0]:
     kpi_card("Open Cases", fmt_int(s.get("open_cases", len(cases))), "currently in-flight")
 with cols[1]:
@@ -174,6 +174,18 @@ with cols[3]:
     kpi_card("Behind (any reason)", fmt_int(behind),
              "union of all flags",
              status="warn" if behind > 0 else "ok")
+with cols[4]:
+    # Pull on-time numbers from kpi_gauges.csv (written by pipeline)
+    try:
+        _g = pd.read_csv(LATEST_DIR / "kpi_gauges.csv").iloc[0].to_dict()
+        ot_pct = float(_g.get("on_time_pct", 0) or 0)
+        ot_n   = int(_g.get("on_time_cases", 0) or 0)
+        ot_win = int(_g.get("on_time_window_days", 90) or 90)
+    except Exception:
+        ot_pct, ot_n, ot_win = 0.0, 0, 90
+    kpi_card("On-Time Ship", f"{ot_pct:.1f}%",
+             f"last {ot_win}d · {ot_n:,} cases",
+             status="ok" if ot_pct >= 90 else "warn")
 
 
 # ── Filters ───────────────────────────────────────────────────────────────────
@@ -231,6 +243,38 @@ view = cases[
 ].copy()
 if show_behind_only:
     view = view[view["is_behind"]]
+
+
+# ── On-time ship trend (last several months) ─────────────────────────────────
+try:
+    _ot = pd.read_csv(LATEST_DIR / "on_time_ship.csv")
+except Exception:
+    _ot = pd.DataFrame()
+if not _ot.empty:
+    section("On-time ship rate — monthly trend")
+    c_chart, c_table = st.columns([3, 2])
+    with c_chart:
+        fig = go.Figure()
+        fig.add_bar(x=_ot["month"], y=_ot["on_time_pct"],
+                    marker_color=[COLORS["grn"] if v >= 90 else COLORS["gold"] if v >= 80 else COLORS["red"]
+                                  for v in _ot["on_time_pct"]],
+                    text=_ot["on_time_pct"].apply(lambda v: f"{v:.1f}%"),
+                    textposition="outside")
+        fig.update_layout(yaxis=dict(range=[0, 105], title="On-time %"),
+                          xaxis_title="",
+                          margin=dict(l=10, r=10, t=10, b=10),
+                          height=260,
+                          plot_bgcolor="white", paper_bgcolor="white")
+        st.plotly_chart(fig, use_container_width=True)
+    with c_table:
+        show = _ot.copy()
+        show["On-Time"] = show["on_time"].astype(int)
+        show["Late"]    = show["late"].astype(int)
+        show["Cases"]   = show["cases"].astype(int)
+        show["On-Time %"] = show["on_time_pct"].apply(lambda v: f"{v:.1f}%")
+        st.dataframe(show[["month", "Cases", "On-Time", "Late", "On-Time %"]]
+                       .rename(columns={"month": "Month"}),
+                     hide_index=True, use_container_width=True, height=260)
 
 
 # ── Department breakdown ──────────────────────────────────────────────────────

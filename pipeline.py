@@ -380,7 +380,7 @@ def _clean_cases(df: pd.DataFrame) -> pd.DataFrame:
         before = len(df)
         df = df.drop_duplicates(subset=["case_number"], keep="first").copy()
         if before - len(df):
-            log.info("Dedup: %d product-line rows → %d unique cases (%d dropped)",
+            log.info("Dedup: %d product-line rows -> %d unique cases (%d dropped)",
                      before, len(df), before - len(df))
     return df
 
@@ -882,6 +882,71 @@ def _parse_sales_summary(path: Path) -> pd.DataFrame:
     return pd.DataFrame(rows_out)
 
 
+def compute_on_time_ship(folder: Path, days: int = 90):
+    """Compute on-time ship-rate metrics from Active_30_day.csv.
+
+    Definition:
+        actual ship date = Cases_ShipmentDate (real shipment), fallback to
+                           Cases_InvoiceDate when ShipmentDate is blank
+        planned ship date = Cases_ShipDate
+        on time = actual <= planned
+
+    Returns (summary_dict, monthly_df). Summary dict is suitable for merging
+    into kpi_gauges.csv. monthly_df has columns:
+        month, cases, on_time, late, on_time_pct
+    """
+    path = folder / "Active_30_day.csv"
+    empty_summary = {
+        "on_time_window_days":   days,
+        "on_time_cases":         0,
+        "on_time_on_time":       0,
+        "on_time_late":          0,
+        "on_time_pct":           0.0,
+    }
+    if not path.exists():
+        return empty_summary, pd.DataFrame()
+    df = pd.read_csv(path, encoding="latin-1", engine="python", on_bad_lines="skip")
+    if "Cases_CaseNumber" in df.columns:
+        df = df.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
+    df["plan"] = pd.to_datetime(df.get("Cases_ShipDate"),    errors="coerce").dt.normalize()
+    df["inv"]  = pd.to_datetime(df.get("Cases_InvoiceDate"), errors="coerce").dt.normalize()
+    if "Cases_ShipmentDate" in df.columns:
+        df["ship"] = pd.to_datetime(df["Cases_ShipmentDate"], errors="coerce").dt.normalize()
+    else:
+        df["ship"] = pd.NaT
+    df["actual"] = df["ship"].fillna(df["inv"])
+
+    today  = pd.Timestamp.today().normalize()
+    cutoff = today - pd.Timedelta(days=days)
+    win = df.dropna(subset=["plan","actual"])
+    win = win[(win["actual"] >= cutoff) & (win["actual"] <= today)].copy()
+    if win.empty:
+        return empty_summary, pd.DataFrame()
+
+    on_time = win["actual"] <= win["plan"]
+    summary = {
+        "on_time_window_days":   days,
+        "on_time_cases":         int(len(win)),
+        "on_time_on_time":       int(on_time.sum()),
+        "on_time_late":          int((~on_time).sum()),
+        "on_time_pct":           round(on_time.mean() * 100, 1),
+    }
+
+    # Monthly trend
+    win["month"] = win["actual"].dt.to_period("M").astype(str)
+    monthly = (
+        win.assign(_ot=on_time.astype(int))
+           .groupby("month")
+           .agg(cases=("Cases_CaseNumber", "count"),
+                on_time=("_ot", "sum"))
+           .reset_index()
+    )
+    monthly["late"] = monthly["cases"] - monthly["on_time"]
+    monthly["on_time_pct"] = (monthly["on_time"] / monthly["cases"] * 100).round(1)
+
+    return summary, monthly.sort_values("month")
+
+
 def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
     """Build daily in/out summary reconciling to Magic Touch's authoritative report.
 
@@ -1070,6 +1135,27 @@ def run_pipeline():
             log.info("Daily sales: %d days computed", len(daily))
     except Exception as exc:
         log.warning("Daily sales computation failed (other outputs unaffected): %s", exc)
+
+    # ── On-time ship rate (trailing 90 days) ────────────────────────────────
+    try:
+        ot_summary, ot_monthly = compute_on_time_ship(watch_folder, days=90)
+        if not ot_monthly.empty:
+            ot_monthly.to_csv(latest_dir / "on_time_ship.csv", index=False)
+            ot_monthly.to_csv(snapshot_dir / "on_time_ship.csv", index=False)
+        # Merge headline numbers into kpi_gauges.csv so dashboards can read them
+        gauges_path = latest_dir / "kpi_gauges.csv"
+        if gauges_path.exists():
+            g = pd.read_csv(gauges_path)
+            for k, v in ot_summary.items():
+                g[k] = v
+            g.to_csv(gauges_path, index=False)
+            g.to_csv(snapshot_dir / "kpi_gauges.csv", index=False)
+        log.info("On-time ship (last %dd): %d cases, %.1f%% on time",
+                 ot_summary.get("on_time_window_days", 90),
+                 ot_summary.get("on_time_cases", 0),
+                 ot_summary.get("on_time_pct", 0.0))
+    except Exception as exc:
+        log.warning("On-time ship computation failed (other outputs unaffected): %s", exc)
 
     log.info("Saved local cache: %s", latest_dir)
 

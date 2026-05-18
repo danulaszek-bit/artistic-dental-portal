@@ -335,8 +335,12 @@ def render_kpi_row(gauges: pd.DataFrame):
                  status="ok" if remake < alert else "warn")
 
     with cols[3]:
-        kpi_card("Avg Margin", f"{float(g.get('avg_margin_pct', 0) or 0):.1f}%",
-                 "Gross margin (placeholder)")
+        ot_pct = float(g.get("on_time_pct", 0) or 0)
+        ot_win = int(g.get("on_time_window_days", 90) or 90)
+        ot_n   = int(g.get("on_time_cases", 0) or 0)
+        kpi_card("On-Time Ship", f"{ot_pct:.1f}%",
+                 f"last {ot_win}d · {ot_n:,} cases",
+                 status="ok" if ot_pct >= 90 else "warn")
 
     wip_val = g.get("wip_value", 0) or 0
     wip_ov = int(g.get("wip_overdue", 0) or 0)
