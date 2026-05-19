@@ -86,6 +86,11 @@ PRODUCT_DEPT_TO_BUCKET = {
 }
 
 
+# Dummy / test accounts excluded from every metric across the portal.
+# Keep in sync with pipeline.py and retention.py.
+EXCLUDED_ACCOUNT_IDS = {"LAWMUR"}
+
+
 # ── Config loading ────────────────────────────────────────────────────────────
 
 def load_logistics_config(base_dir: Path) -> dict:
@@ -218,6 +223,14 @@ def compute_logistics(cases_df: pd.DataFrame,
     if cases_df is None or cases_df.empty:
         log.warning("compute_logistics called with empty cases_df")
         return {"cases_logistics": pd.DataFrame(), "logistics_summary": pd.DataFrame()}
+
+    # ── Drop dummy / test accounts (LAWMUR / Murrphy Lawston, etc.) ──────────
+    if "Cases_CustomerID" in cases_df.columns:
+        norm = cases_df["Cases_CustomerID"].fillna("").astype(str).str.strip().str.upper()
+        before = len(cases_df)
+        cases_df = cases_df[~norm.isin(EXCLUDED_ACCOUNT_IDS)].copy()
+        if before - len(cases_df):
+            log.info("Logistics: dropped %d dummy-account rows", before - len(cases_df))
 
     # ── Extract per-case product lines BEFORE dedup ───────────────────────────
     # WIP.csv is case × product × task granularity — one row per task per

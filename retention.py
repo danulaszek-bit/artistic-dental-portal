@@ -580,13 +580,25 @@ def cases_to_dataframe(cases: list[CaseRow]) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=CASE_HISTORY_COLS)
 
 
+# Dummy / test accounts excluded from every metric across the portal.
+# Keep in sync with pipeline.py and pipeline_logistics.py.
+EXCLUDED_ACCOUNT_IDS = {"LAWMUR"}
+
+
 def load_case_history(path: str | Path) -> pd.DataFrame:
-    """Load the long-lived case_history.csv, or an empty frame if missing."""
+    """Load the long-lived case_history.csv, or an empty frame if missing.
+
+    Runtime safety net: filters out dummy/test accounts even if any historical
+    rows remain in the persisted file.
+    """
     p = Path(path)
     if not p.exists():
         return pd.DataFrame(columns=CASE_HISTORY_COLS)
     df = pd.read_csv(p, dtype={'case_number': str, 'account_id': str},
                      keep_default_na=False)
+    if not df.empty and 'account_id' in df.columns:
+        norm = df['account_id'].fillna('').astype(str).str.strip().str.upper()
+        df = df[~norm.isin(EXCLUDED_ACCOUNT_IDS)].copy()
     return df
 
 
