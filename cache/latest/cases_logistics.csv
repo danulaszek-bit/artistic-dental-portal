@@ -41,7 +41,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450670,KHASUM,Sumayyah Khan,F150,2026-05-20 11:15:00,2026-06-02 17:00:00,6/1/2026 3:00:00 PM,In Production,,324.1,IMPLANTS,CAD Mill crown/coping,Implants,0,5,-1,0,False,False,False,False
 450714,PATNEE,Neeva Patel,F214,2026-05-20 14:04:00,2026-06-11 17:00:00,6/10/2026 3:00:00 PM,In Production,,448.06,IMPLANTS,C&B,Implants,0,5,-1,0,False,False,False,False
 450202,YIANIC,Nicas Yiannias,P357*,2026-05-14 11:57:00,2026-05-27 17:00:00,5/26/2026 2:00:00 PM,In Production,EVD SUBMITTED,629.03,IMPLANT PT,BUSOFF,Implants,0,5,5,0,False,False,False,False
-450049,MADABD,Abdalhameed Madwar,F184*,2026-05-13 09:05:00,2026-05-28 17:00:00,5/27/2026 3:00:00 PM,In Production,CADSTALLED,614.87,IMPLANT PT,BUSOFF,Implants,0,5,6,0,False,False,False,False
+450049,MADABD,Abdalhameed Madwar,F184*,2026-05-13 09:05:00,2026-05-28 17:00:00,5/27/2026 3:00:00 PM,In Production,CADSTALLED,614.87,IMPLANT PT,BUSOFF,Implants,2,5,6,0,False,False,False,False
 449211,PAPAMI,Amiel Pappas,E378,2026-05-01 15:19:00,2026-05-28 17:00:00,5/27/2026 3:00:00 PM,In Production,PORCWALL,302.23,IMPLANT PT,BUSOFF,Implants,0,5,18,0,False,False,False,False
 450590,MALRYA,Ryann Maloney,H149,2026-05-19 14:07:00,2026-06-03 17:00:00,6/2/2026 3:00:00 PM,In Production,,0.0,IMPLANTS,BUSOFF,Implants,0,5,0,0,False,False,False,False
 440896,NIEMAR,Mark Niemiec,H269*,2026-01-26 17:54:00,2026-02-09 17:00:00,2/3/2026 2:00:00 PM,On Hold,CTSIOSHOLDING,353.99,IMPLANT PT,FIXED MODELS,Implants,2,5,113,99,True,False,False,True
@@ -466,7 +466,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450699,YIANIC,Nicas Yiannias,EVDSGN-052026839193,2026-05-20 13:45:00,2026-05-29 17:00:00,5/28/2026 2:00:00 PM,On Hold,,182.09,C&B,CAD DESIGN,Fixed,0,3,-1,0,False,False,False,False
 450710,CZAAUS,Austin Czarnecki,EVDSGN-052026839194,2026-05-20 13:55:00,2026-05-29 17:00:00,5/28/2026 3:00:00 PM,On Hold,,92.06,C&B,BUSOFF,Fixed,0,3,-1,0,False,False,False,False
 450578,HANMIR,Mirette Hanna,H101,2026-05-19 13:47:00,2026-05-29 17:00:00,5/28/2026 3:00:00 PM,In Production,,84.91,C&B,Brux Porcelain,Fixed,0,3,0,0,False,False,False,False
-448202,GERGRE,Greg Germino,D221$&,2026-04-30 14:57:00,2026-05-21 17:00:00,5/20/2026 3:00:00 PM,In Production,PRINTING,1791.25,C&B,BUSOFF,Fixed,0,3,19,0,False,False,False,False
+448202,GERGRE,Greg Germino,D221$&,2026-04-30 14:57:00,2026-05-21 17:00:00,5/20/2026 3:00:00 PM,In Production,PRINTING,1791.25,C&B,BUSOFF,Fixed,2,3,19,0,False,False,False,False
 450650,JONKAR,Karile Jonynas,F166,2026-05-20 09:44:00,2026-06-02 17:00:00,6/1/2026 2:00:00 PM,In Production,,143.74,C&B,C&B,Fixed,0,3,-1,0,False,False,False,False
 450531,DOUBRI,Brian Douts,EVDSGN-051926839139,2026-05-19 11:09:00,2026-06-02 17:00:00,6/1/2026 3:00:00 PM,In Production,EVD SUBMITTED,484.9,C&B,CAD DESIGN,Fixed,0,3,0,0,False,False,False,False
 450603,RESVER,Veronica Resek,EVDSGN-051926839161,2026-05-19 15:01:00,2026-05-28 17:00:00,5/27/2026 3:00:00 PM,In Production,,70.59,C&B,C&B,Fixed,0,3,0,0,False,False,False,False
@@ -661,7 +661,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 449693,CHUMAN,Manas Chug,E91*,2026-05-07 14:54:00,2026-05-15 17:00:00,5/14/2026 3:00:00 PM,On Hold,CTSIOSHOLDING,133.16,Removables,,Removable,2,5,12,4,True,False,False,True
 450602,BOYMIC,Michael Boyle,H52*,2026-05-19 14:56:00,2026-05-29 17:00:00,5/28/2026 3:00:00 PM,In Production,PRINTINGIP,100.42,Removables,BUSOFF,Removable,0,5,0,0,False,False,False,False
 450493,GRAVICDES,Victor Grandinetti,EVDSGN-051826839126,2026-05-18 15:43:00,2026-06-01 17:00:00,5/29/2026 3:00:00 PM,In Production,PRINTINGIP,108.61,Removables,BUSOFF,Removable,0,5,1,0,False,False,False,False
-448623,SHADHALA,Dhaval Shah,F234,2026-04-30 10:01:00,2026-05-21 17:00:00,5/20/2026 3:00:00 PM,In Production,PRINTING,173.91,Removables,Removables,Removable,0,5,19,0,False,False,False,False
+448623,SHADHALA,Dhaval Shah,F234,2026-04-30 10:01:00,2026-05-21 17:00:00,5/20/2026 3:00:00 PM,In Production,PRINTING,173.91,Removables,Removables,Removable,5,5,19,0,False,False,False,False
 450286,SACELI,Elizabeth Sacrey,P389*,2026-05-14 16:57:00,2026-05-26 17:00:00,5/22/2026 3:00:00 PM,In Production,PRINTINGIP,82.23,Removables,BUSOFF,Removable,1,5,5,0,False,False,False,False
 449902,CALSAM,Sam Calabrese,P571*,2026-05-19 15:18:00,2026-06-01 17:00:00,5/29/2026 3:00:00 PM,In Production,REMIPBLERTA,171.68,Removables,BUSOFF,Removable,0,5,0,0,False,False,False,False
 450453,ATHJOH,John Athos,V224*,2026-05-18 13:24:00,2026-05-27 17:00:00,5/26/2026 3:00:00 PM,In Production,PRINTING,163.06,Removables,PRINTING,Removable,0,5,1,0,False,False,False,False
