@@ -410,9 +410,7 @@ def render_profitability(prof_df):
         st.info("No profitability data.")
         return
 
-    # Focus on currently active clients: anyone with $0 year-to-date is
-    # effectively gone (no purchases in the trailing 12 months on a calendar
-    # basis). Drop them so rankings reflect the live book of business.
+    # Hide accounts with $0 YTD so we only see currently active clients.
     total_before = len(prof_df)
     prof_df = prof_df[prof_df["ytd_sales"].fillna(0) > 0].copy()
     dropped = total_before - len(prof_df)
@@ -423,33 +421,78 @@ def render_profitability(prof_df):
         st.info("No active clients with YTD sales.")
         return
 
+    # ── LYTD = last-year revenue pro-rated to today's calendar position.
+    #    (Same-period comparison; rough since seasonality isn't modeled, but
+    #    fair across all accounts.)
+    today = pd.Timestamp.today()
+    day_of_year = today.timetuple().tm_yday
+    days_in_year = 366 if today.is_leap_year else 365
+    elapsed_frac = day_of_year / days_in_year
+    prof_df["lytd_sales"] = prof_df["ly_sales"].fillna(0) * elapsed_frac
+
+    # Growth vs LYTD (NaN when LYTD is 0 = brand-new account this year)
+    def _growth(ytd, lytd):
+        try:
+            ytd = float(ytd or 0); lytd = float(lytd or 0)
+            if lytd <= 0:
+                return float("nan")
+            return (ytd - lytd) / lytd * 100
+        except Exception:
+            return float("nan")
+    prof_df["growth_vs_lytd_pct"] = [
+        _growth(y, l) for y, l in zip(prof_df["ytd_sales"], prof_df["lytd_sales"])
+    ]
+
     col1, col2 = st.columns([3, 2])
     with col1:
-        top = prof_df.nlargest(15, "ltd_sales")
-        fig = go.Figure(go.Bar(
-            x=top["ltd_sales"], y=top["account_id"].astype(str),
-            orientation="h",
-            marker=dict(color=top["yoy_growth_pct"],
-                        colorscale=[[0, COLORS['red']], [0.5, COLORS['sfc2']], [1, COLORS['acc']]],
-                        showscale=True,
-                        colorbar=dict(title="YoY %", thickness=12, tickfont=dict(color=COLORS['txt2']))),
-            text=top.apply(lambda r: f"  ${r['ltd_sales']:,.0f}  ({r['yoy_growth_pct']:+.1f}%)", axis=1),
-            textposition="outside", textfont=dict(color=COLORS['txt']),
+        # Rank by LAST YEAR's full-year revenue (who was big recently), then
+        # show LYTD and YTD as paired bars so growth/decline is visually obvious.
+        top = prof_df.nlargest(15, "ly_sales").iloc[::-1]   # reverse for top-down chart
+        fig = go.Figure()
+        fig.add_trace(go.Bar(
+            x=top["lytd_sales"], y=top["account_id"].astype(str),
+            orientation="h", name="LYTD (same period last yr)",
+            marker_color=COLORS['ylw'],
+            text=top["lytd_sales"].apply(lambda v: f" ${v:,.0f}"),
+            textposition="outside", textfont=dict(color=COLORS['txt'], size=10),
         ))
-        fig.update_layout(yaxis=dict(autorange="reversed"))
-        st.plotly_chart(style_plotly(fig, height=420), width='stretch')
+        fig.add_trace(go.Bar(
+            x=top["ytd_sales"], y=top["account_id"].astype(str),
+            orientation="h", name="YTD (this year so far)",
+            marker_color=COLORS['acc'],
+            text=top["ytd_sales"].apply(lambda v: f" ${v:,.0f}"),
+            textposition="outside", textfont=dict(color=COLORS['txt'], size=10),
+        ))
+        fig.update_layout(barmode='group',
+                          legend=dict(orientation='h', y=-0.10,
+                                      x=0.5, xanchor='center'))
+        st.markdown("**Top 15 by Last Year sales — YTD vs LYTD**")
+        st.plotly_chart(style_plotly(fig, height=520), width='stretch')
     with col2:
-        display = prof_df.nlargest(20, "ltd_sales").copy()
-        cols_show = [c for c in ["account_id","ltd_sales","ytd_sales","ly_sales",
-                                  "yoy_growth_pct","remake_rate_pct"] if c in display.columns]
-        display = display[cols_show]
-        rename = {"account_id":"Account", "ltd_sales":"LTD Sales", "ytd_sales":"YTD Sales",
-                  "ly_sales":"Prior Year", "yoy_growth_pct":"YoY %", "remake_rate_pct":"Remake %"}
-        display = display.rename(columns=rename)
-        for c in ["LTD Sales","YTD Sales","Prior Year"]:
+        display = prof_df.nlargest(20, "ly_sales").copy()
+        cols_keep = [c for c in ["account_id", "ly_sales", "lytd_sales", "ytd_sales",
+                                  "growth_vs_lytd_pct", "remake_rate_pct"]
+                     if c in display.columns]
+        display = display[cols_keep].rename(columns={
+            "account_id": "Account",
+            "ly_sales": "Last Year",
+            "lytd_sales": "LYTD",
+            "ytd_sales": "YTD",
+            "growth_vs_lytd_pct": "YTD vs LYTD",
+            "remake_rate_pct": "Remake %",
+        })
+        for c in ["Last Year", "LYTD", "YTD"]:
             if c in display.columns:
                 display[c] = display[c].apply(lambda v: f"${v:,.0f}")
-        st.dataframe(display, width='stretch', height=420, hide_index=True)
+        if "YTD vs LYTD" in display.columns:
+            display["YTD vs LYTD"] = display["YTD vs LYTD"].apply(
+                lambda v: "—" if pd.isna(v) else f"{v:+.1f}%"
+            )
+        if "Remake %" in display.columns:
+            display["Remake %"] = display["Remake %"].apply(
+                lambda v: f"{v:.1f}%" if pd.notna(v) else "—"
+            )
+        st.dataframe(display, width='stretch', height=520, hide_index=True)
 
 
 def render_pareto(pareto_df, prof_df):
@@ -472,14 +515,16 @@ def render_pareto(pareto_df, prof_df):
         st.info("No active clients with YTD sales.")
         return
 
-    sorted_df = prof_df.sort_values("ltd_sales", ascending=False).copy()
-    total = sorted_df["ltd_sales"].sum()
-    sorted_df["cum_pct"] = sorted_df["ltd_sales"].cumsum() / total * 100
+    # Rank by LAST YEAR's sales -- the active version of the Pareto: who drove
+    # most of last year's revenue, not most of all-time revenue.
+    sorted_df = prof_df.sort_values("ly_sales", ascending=False).copy()
+    total = sorted_df["ly_sales"].sum()
+    sorted_df["cum_pct"] = sorted_df["ly_sales"].cumsum() / total * 100
     top15 = sorted_df.head(15)
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
-    fig.add_trace(go.Bar(x=top15["account_id"].astype(str), y=top15["ltd_sales"],
-                         marker_color=COLORS['acc'], name="Revenue"), secondary_y=False)
+    fig.add_trace(go.Bar(x=top15["account_id"].astype(str), y=top15["ly_sales"],
+                         marker_color=COLORS['acc'], name="Last Year Revenue"), secondary_y=False)
     fig.add_trace(go.Scatter(x=top15["account_id"].astype(str), y=top15["cum_pct"],
                              mode="lines+markers", name="Cumulative %",
                              line=dict(color=COLORS['gold'], width=2)), secondary_y=True)
@@ -494,11 +539,11 @@ def render_pareto(pareto_df, prof_df):
     n_under = int((sorted_df["cum_pct"] <= 80).sum())
     n_keep = min(n_under + 1, len(sorted_df))   # include the boundary-crosser
     pareto_filtered = sorted_df.head(n_keep)
-    pareto_rev = pareto_filtered["ltd_sales"].sum()
+    pareto_rev = pareto_filtered["ly_sales"].sum()
     n = len(pareto_filtered)
     total_n = len(prof_df)
-    st.caption(f"**{n} accounts** ({n/total_n*100:.0f}% of {total_n} active accounts) drive "
-               f"**{fmt_currency(pareto_rev)}** ({pareto_rev/total*100:.0f}% of revenue)")
+    st.caption(f"**{n} accounts** ({n/total_n*100:.0f}% of {total_n} active accounts) drove "
+               f"**{fmt_currency(pareto_rev)}** ({pareto_rev/total*100:.0f}% of last year's revenue)")
 
 
 def render_wip(wip_summary, wip_detail):
