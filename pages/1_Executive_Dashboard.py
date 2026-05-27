@@ -409,6 +409,20 @@ def render_profitability(prof_df):
     if prof_df.empty:
         st.info("No profitability data.")
         return
+
+    # Focus on currently active clients: anyone with $0 year-to-date is
+    # effectively gone (no purchases in the trailing 12 months on a calendar
+    # basis). Drop them so rankings reflect the live book of business.
+    total_before = len(prof_df)
+    prof_df = prof_df[prof_df["ytd_sales"].fillna(0) > 0].copy()
+    dropped = total_before - len(prof_df)
+    if dropped > 0:
+        st.caption(f"Hiding {dropped} inactive account(s) with no YTD sales "
+                   f"to focus on currently active clients.")
+    if prof_df.empty:
+        st.info("No active clients with YTD sales.")
+        return
+
     col1, col2 = st.columns([3, 2])
     with col1:
         top = prof_df.nlargest(15, "ltd_sales")
@@ -440,9 +454,24 @@ def render_profitability(prof_df):
 
 def render_pareto(pareto_df, prof_df):
     section("⭐ Top 20% Accounts — Pareto")
-    if pareto_df.empty:
-        st.info("No Pareto data.")
+    if prof_df is None or prof_df.empty:
+        st.info("No profitability data.")
         return
+
+    # Same focus filter as Profitability: drop accounts with no YTD sales so
+    # the Pareto reflects who's actually driving revenue now -- not historical
+    # dead clients. Pre-computed pareto_df is from the unfiltered set, so we
+    # re-derive the 80% group below from the filtered prof_df.
+    total_before = len(prof_df)
+    prof_df = prof_df[prof_df["ytd_sales"].fillna(0) > 0].copy()
+    dropped = total_before - len(prof_df)
+    if dropped > 0:
+        st.caption(f"Hiding {dropped} inactive account(s) with no YTD sales "
+                   f"to focus on currently active clients.")
+    if prof_df.empty:
+        st.info("No active clients with YTD sales.")
+        return
+
     sorted_df = prof_df.sort_values("ltd_sales", ascending=False).copy()
     total = sorted_df["ltd_sales"].sum()
     sorted_df["cum_pct"] = sorted_df["ltd_sales"].cumsum() / total * 100
@@ -460,10 +489,15 @@ def render_pareto(pareto_df, prof_df):
     fig.update_yaxes(ticksuffix="%", secondary_y=True)
     st.plotly_chart(style_plotly(fig, height=350), width='stretch')
 
-    pareto_rev = pareto_df["ltd_sales"].sum()
-    n = len(pareto_df)
+    # Re-derive the Pareto 80% group from the FILTERED set (smallest set whose
+    # cumulative revenue crosses 80%).
+    n_under = int((sorted_df["cum_pct"] <= 80).sum())
+    n_keep = min(n_under + 1, len(sorted_df))   # include the boundary-crosser
+    pareto_filtered = sorted_df.head(n_keep)
+    pareto_rev = pareto_filtered["ltd_sales"].sum()
+    n = len(pareto_filtered)
     total_n = len(prof_df)
-    st.caption(f"**{n} accounts** ({n/total_n*100:.0f}% of {total_n}) drive "
+    st.caption(f"**{n} accounts** ({n/total_n*100:.0f}% of {total_n} active accounts) drive "
                f"**{fmt_currency(pareto_rev)}** ({pareto_rev/total*100:.0f}% of revenue)")
 
 
