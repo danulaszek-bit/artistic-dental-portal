@@ -1075,6 +1075,48 @@ def render_implants(impl_df):
     st.dataframe(display.head(40), width='stretch', height=420, hide_index=True)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# ============================================================================
 #  MAIN
-# ═════════════�
+# ============================================================================
+
+data = load_kpi_data()
+gauges = data.get("kpi_gauges", pd.DataFrame())
+prof = data.get("profitability", pd.DataFrame())
+pareto = data.get("pareto_accounts", pd.DataFrame())
+implants = data.get("implant_pipeline", pd.DataFrame())
+wip_summary = data.get("wip_summary", pd.DataFrame())
+wip_detail = data.get("wip_detail", pd.DataFrame())
+active_30d = data.get("active_accounts_30d", pd.DataFrame())
+remakes_detail = data.get("remakes_detail", pd.DataFrame())
+remake_reason = data.get("remake_by_reason", pd.DataFrame())
+remake_history = data.get("remake_history_monthly", pd.DataFrame())
+remake_by_dept = data.get("remake_by_dept", pd.DataFrame())
+remake_by_dept_reason = data.get("remake_by_dept_reason", pd.DataFrame())
+remakes_full = data.get("remakes_full", pd.DataFrame())
+daily_sales = data.get("daily_sales", pd.DataFrame())
+product_mix = data.get("product_type_summary", pd.DataFrame())
+
+render_header()
+st.divider()
+render_kpi_row(gauges)
+st.divider()
+render_mtd(gauges)
+st.divider()
+
+tabs = st.tabs([
+    "📅 Daily Sales", "🥧 Product Mix",
+    "💰 Profitability", "⭐ Pareto Top 20%", "🔧 WIP",
+    "👥 Active Accounts", "🔁 Remakes", "🔬 Implants",
+])
+with tabs[0]: render_daily_sales(daily_sales)
+with tabs[1]: render_product_mix(product_mix)
+with tabs[2]: render_profitability(prof)
+with tabs[3]: render_pareto(pareto, prof)
+with tabs[4]: render_wip(wip_summary, wip_detail)
+with tabs[5]: render_active(active_30d)
+with tabs[6]: render_remakes(remakes_detail, remake_reason, remake_history,
+                              remake_by_dept, remake_by_dept_reason, remakes_full)
+with tabs[7]: render_implants(implants)
+
+st.divider()
+st.caption("Artistic Dental Studio - Executive Dashboard - Data refreshed nightly at 6 AM")
