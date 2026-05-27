@@ -819,6 +819,63 @@ def _biz_days_elapsed_in_month(yearmonth: str) -> int:
     return sum(1 for d in weekdays if d.normalize() not in holidays)
 
 
+def _biz_days_total_in_month(yearmonth: str) -> int:
+    """Total business days in the given YYYY-MM (full month, excluding lab holidays)."""
+    period = pd.Period(yearmonth, freq="M")
+    start = period.start_time.normalize()
+    end = period.end_time.normalize()
+    holidays = _lab_holidays(start.year) | _lab_holidays(end.year)
+    weekdays = pd.bdate_range(start, end)
+    return sum(1 for d in weekdays if d.normalize() not in holidays)
+
+
+def _project_month_end_invoiced(month_df: pd.DataFrame, yearmonth: str) -> dict:
+    """Project month-end $ Invoiced using two methods:
+
+      - run_rate: invoiced-so-far + (avg invoiced per biz day) * biz days remaining
+      - trend:    linear least-squares fit on daily invoiced, extended over the
+                  remaining biz days (captures momentum: up or down)
+
+    Returns both numbers plus business-day counts so the caller can show them
+    side by side. If the month is finished (no days remaining) both equal the
+    actual invoiced total.
+    """
+    elapsed = _biz_days_elapsed_in_month(yearmonth)
+    total = _biz_days_total_in_month(yearmonth)
+    remaining = max(total - elapsed, 0)
+    invoiced_so_far = float(month_df["dollars_invoiced"].sum())
+
+    # Simple run-rate (daily avg holds for the rest of the month)
+    avg_per_biz = invoiced_so_far / max(elapsed, 1)
+    run_rate_proj = invoiced_so_far + remaining * avg_per_biz
+
+    # Linear-trend extrapolation across days that actually invoiced
+    days = (month_df[month_df["dollars_invoiced"] > 0]
+            .sort_values("date").reset_index(drop=True))
+    if len(days) >= 2 and remaining > 0:
+        x = days.index.values.astype(float)
+        y = days["dollars_invoiced"].values.astype(float)
+        x_mean, y_mean = x.mean(), y.mean()
+        denom = ((x - x_mean) ** 2).sum()
+        slope = ((x - x_mean) * (y - y_mean)).sum() / denom if denom else 0.0
+        intercept = y_mean - slope * x_mean
+        predicted_remaining = sum(
+            max(0.0, slope * (len(x) + i) + intercept)
+            for i in range(remaining)
+        )
+        trend_proj = invoiced_so_far + predicted_remaining
+    else:
+        trend_proj = run_rate_proj   # not enough data to fit a trend
+
+    return {
+        "run_rate":           run_rate_proj,
+        "trend":              trend_proj,
+        "biz_days_total":     total,
+        "biz_days_elapsed":   elapsed,
+        "biz_days_remaining": remaining,
+    }
+
+
 def render_daily_sales(daily_df):
     section("📅 Daily Sales — Cases In vs. Cases Out")
     if daily_df is None or daily_df.empty:
@@ -873,8 +930,14 @@ def render_daily_sales(daily_df):
                         f"avg {out_units/div:,.1f} / biz day")
     with k[4]: kpi_card("$ Invoiced",fmt_currency(out_gross),
                         f"avg {fmt_currency(out_gross/div)} / biz day")
-    with k[5]: kpi_card("$ Net Sales", fmt_currency(out_net),
-                        f"avg {fmt_currency(out_net/div)} / biz day")
+    with k[5]:
+        proj = _project_month_end_invoiced(month_df, pick)
+        kpi_card(
+            "Projected Month End",
+            fmt_currency(proj["run_rate"]),
+            f"trend: {fmt_currency(proj['trend'])}  ·  "
+            f"{proj['biz_days_remaining']} biz days left of {proj['biz_days_total']}",
+        )
 
     # Daily chart: cases in vs cases out per day
     fig = go.Figure()
@@ -919,39 +982,80 @@ def render_product_mix(mix_df):
 
     cols_present = [c for c in ("ytd", "ly", "lm") if c in mix_df.columns]
     labels = {"ytd": "Year-to-Date", "ly": "Last Year", "lm": "Last Month (~30d)"}
+
+    # ── Stable product → color mapping so each product keeps the SAME color
+    #    across all pies AND the legend table, regardless of its rank in
+    #    any individual period. Sorted alphabetically for determinism.
+    products_sorted = sorted(
+        str(p) for p in mix_df["product_type"].dropna().unique()
+    )
+    palette = (px.colors.qualitative.Set2 +
+               px.colors.qualitative.Pastel +
+               px.colors.qualitative.Set3)
+    color_map = {prod: palette[i % len(palette)]
+                 for i, prod in enumerate(products_sorted)}
+
     cols = st.columns(len(cols_present))
-    palette = px.colors.qualitative.Set2
 
     for i, period in enumerate(cols_present):
         with cols[i]:
             sub = mix_df[["product_type", period]].copy()
             sub = sub[sub[period].abs() > 0].sort_values(period, ascending=False)
             total = float(sub[period].sum())
+            # Apply the stable colors in the order of THIS pie's labels
+            pie_colors = [color_map.get(str(p), "#888888")
+                          for p in sub["product_type"]]
             fig = go.Figure(go.Pie(
                 labels=sub["product_type"], values=sub[period],
                 hole=0.4, sort=False, direction="clockwise",
-                marker=dict(colors=palette),
-                textinfo="percent",
+                marker=dict(colors=pie_colors,
+                            line=dict(color=COLORS['bg'], width=1)),
+                textinfo="label",                  # product names, not %
+                textposition="inside",             # keep labels off the title
+                insidetextorientation="horizontal",
+                textfont=dict(color="white", size=11),
                 hovertemplate="<b>%{label}</b><br>$%{value:,.0f}<br>%{percent}<extra></extra>",
             ))
             fig.update_layout(
                 title=dict(text=f"{labels[period]}<br><sub>{fmt_currency(total)}</sub>",
                            x=0.5, xanchor="center", font=dict(size=14)),
-                margin=dict(l=10, r=10, t=60, b=10),
+                margin=dict(l=10, r=10, t=80, b=10),   # bigger top margin clears the title
                 height=340,
                 showlegend=False,
             )
             style_plotly(fig, height=340)
             st.plotly_chart(fig, use_container_width=True)
 
-    # Shared legend table beneath the pies
+    # ── Color-coded legend table (rows tinted to match pie colors) ──────────
     legend_cols = ["product_type"] + cols_present
     legend = mix_df[legend_cols].copy()
     for c in cols_present:
         legend[c] = legend[c].apply(fmt_currency)
     legend = legend.rename(columns={"product_type": "Product Type",
                                      "ytd": "YTD", "ly": "Last Year", "lm": "Last Month"})
-    st.dataframe(legend, use_container_width=True, hide_index=True, height=260)
+
+    def _hex_to_rgba(hex_color, alpha=0.35):
+        """Convert '#rrggbb' or 'rgb(r,g,b)' to rgba(r,g,b,a)."""
+        h = str(hex_color).strip()
+        if h.startswith("#"):
+            h = h[1:]
+            if len(h) == 3:
+                h = "".join(c * 2 for c in h)
+            r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+        elif h.startswith("rgb"):
+            inside = h[h.index("(") + 1: h.index(")")]
+            r, g, b = (int(x.strip()) for x in inside.split(",")[:3])
+        else:
+            r = g = b = 128
+        return f"rgba({r},{g},{b},{alpha})"
+
+    def _row_style(row):
+        prod = str(row["Product Type"])
+        color = color_map.get(prod, "#888888")
+        return [f"background-color: {_hex_to_rgba(color, 0.35)}"] * len(row)
+
+    styled = legend.style.apply(_row_style, axis=1)
+    st.dataframe(styled, use_container_width=True, hide_index=True, height=260)
 
 
 def render_implants(impl_df):
@@ -973,46 +1077,4 @@ def render_implants(impl_df):
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  MAIN
-# ══════════════════════════════════════════════════════════════════════════════
-
-data = load_kpi_data()
-gauges = data.get("kpi_gauges", pd.DataFrame())
-prof = data.get("profitability", pd.DataFrame())
-pareto = data.get("pareto_accounts", pd.DataFrame())
-implants = data.get("implant_pipeline", pd.DataFrame())
-wip_summary = data.get("wip_summary", pd.DataFrame())
-wip_detail = data.get("wip_detail", pd.DataFrame())
-active_30d = data.get("active_accounts_30d", pd.DataFrame())
-remakes_detail = data.get("remakes_detail", pd.DataFrame())
-remake_reason = data.get("remake_by_reason", pd.DataFrame())
-remake_history = data.get("remake_history_monthly", pd.DataFrame())
-remake_by_dept = data.get("remake_by_dept", pd.DataFrame())
-remake_by_dept_reason = data.get("remake_by_dept_reason", pd.DataFrame())
-remakes_full = data.get("remakes_full", pd.DataFrame())
-daily_sales = data.get("daily_sales", pd.DataFrame())
-product_mix = data.get("product_type_summary", pd.DataFrame())
-
-render_header()
-st.divider()
-render_kpi_row(gauges)
-st.divider()
-render_mtd(gauges)
-st.divider()
-
-tabs = st.tabs([
-    "📅 Daily Sales", "🥧 Product Mix",
-    "💰 Profitability", "⭐ Pareto Top 20%", "🔧 WIP",
-    "👥 Active Accounts", "🔁 Remakes", "🔬 Implants",
-])
-with tabs[0]: render_daily_sales(daily_sales)
-with tabs[1]: render_product_mix(product_mix)
-with tabs[2]: render_profitability(prof)
-with tabs[3]: render_pareto(pareto, prof)
-with tabs[4]: render_wip(wip_summary, wip_detail)
-with tabs[5]: render_active(active_30d)
-with tabs[6]: render_remakes(remakes_detail, remake_reason, remake_history,
-                              remake_by_dept, remake_by_dept_reason, remakes_full)
-with tabs[7]: render_implants(implants)
-
-st.divider()
-st.caption("Artistic Dental Studio · Executive Dashboard · Data refreshed nightly at 6 AM")
+# ═════════════�
