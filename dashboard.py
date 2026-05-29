@@ -273,13 +273,14 @@ with row2_c1:
 
 with row2_c2:
     st.markdown("""
-    <div class="nav-card disabled">
+    <a class="nav-card" href="/Production_Manager" target="_self">
       <div class="nav-icon">🔧</div>
       <div class="nav-title">Production Manager</div>
-      <div class="nav-desc">Lab production tracking, technician performance, turnaround times
-      by department. Coming soon.</div>
-      <div class="nav-coming-soon">Coming Soon</div>
-    </div>
+      <div class="nav-desc">Lab production by department, technician performance, employee
+      productivity, units in, and remake analysis. Day / week / month trends with
+      product-level drill-down.</div>
+      <div style="margin-top:14px;color:#58a6ff;font-size:13px;font-weight:600">Open →</div>
+    </a>
     """, unsafe_allow_html=True)
 
 # Headline KPI strip
