@@ -52,6 +52,10 @@ if not HTML_PATH.exists():
 
 html = HTML_PATH.read_text(encoding="utf-8")
 
-# Tall fixed height with internal scrolling. The embedded app has its own
-# sticky topbar and manages its own vertical scroll inside the iframe.
-components.html(html, height=2400, scrolling=True)
+# Size the iframe to roughly one screen height. The embedded app's upload
+# screen is a position:fixed overlay that centers within the iframe's own
+# viewport — so the iframe must be ~screen-height for it to appear where the
+# user can see it (a too-tall iframe pushes the overlay far down the page).
+# The dashboard's own content scrolls inside the frame (scrolling=True), and
+# it has a sticky topbar that stays pinned.
+components.html(html, height=900, scrolling=True)
