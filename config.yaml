@@ -6,13 +6,19 @@
 data_source:
   mode: csv                          # "csv" | "odbc"
   csv:
-    watch_folder: "C:/ArtisticDentalPortal/live_exports"
-    sales_file: "Sales_Data.csv"         # Magic Touch aggregated sales export
-    active_cases_file: "Active_30_day.csv" # Active cases last 30 days
-    remakes_file: "Remakes.csv"           # Remakes last 30 days
-    wip_file: "WIP_Cases.csv"             # WIP (add tomorrow)
+    watch_folder: "C:/MT_Reports_Local"
+    sales_file: "Sales_Data.csv"
+    active_cases_file: "Active_30_day.csv"
+    wip_cases_file: "WIP_cases.csv"
+    case_location_file: "case_location.csv"
+    remake_reasons_file: "remake_reasons.csv"
+    remake_by_lab_file: "Remake by Lab Customer Products.csv"
+    tech_productivity_file: "tech_productivity.csv"
+    employee_productivity_file: "EmployeeProductivity.xls"
+    prod_by_dept_file: "prod_by_dept.xls"
+    all_cases_daily_file: "AllCasesByDateIn.csv"
+    remakes_daily_file: "Remakes.csv"
     encoding: "utf-8-sig"
-    cases_encoding: "latin-1"             # Magic Touch case exports use latin-1
 
   # --- Phase 2: swap mode to "odbc" when ready -------------
   odbc:

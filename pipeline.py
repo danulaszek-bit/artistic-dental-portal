@@ -21,6 +21,13 @@ import time
 import pandas as pd
 import numpy as np
 
+# ── New MT Reports parsers ─────────────────────────────────────────────────────
+from mt_reports_parser import (
+    load_sales_data, aggregate_sales_for_kpis,
+    load_active_30_day, load_remake_by_lab, load_remake_reasons,
+    build_unified_wip, load_all_cases_daily,
+)
+
 # Google Drive
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
@@ -253,27 +260,25 @@ def load_data() -> dict[str, pd.DataFrame]:
 
 def _load_from_csv() -> dict[str, pd.DataFrame]:
     """
-    Load Magic Touch Sales_Data.csv — pre-aggregated by customer+product.
-    Columns include YTD, LY, LTD, MTD, quarterly sales + remakes.
+    Load all Magic Touch MT_Reports_Local exports via mt_reports_parser.
+    Sales_Data.csv is invoice-line level — aggregate_sales_for_kpis() converts
+    it to the per-account YTD/LY/MTD/quarterly format compute_kpis() expects.
     """
     src = CFG["data_source"]["csv"]
     folder = Path(src["watch_folder"])
-    enc = src.get("encoding", "utf-8-sig")
 
     log.info("Loading Magic Touch data from %s", folder)
 
-    sales_file = src.get("sales_file", "Sales_Data.csv")
-    sales_path = folder / sales_file
-
-    if not sales_path.exists():
-        log.warning("File not found: %s", sales_path)
-        return {"sales": pd.DataFrame()}
-
-    df = pd.read_csv(sales_path, encoding=enc)
-    log.info("Raw file: %d rows loaded", len(df))
-    df = _clean_sales(df)
-    log.info("Clean: %d rows, %d unique customers",
-             len(df), df["account_id"].nunique())
+    # Sales: invoice lines → aggregate to per-account KPI shape
+    raw_sales = load_sales_data(folder)
+    if not raw_sales.empty:
+        raw_sales = _drop_excluded_accounts(raw_sales)
+        df = aggregate_sales_for_kpis(raw_sales)
+        log.info("Sales: %d invoice lines → %d unique accounts",
+                 len(raw_sales), len(df))
+    else:
+        df = pd.DataFrame()
+        log.warning("Sales_Data.csv not found or empty")
 
     tables = {"sales": df}
     tables.update(_load_case_files(folder))
@@ -281,55 +286,53 @@ def _load_from_csv() -> dict[str, pd.DataFrame]:
 
 
 def _load_case_files(folder: Path) -> dict[str, pd.DataFrame]:
-    """Load Active_30_day.csv and Remakes.csv from Magic Touch Advanced Export."""
-    enc = "latin-1"
+    """Load case files via mt_reports_parser functions."""
     tables = {}
+    today = pd.Timestamp.today()
 
-    # Active cases (last 30 days) — also used for WIP
-    active_path = folder / "Active_30_day.csv"
-    if active_path.exists():
-        df = pd.read_csv(active_path, encoding=enc, low_memory=False)
-        df = _clean_cases(df)
-        tables["active_cases"] = df
-        log.info("Active cases: %d rows", len(df))
+    # ── Active cases (rolling ~30 days) ──────────────────────────────────────
+    active = load_active_30_day(folder)
+    if not active.empty:
+        active = _drop_excluded_accounts(active)
+        if "case_number" in active.columns:
+            active = active.drop_duplicates(subset=["case_number"], keep="first").copy()
+        if "date_in" in active.columns:
+            active["days_in_lab"] = (today - active["date_in"]).dt.days
+        if "due_date" in active.columns:
+            active["overdue"] = active["due_date"] < today
+        log.info("Active cases: %d rows", len(active))
     else:
         log.warning("Active_30_day.csv not found")
-        tables["active_cases"] = pd.DataFrame()
+    tables["active_cases"] = active
 
-    # Remakes (last 30 days)
-    remake_path = folder / "Remakes.csv"
-    if remake_path.exists():
-        df = pd.read_csv(remake_path, encoding=enc, low_memory=False)
-        df = _clean_cases(df)
-        tables["remakes"] = df
-        log.info("Remakes: %d rows", len(df))
+    # ── Remakes — richest source first, fall back to reason-only ─────────────
+    remakes = load_remake_by_lab(folder)
+    if remakes.empty:
+        remakes = load_remake_reasons(folder)
+    if not remakes.empty:
+        remakes = _drop_excluded_accounts(remakes)
+        log.info("Remakes: %d rows", len(remakes))
     else:
-        log.warning("Remakes.csv not found")
-        tables["remakes"] = pd.DataFrame()
+        log.warning("No remake file found")
+    tables["remakes"] = remakes
 
-    # WIP — dedicated export from Magic Touch
-    wip_path = folder / "WIP.csv"
-    if wip_path.exists():
-        df = pd.read_csv(wip_path, encoding="utf-8-sig", low_memory=False)
-        df = _clean_cases(df)
-        # Filter to true open WIP statuses only
+    # ── WIP — unified join of WIP_cases + case_location ──────────────────────
+    wip_raw = build_unified_wip(folder)
+    tables["wip_raw"] = wip_raw   # Cases_* columns — used by logistics module
+
+    if not wip_raw.empty:
+        # Clean to plain column names for KPI computation
+        wip_clean = _clean_cases(wip_raw.copy())
         open_statuses = ["In Production", "On Hold", "Submitted",
                          "Outsourced", "Sent for TryIn"]
-        df = df[df["status"].isin(open_statuses)].copy()
-        tables["wip"] = df
+        if "status" in wip_clean.columns:
+            wip_clean = wip_clean[wip_clean["status"].isin(open_statuses)].copy()
+        tables["wip"] = wip_clean
         log.info("WIP: %d open cases, $%.0f total value",
-                 len(df), df["total_charge"].sum() if "total_charge" in df.columns else 0)
+                 len(wip_clean),
+                 wip_clean["total_charge"].sum() if "total_charge" in wip_clean.columns else 0)
     else:
-        # Derive WIP from active cases if WIP.csv not available
-        if not tables["active_cases"].empty:
-            invoiced = ["Invoiced", "Invoiced TryIn", "Cancelled"]
-            wip = tables["active_cases"][
-                ~tables["active_cases"]["status"].isin(invoiced)
-            ].copy()
-            tables["wip"] = wip
-            log.info("WIP (derived): %d open cases", len(wip))
-        else:
-            tables["wip"] = pd.DataFrame()
+        tables["wip"] = pd.DataFrame()
 
     return tables
 
@@ -886,16 +889,14 @@ def compute_on_time_ship(folder: Path, days: int = 90):
     """Compute on-time ship-rate metrics from Active_30_day.csv.
 
     Definition:
-        actual ship date = Cases_ShipmentDate (real shipment), fallback to
-                           Cases_InvoiceDate when ShipmentDate is blank
-        planned ship date = Cases_ShipDate
+        actual date = invoice_date (best proxy for shipment in new export)
+        planned date = ship_date
         on time = actual <= planned
 
     Returns (summary_dict, monthly_df). Summary dict is suitable for merging
     into kpi_gauges.csv. monthly_df has columns:
         month, cases, on_time, late, on_time_pct
     """
-    path = folder / "Active_30_day.csv"
     empty_summary = {
         "on_time_window_days":   days,
         "on_time_cases":         0,
@@ -903,22 +904,19 @@ def compute_on_time_ship(folder: Path, days: int = 90):
         "on_time_late":          0,
         "on_time_pct":           0.0,
     }
-    if not path.exists():
+    df = load_active_30_day(folder)
+    if df.empty:
         return empty_summary, pd.DataFrame()
-    df = pd.read_csv(path, encoding="latin-1", engine="python", on_bad_lines="skip")
-    if "Cases_CaseNumber" in df.columns:
-        df = df.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
-    df["plan"] = pd.to_datetime(df.get("Cases_ShipDate"),    errors="coerce").dt.normalize()
-    df["inv"]  = pd.to_datetime(df.get("Cases_InvoiceDate"), errors="coerce").dt.normalize()
-    if "Cases_ShipmentDate" in df.columns:
-        df["ship"] = pd.to_datetime(df["Cases_ShipmentDate"], errors="coerce").dt.normalize()
-    else:
-        df["ship"] = pd.NaT
-    df["actual"] = df["ship"].fillna(df["inv"])
+
+    if "case_number" in df.columns:
+        df = df.drop_duplicates(subset=["case_number"], keep="first").copy()
+
+    df["plan"]   = pd.to_datetime(df.get("ship_date"),    errors="coerce").dt.normalize()
+    df["actual"] = pd.to_datetime(df.get("invoice_date"), errors="coerce").dt.normalize()
 
     today  = pd.Timestamp.today().normalize()
     cutoff = today - pd.Timedelta(days=days)
-    win = df.dropna(subset=["plan","actual"])
+    win = df.dropna(subset=["plan", "actual"])
     win = win[(win["actual"] >= cutoff) & (win["actual"] <= today)].copy()
     if win.empty:
         return empty_summary, pd.DataFrame()
@@ -932,12 +930,11 @@ def compute_on_time_ship(folder: Path, days: int = 90):
         "on_time_pct":           round(on_time.mean() * 100, 1),
     }
 
-    # Monthly trend
     win["month"] = win["actual"].dt.to_period("M").astype(str)
     monthly = (
         win.assign(_ot=on_time.astype(int))
            .groupby("month")
-           .agg(cases=("Cases_CaseNumber", "count"),
+           .agg(cases=("case_number", "count"),
                 on_time=("_ot", "sum"))
            .reset_index()
     )
@@ -1004,70 +1001,50 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
         })
         out_source = "SalesSummaryByDate.csv"
     else:
-        # Fallback: build from Active_30_day.csv
-        active_path = folder / "Active_30_day.csv"
-        if active_path.exists():
-            try:
-                a = pd.read_csv(active_path, encoding="latin-1",
-                                engine="python", on_bad_lines="skip")
-                if "Cases_CaseNumber" in a.columns:
-                    a = a.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
-                a["inv_date"] = pd.to_datetime(a.get("Cases_InvoiceDate"),
-                                                errors="coerce").dt.normalize()
-                a["tc"]       = pd.to_numeric(a.get("Cases_TotalCharge"),
-                                                errors="coerce").fillna(0)
+        # Fallback: build from Active_30_day.csv via parser (plain column names)
+        try:
+            a = load_active_30_day(folder)
+            if not a.empty:
+                if "case_number" in a.columns:
+                    a = a.drop_duplicates(subset=["case_number"], keep="first").copy()
+                a["inv_date"] = pd.to_datetime(
+                    a.get("invoice_date"), errors="coerce").dt.normalize()
                 a = a[a["inv_date"].notna() & (a["inv_date"] >= cutoff)]
-                out_grp = (a.groupby("inv_date")
-                             .agg(cases_out=("Cases_CaseNumber", "count"),
-                                  dollars_invoiced=("tc", "sum"))
-                             .reset_index().rename(columns={"inv_date": "date"}))
-                # No per-line unit count in this source — proxy with case count.
-                # No tax/discount breakout — Net Sales ≈ Total Invoiced.
-                out_grp["units_out"]   = out_grp["cases_out"]
-                out_grp["dollars_net"] = out_grp["dollars_invoiced"].round(2)
+                out_grp = (
+                    a.groupby("inv_date")
+                     .agg(cases_out=("case_number", "count"),
+                          dollars_invoiced=("total_charge", "sum"))
+                     .reset_index().rename(columns={"inv_date": "date"})
+                )
+                out_grp["units_out"]        = out_grp["cases_out"]
+                out_grp["dollars_net"]      = out_grp["dollars_invoiced"].round(2)
                 out_grp["dollars_invoiced"] = out_grp["dollars_invoiced"].round(2)
                 out_source = "Active_30_day.csv (case-level fallback; units=cases, net=gross)"
-            except Exception as exc:
-                log.warning("Active_30_day.csv read for out side failed: %s", exc)
-                out_grp = pd.DataFrame(columns=["date","cases_out","units_out",
-                                                 "dollars_invoiced","dollars_net"])
-                out_source = "(failed)"
-        else:
-            out_grp = pd.DataFrame(columns=["date","cases_out","units_out",
-                                             "dollars_invoiced","dollars_net"])
-            out_source = "(missing — out side will be empty)"
-
-    # ── IN: from Active_30_day.csv (only fresh DateIn source) ───────────────
-    active_path = folder / "Active_30_day.csv"
-    if active_path.exists():
-        try:
-            act = pd.read_csv(active_path, encoding="latin-1",
-                              engine="python", on_bad_lines="skip")
-            # Dedupe product-line rows → one row per case.
-            # Cases_TotalCharge is the case total repeated on each line, so
-            # summing without dedup multi-counts both case count and dollars.
-            if "Cases_CaseNumber" in act.columns:
-                act = act.drop_duplicates(subset=["Cases_CaseNumber"], keep="first").copy()
-            act["date_in"]      = pd.to_datetime(act.get("Cases_DateIn"),
-                                                  errors="coerce").dt.normalize()
-            act["total_charge"] = pd.to_numeric(act.get("Cases_TotalCharge"),
-                                                  errors="coerce").fillna(0)
-            act = act[act["date_in"] >= cutoff]
-            in_grp = (
-                act.groupby("date_in")
-                   .agg(cases_in=("Cases_CaseNumber", "count"),
-                        dollars_in=("total_charge", "sum"))
-                   .reset_index().rename(columns={"date_in": "date"})
-            )
-            in_grp["dollars_in"] = in_grp["dollars_in"].round(2)
-            in_source = "Active_30_day.csv (deduped)"
+            else:
+                out_grp  = pd.DataFrame(columns=["date","cases_out","units_out",
+                                                   "dollars_invoiced","dollars_net"])
+                out_source = "(missing — out side will be empty)"
         except Exception as exc:
-            log.warning("Active_30_day.csv read failed: %s", exc)
-            in_grp = pd.DataFrame(columns=["date","cases_in","dollars_in"])
-            in_source = "(failed)"
-    else:
-        in_grp = pd.DataFrame(columns=["date","cases_in","dollars_in"])
-        in_source = "(missing — in side will be empty)"
+            log.warning("Active_30_day fallback for out side failed: %s", exc)
+            out_grp  = pd.DataFrame(columns=["date","cases_out","units_out",
+                                               "dollars_invoiced","dollars_net"])
+            out_source = "(failed)"
+
+    # ── IN: AllCasesByDateIn.csv — pre-aggregated daily totals ───────────────
+    try:
+        in_daily = load_all_cases_daily(folder)
+        if not in_daily.empty:
+            in_daily = in_daily[in_daily["date"] >= cutoff].copy()
+            in_grp = in_daily.rename(columns={"total_revenue": "dollars_in"})
+            in_grp["dollars_in"] = in_grp["dollars_in"].round(2)
+            in_source = "AllCasesByDateIn.csv"
+        else:
+            in_grp  = pd.DataFrame(columns=["date","cases_in","dollars_in"])
+            in_source = "(missing — in side will be empty)"
+    except Exception as exc:
+        log.warning("AllCasesByDateIn read failed: %s", exc)
+        in_grp  = pd.DataFrame(columns=["date","cases_in","dollars_in"])
+        in_source = "(failed)"
 
     daily = pd.merge(in_grp, out_grp, on="date", how="outer").fillna(0)
     if daily.empty:
@@ -1136,7 +1113,6 @@ def run_pipeline():
     # GMAIL_KILL_SWITCH — set to False to skip Gmail download entirely.
     # Useful when scheduled reports are wrong/partial and overwriting good files.
     GMAIL_ENABLED = False
-    live_exports = BASE_DIR / CFG["data_source"]["csv"]["watch_folder"].replace("C:/ArtisticDentalPortal/", "")
     watch_folder = Path(CFG["data_source"]["csv"]["watch_folder"])
     if GMAIL_ENABLED:
         try:
@@ -1202,27 +1178,16 @@ def run_pipeline():
     log.info("Saved local cache: %s", latest_dir)
 
     # ── Logistics module: per-case station tracking + KPIs ──────────────────
-    # Source preference: WIP.csv (live WIP, ~1.3k rows) → Active_30_day.csv
-    # (recent 30 days incl. invoiced) → AllCasesByDateIn.csv (historical, not
-    # useful for current WIP because LastLocation is blanked post-invoice).
+    # wip_raw holds the Cases_*-column output of build_unified_wip() which
+    # pipeline_logistics.py expects. Already in tables from _load_case_files().
     try:
         from pipeline_logistics import compute_logistics
-        raw_cases = pd.DataFrame()
-        wip_path        = watch_folder / "WIP.csv"
-        active_raw_path = watch_folder / "Active_30_day.csv"
-        all_cases_path  = watch_folder / "AllCasesByDateIn.csv"
-        if wip_path.exists():
-            raw_cases = pd.read_csv(wip_path, encoding="utf-8-sig", low_memory=False)
-            log.info("Logistics: loaded WIP.csv (%d rows)", len(raw_cases))
-        elif active_raw_path.exists():
-            raw_cases = pd.read_csv(active_raw_path, encoding="latin-1", low_memory=False)
-            log.info("Logistics: loaded Active_30_day.csv as fallback (%d rows)", len(raw_cases))
-        elif all_cases_path.exists():
-            raw_cases = pd.read_csv(all_cases_path, encoding="latin-1", low_memory=False)
-            log.info("Logistics: loaded AllCasesByDateIn.csv as last-resort (%d rows)", len(raw_cases))
-        else:
-            log.warning("Logistics: no raw cases file found — skipping")
+        raw_cases = tables.get("wip_raw", pd.DataFrame())
+        if raw_cases.empty:
+            # Safety fallback: rebuild if tables didn't populate it
+            raw_cases = build_unified_wip(watch_folder)
         if not raw_cases.empty:
+            log.info("Logistics: using unified WIP (%d rows)", len(raw_cases))
             compute_logistics(
                 cases_df=raw_cases,
                 base_dir=BASE_DIR,
@@ -1230,6 +1195,8 @@ def run_pipeline():
                 latest_dir=latest_dir,
             )
             log.info("Logistics: cache/latest/cases_logistics.csv + logistics_summary.csv written")
+        else:
+            log.warning("Logistics: no WIP data available — skipping")
     except Exception as exc:
         log.error("Logistics module failed (other outputs unaffected): %s", exc)
 

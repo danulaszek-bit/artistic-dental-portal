@@ -6,10 +6,11 @@ Designed to be called from run_pipeline() in pipeline.py.
 
 INPUTS
 ------
-  cases_df         pandas DataFrame loaded from AllCasesByDateIn.csv
-                   (or fallback Cases_* tabular export)
+  cases_df         pandas DataFrame from build_unified_wip() in mt_reports_parser.py
+                   (joins WIP_cases.csv + case_location.csv, enriched with dept from
+                    Active_30_day.csv).
                    Expected columns (raw, NOT renamed):
-                     Cases_CaseID, Cases_CaseNumber, Cases_CustomerID,
+                     Cases_CaseNumber, Cases_CustomerID,
                      Cases_DoctorName, Cases_PanNumber,
                      Cases_DateIn, Cases_DueDate, Cases_Status,
                      Cases_LastLocation, Cases_TotalCharge
