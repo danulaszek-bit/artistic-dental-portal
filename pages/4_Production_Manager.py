@@ -4,16 +4,16 @@ Artistic Dental Studio — Production Manager Dashboard
 Hosts the self-contained Production Dashboard (assets/production_dashboard.html)
 inside the portal as a full-bleed embedded page.
 
-The HTML is a standalone client-side app: the manager uploads (or drag-drops)
-Magic Touch reports — Production/Units In, Technician Performance, Employee
-Productivity, Remake Report — and JavaScript parses them in-browser. A built-in
-"Load your data (sample)" button renders a full demo view with no upload.
+If cache/latest/production_data.json exists (produced by production_pipeline.py
+from the Magic Touch reports in live_exports/), this page injects that data into
+the dashboard's global state and skips the upload screen entirely — the manager
+lands straight on the data.
 
-Step 1 of integration: embed as-is so it's live in the portal.
-Later steps will pre-feed the reports we can derive from the existing pipeline
-(Units In + Remakes from AllCasesByDateIn) so fewer manual uploads are needed.
+If the JSON is missing, the page falls back to the original behaviour: the
+upload modal, where the manager drops reports manually.
 """
 
+import json
 from pathlib import Path
 
 import streamlit as st
@@ -21,6 +21,7 @@ import streamlit.components.v1 as components
 
 BASE_DIR = Path(__file__).parent.parent
 HTML_PATH = BASE_DIR / "assets" / "production_dashboard.html"
+DATA_PATH = BASE_DIR / "cache" / "latest" / "production_data.json"
 
 st.set_page_config(
     page_title="Production Manager — Artistic Dental",
@@ -29,8 +30,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Strip Streamlit's default padding so the embedded app renders edge-to-edge,
-# matching how it looks standalone.
+# Strip Streamlit's default padding so the embedded app renders edge-to-edge.
 st.markdown(
     """
     <style>
@@ -52,10 +52,37 @@ if not HTML_PATH.exists():
 
 html = HTML_PATH.read_text(encoding="utf-8")
 
-# Size the iframe to roughly one screen height. The embedded app's upload
-# screen is a position:fixed overlay that centers within the iframe's own
-# viewport — so the iframe must be ~screen-height for it to appear where the
-# user can see it (a too-tall iframe pushes the overlay far down the page).
-# The dashboard's own content scrolls inside the frame (scrolling=True), and
-# it has a sticky topbar that stays pinned.
+# If pre-computed data exists, inject it into the dashboard's global `S` object
+# and call its own closeUpload() (which hides the modal and builds the views).
+preloaded = False
+if DATA_PATH.exists():
+    data = json.loads(DATA_PATH.read_text(encoding="utf-8"))
+    payload = json.dumps(data)
+    inject = f"""
+<script>
+(function preload() {{
+  if (typeof S === 'undefined' || typeof buildDashboard !== 'function') {{
+    return setTimeout(preload, 40);   // wait for the main script to define them
+  }}
+  try {{
+    const D = {payload};
+    S.depts = D.depts || {{}};
+    S.techs = D.techs || [];
+    S.reasons = D.reasons || [];
+    S.period = D.period || '';
+    S.daily = D.daily || [];
+    S.weekly = D.weekly || [];
+    S.monthly = D.monthly || [];
+    S.deptWeekly = D.deptWeekly || [];
+    S.deptMonthly = D.deptMonthly || [];
+    closeUpload();   // hides the upload overlay + runs buildDashboard()
+  }} catch (e) {{
+    console.error('Production preload failed:', e);
+  }}
+}})();
+</script>
+"""
+    html = html.replace("</body>", inject + "\n</body>", 1)
+    preloaded = True
+
 components.html(html, height=900, scrolling=True)

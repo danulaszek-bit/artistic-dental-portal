@@ -329,37 +329,58 @@ def load_tech_productivity(folder: Path) -> pd.DataFrame:
 
 def load_wip_cases(folder: Path) -> pd.DataFrame:
     """
-    Hierarchical report — first 4 rows are header, data starts at row 4.
-    Returns one row per open case.
+    Tabular CSV — row 0 = report title (contains embedded newlines in one
+    quoted field), row 1 = column headers, rows 2+ = data.
+    Uses csv.reader so the multiline title field is consumed as one record.
     """
+    import csv as _csv
     path = folder / "WIP_cases.csv"
     if not path.exists():
         return pd.DataFrame()
 
-    df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
-                     on_bad_lines="skip", engine="python",
-                     encoding=_enc(path))
+    enc = _enc(path)
+    with open(path, newline="", encoding=enc, errors="replace") as f:
+        records = list(_csv.reader(f))
+
+    # Locate the header record: first record whose col 0 is a known column name
+    header_idx = None
+    for i, rec in enumerate(records):
+        if rec and str(rec[0]).strip().lower() in ("shipdate", "ship date", "case #"):
+            header_idx = i
+            break
+    if header_idx is None:
+        header_idx = 1 if len(records) > 1 else 0
+
+    headers      = [c.strip() for c in records[header_idx]]
+    data_records = records[header_idx + 1:]
+
+    def _get(vals, col_name):
+        try:
+            return vals[headers.index(col_name)] if col_name in headers else ""
+        except (ValueError, IndexError):
+            return ""
 
     rows = []
-    for i, row in df.iterrows():
-        if i < 4:
+    for rec in data_records:
+        if not rec:
             continue
-        vals = row.tolist()
-        # Data rows have a numeric case number in col 1
-        case_num = str(vals[1]).strip() if len(vals) > 1 else ""
+        vals = [str(v).strip() for v in rec]
+        while len(vals) < len(headers):
+            vals.append("")
+        case_num = _get(vals, "Case #")
         if not case_num.isdigit():
             continue
         rows.append({
-            "ship_date":    str(vals[0]).strip() if len(vals) > 0 else "",
-            "case_number":  case_num,
-            "pan_number":   str(vals[2]).strip() if len(vals) > 2 else "",
-            "account_id":   str(vals[3]).strip() if len(vals) > 3 else "",
-            "customer_name":str(vals[4]).strip() if len(vals) > 4 else "",
-            "doctor_name":  str(vals[5]).strip() if len(vals) > 5 else "",
-            "patient_name": str(vals[6]).strip() if len(vals) > 6 else "",  # PHI
-            "date_in":      str(vals[7]).strip() if len(vals) > 7 else "",
-            "due_date":     str(vals[8]).strip() if len(vals) > 8 else "",
-            "total_charge": _money(vals[9]) if len(vals) > 9 else 0.0,
+            "ship_date":     _get(vals, "ShipDate"),
+            "case_number":   case_num,
+            "pan_number":    _get(vals, "Pan #"),
+            "account_id":    _get(vals, "Customer ID"),
+            "customer_name": _get(vals, "Customer Name"),
+            "doctor_name":   _get(vals, "Doctor Name"),
+            "patient_name":  _get(vals, "Patient Name"),  # PHI
+            "date_in":       _get(vals, "Date In"),
+            "due_date":      _get(vals, "DueDate"),
+            "total_charge":  _money(_get(vals, "Total Charge")),
         })
 
     if not rows:
@@ -377,54 +398,75 @@ def load_wip_cases(folder: Path) -> pd.DataFrame:
 
 def load_case_location(folder: Path) -> pd.DataFrame:
     """
-    Hierarchical report. Location group headers (Col 0 starts with 'Location:')
-    define the LastLocation carried forward onto each case row below them.
-    Case rows: Col 0 = 'TechCode: TechName'.
-    Returns one row per open case with last_location and status.
+    Hierarchical report with a 2-row header (title + column names, the latter
+    containing quoted multiline fields).  Uses csv.reader to consume those
+    records cleanly, then skips to the data section.
+
+    Layout after headers:
+      Location group rows : col 0 starts with 'Location:'
+      Data rows           : col 0 = 'CUSTID: Customer Name', col 1 = case# (int)
+                            col 2=age_days, col3=date_in, col4=due_date,
+                            col5=ship_date, col6=days_at_loc, col7=last_scan_date,
+                            col8=tech, col9=patient_name(PHI), col11=pan#, col12=status
     """
+    import csv as _csv
     path = folder / "case_location.csv"
     if not path.exists():
         return pd.DataFrame()
 
-    df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
-                     on_bad_lines="skip", engine="python")
+    enc = _enc(path)
+    with open(path, newline="", encoding=enc, errors="replace") as f:
+        records = list(_csv.reader(f))
+
+    # Skip title record (row 0) and column-header record (row 1)
+    data_records = records[2:]
 
     rows = []
     current_location = ""
 
-    for _, row in df.iterrows():
-        vals = [str(v).strip() for v in row.tolist()]
+    for rec in data_records:
+        vals = [str(v).strip() for v in rec]
         c0 = vals[0] if vals else ""
 
-        # Location header row
+        # Location group header: "Location: CADOUT"
         if c0.startswith("Location:"):
-            current_location = c0.replace("Location:", "").split(",")[0].strip()
+            current_location = c0.replace("Location:", "").strip()
             continue
 
-        # Case data row: col 0 = "CODE: Name" or "CODE : Name"
-        if ":" in c0 and len(vals) > 1:
-            case_num = str(vals[1]).strip() if len(vals) > 1 else ""
-            if not case_num.isdigit():
-                continue
-            tech_parts = c0.split(":", 1)
-            tech_code  = tech_parts[0].strip()
-            tech_name  = tech_parts[1].strip() if len(tech_parts) > 1 else ""
-            rows.append({
-                "case_number":    case_num,
-                "tech_code":      tech_code,
-                "tech_name":      tech_name,
-                "age_days":       str(vals[2]).strip() if len(vals) > 2 else "",
-                "date_in":        str(vals[3]).strip() if len(vals) > 3 else "",
-                "due_date":       str(vals[4]).strip() if len(vals) > 4 else "",
-                "ship_date":      str(vals[5]).strip() if len(vals) > 5 else "",
-                "units":          str(vals[6]).strip() if len(vals) > 6 else "",
-                "last_scan_date": str(vals[7]).strip() if len(vals) > 7 else "",
-                "account_id":     str(vals[8]).strip() if len(vals) > 8 else "",
-                "patient_name":   str(vals[9]).strip() if len(vals) > 9 else "",  # PHI
-                "pan_number":     str(vals[11]).strip() if len(vals) > 11 else "",
-                "status":         str(vals[12]).strip() if len(vals) > 12 else "",
-                "last_location":  current_location,
-            })
+        # Skip lab header, totals, empty rows
+        if not c0 or c0.startswith("Lab:") or c0.startswith("Total"):
+            continue
+
+        # Data row: col 1 must be a numeric case number
+        case_num = vals[1].strip() if len(vals) > 1 else ""
+        if not case_num.isdigit():
+            continue
+
+        # col 0 = "CUSTID: Customer Name"
+        if ":" in c0:
+            acct_id, cust_name = c0.split(":", 1)
+            acct_id   = acct_id.strip()
+            cust_name = cust_name.strip()
+        else:
+            acct_id   = c0
+            cust_name = ""
+
+        rows.append({
+            "account_id":     acct_id,
+            "customer_name":  cust_name,
+            "case_number":    case_num,
+            "age_days":       vals[2]  if len(vals) > 2  else "",
+            "date_in":        vals[3]  if len(vals) > 3  else "",
+            "due_date":       vals[4]  if len(vals) > 4  else "",
+            "ship_date":      vals[5]  if len(vals) > 5  else "",
+            "days_at_loc":    vals[6]  if len(vals) > 6  else "",
+            "last_scan_date": vals[7]  if len(vals) > 7  else "",
+            "tech_code":      vals[8]  if len(vals) > 8  else "",
+            "patient_name":   vals[9]  if len(vals) > 9  else "",  # PHI
+            "pan_number":     vals[11] if len(vals) > 11 else "",
+            "status":         vals[12] if len(vals) > 12 else "",
+            "last_location":  current_location,
+        })
 
     if not rows:
         return pd.DataFrame()
@@ -682,27 +724,28 @@ def load_employee_productivity(folder: Path) -> pd.DataFrame:
             current_dept = c0.replace("Department:", "").strip()
             continue
 
-        # Employee row: "CODE - Last, First"
-        if " - " in c0 and not c0.startswith("Department:") and row[1].replace(",","").replace(".","").isdigit():
+        # Employee row: "CODE - Last, First" in col 0; data in cols 7 / 11 / 13
+        if " - " in c0 and not c0.startswith("Department:"):
             if current_emp:
                 rows.append(current_emp)
             code, name = c0.split(" - ", 1)
             current_emp = {
-                "tech_code":       code.strip(),
-                "tech_name":       name.strip(),
-                "department":      current_dept,
-                "total_units":     _money(row[1]),
-                "total_hours":     _hours_to_decimal(row[2]),
-                "uph":             _money(row[3]),
-                "production_units":0.0,
-                "production_hours":0.0,
+                "tech_code":        code.strip(),
+                "tech_name":        name.strip(),
+                "department":       current_dept,
+                "total_units":      _money(row[7])  if len(row) > 7  else 0.0,
+                "total_hours":      _hours_to_decimal(row[11]) if len(row) > 11 else 0.0,
+                "uph":              _money(row[13]) if len(row) > 13 else 0.0,
+                "production_units": 0.0,
+                "production_hours": 0.0,
             }
             continue
 
-        # Time-category sub-rows
-        if current_emp and c0 == "Production":
-            current_emp["production_units"] = _money(row[1])
-            current_emp["production_hours"] = _hours_to_decimal(row[2])
+        # Time-category sub-rows: category name is in col 1 (col 0 is blank),
+        # data is in cols 7 (units) and 11 (hours)
+        if current_emp and not c0 and len(row) > 1 and row[1].strip() == "Production":
+            current_emp["production_units"] = _money(row[7])  if len(row) > 7  else 0.0
+            current_emp["production_hours"] = _hours_to_decimal(row[11]) if len(row) > 11 else 0.0
 
     if current_emp:
         rows.append(current_emp)
