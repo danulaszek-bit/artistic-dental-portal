@@ -188,6 +188,40 @@ def aggregate_sales_for_kpis(sales_df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def compute_lytd_from_summary(portal_root: Path, through_date: "date | None" = None) -> float:
+    """
+    Read historical/Sales_2025.csv (Sales Summary By Date format) and return
+    the Total Invoiced sum through `through_date` (same calendar date last year).
+
+    The Sales Summary By Date CSV has a fixed layout:
+      col 24 = date (YYYY-MM-DD), col 37 = Total Invoiced for that date.
+
+    Returns 0.0 if the file is missing or unparseable.
+    """
+    from datetime import date as _date
+    path = portal_root / "historical" / "Sales_2025.csv"
+    if not path.exists():
+        return 0.0
+    if through_date is None:
+        today = _date.today()
+        through_date = today.replace(year=today.year - 1)
+    cutoff = pd.Timestamp(through_date)
+    try:
+        df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
+                         on_bad_lines="skip", engine="python")
+        DATE_COL, INV_COL = 24, 37
+        if df.shape[1] <= INV_COL:
+            return 0.0
+        total = 0.0
+        for _, row in df.iterrows():
+            dt = pd.to_datetime(str(row.iloc[DATE_COL]).strip(), errors="coerce")
+            if pd.notna(dt) and dt <= cutoff:
+                total += _money(str(row.iloc[INV_COL]))
+        return total
+    except Exception:
+        return 0.0
+
+
 def load_ly_from_legacy_sales(portal_root: Path) -> pd.DataFrame:
     """
     Load last-year (2025) sales totals per account for LY KPI fields.

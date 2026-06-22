@@ -25,7 +25,7 @@ import numpy as np
 from mt_reports_parser import (
     load_sales_data, aggregate_sales_for_kpis, load_ly_from_legacy_sales,
     load_active_30_day, load_remake_by_lab, load_remake_reasons,
-    build_unified_wip, load_all_cases_daily,
+    build_unified_wip, load_all_cases_daily, compute_lytd_from_summary,
 )
 
 # Google Drive
@@ -274,7 +274,7 @@ def _load_from_csv() -> dict[str, pd.DataFrame]:
     if not raw_sales.empty:
         raw_sales = _drop_excluded_accounts(raw_sales)
         df = aggregate_sales_for_kpis(raw_sales)
-        log.info("Sales: %d invoice lines → %d unique accounts",
+        log.info("Sales: %d invoice lines -> %d unique accounts",
                  len(raw_sales), len(df))
     else:
         df = pd.DataFrame()
@@ -296,7 +296,7 @@ def _load_from_csv() -> dict[str, pd.DataFrame]:
             df.drop(columns=["_ly", "_ly_rem"], inplace=True)
             n_filled = zero_ly.sum()
             log.info("LY supplement: filled %d accounts from live_exports/Sales_Data.csv "
-                     "(total LY=$%,.0f)", n_filled, df["ly_sales"].sum())
+                     "(total LY=$%.0f)", n_filled, df["ly_sales"].sum())
 
     tables = {"sales": df}
     tables.update(_load_case_files(folder))
@@ -555,11 +555,20 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     # Prorate LY to the same elapsed portion of the year for a fair YTD comparison.
     # Use day-of-year (more precise than month/12 which overstates mid-month).
     today_date     = date.today()
+    current_month  = today_date.month
     day_of_year    = today_date.timetuple().tm_yday
     days_in_year   = 366 if (today_date.year % 4 == 0 and
                               (today_date.year % 100 != 0 or today_date.year % 400 == 0)) else 365
     elapsed_frac   = day_of_year / days_in_year
     ly_prorated    = ly_total * elapsed_frac
+
+    # Prefer exact same-period LY from daily historical summary over the prorated estimate.
+    lytd_exact = compute_lytd_from_summary(BASE_DIR)
+    if lytd_exact > 0:
+        log.info("LYTD exact from historical/Sales_2025.csv: $%.0f (replaces prorated $%.0f)",
+                 lytd_exact, ly_prorated)
+        ly_prorated = lytd_exact
+
     ytd_target     = ly_prorated * (1 + growth_target / 100)
     actual_growth  = ((ytd_total - ly_prorated) / ly_prorated * 100) if ly_prorated else 0
 
