@@ -677,16 +677,32 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     # ── 7c. Active Accounts (last 30 days) ────────────────────
     active = tables.get("active_cases", pd.DataFrame())
     if not active.empty:
-        # Ensure account_id column exists
-        if "account_id" not in active.columns and "Cases_CustomerID" in active.columns:
-            active["account_id"] = active["Cases_CustomerID"]
-        if "total_charge" not in active.columns and "Cases_TotalCharge" in active.columns:
-            active["total_charge"] = pd.to_numeric(active["Cases_TotalCharge"], errors="coerce").fillna(0)
+        # Normalise column names — MT_Reports_Local export uses plain names,
+        # live_exports uses Cases_* prefixed names.
+        if "account_id" not in active.columns:
+            for src in ("CustomerID", "Cases_CustomerID"):
+                if src in active.columns:
+                    active["account_id"] = active[src]
+                    break
+        if "total_charge" not in active.columns:
+            for src in ("TotalCharge", "Cases_TotalCharge"):
+                if src in active.columns:
+                    active["total_charge"] = pd.to_numeric(active[src], errors="coerce").fillna(0)
+                    break
         if "account_id" in active.columns:
-            # All cases with any status count as active accounts
+            # Filter to actual last 30 days — the export covers ~80 days (ship
+            # date window), so without filtering we'd overcount active accounts.
+            cutoff_30d = pd.Timestamp.today() - pd.Timedelta(days=30)
+            for date_col in ("ShipDate", "InvoiceDate", "DateIn"):
+                if date_col in active.columns:
+                    active[date_col] = pd.to_datetime(active[date_col], errors="coerce")
+                    active = active[active[date_col] >= cutoff_30d].copy()
+                    log.info("Active accounts: filtered to %s >= %s (%d rows remain)",
+                             date_col, cutoff_30d.date(), len(active))
+                    break
             active_accounts = active[active["account_id"].notna()].groupby("account_id").agg(
-                cases=("account_id","count"),
-                revenue=("total_charge","sum"),
+                cases=("account_id", "count"),
+                revenue=("total_charge", "sum"),
             ).reset_index().sort_values("revenue", ascending=False)
             kpis["active_accounts_30d"] = active_accounts
             log.info("Active accounts 30d: %d unique accounts", len(active_accounts))
