@@ -591,11 +591,84 @@ def load_case_location(folder: Path) -> pd.DataFrame:
 #  6. build_unified_wip()  — joins WIP_cases + case_location for logistics
 # ═══════════════════════════════════════════════════════════════════════════════
 
+def _parse_all_cases_csv(path: Path) -> dict:
+    """
+    Parse one AllCasesByDateIn-format CSV into a {case_number_str: total_charge_float} dict.
+    Rows where col 0 is not a digit (group headers, date summaries) are skipped.
+    """
+    import csv as _csv, io as _io
+    enc = _enc(path)
+    with open(path, "rb") as f:
+        raw = f.read().replace(b"\x00", b"")
+    text = raw.decode(enc, errors="replace")
+    rows = list(_csv.reader(_io.StringIO(text)))
+    lookup: dict = {}
+    for r in rows:
+        if not r:
+            continue
+        case_num = r[0].strip()
+        if not case_num.isdigit():
+            continue
+        charge = _money(r[10]) if len(r) > 10 else 0.0
+        lookup.setdefault(case_num, charge)
+    return lookup
+
+
+def load_all_cases_charge_lookup(folder: Path) -> dict:
+    """
+    Build a {case_number_str: total_charge_float} lookup from all available sources:
+
+      1. historical/AllCases_charge_lookup.csv  — one-time export going back to lab
+                                                   inception (run manually, widest coverage)
+      2. AllCasesByDateIn.csv                   — rolling live export (current date range)
+
+    The historical file is loaded first (broadest coverage). The live file then fills
+    in any case numbers not already seen, so recent cases added after the historical
+    export was generated are always captured.
+    """
+    lookup: dict = {}
+
+    # 1. Historical one-time export (widest date range)
+    # mt_reports_parser.py lives in the portal root, so historical/ is a sibling.
+    portal_root = Path(__file__).parent
+    hist_path = portal_root / "historical" / "AllCases_charge_lookup.csv"
+    if hist_path.exists():
+        hist = _parse_all_cases_csv(hist_path)
+        lookup.update(hist)
+        import logging as _log
+        _log.getLogger(__name__).info(
+            "WIP charge lookup: loaded %d cases from historical/AllCases_charge_lookup.csv",
+            len(hist)
+        )
+
+    # 2. Live rolling export — fills gaps for cases newer than the historical snapshot
+    live_path = folder / "AllCasesByDateIn.csv"
+    if live_path.exists():
+        live = _parse_all_cases_csv(live_path)
+        before = len(lookup)
+        for k, v in live.items():
+            lookup.setdefault(k, v)  # don't overwrite historical with live
+        added = len(lookup) - before
+        if added:
+            import logging as _log
+            _log.getLogger(__name__).info(
+                "WIP charge lookup: +%d new cases from AllCasesByDateIn.csv (total %d)",
+                added, len(lookup)
+            )
+
+    return lookup
+
+
 def build_unified_wip(folder: Path) -> pd.DataFrame:
     """
     Join WIP_cases.csv (open case list) with case_location.csv (location/status)
     on case_number. Outputs a DataFrame with Cases_* column names so that
     pipeline_logistics.py works without modification.
+
+    Charge lookup priority (highest wins, fills gaps downward):
+      1. WIP_cases.csv     — "Cases Due Out by Ship Date" (date-filtered, ~200 cases)
+      2. AllCasesByDateIn.csv — all cases by intake date (broader, ~13 K rows)
+    case_location.csv is the authoritative open-case list (no charge column).
 
     Optionally enriches with Active_30_day.csv for Products_Department where
     the case appears in the rolling window.
@@ -624,6 +697,27 @@ def build_unified_wip(folder: Path) -> pd.DataFrame:
                 base["pan_number"] != "", base["pan_number_wip"]
             )
             base = base.drop(columns=["pan_number_wip"])
+
+    # --- Supplement total_charge from AllCasesByDateIn for cases WIP_cases missed ---
+    # WIP_cases is filtered by ship-date window so many open cases have no charge.
+    # AllCasesByDateIn covers a wider date range and fills most of the gap.
+    if "case_number" in base.columns:
+        all_charges = load_all_cases_charge_lookup(folder)
+        if all_charges:
+            if "total_charge" not in base.columns:
+                base["total_charge"] = 0.0
+            base["total_charge"] = pd.to_numeric(base["total_charge"], errors="coerce").fillna(0)
+            missing_mask = base["total_charge"] == 0
+            base.loc[missing_mask, "total_charge"] = (
+                base.loc[missing_mask, "case_number"].map(all_charges).fillna(0)
+            )
+            n_filled = int(missing_mask.sum()) - int((base["total_charge"] == 0).sum())
+            if n_filled > 0:
+                import logging as _log
+                _log.getLogger(__name__).info(
+                    "WIP charges: filled %d cases from AllCasesByDateIn "
+                    "(total WIP now $%.0f)", n_filled, base["total_charge"].sum()
+                )
 
     # Enrich with Products_Department from Active_30_day where available
     active = load_active_30_day(folder)

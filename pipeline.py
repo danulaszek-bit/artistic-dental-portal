@@ -345,6 +345,18 @@ def _load_case_files(folder: Path) -> dict[str, pd.DataFrame]:
                          "Outsourced", "Sent for TryIn"]
         if "status" in wip_clean.columns:
             wip_clean = wip_clean[wip_clean["status"].isin(open_statuses)].copy()
+        # Exclude cases whose original date-in is older than 9 months.
+        # Cases open longer than that are stale (implant holds, abandoned, etc.)
+        # and should not inflate WIP count or value.
+        if "date_in" in wip_clean.columns:
+            nine_months_ago = pd.Timestamp.today() - pd.DateOffset(months=9)
+            before = len(wip_clean)
+            wip_clean = wip_clean[
+                wip_clean["date_in"].isna() | (wip_clean["date_in"] >= nine_months_ago)
+            ].copy()
+            excluded = before - len(wip_clean)
+            if excluded:
+                log.info("WIP: excluded %d cases older than 9 months from WIP metrics", excluded)
         tables["wip"] = wip_clean
         log.info("WIP: %d open cases, $%.0f total value",
                  len(wip_clean),
