@@ -25,7 +25,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 451020,THADEVOP,Devang Thakkar,H30,2026-05-26,2026-06-16,2026-06-15,In Production,GUIDES,222.92,MISC,Surgical,10,7,27,6,True,True,False,True
 451021,THADEVOP,Devang Thakkar,H37,2026-05-26,2026-06-16,2026-06-15,In Production,GUIDES,277.91,MISC,Surgical,10,7,27,6,True,True,False,True
 451180,SLAMIC,Michael Slavin,P442,2026-05-28,2026-06-15,2026-06-12,In Production,GUIDES,292.91,MISC,Surgical,10,7,25,7,True,True,False,True
-452269,SCARAN,Randy Scarpiniti,F92,2026-06-10,2026-06-24,2026-06-23,In Production,REMOUT,289.33,MISC,Removable,0,5,12,0,False,False,False,False
+452269,SCARAN,,F92,2026-06-10,2026-06-24,2026-06-23,In Production,REMOUT,289.33,MISC,Removable,0,5,12,0,False,False,False,False
 450878,ANDMAR,,E151*,2026-05-21,2026-06-29,2026-06-26,In Production,CADOUT,838.62,,CAD_CAM,0,2,32,0,False,False,False,False
 431543,CHUMAN,,P807,2025-10-02,2025-10-10,2025-10-09,In Production,CADSTALLED,376.0,,CAD_CAM,10,2,263,255,True,True,False,True
 451906,WALSCO,,H108*,2026-06-05,2026-06-26,2026-06-25,In Production,CADSTALLED,604.47,,CAD_CAM,0,2,17,0,False,False,False,False
@@ -58,12 +58,12 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 451526,RIYTARCHI,,H26*,2026-06-01,2026-06-26,2026-06-25,In Production,CTS,347.7,,Surgical,0,7,21,0,False,False,False,False
 451553,GOYRINLV,,H81,2026-06-02,2026-06-30,2026-06-29,In Production,CTS,324.1,,Surgical,10,7,20,0,False,True,False,True
 451683,POTCHR,,DX6$,2026-06-03,2026-07-01,2026-06-30,In Production,CTS,6.99,,Surgical,0,7,19,0,False,False,False,False
-451845,SINPAU,,P702*,2026-06-04,2026-06-23,2026-06-22,In Production,CTS,0.0,,Surgical,10,7,18,0,False,True,False,True
+451845,SINPAU,Paul Singh,P702*,2026-06-04,2026-06-23,2026-06-22,In Production,CTS,0.0,,Surgical,10,7,18,0,False,True,False,True
 451869,DARDAVSB,,E179*,2026-06-04,2026-06-24,2026-06-23,In Production,CTS,237.73,,Surgical,0,7,18,0,False,False,False,False
 452043,RINJOH,,D319$*,2026-06-08,2026-07-08,2026-07-07,In Production,CTS,511.5,,Surgical,0,7,14,0,False,False,False,False
-452147,LIGJOC,,H4,2026-06-09,2026-06-23,2026-06-22,In Production,CTS,867.05,,Surgical,10,7,13,0,False,True,False,True
+452147,LIGJOC,Jocellyn Ligocki,H4,2026-06-09,2026-06-23,2026-06-22,In Production,CTS,867.05,,Surgical,10,7,13,0,False,True,False,True
 452244,COLVIN,,H276*,2026-06-10,2026-06-25,2026-06-24,In Production,CTS,1188.46,,Surgical,0,7,12,0,False,False,False,False
-452270,PAPAMI,,P143*,2026-06-10,2026-06-23,2026-06-22,In Production,CTS,348.71,,Surgical,0,7,12,0,False,False,False,False
+452270,PAPAMI,Amiel Pappas,P143*,2026-06-10,2026-06-23,2026-06-22,In Production,CTS,348.71,,Surgical,0,7,12,0,False,False,False,False
 452285,GRISET,,P69*,2026-06-10,2026-06-24,2026-06-23,In Production,CTS,548.19,,Surgical,0,7,12,0,False,False,False,False
 452311,KUCMAR,,P34*,2026-06-11,2026-06-24,2026-06-23,In Production,CTS,1239.81,,Surgical,0,7,11,0,False,False,False,False
 452386,NAISNE,,E195*,2026-06-11,2026-06-25,2026-06-24,In Production,CTS,603.48,,Surgical,0,7,11,0,False,False,False,False
@@ -91,7 +91,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 452340,SALNICLAW,,H306*,2026-06-11,2026-06-26,2026-06-24,In Production,DIGITALREMOVABLE,174.08,,Removable,0,5,11,0,False,False,False,False
 452584,KOSFAY,,EVQC-061526839310,2026-06-15,2026-07-09,2026-07-08,In Production,DIGITALREMOVABLE,617.43,,Removable,0,5,7,0,False,False,False,False
 452603,SIETOM,,H250*,2026-06-15,2026-06-24,2026-06-23,In Production,DIGITALREMOVABLE,82.23,,Removable,0,5,7,0,False,False,False,False
-452714,NIEMAR,,H230*,2026-06-16,2026-06-26,2026-06-22,In Production,DIGITALREMOVABLE,108.35,,Removable,0,5,6,0,False,False,False,False
+452714,NIEMAR,Mark Niemiec,H230*,2026-06-16,2026-06-26,2026-06-22,In Production,DIGITALREMOVABLE,108.35,,Removable,0,5,6,0,False,False,False,False
 452741,KORMIK,,F206*,2026-06-17,2026-06-24,2026-06-23,In Production,DIGITALREMOVABLE,180.6,,Removable,0,5,5,0,False,False,False,False
 452780,PATHARVV,,F130*,2026-06-17,2026-06-26,2026-06-25,In Production,DIGITALREMOVABLE,213.96,,Removable,0,5,5,0,False,False,False,False
 452805,ALSDIN,,F89*,2026-06-17,2026-06-25,2026-06-24,In Production,DIGITALREMOVABLE,106.24,,Removable,0,5,5,0,False,False,False,False
@@ -102,7 +102,6 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 452574,RIYTARCHI,,V99*,2026-06-15,2026-06-30,2026-06-29,In Production,EVD SUBMITTED,501.16,,Scheduling,0,2,7,0,False,False,False,False
 452582,HANEMIMUN,,V68*,2026-06-15,2026-07-06,2026-07-02,In Production,EVD SUBMITTED,256.18,,Scheduling,0,2,7,0,False,False,False,False
 452624,NICJEF,,EVDSGN-061526839709,2026-06-15,2026-06-24,2026-06-23,In Production,EVD SUBMITTED,81.22,,Scheduling,0,2,7,0,False,False,False,False
-452654,DARDAVSB,,EVDSGN-061626839717,2026-06-16,2026-06-23,2026-06-22,In Production,EVD SUBMITTED,90.42,,Scheduling,0,2,6,0,False,False,False,False
 452769,LIAPETBO,,EVDSGN-061726839751,2026-06-17,2026-06-24,2026-06-23,In Production,EVD SUBMITTED,90.42,,Scheduling,0,2,5,0,False,False,False,False
 452779,LEBRAFB,,EVDSGN-061726839753,2026-06-17,2026-06-24,2026-06-23,In Production,EVD SUBMITTED,91.05,,Scheduling,0,2,5,0,False,False,False,False
 452790,FELNIC,,EVDSGN-061726839759,2026-06-17,2026-06-25,2026-06-24,In Production,EVD SUBMITTED,91.05,,Scheduling,0,2,5,0,False,False,False,False
@@ -125,8 +124,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 452856,LAPANT,,P10,2026-06-18,2026-06-29,2026-06-26,In Production,FIXEDINCOMINGCTS,0.0,,Fixed,0,3,4,0,False,False,False,False
 452954,RHICAT,,E300,2026-06-19,2026-06-29,2026-06-26,In Production,FIXEDINCOMINGCTS,0.0,,Fixed,0,3,3,0,False,False,False,False
 452481,HOLMARLA,,E311,2026-06-12,2026-06-25,2026-06-24,In Production,FRED,141.17,,Fixed,0,3,10,0,False,False,False,False
-452546,ALIFAT,,V210,2026-06-15,2026-06-23,2026-06-22,In Production,FRED,0.0,,Fixed,0,3,7,0,False,False,False,False
-452674,PATGIA,,H160,2026-06-16,2026-06-23,2026-06-22,In Production,FRED,79.79,,Fixed,0,3,6,0,False,False,False,False
+452546,ALIFAT,Fatjona Aliaj,V210,2026-06-15,2026-06-23,2026-06-22,In Production,FRED,0.0,,Fixed,0,3,7,0,False,False,False,False
 452726,FELNIC,,H212*,2026-06-16,2026-06-24,2026-06-23,In Production,FRED,0.0,,Fixed,0,3,6,0,False,False,False,False
 452894,PICGIN,,EVDSGN-061826839793,2026-06-18,2026-06-25,2026-06-24,In Production,FRED,91.05,,Fixed,0,3,4,0,False,False,False,False
 452961,CHANHWA,,E146,2026-06-19,2026-06-24,2026-06-23,In Production,FRED,0.0,,Fixed,0,3,3,0,False,False,False,False
@@ -155,7 +153,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 435697,LESSTE,,D115*,2025-11-20,2025-12-18,2025-12-15,In Production,GUIDES,0.0,,Surgical,10,7,214,186,True,True,False,True
 438294,MULKEV,,V871*,2025-12-22,2026-01-12,2026-01-08,In Production,GUIDES,0.0,,Surgical,10,7,182,161,True,True,False,True
 451949,THADEVHOM,,E221,2026-06-05,2026-06-29,2026-06-26,In Production,GUIDES,277.91,,Surgical,0,7,17,0,False,False,False,False
-452488,SLAMICJOL,,E337,2026-06-12,2026-06-23,2026-06-22,In Production,GUIDES,222.92,,Surgical,0,7,10,0,False,False,False,False
+452488,SLAMICJOL,Michael Slavin,E337,2026-06-12,2026-06-23,2026-06-22,In Production,GUIDES,222.92,,Surgical,0,7,10,0,False,False,False,False
 452581,ZAIZAC,,F152*,2026-06-15,2026-06-30,2026-06-29,In Production,GUIDES,1534.49,,Surgical,0,7,7,0,False,False,False,False
 452900,MORCHR,,P602,2026-06-18,2026-06-26,2026-06-25,In Production,HENRY,112.52,,Fixed,0,3,4,0,False,False,False,False
 452396,DARDAVSB,,V90*,2026-06-11,2026-06-26,2026-06-25,In Production,IOS,1150.88,,Surgical,0,7,11,0,False,False,False,False
@@ -184,7 +182,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 452978,KORMIK,,EVDSGN-061926839815,2026-06-19,2026-06-26,2026-06-25,In Production,MATCHING TABLE,79.79,,Unknown,0,5,3,0,False,False,False,False
 452983,CORKAT,,EVDSGN-061926839817,2026-06-19,2026-06-26,2026-06-25,In Production,MATCHING TABLE,70.59,,Unknown,0,5,3,0,False,False,False,False
 452986,CUARACMOK,,EVDSGN-061926839818,2026-06-19,2026-06-26,2026-06-25,In Production,MATCHING TABLE,108.0,,Unknown,0,5,3,0,False,False,False,False
-449846,PANANE,,D321$,2026-05-11,2026-06-29,2026-06-26,In Production,MILLING AO4,1536.38,,CAD_CAM,0,2,42,0,False,False,False,False
+449846,PANANE,,D321$,2026-05-11,2026-06-26,2026-06-25,In Production,MILLING AO4,1536.38,,CAD_CAM,0,2,42,0,False,False,False,False
 452241,FRAMIC,,D184$,2026-06-10,2026-07-01,2026-06-30,In Production,MILLING AO4,1546.38,,CAD_CAM,0,2,12,0,False,False,False,False
 452717,GERGRE,,D262$,2026-06-16,2026-07-07,2026-07-06,In Production,MILLING AO4,1536.38,,CAD_CAM,0,2,6,0,False,False,False,False
 452765,HUBMAR,,F229,2026-06-17,2026-06-26,2026-06-25,In Production,MILLING AO4,869.28,,CAD_CAM,0,2,5,0,False,False,False,False
@@ -350,7 +348,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 452865,VINSHY,,P845,2026-06-18,2026-07-08,2026-07-06,In Production,REMPREP,169.42,,Removable,0,5,4,0,False,False,False,False
 452866,GRAALE,,P850,2026-06-18,2026-07-02,2026-07-01,In Production,REMPREP,163.0,,Removable,0,5,4,0,False,False,False,False
 452867,GRAALE,,P776,2026-06-18,2026-07-02,2026-07-01,In Production,REMPREP,163.0,,Removable,0,5,4,0,False,False,False,False
-452870,GRAALE,,P762,2026-06-18,2026-06-23,2026-06-22,In Production,REMPREP,163.0,,Removable,0,5,4,0,False,False,False,False
+452870,GRAALE,Alexander Grabavoy,P762,2026-06-18,2026-06-23,2026-06-22,In Production,REMPREP,163.0,,Removable,0,5,4,0,False,False,False,False
 452872,GRAALE,,P499,2026-06-18,2026-07-02,2026-07-01,In Production,REMPREP,163.0,,Removable,0,5,4,0,False,False,False,False
 452897,CREJASTP,,P24,2026-06-18,2026-07-02,2026-07-01,In Production,REMPREP,639.98,,Removable,0,5,4,0,False,False,False,False
 452903,PANANE,,P131,2026-06-18,2026-06-29,2026-06-26,In Production,REMPREP,155.72,,Removable,0,5,4,0,False,False,False,False
