@@ -26,6 +26,7 @@ from mt_reports_parser import (
     load_sales_data, aggregate_sales_for_kpis, load_ly_from_legacy_sales,
     load_active_30_day, load_remake_by_lab, load_remake_reasons,
     build_unified_wip, load_all_cases_daily, compute_lytd_from_summary,
+    compute_ly_same_month,
 )
 
 # Google Drive
@@ -693,9 +694,8 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
             # Filter to actual last 30 days — the export covers ~80 days (ship
             # date window), so without filtering we'd overcount active accounts.
             cutoff_30d = pd.Timestamp.today() - pd.Timedelta(days=30)
-            for date_col in ("ShipDate", "InvoiceDate", "DateIn"):
+            for date_col in ("ship_date", "invoice_date", "date_in"):
                 if date_col in active.columns:
-                    active[date_col] = pd.to_datetime(active[date_col], errors="coerce")
                     active = active[active[date_col] >= cutoff_30d].copy()
                     log.info("Active accounts: filtered to %s >= %s (%d rows remain)",
                              date_col, cutoff_30d.date(), len(active))
@@ -817,6 +817,7 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
         ) if mtd_sales else 0,
         "mtd_days_elapsed":     business_days_between(date.today().replace(day=1), date.today()),
         "mtd_days_in_month":    business_days_in_month(date.today().year, date.today().month),
+        "ly_same_month":        compute_ly_same_month(BASE_DIR),
         "wip_value":            wip_value,
         "wip_count":            wip_count,
         "wip_overdue":          wip_overdue,

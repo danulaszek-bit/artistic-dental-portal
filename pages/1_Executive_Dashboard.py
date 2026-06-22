@@ -366,13 +366,40 @@ def render_mtd(gauges: pd.DataFrame):
     days_elapsed = int(g.get("mtd_days_elapsed", 1) or 1)
     days_in_month = int(g.get("mtd_days_in_month", 30) or 30)
     days_remaining = max(days_in_month - days_elapsed, 0)
-    ly_full_year = float(g.get("ly_full_year", 0) or 0)
-    ly_monthly_avg = ly_full_year / 12 if ly_full_year else 0
-    ly_target = ly_monthly_avg * 1.07
-    on_pace = projected >= ly_target
+    ly_same_month = float(g.get("ly_same_month", 0) or 0)
+    ly_full_year  = float(g.get("ly_full_year", 0) or 0)
+
+    # If pipeline didn't populate ly_same_month, read it directly from the historical CSV.
+    if not ly_same_month:
+        try:
+            import re as _re
+            from datetime import date as _date
+            _hist = BASE_DIR / "historical" / "Sales_2025.csv"
+            if _hist.exists():
+                _df = pd.read_csv(_hist, header=None, dtype=str, keep_default_na=False,
+                                  on_bad_lines="skip", engine="python")
+                _month = _date.today().month
+                _total = 0.0
+                for _, _row in _df.iterrows():
+                    _dt = pd.to_datetime(str(_row.iloc[24]).strip(), errors="coerce")
+                    if pd.notna(_dt) and _dt.month == _month:
+                        _s = _re.sub(r"[^\d.]", "", str(_row.iloc[37]).strip())
+                        try:
+                            _total += float(_s)
+                        except ValueError:
+                            pass
+                ly_same_month = _total
+        except Exception:
+            pass
+
+    # Monthly target = same calendar month last year × 1.07
+    # Fall back to full-year monthly avg if same-month data isn't available yet
+    ly_month_base = ly_same_month if ly_same_month else (ly_full_year / 12 if ly_full_year else 0)
+    ly_target     = ly_month_base * 1.07
+    on_pace       = projected >= ly_target
 
     mtd_daily_avg = mtd / days_elapsed if days_elapsed else 0
-    daily_target = ly_target / days_in_month if days_in_month else 0
+    daily_target  = ly_target / days_in_month if days_in_month else 0
 
     c1, c2, c3, c4 = st.columns(4)
     with c1:

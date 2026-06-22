@@ -17,6 +17,7 @@ git add .gitignore
 git add config.yaml
 git add requirements.txt
 git add pipeline.py
+git add mt_reports_parser.py
 git add dashboard.py
 git add retention.py
 git add import_case_history.py

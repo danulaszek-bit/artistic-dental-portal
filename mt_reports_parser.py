@@ -222,6 +222,33 @@ def compute_lytd_from_summary(portal_root: Path, through_date: "date | None" = N
         return 0.0
 
 
+def compute_ly_same_month(portal_root: Path, month: "int | None" = None) -> float:
+    """
+    Return Total Invoiced for the same calendar month last year from
+    historical/Sales_2025.csv.  Defaults to the current calendar month.
+    """
+    from datetime import date as _date
+    if month is None:
+        month = _date.today().month
+    path = portal_root / "historical" / "Sales_2025.csv"
+    if not path.exists():
+        return 0.0
+    try:
+        df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
+                         on_bad_lines="skip", engine="python")
+        DATE_COL, INV_COL = 24, 37
+        if df.shape[1] <= INV_COL:
+            return 0.0
+        total = 0.0
+        for _, row in df.iterrows():
+            dt = pd.to_datetime(str(row.iloc[DATE_COL]).strip(), errors="coerce")
+            if pd.notna(dt) and dt.month == month:
+                total += _money(str(row.iloc[INV_COL]))
+        return total
+    except Exception:
+        return 0.0
+
+
 def load_ly_from_legacy_sales(portal_root: Path) -> pd.DataFrame:
     """
     Load last-year (2025) sales totals per account for LY KPI fields.
