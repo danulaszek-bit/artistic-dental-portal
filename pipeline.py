@@ -1,0 +1,1279 @@
+"""
+Artistic Dental Studio — Automated Data Pipeline
+=================================================
+Built around Magic Touch Sales_Data.csv export format.
+Pre-aggregated by customer + product with YTD, LY, LTD, quarterly breakdowns.
+
+Run manually   : python pipeline.py
+Run as service : python pipeline.py --daemon
+"""
+
+import sys
+import pickle
+import logging
+import argparse
+from datetime import datetime, date
+from pathlib import Path
+
+import yaml
+import schedule
+import time
+import pandas as pd
+import numpy as np
+
+# ── New MT Reports parsers ─────────────────────────────────────────────────────
+from mt_reports_parser import (
+    load_sales_data, aggregate_sales_for_kpis, load_ly_from_legacy_sales,
+    load_active_30_day, load_remake_by_lab, load_remake_reasons,
+    build_unified_wip, load_all_cases_daily,
+)
+
+# Google Drive
+from google.auth.transport.requests import Request
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+from google_auth_oauthlib.flow import InstalledAppFlow
+
+# ── Gmail attachment downloader ────────────────────────────────────────────────
+GMAIL_SCOPES = [
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/gmail.readonly",
+]
+
+def download_gmail_attachments(dest_folder: Path) -> list[str]:
+    """
+    Check the MagicTouchExports Gmail label and download any CSV attachments
+    to dest_folder. Returns list of downloaded filenames.
+    """
+    import base64
+    from googleapiclient.discovery import build as gbuild
+
+    token_path  = BASE_DIR / CFG["google_drive"]["token_file"]
+    creds_path  = BASE_DIR / CFG["google_drive"]["credentials_file"]
+
+    creds = None
+    if token_path.exists():
+        with open(token_path, "rb") as f:
+            creds = pickle.load(f)
+
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(str(creds_path), GMAIL_SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open(token_path, "wb") as f:
+            pickle.dump(creds, f)
+
+    gmail = gbuild("gmail", "v1", credentials=creds)
+    downloaded = []
+
+    # Search for unread emails in MagicTouchExports label from last 24 hours
+    query = "label:MagicTouchExports has:attachment newer_than:1d"
+    results = gmail.users().messages().list(userId="me", q=query).execute()
+    messages = results.get("messages", [])
+
+    if not messages:
+        log.info("Gmail: no new Magic Touch exports found")
+        return downloaded
+
+    log.info("Gmail: found %d new export email(s)", len(messages))
+
+    for msg_ref in messages:
+        msg = gmail.users().messages().get(
+            userId="me", id=msg_ref["id"], format="full"
+        ).execute()
+
+        subject = next(
+            (h["value"] for h in msg["payload"]["headers"] if h["name"] == "Subject"),
+            "Unknown"
+        )
+
+        parts = msg.get("payload", {}).get("parts", [])
+        for part in parts:
+            filename = part.get("filename", "")
+            if not filename or not filename.lower().endswith(".csv"):
+                continue
+
+            att_id = part["body"].get("attachmentId")
+            if not att_id:
+                continue
+
+            att = gmail.users().messages().attachments().get(
+                userId="me", messageId=msg_ref["id"], id=att_id
+            ).execute()
+
+            data = base64.urlsafe_b64decode(att["data"])
+
+            # Map Magic Touch report names to our standard filenames
+            save_name = _map_report_filename(filename, subject)
+            if save_name is None:
+                log.info("Gmail: skipping %s (not a recognized report)", filename)
+                continue
+            save_path = dest_folder / save_name
+
+            with open(save_path, "wb") as f:
+                f.write(data)
+
+            log.info("Gmail: downloaded %s → %s", filename, save_name)
+            downloaded.append(save_name)
+
+    return downloaded
+
+
+def _map_report_filename(filename: str, subject: str) -> str:
+    """
+    Map Magic Touch report filenames to our standard names.
+    Returns None for unrecognized reports so they get skipped (instead of
+    accidentally clobbering known files).
+    """
+    fname = filename.lower()
+    subj  = subject.lower()
+
+    # EXCLUSIONS — known wrong-format reports we never want to ingest.
+    # The "Sales Summary by Customer & Product" report is single-period and
+    # missing the SalesData_* columns we need; ignoring it keeps it from
+    # overwriting the real SalesData export.
+    if "salessummary" in fname or "salessummary" in subj:
+        return None
+
+    if "allcasesbydate" in fname or "allcasesbydate" in subj:
+        return "Active_30_day.csv"
+    # Be specific — only match the SalesData report, not any "sales" subject
+    if "salesdata" in fname or "sales_data" in fname or "salesdata" in subj:
+        return "Sales_Data.csv"
+    if "remake" in fname or "remake" in subj:
+        return "Remakes.csv"
+    if "wip" in fname or "wip" in subj or "opencase" in fname:
+        return "WIP.csv"
+
+    # Unrecognized — skip rather than blindly save with original name
+    return None
+
+
+# ── Logging ────────────────────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s  %(levelname)-8s  %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("pipeline.log"),
+    ],
+)
+log = logging.getLogger("dental_pipeline")
+
+# ── Config ─────────────────────────────────────────────────────────────────────
+BASE_DIR = Path(__file__).parent
+with open(BASE_DIR / "config.yaml") as f:
+    CFG = yaml.safe_load(f)
+
+SCOPES = GMAIL_SCOPES
+CACHE_DIR = BASE_DIR / CFG["output"]["local_cache_dir"]
+CACHE_DIR.mkdir(exist_ok=True)
+
+# Dummy / test accounts to exclude from every metric.
+# Matched on the customer/account ID (case- and whitespace-insensitive).
+# Keep in sync with pipeline_logistics.py and retention.py.
+EXCLUDED_ACCOUNT_IDS = {"LAWMUR"}
+
+
+# ── Lab business-day calendar ─────────────────────────────────────────────────
+# Holidays the lab is closed. Fixed-date holidays falling on a weekend shift
+# to the nearest business day (Sat → Fri, Sun → Mon) so monthly averaging
+# divides by the right count of working days.
+def get_lab_holidays(year: int) -> list[pd.Timestamp]:
+    """Return Timestamps the lab is closed for the given year."""
+    out = []
+    # Fixed-date with nearest-workday observance
+    for month, day in [(1, 1), (7, 4), (12, 25)]:
+        d = pd.Timestamp(year=year, month=month, day=day)
+        if d.weekday() == 5:        # Saturday → observed Friday
+            d = d - pd.Timedelta(days=1)
+        elif d.weekday() == 6:      # Sunday → observed Monday
+            d = d + pd.Timedelta(days=1)
+        out.append(d)
+    # Memorial Day — last Monday of May
+    d = pd.Timestamp(year=year, month=5, day=31)
+    while d.weekday() != 0:
+        d -= pd.Timedelta(days=1)
+    out.append(d)
+    # Labor Day — first Monday of September
+    d = pd.Timestamp(year=year, month=9, day=1)
+    while d.weekday() != 0:
+        d += pd.Timedelta(days=1)
+    out.append(d)
+    # Thanksgiving — fourth Thursday of November (1st Thursday + 21 days)
+    d = pd.Timestamp(year=year, month=11, day=1)
+    while d.weekday() != 3:
+        d += pd.Timedelta(days=1)
+    thanksgiving = d + pd.Timedelta(days=21)
+    out.append(thanksgiving)
+    # Day after Thanksgiving (Black Friday)
+    out.append(thanksgiving + pd.Timedelta(days=1))
+    return out
+
+
+def business_days_between(start, end) -> int:
+    """Inclusive count of business days between two dates, lab-holiday aware."""
+    start = pd.Timestamp(start).normalize()
+    end   = pd.Timestamp(end).normalize()
+    if end < start:
+        return 0
+    holidays = set()
+    for y in range(start.year, end.year + 1):
+        holidays.update(d.normalize() for d in get_lab_holidays(y))
+    weekdays = pd.bdate_range(start, end)  # Mon–Fri inclusive
+    return sum(1 for d in weekdays if d not in holidays)
+
+
+def business_days_in_month(year: int, month: int) -> int:
+    """Total business days in the given calendar month."""
+    import calendar as _cal
+    last_day = _cal.monthrange(year, month)[1]
+    return business_days_between(
+        pd.Timestamp(year=year, month=month, day=1),
+        pd.Timestamp(year=year, month=month, day=last_day),
+    )
+
+
+def _drop_excluded_accounts(df: pd.DataFrame, col: str = "account_id") -> pd.DataFrame:
+    """Drop rows whose account_id matches a dummy/test account."""
+    if df.empty or col not in df.columns:
+        return df
+    norm = df[col].fillna("").astype(str).str.strip().str.upper()
+    return df[~norm.isin(EXCLUDED_ACCOUNT_IDS)].copy()
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  DATA INGESTION — Magic Touch Sales_Data.csv
+# ══════════════════════════════════════════════════════════════════════════════
+
+def load_data() -> dict[str, pd.DataFrame]:
+    mode = CFG["data_source"]["mode"]
+    if mode == "csv":
+        return _load_from_csv()
+    elif mode == "odbc":
+        return _load_from_odbc()
+    else:
+        raise ValueError(f"Unknown data_source.mode: {mode}")
+
+
+def _load_from_csv() -> dict[str, pd.DataFrame]:
+    """
+    Load all Magic Touch MT_Reports_Local exports via mt_reports_parser.
+    Sales_Data.csv is invoice-line level — aggregate_sales_for_kpis() converts
+    it to the per-account YTD/LY/MTD/quarterly format compute_kpis() expects.
+    """
+    src = CFG["data_source"]["csv"]
+    folder = Path(src["watch_folder"])
+
+    log.info("Loading Magic Touch data from %s", folder)
+
+    # Sales: invoice lines → aggregate to per-account KPI shape
+    raw_sales = load_sales_data(folder)
+    if not raw_sales.empty:
+        raw_sales = _drop_excluded_accounts(raw_sales)
+        df = aggregate_sales_for_kpis(raw_sales)
+        log.info("Sales: %d invoice lines → %d unique accounts",
+                 len(raw_sales), len(df))
+    else:
+        df = pd.DataFrame()
+        log.warning("Sales_Data.csv not found or empty")
+
+    # Supplement LY figures from legacy pre-aggregated export.
+    # New Sales_Data.csv is current-year-only; live_exports/Sales_Data.csv has
+    # SalesData_LYSales pre-computed by Magic Touch (valid until MT report is
+    # reconfigured for a multi-year date range).
+    if not df.empty:
+        ly_supp = load_ly_from_legacy_sales(BASE_DIR)
+        if not ly_supp.empty:
+            df = df.merge(ly_supp.rename(columns={"ly_sales": "_ly", "ly_remake": "_ly_rem"}),
+                          on="account_id", how="left")
+            # Only overwrite where the current ly_sales is 0 (no 2025 invoices in new CSV)
+            zero_ly = df["ly_sales"].fillna(0) == 0
+            df.loc[zero_ly, "ly_sales"]  = df.loc[zero_ly, "_ly"].fillna(0)
+            df.loc[zero_ly, "ly_remake"] = df.loc[zero_ly, "_ly_rem"].fillna(0)
+            df.drop(columns=["_ly", "_ly_rem"], inplace=True)
+            n_filled = zero_ly.sum()
+            log.info("LY supplement: filled %d accounts from live_exports/Sales_Data.csv "
+                     "(total LY=$%,.0f)", n_filled, df["ly_sales"].sum())
+
+    tables = {"sales": df}
+    tables.update(_load_case_files(folder))
+    return tables
+
+
+def _load_case_files(folder: Path) -> dict[str, pd.DataFrame]:
+    """Load case files via mt_reports_parser functions."""
+    tables = {}
+    today = pd.Timestamp.today()
+
+    # ── Active cases (rolling ~30 days) ──────────────────────────────────────
+    active = load_active_30_day(folder)
+    if not active.empty:
+        active = _drop_excluded_accounts(active)
+        if "case_number" in active.columns:
+            active = active.drop_duplicates(subset=["case_number"], keep="first").copy()
+        if "date_in" in active.columns:
+            active["days_in_lab"] = (today - active["date_in"]).dt.days
+        if "due_date" in active.columns:
+            active["overdue"] = active["due_date"] < today
+        log.info("Active cases: %d rows", len(active))
+    else:
+        log.warning("Active_30_day.csv not found")
+    tables["active_cases"] = active
+
+    # ── Remakes — richest source first, fall back to reason-only ─────────────
+    remakes = load_remake_by_lab(folder)
+    if remakes.empty:
+        remakes = load_remake_reasons(folder)
+    if not remakes.empty:
+        remakes = _drop_excluded_accounts(remakes)
+        log.info("Remakes: %d rows", len(remakes))
+    else:
+        log.warning("No remake file found")
+    tables["remakes"] = remakes
+
+    # ── WIP — unified join of WIP_cases + case_location ──────────────────────
+    wip_raw = build_unified_wip(folder)
+    tables["wip_raw"] = wip_raw   # Cases_* columns — used by logistics module
+
+    if not wip_raw.empty:
+        # Clean to plain column names for KPI computation
+        wip_clean = _clean_cases(wip_raw.copy())
+        open_statuses = ["In Production", "On Hold", "Submitted",
+                         "Outsourced", "Sent for TryIn"]
+        if "status" in wip_clean.columns:
+            wip_clean = wip_clean[wip_clean["status"].isin(open_statuses)].copy()
+        tables["wip"] = wip_clean
+        log.info("WIP: %d open cases, $%.0f total value",
+                 len(wip_clean),
+                 wip_clean["total_charge"].sum() if "total_charge" in wip_clean.columns else 0)
+    else:
+        tables["wip"] = pd.DataFrame()
+
+    return tables
+
+
+def _clean_cases(df: pd.DataFrame) -> pd.DataFrame:
+    """Normalise Magic Touch case export columns."""
+    if df.empty:
+        return df
+    rename = {
+        "Cases_CaseNumber":    "case_number",
+        "Cases_CustomerID":    "account_id",
+        "Cases_DateIn":        "date_in",
+        "Cases_DueDate":       "due_date",
+        "Cases_Status":        "status",
+        "Cases_TotalCharge":   "total_charge",
+        "Cases_DoctorName":    "doctor_name",
+        "Cases_Remake":        "remake_reason_code",
+        "Cases_RemakeReason":  "remake_reason",
+        "Cases_Rush":          "rush",
+        "Cases_SalesPerson":   "sales_person",
+        "Cases_Department":    "department",
+        "Cases_LabName":       "lab_name",
+        "Cases_PanNumber":     "pan_number",
+        "Cases_PatientFullName": "patient_name",
+        "Cases_PatientLast":   "patient_last",
+        "Cases_ShipDate":      "ship_date",
+        "Cases_InvoiceDate":   "invoice_date",
+        "Products_Department": "product_department",
+        "Products_Type":       "product_category",
+    }
+    df = df.rename(columns={k: v for k, v in rename.items() if k in df.columns})
+    if "total_charge" in df.columns:
+        df["total_charge"] = pd.to_numeric(df["total_charge"], errors="coerce").fillna(0)
+    if "date_in" in df.columns:
+        df["date_in"] = pd.to_datetime(df["date_in"], errors="coerce")
+    if "due_date" in df.columns:
+        df["due_date"] = pd.to_datetime(df["due_date"], errors="coerce")
+    if "due_date" in df.columns and "date_in" in df.columns:
+        today = pd.Timestamp.today()
+        df["days_in_lab"] = (today - df["date_in"]).dt.days
+        df["overdue"] = df["due_date"] < today
+    df = _drop_excluded_accounts(df)
+    # Magic Touch exports are product-line-level: one row per Products_ProductID
+    # for cases with multiple products. Cases_TotalCharge is the case total
+    # repeated on every line, so summing without dedup inflates revenue/WIP.
+    # Collapse to one row per case_number, keeping the first product line.
+    if "case_number" in df.columns:
+        before = len(df)
+        df = df.drop_duplicates(subset=["case_number"], keep="first").copy()
+        if before - len(df):
+            log.info("Dedup: %d product-line rows -> %d unique cases (%d dropped)",
+                     before, len(df), before - len(df))
+    return df
+
+
+def _clean_sales(df: pd.DataFrame) -> pd.DataFrame:
+    """Rename Magic Touch columns and coerce numerics."""
+    if df.empty:
+        return df
+
+    rename = {
+        "SalesData_CustomerID":   "account_id",
+        "SalesData_ProductGroup": "product_group",
+        "SalesData_ProductID":    "product_id",
+        "SalesData_ProductType":  "product_type",
+        "SalesData_Department":   "department",
+        "SalesData_YTDSales":     "ytd_sales",
+        "SalesData_LYSales":      "ly_sales",
+        "SalesData_LTDSales":     "ltd_sales",
+        "SalesData_MTDSales":     "mtd_sales",
+        "SalesData_LMSales":      "lm_sales",
+        "SalesData_Q1Sales":      "q1_sales",
+        "SalesData_Q2Sales":      "q2_sales",
+        "SalesData_Q3Sales":      "q3_sales",
+        "SalesData_Q4Sales":      "q4_sales",
+        "SalesData_YTDRemake":    "ytd_remake",
+        "SalesData_LYRemake":     "ly_remake",
+        "SalesData_LTDRemake":    "ltd_remake",
+        "SalesData_MTDRemake":    "mtd_remake",
+        "SalesData_LMRemake":     "lm_remake",
+        "SalesData_Q1Remake":     "q1_remake",
+        "SalesData_Q2Remake":     "q2_remake",
+        "SalesData_Q3Remake":     "q3_remake",
+        "SalesData_Q4Remake":     "q4_remake",
+        "SalesData_YTDCredit":    "ytd_credit",
+        "SalesData_LYCredit":     "ly_credit",
+        "SalesData_LTDCredit":    "ltd_credit",
+        "SalesData_MTDCredit":    "mtd_credit",
+        "SalesData_LMCredit":     "lm_credit",
+    }
+    df = df.rename(columns={k: v for k, v in rename.items() if k in df.columns})
+
+    num_cols = [c for c in df.columns if any(
+        c.startswith(p) for p in ["ytd_", "ly_", "ltd_", "mtd_", "lm_",
+                                   "q1_", "q2_", "q3_", "q4_"])]
+    for col in num_cols:
+        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+
+    df["is_implant"] = df["department"].str.upper().str.contains(
+        "IMPLANT", na=False)
+
+    # Drop Crystal Report header/footer rows (no account_id)
+    if "account_id" in df.columns:
+        df = df[df["account_id"].notna() & (df["account_id"].astype(str).str.strip() != "")].copy()
+
+    df = _drop_excluded_accounts(df)
+    return df
+
+
+# ── Phase 2: ODBC ─────────────────────────────────────────────────────────────
+def _load_from_odbc() -> dict[str, pd.DataFrame]:
+    try:
+        import pyodbc
+    except ImportError:
+        log.error("pyodbc not installed. Run: pip install pyodbc")
+        sys.exit(1)
+
+    src = CFG["data_source"]["odbc"]
+    conn_str = (f"DSN={src['dsn']};" if src.get("dsn") else
+                f"DRIVER={src['driver']};SERVER={src['server']};"
+                f"DATABASE={src['database']};"
+                f"Trusted_Connection={src.get('trusted_connection','yes')};")
+    log.info("Connecting via ODBC ...")
+    conn = pyodbc.connect(conn_str, timeout=10)
+    sql = """
+        SELECT CustomerID AS account_id, ProductType AS product_type,
+               Department AS department,
+               YTDSales AS ytd_sales, LYSales AS ly_sales,
+               LTDSales AS ltd_sales, MTDSales AS mtd_sales,
+               Q1Sales AS q1_sales, Q2Sales AS q2_sales,
+               Q3Sales AS q3_sales, Q4Sales AS q4_sales,
+               YTDRemake AS ytd_remake, LYRemake AS ly_remake,
+               Q1Remake AS q1_remake, Q2Remake AS q2_remake,
+               Q3Remake AS q3_remake, Q4Remake AS q4_remake
+        FROM   dbo.SalesData
+    """
+    df = pd.read_sql(sql, conn)
+    conn.close()
+    return {"sales": _clean_sales(df)}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  KPI COMPUTATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
+    df = tables.get("sales", pd.DataFrame())
+    kpis = {}
+
+    if df.empty:
+        log.warning("Sales table empty — all KPIs will be blank")
+        return kpis
+
+    # ── 1. Profitability ranking by account ───────────────────────────────
+    prof = (
+        df.groupby("account_id")
+        .agg(
+            ltd_sales=("ltd_sales",   "sum"),
+            ytd_sales=("ytd_sales",   "sum"),
+            ly_sales=("ly_sales",     "sum"),
+            ytd_remake=("ytd_remake", "sum"),
+            product_lines=("product_type", "nunique"),
+        )
+        .reset_index()
+        .sort_values("ltd_sales", ascending=False)
+    )
+    prof["yoy_growth_pct"] = np.where(
+        prof["ly_sales"] > 0,
+        (prof["ytd_sales"] - prof["ly_sales"]) / prof["ly_sales"] * 100,
+        0
+    ).round(1)
+    prof["remake_rate_pct"] = np.where(
+        prof["ytd_sales"] > 0,
+        prof["ytd_remake"] / prof["ytd_sales"] * 100,
+        0
+    ).round(2)
+    kpis["profitability"] = prof
+
+    # ── 2. Pareto — active accounts only (ytd or ly sales > 0) ───────────
+    active_prof = prof[(prof["ytd_sales"] > 0) | (prof["ly_sales"] > 0)].copy()
+    log.info("Active accounts (ytd or ly sales > 0): %d of %d total",
+             len(active_prof), len(prof))
+
+    total_ltd = active_prof["ltd_sales"].sum()
+    prof_sorted = active_prof.sort_values("ltd_sales", ascending=False).copy()
+    prof_sorted["cum_ltd"] = prof_sorted["ltd_sales"].cumsum()
+    prof_sorted["cum_pct"] = prof_sorted["cum_ltd"] / total_ltd
+    threshold = CFG["targets"]["pareto_threshold"]
+    kpis["pareto_accounts"] = prof_sorted[
+        prof_sorted["cum_pct"].shift(1, fill_value=0) < threshold
+    ].copy()
+
+    # ── 3. YTD vs prior year + 7% growth target ───────────────────────────
+    ytd_total = df["ytd_sales"].sum()
+    ly_total  = df["ly_sales"].sum()
+    ltd_total = df["ltd_sales"].sum()
+    mtd_sales = df["mtd_sales"].sum()
+    ytd_remake = df["ytd_remake"].sum()
+    mtd_remake = df["mtd_remake"].sum()
+
+    growth_target = CFG["targets"]["annual_growth_pct"]
+    # Prorate LY to the same elapsed portion of the year for a fair YTD comparison.
+    # Use day-of-year (more precise than month/12 which overstates mid-month).
+    today_date     = date.today()
+    day_of_year    = today_date.timetuple().tm_yday
+    days_in_year   = 366 if (today_date.year % 4 == 0 and
+                              (today_date.year % 100 != 0 or today_date.year % 400 == 0)) else 365
+    elapsed_frac   = day_of_year / days_in_year
+    ly_prorated    = ly_total * elapsed_frac
+    ytd_target     = ly_prorated * (1 + growth_target / 100)
+    actual_growth  = ((ytd_total - ly_prorated) / ly_prorated * 100) if ly_prorated else 0
+
+    kpis["ytd_summary"] = pd.DataFrame([{
+        "current_year":      date.today().year,
+        "ytd_current":       ytd_total,
+        "ytd_prior":         ly_prorated,    # prorated to same months
+        "ly_full_year":      ly_total,
+        "ltd_total":         ltd_total,
+        "ytd_target":        ytd_target,
+        "target_growth_pct": growth_target,
+        "actual_growth_pct": round(actual_growth, 2),
+        "on_track":          ytd_total >= ytd_target,
+        "months_elapsed":    current_month,
+    }])
+
+    # ── 4. Quarterly trend ────────────────────────────────────────────────
+    quarters = []
+    for q in ["q1", "q2", "q3", "q4"]:
+        cy_sales  = df[f"{q}_sales"].sum()
+        cy_remake = df[f"{q}_remake"].sum()
+        ly_approx = ly_total / 4
+        quarters.append({
+            "quarter":       q.upper(),
+            "cy_sales":      cy_sales,
+            "ly_approx":     ly_approx,
+            "target":        ly_approx * (1 + growth_target / 100),
+            "remake_amount": cy_remake,
+            "remake_rate":   round(cy_remake / cy_sales * 100, 2) if cy_sales else 0,
+        })
+    kpis["quarterly_trend"] = pd.DataFrame(quarters)
+
+    # ── 5. Remake trends ──────────────────────────────────────────────────
+    remake_rows = []
+    for q in ["q1", "q2", "q3", "q4"]:
+        s = df[f"{q}_sales"].sum()
+        r = df[f"{q}_remake"].sum()
+        remake_rows.append({
+            "yearmonth":   q.upper(),
+            "total":       s,
+            "remakes":     r,
+            "remake_rate": round(r / s * 100, 2) if s > 0 else 0,
+        })
+    remake_rows.append({
+        "yearmonth":   "YTD",
+        "total":       ytd_total,
+        "remakes":     ytd_remake,
+        "remake_rate": round(ytd_remake / ytd_total * 100, 2) if ytd_total else 0,
+    })
+    kpis["remake_trends"] = pd.DataFrame(remake_rows)
+
+    # ── 6. Implant summary ────────────────────────────────────────────────
+    implants = df[df["is_implant"]].copy()
+    impl_summary = (
+        implants.groupby("account_id")
+        .agg(
+            ytd_implant_sales=("ytd_sales",   "sum"),
+            ly_implant_sales=("ly_sales",     "sum"),
+            ytd_implant_remakes=("ytd_remake", "sum"),
+        )
+        .reset_index()
+        .sort_values("ytd_implant_sales", ascending=False)
+    )
+    kpis["implant_pipeline"] = impl_summary
+
+    # ── 7. Department mix ─────────────────────────────────────────────────
+    dept = (
+        df.groupby("department")
+        .agg(ytd_sales=("ytd_sales", "sum"), ly_sales=("ly_sales", "sum"))
+        .reset_index()
+        .sort_values("ytd_sales", ascending=False)
+    )
+    dept = dept[dept["department"].notna() & (dept["ytd_sales"] > 0)]
+    kpis["department_mix"] = dept
+
+    # ── 7b. WIP Summary ──────────────────────────────────────
+    wip = tables.get("wip", pd.DataFrame())
+    if not wip.empty and "total_charge" in wip.columns:
+        wip_value = wip["total_charge"].sum()
+        wip_count = len(wip)
+        wip_overdue = int(wip["overdue"].sum()) if "overdue" in wip.columns else 0
+        wip_by_status = wip.groupby("status")["total_charge"].agg(["sum","count"]).reset_index()
+        wip_by_status.columns = ["status","value","count"]
+        kpis["wip_summary"] = wip_by_status
+        kpis["wip_detail"] = wip[[c for c in ["case_number","account_id","doctor_name",
+                                                "date_in","due_date","status","total_charge",
+                                                "days_in_lab","overdue","rush"] 
+                                    if c in wip.columns]].copy()
+    else:
+        wip_value = wip_count = wip_overdue = 0
+        kpis["wip_summary"] = pd.DataFrame()
+        kpis["wip_detail"] = pd.DataFrame()
+
+    # ── 7c. Active Accounts (last 30 days) ────────────────────
+    active = tables.get("active_cases", pd.DataFrame())
+    if not active.empty:
+        # Ensure account_id column exists
+        if "account_id" not in active.columns and "Cases_CustomerID" in active.columns:
+            active["account_id"] = active["Cases_CustomerID"]
+        if "total_charge" not in active.columns and "Cases_TotalCharge" in active.columns:
+            active["total_charge"] = pd.to_numeric(active["Cases_TotalCharge"], errors="coerce").fillna(0)
+        if "account_id" in active.columns:
+            # All cases with any status count as active accounts
+            active_accounts = active[active["account_id"].notna()].groupby("account_id").agg(
+                cases=("account_id","count"),
+                revenue=("total_charge","sum"),
+            ).reset_index().sort_values("revenue", ascending=False)
+            kpis["active_accounts_30d"] = active_accounts
+            log.info("Active accounts 30d: %d unique accounts", len(active_accounts))
+        else:
+            kpis["active_accounts_30d"] = pd.DataFrame()
+    else:
+        kpis["active_accounts_30d"] = pd.DataFrame()
+
+    # ── 7d. Remakes detail ────────────────────────────────────
+    # New schema: remakes.csv now has one row PER product line per case, so a
+    # case with multiple products spans multiple rows. Dedupe by case_number
+    # for case-level totals and the detail table. Department-level breakdowns
+    # use the raw (multi-row) data so a multi-product case can attribute to
+    # more than one department.
+    remakes_df = tables.get("remakes", pd.DataFrame())
+    if not remakes_df.empty:
+        # Full multi-row remakes data (one row per product line per case) —
+        # needed by the dashboard's drill-down so a user can click into a
+        # department and see the individual products.
+        full_cols = [c for c in ["case_number", "account_id", "doctor_name",
+                                  "patient_last", "date_in", "due_date",
+                                  "ship_date", "status", "total_charge",
+                                  "remake_reason", "product_department",
+                                  "product_category"]
+                     if c in remakes_df.columns]
+        if full_cols:
+            kpis["remakes_full"] = remakes_df[full_cols].copy()
+
+        # Case-level detail: one row per case_number (take first product line)
+        if "case_number" in remakes_df.columns:
+            cases_unique = remakes_df.drop_duplicates(subset=["case_number"], keep="first").copy()
+        else:
+            cases_unique = remakes_df.copy()
+
+        detail_cols = [c for c in ["case_number","account_id","doctor_name","date_in",
+                                    "remake_reason","total_charge","status",
+                                    "product_department","product_category"]
+                       if c in cases_unique.columns]
+        kpis["remakes_detail"] = cases_unique[detail_cols].copy()
+
+        # Overall remakes-by-reason (count distinct cases per reason)
+        if "remake_reason" in cases_unique.columns:
+            kpis["remake_by_reason"] = (
+                cases_unique.groupby("remake_reason").size().reset_index(name="count")
+            )
+        else:
+            kpis["remake_by_reason"] = pd.DataFrame()
+
+        # NEW: Remakes by department — count + $ totals (case-level, deduped)
+        # plus reason breakdown (one row per case × dept × reason).
+        if "product_department" in remakes_df.columns:
+            # Department totals: each case counted once per department it touches.
+            dept_rows = remakes_df.drop_duplicates(
+                subset=["case_number", "product_department"]
+            )
+            # For dollars, attribute each case's full TotalCharge to every dept
+            # it has work in — typically a case is single-dept; multi-dept
+            # cases are rare. (Cleaner per-line allocation would require a
+            # per-product price field we don't have.)
+            dept_totals = (
+                dept_rows.groupby("product_department")
+                .agg(remake_cases=("case_number", "nunique"),
+                     remake_dollars=("total_charge", "sum"))
+                .reset_index()
+                .sort_values("remake_cases", ascending=False)
+            )
+            kpis["remake_by_dept"] = dept_totals
+
+            # Department × reason cross-table
+            if "remake_reason" in remakes_df.columns:
+                kpis["remake_by_dept_reason"] = (
+                    dept_rows.groupby(["product_department", "remake_reason"])
+                    .size().reset_index(name="count")
+                    .sort_values(["product_department", "count"], ascending=[True, False])
+                )
+            else:
+                kpis["remake_by_dept_reason"] = pd.DataFrame()
+        else:
+            kpis["remake_by_dept"] = pd.DataFrame()
+            kpis["remake_by_dept_reason"] = pd.DataFrame()
+    else:
+        kpis["remakes_detail"] = pd.DataFrame()
+        kpis["remake_by_reason"] = pd.DataFrame()
+        kpis["remake_by_dept"] = pd.DataFrame()
+        kpis["remake_by_dept_reason"] = pd.DataFrame()
+
+    # ── 8. KPI gauges ─────────────────────────────────────────────────────
+    overall_remake = (ytd_remake / ytd_total * 100) if ytd_total else 0
+    kpis["kpi_gauges"] = pd.DataFrame([{
+        "ytd_revenue":          ytd_total,
+        "ytd_prior_revenue":    ly_prorated,   # prorated to same elapsed portion of year
+        "ly_full_year":         ly_total,       # full prior year (for reference)
+        "ltd_revenue":          ltd_total,
+        "actual_growth_pct":    round(actual_growth, 2),
+        "target_growth_pct":    growth_target,
+        "remake_rate":          round(overall_remake, 2),
+        "remake_alert_pct":     CFG["targets"]["remake_alert_pct"],
+        "avg_margin_pct":       0,
+        "implant_ytd_sales":    implants["ytd_sales"].sum(),
+        "implant_accounts":     impl_summary["account_id"].nunique(),
+        "pareto_account_count": len(kpis["pareto_accounts"]),
+        "total_account_count":  len(active_prof),
+        "all_account_count":    len(prof),
+        "mtd_revenue":          mtd_sales,
+        "mtd_remake_rate":      round(mtd_remake / mtd_sales * 100, 2) if mtd_sales else 0,
+        # MTD projection uses BUSINESS days (lab calendar), not calendar days:
+        # weekends + lab holidays excluded so the per-day rate isn't diluted.
+        "mtd_projected_month":  round(
+            mtd_sales / max(business_days_between(date.today().replace(day=1), date.today()), 1)
+                      * business_days_in_month(date.today().year, date.today().month),
+            2
+        ) if mtd_sales else 0,
+        "mtd_days_elapsed":     business_days_between(date.today().replace(day=1), date.today()),
+        "mtd_days_in_month":    business_days_in_month(date.today().year, date.today().month),
+        "wip_value":            wip_value,
+        "wip_count":            wip_count,
+        "wip_overdue":          wip_overdue,
+        "active_accounts_30d":  len(kpis.get("active_accounts_30d", pd.DataFrame())),
+        "remakes_30d":          len(remakes_df) if not remakes_df.empty else 0,
+    }])
+
+    # ── 9. 13-month historical remake trend (from case_history.csv) ─────────
+    try:
+        ch_path = CACHE_DIR / "case_history.csv"
+        if ch_path.exists():
+            ch = pd.read_csv(ch_path, encoding="utf-8", low_memory=False)
+            if not ch.empty and "date_in" in ch.columns and "remake" in ch.columns:
+                ch["date_in"] = pd.to_datetime(ch["date_in"], errors="coerce")
+                ch = ch.dropna(subset=["date_in"])
+                ch["yearmonth"] = ch["date_in"].dt.to_period("M").astype(str)
+                ch["is_remake"] = ch["remake"].fillna("").astype(str).str.strip().ne("")
+                today_m = pd.Timestamp.today().to_period("M")
+                months_keep = [(today_m - i).strftime("%Y-%m") for i in range(13)]
+                ch_recent = ch[ch["yearmonth"].isin(months_keep)]
+                hist = (
+                    ch_recent.groupby("yearmonth")
+                    .agg(total_cases=("case_number", "count"),
+                         total_remakes=("is_remake", "sum"))
+                    .reset_index()
+                )
+                hist["remake_rate_pct"] = (
+                    hist["total_remakes"] / hist["total_cases"] * 100
+                ).round(2)
+                hist = hist.sort_values("yearmonth")
+                kpis["remake_history_monthly"] = hist
+                log.info("Remake history: %d months computed (last 13 from case_history.csv)",
+                         len(hist))
+    except Exception as exc:
+        log.warning("Could not compute remake_history_monthly: %s", exc)
+
+    # ── 10. Product mix by type (LY / YTD / LM) ────────────────────────────
+    # Pie-chart fodder for the Executive Dashboard.
+    if "product_type" in df.columns:
+        agg_dict = {"ytd": ("ytd_sales", "sum"), "ly": ("ly_sales", "sum")}
+        if "lm_sales" in df.columns:
+            agg_dict["lm"] = ("lm_sales", "sum")
+        mix = (
+            df.groupby("product_type", dropna=False)
+              .agg(**agg_dict)
+              .reset_index()
+        )
+        mix["product_type"] = mix["product_type"].fillna("Unspecified").replace("", "Unspecified")
+        mix = mix[mix[list(agg_dict.keys())].abs().sum(axis=1) > 0]
+        mix = mix.sort_values("ytd", ascending=False)
+        kpis["product_type_summary"] = mix
+
+    return kpis
+
+
+def _parse_money(s) -> float:
+    """Parse a money string like '$1,234.56' or '($89.60)' → float."""
+    if s is None:
+        return 0.0
+    s = str(s).strip()
+    if not s or s.lower() == "nan":
+        return 0.0
+    neg = s.startswith("(") and s.endswith(")")
+    s = s.strip("()$").replace(",", "").strip()
+    try:
+        v = float(s) if s else 0.0
+    except ValueError:
+        return 0.0
+    return -v if neg else v
+
+
+def _parse_int(s) -> int:
+    if s is None:
+        return 0
+    s = str(s).strip().replace(",", "")
+    if not s or s.lower() == "nan":
+        return 0
+    try:
+        return int(float(s))
+    except ValueError:
+        return 0
+
+
+def _parse_sales_summary(path: Path) -> pd.DataFrame:
+    """Parse Magic Touch's Sales Summary By Date Crystal Report CSV.
+
+    Authoritative source for daily billing — matches the printed Sales Summary
+    Report By Date exactly. Returns one row per date with:
+        date, customers, inv_new, inv_credit, inv_remake,
+        units_new, units_credit, units_remake,
+        credit_dollars, discounts, remake_sales, metal_charges, total_tax,
+        total_invoiced, net_sales
+    """
+    import csv
+    rows_out = []
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        reader = csv.reader(f)
+        for r in reader:
+            if not r:
+                continue
+            first = r[0].strip() if r else ""
+            try:
+                d = pd.to_datetime(first, errors="raise").normalize()
+            except Exception:
+                continue
+            # Expect 15 fields per data row (date + 14 metrics)
+            if len(r) < 15:
+                continue
+            rows_out.append({
+                "date":           d,
+                "customers":      _parse_int(r[1]),
+                "inv_new":        _parse_int(r[2]),
+                "inv_credit":     _parse_int(r[3]),
+                "inv_remake":     _parse_int(r[4]),
+                "units_new":      _parse_int(r[5]),
+                "units_credit":   _parse_int(r[6]),
+                "units_remake":   _parse_int(r[7]),
+                "credit_dollars": _parse_money(r[8]),
+                "discounts":      _parse_money(r[9]),
+                "remake_sales":   _parse_money(r[10]),
+                "metal_charges":  _parse_money(r[11]),
+                "total_tax":      _parse_money(r[12]),
+                "total_invoiced": _parse_money(r[13]),
+                "net_sales":      _parse_money(r[14]),
+            })
+    return pd.DataFrame(rows_out)
+
+
+def compute_on_time_ship(folder: Path, days: int = 90):
+    """Compute on-time ship-rate metrics from Active_30_day.csv.
+
+    Definition:
+        actual date = invoice_date (best proxy for shipment in new export)
+        planned date = ship_date
+        on time = actual <= planned
+
+    Returns (summary_dict, monthly_df). Summary dict is suitable for merging
+    into kpi_gauges.csv. monthly_df has columns:
+        month, cases, on_time, late, on_time_pct
+    """
+    empty_summary = {
+        "on_time_window_days":   days,
+        "on_time_cases":         0,
+        "on_time_on_time":       0,
+        "on_time_late":          0,
+        "on_time_pct":           0.0,
+    }
+    df = load_active_30_day(folder)
+    if df.empty:
+        return empty_summary, pd.DataFrame()
+
+    if "case_number" in df.columns:
+        df = df.drop_duplicates(subset=["case_number"], keep="first").copy()
+
+    df["plan"]   = pd.to_datetime(df.get("ship_date"),    errors="coerce").dt.normalize()
+    df["actual"] = pd.to_datetime(df.get("invoice_date"), errors="coerce").dt.normalize()
+
+    today  = pd.Timestamp.today().normalize()
+    cutoff = today - pd.Timedelta(days=days)
+    win = df.dropna(subset=["plan", "actual"])
+    win = win[(win["actual"] >= cutoff) & (win["actual"] <= today)].copy()
+    if win.empty:
+        return empty_summary, pd.DataFrame()
+
+    on_time = win["actual"] <= win["plan"]
+    summary = {
+        "on_time_window_days":   days,
+        "on_time_cases":         int(len(win)),
+        "on_time_on_time":       int(on_time.sum()),
+        "on_time_late":          int((~on_time).sum()),
+        "on_time_pct":           round(on_time.mean() * 100, 1),
+    }
+
+    win["month"] = win["actual"].dt.to_period("M").astype(str)
+    monthly = (
+        win.assign(_ot=on_time.astype(int))
+           .groupby("month")
+           .agg(cases=("case_number", "count"),
+                on_time=("_ot", "sum"))
+           .reset_index()
+    )
+    monthly["late"] = monthly["cases"] - monthly["on_time"]
+    monthly["on_time_pct"] = (monthly["on_time"] / monthly["cases"] * 100).round(1)
+
+    return summary, monthly.sort_values("month")
+
+
+def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
+    """Build daily in/out summary reconciling to Magic Touch's authoritative report.
+
+    Out side (billing):
+        SalesSummaryByDate.csv — the CSV form of the Sales Summary By Date
+        report. Numbers match the printed report exactly. Provides:
+        cases_out (= new invoices), units_out (= new + credit + remake units),
+        dollars_invoiced (= Total Invoiced gross), dollars_net (= Net Sales,
+        the figure that ties to the monthly sales tile).
+    In side (cases received):
+        Active_30_day.csv — only source with fresh Cases_DateIn going back
+        ~5 months. Provides cases_in and dollars_in (sum of TotalCharge).
+
+    No account exclusions — totals must reconcile to the raw Magic Touch
+    figures, dummy accounts included.
+
+    Returns one row per day, sorted most-recent first.
+    """
+    cutoff = pd.Timestamp.today().normalize() - pd.Timedelta(days=days_back)
+
+    # ── OUT side: prefer Sales Summary By Date (authoritative units + net),
+    #             fall back to Active_30_day.csv (always fresh, case-level only).
+    today = pd.Timestamp.today().normalize()
+    summary_path = folder / "SalesSummaryByDate.csv"
+    summary = pd.DataFrame()
+    if summary_path.exists():
+        try:
+            summary = _parse_sales_summary(summary_path)
+        except Exception as exc:
+            log.warning("SalesSummaryByDate.csv parse failed: %s", exc)
+
+    # Decide whether the Sales Summary report is usable:
+    # - parsed successfully
+    # - latest row is within 3 days of today (otherwise it's stale)
+    use_summary = False
+    if not summary.empty:
+        latest = summary["date"].max()
+        if pd.notna(latest) and (today - latest).days <= 3:
+            use_summary = True
+        else:
+            log.info(
+                "SalesSummaryByDate.csv is stale (latest %s, today %s) — falling back to Active_30_day.csv",
+                latest.date() if pd.notna(latest) else "?", today.date()
+            )
+
+    if use_summary:
+        summary = summary[summary["date"] >= cutoff].copy()
+        out_grp = pd.DataFrame({
+            "date":              summary["date"],
+            "cases_out":         summary["inv_new"],
+            "units_out":         summary["units_new"] + summary["units_credit"]
+                                 + summary["units_remake"],
+            "dollars_invoiced":  summary["total_invoiced"].round(2),
+            "dollars_net":       summary["net_sales"].round(2),
+        })
+        out_source = "SalesSummaryByDate.csv"
+    else:
+        # Fallback: Sales_Data.csv grouped by InvoiceDate.
+        # Each row's InvoiceTotal is the per-product-line charge (already net of discount).
+        # Summing by date gives accurate daily billings without the multi-row case
+        # double-counting that plagued the old Active_30_day approach.
+        try:
+            a = load_sales_data(folder)
+            if not a.empty and "invoice_date" in a.columns and "invoice_total" in a.columns:
+                a["inv_date"] = pd.to_datetime(a["invoice_date"], errors="coerce").dt.normalize()
+                a = a[a["inv_date"].notna() & (a["inv_date"] >= cutoff)]
+                if "case_number" in a.columns:
+                    out_grp = (
+                        a.groupby("inv_date")
+                         .agg(cases_out=("case_number", "nunique"),
+                              dollars_invoiced=("invoice_total", "sum"))
+                         .reset_index().rename(columns={"inv_date": "date"})
+                    )
+                else:
+                    out_grp = (
+                        a.groupby("inv_date")
+                         .agg(dollars_invoiced=("invoice_total", "sum"))
+                         .reset_index().rename(columns={"inv_date": "date"})
+                    )
+                    out_grp["cases_out"] = 0
+                out_grp["units_out"]        = out_grp["cases_out"]
+                out_grp["dollars_net"]      = out_grp["dollars_invoiced"].round(2)
+                out_grp["dollars_invoiced"] = out_grp["dollars_invoiced"].round(2)
+                out_source = "Sales_Data.csv (invoice-line fallback; cases=distinct case_numbers)"
+            else:
+                out_grp  = pd.DataFrame(columns=["date","cases_out","units_out",
+                                                   "dollars_invoiced","dollars_net"])
+                out_source = "(missing — out side will be empty)"
+        except Exception as exc:
+            log.warning("Active_30_day fallback for out side failed: %s", exc)
+            out_grp  = pd.DataFrame(columns=["date","cases_out","units_out",
+                                               "dollars_invoiced","dollars_net"])
+            out_source = "(failed)"
+
+    # ── IN: AllCasesByDateIn.csv — pre-aggregated daily totals ───────────────
+    try:
+        in_daily = load_all_cases_daily(folder)
+        if not in_daily.empty:
+            in_daily = in_daily[in_daily["date"] >= cutoff].copy()
+            in_grp = in_daily.rename(columns={"total_revenue": "dollars_in"})
+            in_grp["dollars_in"] = in_grp["dollars_in"].round(2)
+            in_source = "AllCasesByDateIn.csv"
+        else:
+            in_grp  = pd.DataFrame(columns=["date","cases_in","dollars_in"])
+            in_source = "(missing — in side will be empty)"
+    except Exception as exc:
+        log.warning("AllCasesByDateIn read failed: %s", exc)
+        in_grp  = pd.DataFrame(columns=["date","cases_in","dollars_in"])
+        in_source = "(failed)"
+
+    daily = pd.merge(in_grp, out_grp, on="date", how="outer").fillna(0)
+    if daily.empty:
+        return daily
+    for col in ("cases_in", "cases_out", "units_out"):
+        if col in daily.columns:
+            daily[col] = daily[col].astype(int)
+    daily = daily.sort_values("date", ascending=False).reset_index(drop=True)
+    log.info("Daily sales sources — out: %s, in: %s", out_source, in_source)
+    return daily
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  GOOGLE DRIVE
+# ══════════════════════════════════════════════════════════════════════════════
+
+def get_drive_service():
+    creds = None
+    token_path = BASE_DIR / CFG["google_drive"]["token_file"]
+    creds_path = BASE_DIR / CFG["google_drive"]["credentials_file"]
+
+    if token_path.exists():
+        with open(token_path, "rb") as f:
+            creds = pickle.load(f)
+
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(str(creds_path), SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open(token_path, "wb") as f:
+            pickle.dump(creds, f)
+
+    return build("drive", "v3", credentials=creds)
+
+
+def upload_to_drive(service, local_path: Path, drive_folder_id: str) -> str:
+    filename = local_path.name
+    query    = (f"name='{filename}' and '{drive_folder_id}' in parents "
+                f"and trashed=false")
+    existing = service.files().list(q=query, fields="files(id)").execute().get("files", [])
+    media    = MediaFileUpload(str(local_path), resumable=True)
+
+    if existing:
+        file_id = existing[0]["id"]
+        service.files().update(fileId=file_id, media_body=media).execute()
+        log.info("Updated  Drive: %s", filename)
+    else:
+        meta    = {"name": filename, "parents": [drive_folder_id]}
+        file_id = service.files().create(body=meta, media_body=media,
+                                          fields="id").execute()["id"]
+        log.info("Uploaded Drive: %s", filename)
+    return file_id
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  MAIN
+# ══════════════════════════════════════════════════════════════════════════════
+
+def run_pipeline():
+    log.info("=" * 60)
+    log.info("Pipeline started  %s", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+    # Step 0: Pull fresh exports from Gmail before loading
+    # GMAIL_KILL_SWITCH — set to False to skip Gmail download entirely.
+    # Useful when scheduled reports are wrong/partial and overwriting good files.
+    GMAIL_ENABLED = False
+    watch_folder = Path(CFG["data_source"]["csv"]["watch_folder"])
+    if GMAIL_ENABLED:
+        try:
+            downloaded = download_gmail_attachments(watch_folder)
+            if downloaded:
+                log.info("Gmail: pulled %d file(s): %s", len(downloaded), downloaded)
+            else:
+                log.info("Gmail: no new files — using existing exports")
+        except Exception as exc:
+            log.error("Gmail download failed (using existing files): %s", exc)
+    else:
+        log.info("Gmail: SKIPPED (GMAIL_ENABLED=False) — using existing live_exports/")
+
+    tables = load_data()
+    kpis   = compute_kpis(tables)
+
+    today_str    = date.today().strftime("%Y-%m-%d")
+    latest_dir   = CACHE_DIR / "latest"
+    snapshot_dir = CACHE_DIR / f"snapshot_{today_str}"
+    latest_dir.mkdir(exist_ok=True)
+    snapshot_dir.mkdir(exist_ok=True)
+
+    # Save each KPI table as its own CSV — no Excel license needed
+    for name, df in kpis.items():
+        if isinstance(df, pd.DataFrame) and not df.empty:
+            df.to_csv(latest_dir / f"{name}.csv", index=False)
+            df.to_csv(snapshot_dir / f"{name}.csv", index=False)
+    raw = tables.get("sales", pd.DataFrame())
+    if not raw.empty:
+        raw.to_csv(latest_dir / "raw_sales.csv", index=False)
+
+    # ── Daily in/out summary from AllCasesByDateIn.csv ──────────────────────
+    try:
+        daily = compute_daily_sales(watch_folder, days_back=90)
+        if not daily.empty:
+            daily.to_csv(latest_dir / "daily_sales.csv", index=False)
+            daily.to_csv(snapshot_dir / "daily_sales.csv", index=False)
+            log.info("Daily sales: %d days computed", len(daily))
+    except Exception as exc:
+        log.warning("Daily sales computation failed (other outputs unaffected): %s", exc)
+
+    # ── On-time ship rate (trailing 90 days) ────────────────────────────────
+    try:
+        ot_summary, ot_monthly = compute_on_time_ship(watch_folder, days=90)
+        if not ot_monthly.empty:
+            ot_monthly.to_csv(latest_dir / "on_time_ship.csv", index=False)
+            ot_monthly.to_csv(snapshot_dir / "on_time_ship.csv", index=False)
+        # Merge headline numbers into kpi_gauges.csv so dashboards can read them
+        gauges_path = latest_dir / "kpi_gauges.csv"
+        if gauges_path.exists():
+            g = pd.read_csv(gauges_path)
+            for k, v in ot_summary.items():
+                g[k] = v
+            g.to_csv(gauges_path, index=False)
+            g.to_csv(snapshot_dir / "kpi_gauges.csv", index=False)
+        log.info("On-time ship (last %dd): %d cases, %.1f%% on time",
+                 ot_summary.get("on_time_window_days", 90),
+                 ot_summary.get("on_time_cases", 0),
+                 ot_summary.get("on_time_pct", 0.0))
+    except Exception as exc:
+        log.warning("On-time ship computation failed (other outputs unaffected): %s", exc)
+
+    log.info("Saved local cache: %s", latest_dir)
+
+    # ── Logistics module: per-case station tracking + KPIs ──────────────────
+    # wip_raw holds the Cases_*-column output of build_unified_wip() which
+    # pipeline_logistics.py expects. Already in tables from _load_case_files().
+    try:
+        from pipeline_logistics import compute_logistics
+        raw_cases = tables.get("wip_raw", pd.DataFrame())
+        if raw_cases.empty:
+            # Safety fallback: rebuild if tables didn't populate it
+            raw_cases = build_unified_wip(watch_folder)
+        if not raw_cases.empty:
+            log.info("Logistics: using unified WIP (%d rows)", len(raw_cases))
+            compute_logistics(
+                cases_df=raw_cases,
+                base_dir=BASE_DIR,
+                cache_dir=CACHE_DIR,
+                latest_dir=latest_dir,
+            )
+            log.info("Logistics: cache/latest/cases_logistics.csv + logistics_summary.csv written")
+        else:
+            log.warning("Logistics: no WIP data available — skipping")
+    except Exception as exc:
+        log.error("Logistics module failed (other outputs unaffected): %s", exc)
+
+    try:
+        service   = get_drive_service()
+        folder_id = CFG["google_drive"]["folder_id"]
+        for csv_file in latest_dir.glob("*.csv"):
+            upload_to_drive(service, csv_file, folder_id)
+        log.info("Google Drive upload complete.")
+    except Exception as exc:
+        log.error("Drive upload failed (data saved locally): %s", exc)
+
+    # Auto-push fresh CSV files to GitHub
+    # NOTE: no git stash/pull — this machine is the sole writer so pulling first
+    # is unnecessary and caused stash pile-up that silently swallowed cache updates.
+    try:
+        import subprocess
+        repo_dir = str(BASE_DIR)
+        subprocess.run(["git", "add", "cache/latest/"], cwd=repo_dir, check=True)
+        result = subprocess.run(["git", "commit", "-m", f"Auto-update data {date.today()}"], cwd=repo_dir)
+        if result.returncode == 0:
+            subprocess.run(["git", "push", "origin", "main"], cwd=repo_dir, check=True)
+            log.info("GitHub push complete.")
+        else:
+            log.info("Nothing new to push to GitHub.")
+    except Exception as exc:
+        log.error("GitHub push failed (data still saved locally): %s", exc)
+
+    log.info("Pipeline run complete.")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--daemon", action="store_true")
+    args = parser.parse_args()
+
+    if args.daemon:
+        run_time = CFG["schedule"]["run_time"]
+        log.info("Daemon mode: daily at %s", run_time)
+        schedule.every().day.at(run_time).do(run_pipeline)
+        while True:
+            schedule.run_pending()
+            time.sleep(30)
+    else:
+        run_pipeline()
+
+
+if __name__ == "__main__":
+    main()
