@@ -208,7 +208,7 @@ div[data-baseweb="popover"] [aria-selected="true"] {{
 #  DATA LOADING
 # ══════════════════════════════════════════════════════════════════════════════
 
-@st.cache_data(ttl=0)
+@st.cache_data(ttl=120)
 def load_kpi_data() -> dict[str, pd.DataFrame]:
     """Load pre-computed KPI tables from CSV files in cache/latest/."""
     if LATEST_DIR.exists() and any(LATEST_DIR.glob("*.csv")):
@@ -366,10 +366,13 @@ def render_mtd(gauges: pd.DataFrame):
     days_elapsed = int(g.get("mtd_days_elapsed", 1) or 1)
     days_in_month = int(g.get("mtd_days_in_month", 30) or 30)
     days_remaining = max(days_in_month - days_elapsed, 0)
-    ly_total = float(g.get("ytd_prior_revenue", 0) or 0)
-    ly_monthly_avg = ly_total / 12 if ly_total else 0
+    ly_full_year = float(g.get("ly_full_year", 0) or 0)
+    ly_monthly_avg = ly_full_year / 12 if ly_full_year else 0
     ly_target = ly_monthly_avg * 1.07
     on_pace = projected >= ly_target
+
+    mtd_daily_avg = mtd / days_elapsed if days_elapsed else 0
+    daily_target = ly_target / days_in_month if days_in_month else 0
 
     c1, c2, c3, c4 = st.columns(4)
     with c1:
@@ -380,8 +383,9 @@ def render_mtd(gauges: pd.DataFrame):
                  "at current biz-day run rate",
                  status="ok" if on_pace else "warn")
     with c3:
-        kpi_card("Last Year Monthly Avg", fmt_currency(ly_monthly_avg),
-                 f"7% target: {fmt_currency(ly_target)}")
+        kpi_card("MTD Avg Daily Sales", fmt_currency(mtd_daily_avg),
+                 f"Target: {fmt_currency(daily_target)}/day (7% growth)",
+                 status="ok" if mtd_daily_avg >= daily_target else "warn")
     with c4:
         daily_needed = (ly_target - mtd) / days_remaining if days_remaining > 0 else 0
         kpi_card("Daily Revenue Needed", fmt_currency(max(daily_needed, 0)),
