@@ -1210,12 +1210,11 @@ def run_pipeline():
         log.error("Drive upload failed (data saved locally): %s", exc)
 
     # Auto-push fresh CSV files to GitHub
+    # NOTE: no git stash/pull — this machine is the sole writer so pulling first
+    # is unnecessary and caused stash pile-up that silently swallowed cache updates.
     try:
         import subprocess
         repo_dir = str(BASE_DIR)
-        subprocess.run(["git", "stash"], cwd=repo_dir)
-        subprocess.run(["git", "pull", "origin", "main", "--rebase"], cwd=repo_dir)
-        subprocess.run(["git", "stash", "pop"], cwd=repo_dir)
         subprocess.run(["git", "add", "cache/latest/"], cwd=repo_dir, check=True)
         result = subprocess.run(["git", "commit", "-m", f"Auto-update data {date.today()}"], cwd=repo_dir)
         if result.returncode == 0:
