@@ -23,7 +23,7 @@ import numpy as np
 
 # ── New MT Reports parsers ─────────────────────────────────────────────────────
 from mt_reports_parser import (
-    load_sales_data, aggregate_sales_for_kpis,
+    load_sales_data, aggregate_sales_for_kpis, load_ly_from_legacy_sales,
     load_active_30_day, load_remake_by_lab, load_remake_reasons,
     build_unified_wip, load_all_cases_daily,
 )
@@ -279,6 +279,24 @@ def _load_from_csv() -> dict[str, pd.DataFrame]:
     else:
         df = pd.DataFrame()
         log.warning("Sales_Data.csv not found or empty")
+
+    # Supplement LY figures from legacy pre-aggregated export.
+    # New Sales_Data.csv is current-year-only; live_exports/Sales_Data.csv has
+    # SalesData_LYSales pre-computed by Magic Touch (valid until MT report is
+    # reconfigured for a multi-year date range).
+    if not df.empty:
+        ly_supp = load_ly_from_legacy_sales(BASE_DIR)
+        if not ly_supp.empty:
+            df = df.merge(ly_supp.rename(columns={"ly_sales": "_ly", "ly_remake": "_ly_rem"}),
+                          on="account_id", how="left")
+            # Only overwrite where the current ly_sales is 0 (no 2025 invoices in new CSV)
+            zero_ly = df["ly_sales"].fillna(0) == 0
+            df.loc[zero_ly, "ly_sales"]  = df.loc[zero_ly, "_ly"].fillna(0)
+            df.loc[zero_ly, "ly_remake"] = df.loc[zero_ly, "_ly_rem"].fillna(0)
+            df.drop(columns=["_ly", "_ly_rem"], inplace=True)
+            n_filled = zero_ly.sum()
+            log.info("LY supplement: filled %d accounts from live_exports/Sales_Data.csv "
+                     "(total LY=$%,.0f)", n_filled, df["ly_sales"].sum())
 
     tables = {"sales": df}
     tables.update(_load_case_files(folder))
@@ -1237,10 +1255,9 @@ def main():
         run_time = CFG["schedule"]["run_time"]
         log.info("Daemon mode: daily at %s", run_time)
         schedule.every().day.at(run_time).do(run_pipeline)
-        run_pipeline()
         while True:
             schedule.run_pending()
-            time.sleep(60)
+            time.sleep(30)
     else:
         run_pipeline()
 

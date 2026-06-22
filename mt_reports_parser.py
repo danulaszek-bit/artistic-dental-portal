@@ -186,6 +186,41 @@ def aggregate_sales_for_kpis(sales_df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def load_ly_from_legacy_sales(portal_root: Path) -> pd.DataFrame:
+    """
+    Read last-year totals from the legacy live_exports/Sales_Data.csv (old
+    AHK-exported, pre-aggregated format with SalesData_LYSales columns).
+
+    The new MT_Reports_Local/Sales_Data.csv only covers the current year, so
+    this supplements it with LY figures until Magic Touch is reconfigured to
+    export a multi-year date range.
+
+    Returns a DataFrame with columns: account_id, ly_sales, ly_remake.
+    Returns empty DataFrame if the file is missing.
+    """
+    path = portal_root / "live_exports" / "Sales_Data.csv"
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        enc = _enc(path)
+        df = pd.read_csv(path, encoding=enc, errors="replace", low_memory=False)
+        col_map = {
+            "SalesData_CustomerID": "account_id",
+            "SalesData_LYSales":    "ly_sales",
+            "SalesData_LYRemake":   "ly_remake",
+        }
+        missing = [c for c in col_map if c not in df.columns]
+        if missing:
+            return pd.DataFrame()
+        df = df.rename(columns=col_map)[["account_id", "ly_sales", "ly_remake"]].copy()
+        for col in ("ly_sales", "ly_remake"):
+            df[col] = df[col].astype(str).str.replace(r"[$,]", "", regex=True).astype(float, errors="ignore").fillna(0)
+        out = df.groupby("account_id").agg({"ly_sales": "sum", "ly_remake": "sum"}).reset_index()
+        return out
+    except Exception:
+        return pd.DataFrame()
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 #  2. Active_30_day.csv  — shipped/invoiced cases rolling ~30 days
 # ═══════════════════════════════════════════════════════════════════════════════
