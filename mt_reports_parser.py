@@ -594,7 +594,16 @@ def load_case_location(folder: Path) -> pd.DataFrame:
 def _parse_all_cases_csv(path: Path) -> dict:
     """
     Parse one AllCasesByDateIn-format CSV into a {case_number_str: total_charge_float} dict.
-    Rows where col 0 is not a digit (group headers, date summaries) are skipped.
+
+    Two known export formats:
+      Standard (11 cols): col 0 = case#, col 10 = TotalCharge
+        - Produced by the rolling AHK export (AllCasesByDateIn.csv)
+      Flat/historical (40 cols): col 18 = case#, col 28 = TotalCharge
+        - Produced when the report is manually exported going back to 2020;
+          the report title + header + group summary + case data + grand totals
+          are all collapsed into one wide row per case.
+
+    Format is detected from the first data row's column count.
     """
     import csv as _csv, io as _io
     enc = _enc(path)
@@ -603,14 +612,32 @@ def _parse_all_cases_csv(path: Path) -> dict:
     text = raw.decode(enc, errors="replace")
     rows = list(_csv.reader(_io.StringIO(text)))
     lookup: dict = {}
-    for r in rows:
-        if not r:
-            continue
-        case_num = r[0].strip()
-        if not case_num.isdigit():
-            continue
-        charge = _money(r[10]) if len(r) > 10 else 0.0
-        lookup.setdefault(case_num, charge)
+
+    # Detect format from the first non-empty row
+    first_row = next((r for r in rows if r), [])
+    wide_format = len(first_row) >= 30 and first_row[18].strip().isdigit()
+
+    if wide_format:
+        # 40-col flat format: case# at col 18, TotalCharge at col 28
+        CASE_COL, CHARGE_COL = 18, 28
+        for r in rows:
+            if len(r) <= CHARGE_COL:
+                continue
+            case_num = r[CASE_COL].strip()
+            if not case_num.isdigit():
+                continue
+            lookup.setdefault(case_num, _money(r[CHARGE_COL]))
+    else:
+        # Standard 11-col format: case# at col 0, TotalCharge at col 10
+        for r in rows:
+            if not r:
+                continue
+            case_num = r[0].strip()
+            if not case_num.isdigit():
+                continue
+            charge = _money(r[10]) if len(r) > 10 else 0.0
+            lookup.setdefault(case_num, charge)
+
     return lookup
 
 
