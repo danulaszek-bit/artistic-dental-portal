@@ -121,8 +121,10 @@ def aggregate_sales_for_kpis(sales_df: pd.DataFrame) -> pd.DataFrame:
     df["invoice_date"] = pd.to_datetime(df["invoice_date"], errors="coerce")
     df = df.dropna(subset=["invoice_date", "account_id"])
 
-    net = df["invoice_total"].fillna(0) - df.get("sales_discount", pd.Series(0, index=df.index)).fillna(0)
-    df["net_sales"] = net
+    # InvoiceTotal is already net of SalesDiscount (Magic Touch subtracts it
+    # before writing the column). Do NOT subtract sales_discount again here —
+    # that would double-count every discount and understate revenue.
+    df["net_sales"] = df["invoice_total"].fillna(0)
 
     # Period flags
     df["is_ytd"] = df["invoice_date"].dt.year == yr
@@ -188,35 +190,72 @@ def aggregate_sales_for_kpis(sales_df: pd.DataFrame) -> pd.DataFrame:
 
 def load_ly_from_legacy_sales(portal_root: Path) -> pd.DataFrame:
     """
-    Read last-year totals from the legacy live_exports/Sales_Data.csv (old
-    AHK-exported, pre-aggregated format with SalesData_LYSales columns).
+    Load last-year (2025) sales totals per account for LY KPI fields.
 
-    The new MT_Reports_Local/Sales_Data.csv only covers the current year, so
-    this supplements it with LY figures until Magic Touch is reconfigured to
-    export a multi-year date range.
+    Priority order:
+      1. historical/Sales_2025.csv — invoice-line format (same as current
+         MT_Reports_Local/Sales_Data.csv), full year 2025. Drop this file in
+         C:\\ArtisticDentalPortal\\historical\\ once and it never needs updating.
+      2. live_exports/Sales_Data.csv — old AHK pre-aggregated format with
+         SalesData_LYSales columns. Used as fallback until the 2025 file exists.
 
     Returns a DataFrame with columns: account_id, ly_sales, ly_remake.
-    Returns empty DataFrame if the file is missing.
+    Returns empty DataFrame if neither source is available.
     """
-    path = portal_root / "live_exports" / "Sales_Data.csv"
-    if not path.exists():
+    # Option 1: dedicated 2025 invoice-line export (same format as Sales_Data.csv)
+    hist_path = portal_root / "historical" / "Sales_2025.csv"
+    if hist_path.exists():
+        try:
+            enc = _enc(hist_path)
+            df = pd.read_csv(hist_path, encoding=enc, low_memory=False)
+            id_col  = next((c for c in df.columns if c.strip().lower() in
+                            ("customerid", "customer id", "account_id")), None)
+            tot_col = next((c for c in df.columns if c.strip().lower() in
+                            ("invoicetotal", "invoice total", "invoiceamount")), None)
+            rem_col = next((c for c in df.columns if "remakedisc" in c.lower() or
+                            "remake_disc" in c.lower()), None)
+            if id_col and tot_col:
+                df = df.rename(columns={id_col: "account_id", tot_col: "net_sales"})
+                df["net_sales"] = (df["net_sales"].astype(str)
+                    .str.replace(r"[$,]", "", regex=True)
+                    .pipe(pd.to_numeric, errors="coerce").fillna(0))
+                df["is_remake"] = False
+                if rem_col:
+                    df["is_remake"] = (df[rem_col].astype(str)
+                        .str.replace(r"[$,]", "", regex=True)
+                        .pipe(pd.to_numeric, errors="coerce").fillna(0) > 0)
+                grp = df.groupby("account_id")
+                out = pd.DataFrame({
+                    "ly_sales":  grp["net_sales"].sum(),
+                    "ly_remake": grp.apply(
+                        lambda g: g.loc[g["is_remake"], "net_sales"].sum()
+                    ),
+                }).reset_index()
+                return out
+        except Exception:
+            pass  # fall through to legacy
+
+    # Option 2: legacy AHK pre-aggregated export
+    legacy_path = portal_root / "live_exports" / "Sales_Data.csv"
+    if not legacy_path.exists():
         return pd.DataFrame()
     try:
-        enc = _enc(path)
-        df = pd.read_csv(path, encoding=enc, errors="replace", low_memory=False)
+        enc = _enc(legacy_path)
+        df = pd.read_csv(legacy_path, encoding=enc, low_memory=False)
         col_map = {
             "SalesData_CustomerID": "account_id",
             "SalesData_LYSales":    "ly_sales",
             "SalesData_LYRemake":   "ly_remake",
         }
-        missing = [c for c in col_map if c not in df.columns]
-        if missing:
+        if any(c not in df.columns for c in col_map):
             return pd.DataFrame()
         df = df.rename(columns=col_map)[["account_id", "ly_sales", "ly_remake"]].copy()
         for col in ("ly_sales", "ly_remake"):
-            df[col] = df[col].astype(str).str.replace(r"[$,]", "", regex=True).astype(float, errors="ignore").fillna(0)
-        out = df.groupby("account_id").agg({"ly_sales": "sum", "ly_remake": "sum"}).reset_index()
-        return out
+            df[col] = (df[col].astype(str).str.replace(r"[$,]", "", regex=True)
+                .pipe(pd.to_numeric, errors="coerce").fillna(0))
+        return df.groupby("account_id").agg(
+            {"ly_sales": "sum", "ly_remake": "sum"}
+        ).reset_index()
     except Exception:
         return pd.DataFrame()
 
