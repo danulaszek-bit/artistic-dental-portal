@@ -999,183 +999,233 @@ def load_employee_productivity(folder: Path) -> pd.DataFrame:
 
         # Time-category sub-rows: category name is in col 1 (col 0 is blank),
         # data is in cols 7 (units) and 11 (hours)
-        if current_emp and not c0 and len(row) > 1 and row[1].strip() == "Production":
-            current_emp["production_units"] = _money(row[7])  if len(row) > 7  else 0.0
-            current_emp["production_hours"] = _hours_to_decimal(row[11]) if len(row) > 11 else 0.0
+        if current_emp and not c0 and len(row) > 1 and row[1]:
+            cat = row[1].strip()
+            if cat == "Production":
+                current_emp["production_units"] = _money(row[7])  if len(row) > 7  else 0.0
+                current_emp["production_hours"] = _hours_to_decimal(row[11]) if len(row) > 11 else 0.0
 
     if current_emp:
         rows.append(current_emp)
 
-    if not rows:
-        return pd.DataFrame()
-
-    out = pd.DataFrame(rows)
-    # Recompute UPH from production hours where available
-    out["uph"] = (
-        out["production_units"] / out["production_hours"].replace(0, pd.NA)
-    ).fillna(out["uph"]).round(2)
-    return out
+    return pd.DataFrame(rows) if rows else pd.DataFrame()
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  10. prod_by_dept.xls  — sales by product department (units + dollars)
+#  Helper: resolve .xls ↔ .csv  (pick freshest existing file)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def _resolve_path(folder: Path, name: str) -> Path:
+    """Return the freshest file matching name, trying the alternate extension
+    (.xls ↔ .csv) when the primary is absent or older."""
+    primary = folder / name
+    stem    = Path(name).stem
+    ext     = Path(name).suffix.lower()
+    alt_ext = ".csv" if ext in (".xls", ".xlsx") else ".xls"
+    alt     = folder / (stem + alt_ext)
+
+    p_ok = primary.exists()
+    a_ok = alt.exists()
+
+    if p_ok and a_ok:
+        return primary if primary.stat().st_mtime >= alt.stat().st_mtime else alt
+    if p_ok:
+        return primary
+    if a_ok:
+        return alt
+    return primary   # caller handles missing-file
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  10. prod_by_dept  (xls or csv)  — department/product unit counts
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def load_prod_by_dept(folder: Path) -> pd.DataFrame:
     """
-    XLS hierarchical report. Structure:
-      Row 8:  Column headers
-      Dept header rows: Col 0 starts with 'Department:'
-      Product rows:     Col 0 = 'PRODUCTID-Description'
-      Subtotal rows:    Col 0 is numeric — skip
-
-    Column map (0-indexed):
-      0  = ProductID-Description  (split on first '-')
-      1  = # of Invoices
-      2  = New Units
-      3  = Remake Units
-      4  = Credit Units
-      5  = Credit Discount
-      6  = Sales Discount
-      7  = Remake Discount
-      8  = Metal Charges
-      9  = Total Tax
-      10 = Total Invoiced
-      11 = Net Sales
+    Magic Touch "Sales By Product Department" report.
+    Hierarchical layout (same structure in both XLS and LibreOffice-converted CSV):
+      Row 0-9:  report header / column labels
+        Header row contains "Product ID" in col 0
+      Department row: col 0 starts with "Department:"
+      Product row:    col 0 = "PRODID-Description", col 3 = New Units, col 4 = Rmk Units
+      Totals row:     col 0 is blank
+    Returns one row per product: department, product_id, description,
+    new_units, remake_units.
+    Picks the freshest of prod_by_dept.xls / prod_by_dept.csv via _resolve_path.
     """
-    import xlrd
-    path = folder / "prod_by_dept.xls"
+    path = _resolve_path(folder, "prod_by_dept.xls")
     if not path.exists():
         return pd.DataFrame()
 
-    wb = xlrd.open_workbook(str(path))
-    sh = wb.sheet_by_index(0)
+    ext = path.suffix.lower()
 
-    rows = []
+    # ── Read into a list of string rows ──────────────────────────────────────
+    # Try multiple strategies in order: xlrd → openpyxl → read-as-csv → sibling .csv
+    raw_rows: list[list[str]] = []
+
+    def _rows_from_csv(p: Path) -> list:
+        df = pd.read_csv(p, header=None, dtype=str,
+                         keep_default_na=False, on_bad_lines="skip",
+                         engine="python")
+        return [[str(v).strip() for v in row] for row in df.values.tolist()]
+
+    if ext == ".csv":
+        try:
+            raw_rows = _rows_from_csv(path)
+        except Exception:
+            return pd.DataFrame()
+    else:
+        # 1. xlrd (classic BIFF)
+        loaded = False
+        try:
+            import xlrd
+            wb = xlrd.open_workbook(str(path))
+            sh = wb.sheet_by_index(0)
+            raw_rows = [
+                [str(sh.cell_value(i, c)).strip() for c in range(sh.ncols)]
+                for i in range(sh.nrows)
+            ]
+            loaded = True
+        except Exception:
+            pass
+
+        # 2. openpyxl (xlsx stored as .xls)
+        if not loaded:
+            try:
+                df = pd.read_excel(path, header=None, dtype=str, engine="openpyxl")
+                raw_rows = [[str(v).strip() for v in row] for row in df.values.tolist()]
+                loaded = True
+            except Exception:
+                pass
+
+        # 3. File might actually be CSV despite the .xls extension
+        if not loaded:
+            try:
+                raw_rows = _rows_from_csv(path)
+                loaded = True
+            except Exception:
+                pass
+
+        # 4. Fall back to sibling .csv file (same stem, .csv extension)
+        if not loaded:
+            sibling = path.parent / (path.stem + ".csv")
+            if sibling.exists():
+                try:
+                    raw_rows = _rows_from_csv(sibling)
+                    loaded = True
+                except Exception:
+                    pass
+
+        if not loaded:
+            return pd.DataFrame()
+
+    if not raw_rows:
+        return pd.DataFrame()
+
+    # ── Parse hierarchical rows ───────────────────────────────────────────────
+    results      = []
     current_dept = ""
 
-    for i in range(sh.nrows):
-        row = [str(sh.cell_value(i, c)).strip() for c in range(sh.ncols)]
-        c0  = row[0]
+    for row in raw_rows:
+        c0 = row[0] if row else ""
 
+        # Department header
         if c0.startswith("Department:"):
             current_dept = c0.replace("Department:", "").strip()
             continue
 
-        # Skip subtotal rows (col 0 is pure numeric)
-        if c0.replace(",", "").replace(".", "").isdigit():
+        # Skip blank, header, or totals rows
+        if not c0 or not current_dept:
+            continue
+        if any(kw in c0 for kw in ("Product ID", "Invoicing Lab", "Sales By Product")):
             continue
 
-        # Product row: must contain a dash and not look like a header
-        if "-" not in c0 or c0.startswith("Product") or c0.startswith("Invoicing"):
+        # Product row: "PRODID-Description" or "PRODID-Description (detail)"
+        # New units = col 3, Remake units = col 4
+        if len(row) < 5:
             continue
+        new_u    = int(_money(row[3])) if row[3] else 0
+        remake_u = int(_money(row[4])) if row[4] else 0
+        if new_u == 0 and remake_u == 0:
+            continue   # totals / blank rows
 
-        pid, desc = c0.split("-", 1)
-        pid, desc = pid.strip(), desc.strip()
-        if not pid:
-            continue
+        # Split product ID from description on first hyphen
+        if "-" in c0:
+            prod_id, desc = c0.split("-", 1)
+        else:
+            prod_id, desc = c0, ""
 
-        rows.append({
-            "department":      current_dept,
-            "product_id":      pid,
-            "description":     desc,
-            "num_invoices":    _money(row[1]) if len(row) > 1 else 0,
-            "new_units":       _money(row[2]) if len(row) > 2 else 0,
-            "remake_units":    _money(row[3]) if len(row) > 3 else 0,
-            "credit_units":    _money(row[4]) if len(row) > 4 else 0,
-            "credit_discount": _money(row[5]) if len(row) > 5 else 0,
-            "sales_discount":  _money(row[6]) if len(row) > 6 else 0,
-            "remake_discount": _money(row[7]) if len(row) > 7 else 0,
-            "metal_charges":   _money(row[8]) if len(row) > 8 else 0,
-            "total_tax":       _money(row[9]) if len(row) > 9 else 0,
-            "total_invoiced":  _money(row[10]) if len(row) > 10 else 0,
-            "net_sales":       _money(row[11]) if len(row) > 11 else 0,
+        results.append({
+            "department":   current_dept,
+            "product_id":   prod_id.strip(),
+            "description":  desc.strip(),
+            "new_units":    new_u,
+            "remake_units": remake_u,
         })
 
-    return pd.DataFrame(rows) if rows else pd.DataFrame()
+    return pd.DataFrame(results) if results else pd.DataFrame()
 
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  11. AllCasesByDateIn.csv  — daily aggregate: cases in / units / revenue
-# ═══════════════════════════════════════════════════════════════════════════════
 
 def load_all_cases_daily(folder: Path) -> pd.DataFrame:
     """
-    Parses the daily aggregate report. Each data row looks like:
-      'Cases In on 1/2/2026:  35'  |  'Units In on 1/2/2026:  56.00'  |  'Total for Date: $5,267.95'
-    Returns one row per date: date, cases_in, units_in, total_revenue.
+    Magic Touch "All Cases by Date In" summary export.
+    Each data row has three columns:
+      col 0: "Cases In on M/D/YYYY:\t<count>"
+      col 1: "Units In on M/D/YYYY:\t<count>"
+      col 2: "Total for Date: $<amount>"
+    Returns one row per date with: date, cases_in, units_in, total_amount.
+    Accepts .csv or .xls — picks the freshest via _resolve_path.
     """
-    path = folder / "AllCasesByDateIn.csv"
+    path = _resolve_path(folder, "AllCasesByDateIn.csv")
     if not path.exists():
         return pd.DataFrame()
 
-    df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
-                     on_bad_lines="skip", engine="python")
+    ext = path.suffix.lower()
+    try:
+        if ext in (".xls", ".xlsx"):
+            raw = pd.read_excel(path, header=None, dtype=str)
+        else:
+            raw = pd.read_csv(path, header=None, dtype=str,
+                              keep_default_na=False, on_bad_lines="skip",
+                              engine="python")
+    except Exception:
+        return pd.DataFrame()
+
+    if raw.empty:
+        return pd.DataFrame()
+
+    # Pattern: "Cases In on 1/2/2026:  \t35"
+    date_re  = re.compile(r"Cases In on\s+([\d/]+):", re.IGNORECASE)
+    count_re = re.compile(r"[:\t\s]+([\d.]+)\s*$")
 
     rows = []
-    for _, row in df.iterrows():
-        vals = row.tolist()
-        c0 = str(vals[0]).strip() if vals else ""
-        if not c0.startswith("Cases In on"):
-            continue
-        # Extract date and count from col 0
-        m0 = re.search(r"Cases In on ([\d/]+).*?(\d+)\s*$", c0)
-        if not m0:
-            continue
-        date_str  = m0.group(1)
-        cases_in  = int(m0.group(2))
+    for _, row in raw.iterrows():
+        c0 = str(row.iloc[0]).strip() if len(row) > 0 else ""
+        c1 = str(row.iloc[1]).strip() if len(row) > 1 else ""
+        c2 = str(row.iloc[2]).strip() if len(row) > 2 else ""
 
-        units_in  = 0.0
-        total_rev = 0.0
-        if len(vals) > 1:
-            m1 = re.search(r"([\d,.]+)\s*$", str(vals[1]))
-            if m1:
-                units_in = float(m1.group(1).replace(",", ""))
-        if len(vals) > 2:
-            m2 = re.search(r"\$([\d,.]+)", str(vals[2]))
-            if m2:
-                total_rev = float(m2.group(1).replace(",", ""))
+        m = date_re.search(c0)
+        if not m:
+            continue
+
+        date_str = m.group(1)
+        dt = pd.to_datetime(date_str, errors="coerce")
+        if pd.isna(dt):
+            continue
+
+        # Extract trailing number from each column
+        def _tail_num(s):
+            t = s.split("\t")[-1].strip() if "\t" in s else s.split(":")[-1].strip()
+            try:
+                return float(re.sub(r"[$,]", "", t))
+            except (ValueError, TypeError):
+                return 0.0
 
         rows.append({
-            "date":          pd.to_datetime(date_str, errors="coerce"),
-            "cases_in":      cases_in,
-            "units_in":      units_in,
-            "total_revenue": total_rev,
+            "date":         dt,
+            "cases_in":     int(_tail_num(c0)),
+            "units_in":     _tail_num(c1),
+            "total_amount": _tail_num(c2),
         })
-
-    return pd.DataFrame(rows) if rows else pd.DataFrame()
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  12. Remakes.csv  — daily aggregate remake counts
-# ═══════════════════════════════════════════════════════════════════════════════
-
-def load_remakes_daily(folder: Path) -> pd.DataFrame:
-    """
-    Parses daily remake count aggregate:
-      'Date In: 4/1/2026'
-      'Remake Cases In for 4/1/2026:  10'
-    Returns one row per date: date, remake_cases.
-    """
-    path = folder / "Remakes.csv"
-    if not path.exists():
-        return pd.DataFrame()
-
-    df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
-                     on_bad_lines="skip", engine="python")
-
-    rows = []
-    current_date = None
-    for _, row in df.iterrows():
-        vals = row.tolist()
-        c0 = str(vals[0]).strip()
-        if c0.startswith("Date In:"):
-            date_str = c0.replace("Date In:", "").strip()
-            current_date = pd.to_datetime(date_str, errors="coerce")
-        elif c0.startswith("Remake Cases In for") and current_date is not None:
-            m = re.search(r"(\d+)\s*$", c0)
-            count = int(m.group(1)) if m else 0
-            rows.append({"date": current_date, "remake_cases": count})
-            current_date = None
 
     return pd.DataFrame(rows) if rows else pd.DataFrame()
