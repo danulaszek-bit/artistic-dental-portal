@@ -12,12 +12,18 @@ echo === git status before ===
 git status --short
 
 echo.
+echo === Running pipelines ===
+python pipeline.py
+python production_pipeline.py
+
+echo.
 echo === Adding files ===
 git add .gitignore
 git add config.yaml
 git add requirements.txt
 git add pipeline.py
 git add mt_reports_parser.py
+git add production_pipeline.py
 git add dashboard.py
 git add retention.py
 git add import_case_history.py
