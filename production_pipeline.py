@@ -407,5 +407,15 @@ def render_live_html(depts: dict, employees: list, reasons: list, report: dict):
         html,
     )
 
+    # Auto-close the upload overlay since data is baked in
+    auto_close = (
+        "\n<script>\n"
+        "document.addEventListener('DOMContentLoaded',function(){\n"
+        "  if(Object.keys(S.depts).length>0){closeUpload();}\n"
+        "});\n"
+        "</script>\n"
+    )
+    html = html.replace("</body>", auto_close + "</body>", 1)
+
     out_path.write_text(html, encoding="utf-8")
     print(f"rendered HTML  -> {out_path.name}  ({out_path.stat().st_size:,} bytes)")
