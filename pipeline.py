@@ -791,16 +791,20 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
         kpis["remake_by_dept_reason"] = pd.DataFrame()
 
     # ── 8. KPI gauges ─────────────────────────────────────────────────────
-    # Use unit-based remake rate from production pipeline if available;
-    # fall back to dollar-based (ytd_remake / ytd_total) otherwise.
+    # Compute unit-based remake rate directly from prod_by_dept.xls.
+    # This matches what the Production Manager dashboard shows (remake units / total units).
     try:
-        _prod_kpis_path = BASE_DIR / "cache" / "latest" / "production_kpis.json"
-        _prod_kpis = json.loads(_prod_kpis_path.read_text(encoding="utf-8"))
-        overall_remake = float(_prod_kpis.get("unit_remake_rate", 0))
-        log.info("Remake rate from production pipeline (unit-based): %.2f%%", overall_remake)
-    except Exception:
+        from mt_reports_parser import load_prod_by_dept as _lpbd
+        _pbd = _lpbd(folder)
+        _new = _pbd["new_units"].sum() if "new_units" in _pbd.columns else 0
+        _rem = _pbd["remake_units"].sum() if "remake_units" in _pbd.columns else 0
+        _tot = _new + _rem
+        overall_remake = round(_rem / _tot * 100, 2) if _tot > 0 else 0
+        log.info("Remake rate from prod_by_dept (unit-based): %.2f%%  (%d remakes / %d total)",
+                 overall_remake, _rem, _tot)
+    except Exception as _e:
         overall_remake = (ytd_remake / ytd_total * 100) if ytd_total else 0
-        log.info("Remake rate fallback (dollar-based): %.2f%%", overall_remake)
+        log.info("Remake rate fallback (dollar-based): %.2f%%  (%s)", overall_remake, _e)
     kpis["kpi_gauges"] = pd.DataFrame([{
         "ytd_revenue":          ytd_total,
         "ytd_prior_revenue":    ly_prorated,   # prorated to same elapsed portion of year
