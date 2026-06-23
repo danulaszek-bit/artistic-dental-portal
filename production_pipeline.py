@@ -272,6 +272,7 @@ def main():
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(data, indent=1), encoding="utf-8")
+    render_live_html(depts, employees, reasons, report)
 
     print("── Production pipeline ─────────────────────────────")
     print(f"source folder      : {MT_FOLDER}")
@@ -293,5 +294,118 @@ def main():
     print(f"\nwrote {OUT}")
 
 
+
 if __name__ == "__main__":
     main()
+
+# ── Bake data into a live HTML file ──────────────────────────────────────────
+def render_live_html(depts: dict, employees: list, reasons: list, report: dict):
+    """
+    Read assets/production_dashboard.html (template with Apr/May hardcoded),
+    inject current-period data into const S and add a new MONTHLY_DEPT entry,
+    write result to assets/production_dashboard_live.html.
+    Streamlit serves the live file; no runtime JS injection needed.
+    """
+    import re as _re
+    import json as _json
+
+    template = BASE / "assets" / "production_dashboard.html"
+    out_path  = BASE / "assets" / "production_dashboard_live.html"
+    if not template.exists():
+        print("render_live_html: template not found, skipping")
+        return
+
+    html = template.read_text(encoding="utf-8")
+    _now = datetime.now()
+    month_key   = f"{_now.year}-{_now.month:02d}"
+    month_label = _now.strftime("%B %Y")   # "June 2026"
+
+    # ── 1. Replace const S declaration ──────────────────────────────────────
+    s_obj = {
+        "depts":      depts,
+        "techs":      [{
+            "code":        e.get("code", ""),
+            "name":        e.get("name", ""),
+            "dept":        e.get("dept", "") or "",
+            "units":       int(e.get("units", 0) or 0),
+            "remakes":     0,
+            "adjustments": 0,
+            "hours":       round(float(e.get("hours", 0) or 0), 1),
+            "uph":         round(float(e.get("uph", 0) or 0), 2),
+        } for e in employees],
+        "reasons":     reasons,
+        "products":    [],
+        "adjProducts": [],
+        "daily":       [],
+        "weekly":      [],
+        "monthly":     [],
+        "deptWeekly":  [],
+        "deptMonthly": [],
+        "period":      report["period"],
+    }
+    s_json = _json.dumps(s_obj, separators=(",", ":"))
+    html = _re.sub(
+        r"const S=\{depts:\{\},.+?period:'No data loaded'\};",
+        f"const S={s_json};",
+        html,
+        flags=_re.DOTALL,
+    )
+
+    # ── 2. Build MONTHLY_DEPT entry for current month ────────────────────────
+    techs_by_dept: dict[str, list] = {}
+    for e in employees:
+        d = (e.get("dept") or "").strip()
+        if d and int(e.get("units", 0) or 0) > 0:
+            techs_by_dept.setdefault(d, []).append({
+                "name": e.get("name", ""),
+                "u": int(e.get("units", 0) or 0),
+                "r": 0, "a": 0,
+            })
+
+    cur_month: dict = {}
+    for dept_name, dd in depts.items():
+        if dept_name in ("-- Undefined --", "Sales") or not dd.get("total", 0):
+            continue
+        prods = [
+            {"id": p["id"], "desc": (p["desc"] or "")[:30],
+             "u": p["new"] + p["remakes"], "r": p["remakes"]}
+            for p in dd.get("products", [])
+            if p.get("new", 0) + p.get("remakes", 0) > 0
+        ][:8]
+        cur_month[dept_name] = {
+            "units":    dd["total"],
+            "remakes":  dd["remakes"],
+            "adj":      dd["adjustments"],
+            "products": prods,
+            "techs":    techs_by_dept.get(dept_name, []),
+        }
+
+    if cur_month:
+        new_entry = f'"{month_key}":{_json.dumps(cur_month, separators=(",",":"))}' 
+        marker = "const MONTHLY_DEPT = {"
+        idx = html.find(marker)
+        if idx != -1:
+            end = html.index("};", idx) + 2
+            old_block = html[idx:end]
+            # Remove any existing entry for this month key to avoid duplicates
+            old_block = _re.sub(
+                rf',\s*"{month_key}":\{{.*?\}}(?=\s*[,}}])',
+                "",
+                old_block,
+                flags=_re.DOTALL,
+            )
+            new_block = old_block[:-2] + "," + new_entry + "};"
+            html = html[:idx] + new_block + html[end:]
+
+    # ── 3. Update MONTH_LABELS ───────────────────────────────────────────────
+    html = _re.sub(
+        r"(const MONTH_LABELS = \{[^}]*)\}",
+        lambda m: (
+            m.group(0) if f"'{month_key}'" in m.group(0)
+            else m.group(1) + f",'{month_key}':'{month_label}'" + "}"
+        ),
+        html,
+    )
+
+    out_path.write_text(html, encoding="utf-8")
+    print(f"rendered HTML  -> {out_path.name}  ({out_path.stat().st_size:,} bytes)")

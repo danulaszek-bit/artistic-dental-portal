@@ -33,6 +33,7 @@ git add git_push.bat
 git add deploy.bat
 git add .streamlit/
 git add pages/
+git add assets/
 git add cache/latest/
 
 echo.
@@ -43,14 +44,4 @@ echo.
 set /p MSG=Enter commit message (or press Enter for default): 
 if "%MSG%"=="" set MSG=Update Partner Portal
 
-echo.
-echo === Committing ===
-git commit -m "%MSG%"
-
-echo.
-echo === Pushing to origin/main ===
-git push origin main
-
-echo.
-echo === Done ===
-pause
+echo
