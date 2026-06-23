@@ -1090,8 +1090,8 @@ def render_product_mix(mix_df):
                 "`cache/latest/product_type_summary.csv`.")
         return
 
-    cols_present = [c for c in ("ytd", "ly", "lm") if c in mix_df.columns]
-    labels = {"ytd": "Year-to-Date", "ly": "Last Year", "lm": "Last Month (~30d)"}
+    cols_present = [c for c in ("ytd", "lytd", "lm") if c in mix_df.columns]
+    labels = {"ytd": "Year-to-Date", "lytd": "Last YTD", "lm": "Last Month (~30d)"}
 
     # ── Stable product → color mapping so each product keeps the SAME color
     #    across all pies AND the legend table, regardless of its rank in
@@ -1142,7 +1142,7 @@ def render_product_mix(mix_df):
     for c in cols_present:
         legend[c] = legend[c].apply(fmt_currency)
     legend = legend.rename(columns={"product_type": "Product Type",
-                                     "ytd": "YTD", "ly": "Last Year", "lm": "Last Month"})
+                                     "ytd": "YTD", "lytd": "Last YTD", "lm": "Last Month"})
 
     def _hex_to_rgba(hex_color, alpha=0.35):
         """Convert '#rrggbb' or 'rgb(r,g,b)' to rgba(r,g,b,a)."""

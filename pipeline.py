@@ -854,21 +854,46 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     except Exception as exc:
         log.warning("Could not compute remake_history_monthly: %s", exc)
 
-    # ── 10. Product mix by type (LY / YTD / LM) ────────────────────────────
-    # Pie-chart fodder for the Executive Dashboard.
-    if "product_type" in df.columns:
-        agg_dict = {"ytd": ("ytd_sales", "sum"), "ly": ("ly_sales", "sum")}
-        if "lm_sales" in df.columns:
-            agg_dict["lm"] = ("lm_sales", "sum")
-        mix = (
-            df.groupby("product_type", dropna=False)
-              .agg(**agg_dict)
-              .reset_index()
+    # ── 10. Product mix by department (LYTD / YTD / LM) ────────────────────
+    # Group products by their lab department using the case_product_lines mapping.
+    DEPT_MERGE = {
+        "IMPLANT PT":         "IMPLANTS",
+        "CHAIRSIDE SERVICES": "Removables",
+        "MISC":               "Other",
+        "DELIVERY":           "Other",
+        "Alloy":              "C&B",
+    }
+    try:
+        pl_path = BASE_DIR / "cache" / "latest" / "case_product_lines.csv"
+        pl = pd.read_csv(pl_path)
+        dept_map = (
+            pl[["Products_ProductID", "Products_Department"]]
+            .dropna(subset=["Products_Department"])
+            .drop_duplicates("Products_ProductID")
+            .rename(columns={"Products_ProductID": "product_id",
+                             "Products_Department": "dept"})
         )
-        mix["product_type"] = mix["product_type"].fillna("Unspecified").replace("", "Unspecified")
-        mix = mix[mix[list(agg_dict.keys())].abs().sum(axis=1) > 0]
-        mix = mix.sort_values("ytd", ascending=False)
-        kpis["product_type_summary"] = mix
+        df_mix = df.merge(dept_map, on="product_id", how="left")
+        df_mix["dept"] = df_mix["dept"].fillna("Other").replace(DEPT_MERGE)
+    except Exception:
+        df_mix = df.copy()
+        df_mix["dept"] = df_mix.get("product_type", "Other").fillna("Other")
+
+    agg_dict = {"ytd": ("ytd_sales", "sum"), "ly": ("ly_sales", "sum")}
+    if "lm_sales" in df_mix.columns:
+        agg_dict["lm"] = ("lm_sales", "sum")
+    mix = df_mix.groupby("dept", dropna=False).agg(**agg_dict).reset_index()
+    mix = mix.rename(columns={"dept": "product_type"})
+    mix["product_type"] = mix["product_type"].fillna("Other")
+    # Compute LYTD: prorate LY to the same elapsed fraction of the year
+    _today = date.today()
+    _yday  = _today.timetuple().tm_yday
+    _days  = 366 if (_today.year % 4 == 0 and
+                     (_today.year % 100 != 0 or _today.year % 400 == 0)) else 365
+    mix["lytd"] = (mix["ly"] * (_yday / _days)).round(2)
+    mix = mix[mix[list(agg_dict.keys())].abs().sum(axis=1) > 0]
+    mix = mix.sort_values("ytd", ascending=False)
+    kpis["product_type_summary"] = mix
 
     return kpis
 
