@@ -1229,3 +1229,64 @@ def load_all_cases_daily(folder: Path) -> pd.DataFrame:
         })
 
     return pd.DataFrame(rows) if rows else pd.DataFrame()
+
+
+def load_internal_remakes(folder: Path, year: int = None, month: int = None):
+    """
+    Parse InternalRemakesAnalysis.xls (grouped by technician).
+    Returns dict of {tech_code: remake_count} for the given year+month.
+    If year/month are None, returns counts for all dates.
+    """
+    import xlrd
+    from collections import defaultdict
+
+    KNOWN_CODES = {
+        "GAMMA-TECH", "3SHAPE", "EASY DENT", "EvidentQC", "Evident",
+        "AJEBLE", "AJEZYM", "ALMSEN", "AREVHE", "ARSORU", "AUKSOR",
+        "CARLUC", "CHRICH", "CIAJIA", "CONWSA", "DELEAL", "DENMIA",
+        "DIVERI", "EARLMA", "FLOBRE", "FRAHOP", "FREDCH", "GAMMA-TECH",
+        "GASICO", "GIBPCEL", "GORMAT", "HOOTAR", "IOVFRE", "KAZERI",
+        "KENSCA", "MAGASE", "OHAJOH", "PODBES", "POZDOM", "PRINKE",
+        "SALPAL", "SHARSA", "TAPLIZ", "ULASDA", "ULASJE", "VEGANI",
+        "VENPAU", "WIKAMA", "WUTWAR", "ZEMBEDR",
+    }
+
+    def _parse_tech_line(line):
+        part = line.replace("Technician:", "").strip()
+        for code in KNOWN_CODES:
+            if part.startswith(code + "-") or part.startswith(code + " "):
+                return code, part[len(code):].lstrip("- ").strip()
+        dash = part.find("-")
+        return (part[:dash].strip(), part[dash+1:].strip()) if dash > 0 else (part, part)
+
+    candidates = sorted(folder.glob("InternalRemakesAnalysis*.xls*"))
+    if not candidates:
+        return {}
+
+    wb  = xlrd.open_workbook(str(candidates[-1]))
+    sh  = wb.sheet_by_index(0)
+    out = defaultdict(int)
+    current_code = None
+
+    for i in range(25, sh.nrows):
+        c0 = str(sh.cell_value(i, 0)).strip()
+        if c0.startswith("Technician:"):
+            current_code, _ = _parse_tech_line(c0)
+            continue
+        if not current_code or not c0 or not c0.replace(".", "").isdigit():
+            continue
+        if year is not None or month is not None:
+            date_raw = sh.cell_value(i, 12)
+            if not date_raw or not isinstance(date_raw, float):
+                continue
+            try:
+                d = xlrd.xldate_as_datetime(date_raw, wb.datemode)
+            except Exception:
+                continue
+            if year is not None and d.year != year:
+                continue
+            if month is not None and d.month != month:
+                continue
+        out[current_code] += 1
+
+    return dict(out)

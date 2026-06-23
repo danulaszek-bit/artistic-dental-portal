@@ -28,6 +28,7 @@ from mt_reports_parser import (
     load_remake_by_lab,
     load_remake_reasons,
     load_all_cases_daily,
+    load_internal_remakes,
 )
 
 BASE = Path(__file__).parent
@@ -259,7 +260,16 @@ def main():
     reasons    = parse_reasons(report)
     monthly    = parse_monthly(report)
 
-    techs = [{**e, "remakes": 0, "adjustments": 0} for e in employees]
+    # Real per-technician remake counts from InternalRemakesAnalysis.xls
+    # Filter to current period month if determinable, else load all
+    _now = datetime.now()
+    real_remakes = load_internal_remakes(MT_FOLDER, year=_now.year, month=_now.month)
+    if not real_remakes:
+        # Fallback: load full date range if current month has no data yet
+        real_remakes = load_internal_remakes(MT_FOLDER)
+    techs = [{**e, "remakes": real_remakes.get(e["code"], 0), "adjustments": 0}
+             for e in employees]
+    print(f"real remake data   : {sum(real_remakes.values())} remakes across {len(real_remakes)} techs")
 
     data = {
         "period":    report["period"],
@@ -272,7 +282,7 @@ def main():
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(data, indent=1), encoding="utf-8")
-    render_live_html(depts, employees, reasons, report)
+    render_live_html(depts, employees, reasons, report, techs)
 
     print("── Production pipeline ─────────────────────────────")
     print(f"source folder      : {MT_FOLDER}")
@@ -295,11 +305,8 @@ def main():
 
 
 
-if __name__ == "__main__":
-    main()
-
 # ── Bake data into a live HTML file ──────────────────────────────────────────
-def render_live_html(depts: dict, employees: list, reasons: list, report: dict):
+def render_live_html(depts: dict, employees: list, reasons: list, report: dict, techs: list = None):
     """
     Read assets/production_dashboard.html (template with Apr/May hardcoded),
     inject current-period data into const S and add a new MONTHLY_DEPT entry,
@@ -321,9 +328,9 @@ def render_live_html(depts: dict, employees: list, reasons: list, report: dict):
     month_label = _now.strftime("%B %Y")   # "June 2026"
 
     # ── 1. Replace const S declaration ──────────────────────────────────────
-    s_obj = {
-        "depts":      depts,
-        "techs":      [{
+    # Use pre-built techs list (with real remakes) if provided
+    if techs is None:
+        techs = [{
             "code":        e.get("code", ""),
             "name":        e.get("name", ""),
             "dept":        e.get("dept", "") or "",
@@ -332,7 +339,10 @@ def render_live_html(depts: dict, employees: list, reasons: list, report: dict):
             "adjustments": 0,
             "hours":       round(float(e.get("hours", 0) or 0), 1),
             "uph":         round(float(e.get("uph", 0) or 0), 2),
-        } for e in employees],
+        } for e in employees]
+    s_obj = {
+        "depts":      depts,
+        "techs":      techs,
         "reasons":     reasons,
         "products":    [],
         "adjProducts": [],
@@ -353,13 +363,14 @@ def render_live_html(depts: dict, employees: list, reasons: list, report: dict):
 
     # ── 2. Build MONTHLY_DEPT entry for current month ────────────────────────
     techs_by_dept: dict[str, list] = {}
-    for e in employees:
-        d = (e.get("dept") or "").strip()
-        if d and int(e.get("units", 0) or 0) > 0:
+    for t in techs:
+        d = (t.get("dept") or "").strip()
+        if d and int(t.get("units", 0) or 0) > 0:
             techs_by_dept.setdefault(d, []).append({
-                "name": e.get("name", ""),
-                "u": int(e.get("units", 0) or 0),
-                "r": 0, "a": 0,
+                "name": t.get("name", ""),
+                "u": int(t.get("units", 0) or 0),
+                "r": int(t.get("remakes", 0) or 0),
+                "a": int(t.get("adjustments", 0) or 0),
             })
 
     cur_month: dict = {}
@@ -397,8 +408,10 @@ def render_live_html(depts: dict, employees: list, reasons: list, report: dict):
             new_block = old_block[:-2] + "," + new_entry + "};"
             html = html[:idx] + new_block + html[end:]
 
-    # ── 3. Update MONTH_LABELS ───────────────────────────────────────────────
-    html = _re.sub(
+    # ── 3. Update MONTH_LABELS ─────────────────────────────────────
+if __name__ == '__main__':
+    main()
+ = _re.sub(
         r"(const MONTH_LABELS = \{[^}]*)\}",
         lambda m: (
             m.group(0) if f"'{month_key}'" in m.group(0)

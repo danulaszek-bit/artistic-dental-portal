@@ -1104,7 +1104,7 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
         in_daily = load_all_cases_daily(folder)
         if not in_daily.empty:
             in_daily = in_daily[in_daily["date"] >= cutoff].copy()
-            in_grp = in_daily.rename(columns={"total_revenue": "dollars_in"})
+            in_grp = in_daily.rename(columns={"total_amount": "dollars_in"})
             in_grp["dollars_in"] = in_grp["dollars_in"].round(2)
             in_source = "AllCasesByDateIn.csv"
         else:
