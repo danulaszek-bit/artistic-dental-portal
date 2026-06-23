@@ -795,7 +795,8 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     # This matches what the Production Manager dashboard shows (remake units / total units).
     try:
         from mt_reports_parser import load_prod_by_dept as _lpbd
-        _pbd = _lpbd(folder)
+        _mt_folder = Path(CFG["data_source"]["csv"]["watch_folder"])
+        _pbd = _lpbd(_mt_folder)
         _new = _pbd["new_units"].sum() if "new_units" in _pbd.columns else 0
         _rem = _pbd["remake_units"].sum() if "remake_units" in _pbd.columns else 0
         _tot = _new + _rem
