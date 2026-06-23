@@ -9,6 +9,7 @@ Run as service : python pipeline.py --daemon
 """
 
 import sys
+import json
 import pickle
 import logging
 import argparse
@@ -790,7 +791,16 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
         kpis["remake_by_dept_reason"] = pd.DataFrame()
 
     # ── 8. KPI gauges ─────────────────────────────────────────────────────
-    overall_remake = (ytd_remake / ytd_total * 100) if ytd_total else 0
+    # Use unit-based remake rate from production pipeline if available;
+    # fall back to dollar-based (ytd_remake / ytd_total) otherwise.
+    try:
+        _prod_kpis_path = BASE_DIR / "cache" / "latest" / "production_kpis.json"
+        _prod_kpis = json.loads(_prod_kpis_path.read_text(encoding="utf-8"))
+        overall_remake = float(_prod_kpis.get("unit_remake_rate", 0))
+        log.info("Remake rate from production pipeline (unit-based): %.2f%%", overall_remake)
+    except Exception:
+        overall_remake = (ytd_remake / ytd_total * 100) if ytd_total else 0
+        log.info("Remake rate fallback (dollar-based): %.2f%%", overall_remake)
     kpis["kpi_gauges"] = pd.DataFrame([{
         "ytd_revenue":          ytd_total,
         "ytd_prior_revenue":    ly_prorated,   # prorated to same elapsed portion of year

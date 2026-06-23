@@ -282,6 +282,22 @@ def main():
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(data, indent=1), encoding="utf-8")
+
+    # Write unit-based remake rate summary for executive dashboard KPI
+    total_units   = sum(d.get("total",   0) for d in depts.values())
+    total_remakes = sum(d.get("remakes", 0) for d in depts.values())
+    unit_remake_rate = round(total_remakes / total_units * 100, 2) if total_units else 0
+    prod_kpis = {
+        "total_units":      total_units,
+        "total_remakes":    total_remakes,
+        "unit_remake_rate": unit_remake_rate,
+        "period":           report["period"],
+        "_generated":       datetime.now().isoformat(timespec="seconds"),
+    }
+    (OUT.parent / "production_kpis.json").write_text(
+        json.dumps(prod_kpis, indent=1), encoding="utf-8"
+    )
+
     render_live_html(depts, employees, reasons, report, techs)
 
     print("── Production pipeline ─────────────────────────────")
