@@ -2236,9 +2236,13 @@ function initRemakeTabs() {
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded',function(){
-  if(Object.keys(S.depts).length>0){closeUpload();}
-});
+(function go(){
+  if(typeof closeUpload==='function'&&typeof S!=='undefined'&&Object.keys(S.depts).length>0){
+    closeUpload();
+  } else {
+    setTimeout(go,50);
+  }
+})();
 </script>
 </body>
 </html>
