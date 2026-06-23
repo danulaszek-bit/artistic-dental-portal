@@ -109,7 +109,9 @@ def parse_units(report: dict):
 
     # Try to pull period label from the XLS header rows
     period = _read_period_from_xls(MT_FOLDER / "prod_by_dept.xls")
-    report["period"]      = period or datetime.now().strftime("%-m/%-d/%Y")
+    _now = datetime.now()
+    _fmt = f"{_now.month}/{_now.day}/{_now.year}"   # cross-platform M/D/YYYY
+    report["period"]      = period or _fmt
     report["depts_count"] = len(depts)
     report["units_total"] = sum(d["total"] for d in depts.values())
     return depts
