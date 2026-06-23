@@ -13,8 +13,8 @@ git status --short
 
 echo.
 echo === Running pipelines ===
-python pipeline.py
 python production_pipeline.py
+python pipeline.py
 
 echo.
 echo === Adding files ===
