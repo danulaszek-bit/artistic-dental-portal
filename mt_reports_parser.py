@@ -1176,8 +1176,18 @@ def load_all_cases_daily(folder: Path) -> pd.DataFrame:
     Returns one row per date with: date, cases_in, units_in, total_amount.
     Accepts .csv or .xls — picks the freshest via _resolve_path.
     """
-    path = _resolve_path(folder, "AllCasesByDateIn.csv")
-    if not path.exists():
+    # Prefer DailyCaseExport.csv — includes WIP + invoiced cases, so it's
+    # more current (~yesterday) vs AllCasesByDateIn (invoiced only, ~2-week lag).
+    # Pick whichever is fresher if both exist.
+    _daily = _resolve_path(folder, "DailyCaseExport.csv")
+    _all   = _resolve_path(folder, "AllCasesByDateIn.csv")
+    if _daily.exists() and _all.exists():
+        path = _daily if _daily.stat().st_mtime >= _all.stat().st_mtime else _all
+    elif _daily.exists():
+        path = _daily
+    elif _all.exists():
+        path = _all
+    else:
         return pd.DataFrame()
 
     ext = path.suffix.lower()

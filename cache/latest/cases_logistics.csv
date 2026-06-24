@@ -1,5 +1,5 @@
 Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,Cases_DueDate,Cases_ShipDate,Cases_Status,Cases_LastLocation,Cases_TotalCharge,Cases_Carrier,Cases_Notes,pseudo_dept,days_at_station,dept_threshold_days,age_days,days_overdue,flag_past_due,flag_stuck,flag_high_value_aged,is_behind
-449327,,Magdalena Zmek,D146$,2026-05-04,2026-06-05,2026-06-04,In Production,REMIPMARGARET,0.0,SE RT 3,dd 5/27,Implants,12,5,51,19,True,True,False,True
+449327,,Magdalena Zmek,D146$,2026-05-04,2026-06-05,2026-06-04,In Production,REMIPMARGARET,0.0,SE RT 3,dd 5/27,Removable,12,5,51,19,True,True,False,True
 450497,,Upasna Janu,V61*,2026-05-18,2026-06-05,2026-06-04,In Production,GUIDES,0.0,UPS: 03,dd 6/8 deliver to homewood,Surgical,12,7,37,19,True,True,False,True
 450873,,Luis Peralta,F223*,2026-05-21,2026-06-08,2026-06-05,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,12,7,34,16,True,True,False,True
 450856,,Michael Slavin,P303,2026-05-21,2026-06-09,2026-06-08,In Production,GUIDES,0.0,SW RT 5,"DD 6/18, PT APPT 6/25",Surgical,12,7,34,15,True,True,False,True
@@ -15,7 +15,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 451516,,Luis Peralta,P386*,2026-06-01,2026-06-22,2026-06-19,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,12,7,23,2,True,True,False,True
 451845,,Paul Singh,P702*,2026-06-04,2026-06-23,2026-06-22,In Production,CTS,0.0,SW RT 5,,Surgical,12,7,20,1,True,True,False,True
 452488,,Michael Slavin,E337,2026-06-12,2026-06-23,2026-06-22,In Production,GUIDES,0.0,SW RT 5,"DD 6/23, PT APPT 6/30",Surgical,2,7,12,1,True,False,False,True
-452714,,Mark Niemiec,H230*,2026-06-16,2026-06-26,2026-06-22,In Production,REMIPLIZ,0.0,UPS: 03,,Implants,0,5,8,0,False,False,False,False
+452714,,Mark Niemiec,H230*,2026-06-16,2026-06-26,2026-06-22,In Production,REMIPLIZ,0.0,UPS: 03,,Removable,0,5,8,0,False,False,False,False
 452082,,Mark Niemiec,H280,2026-06-09,2026-06-29,2026-06-23,In Production,FRED,0.0,UPS: 03,,Fixed,0,3,15,0,False,False,False,False
 452195,,Kevin Breen,F26,2026-06-10,2026-06-24,2026-06-23,In Production,REMOUT,0.0,FNW RT 8,"M 10-7 / Th 7-4 / F 8-1
 LMOR W/NEW DD 6/24 /SS",Removable,2,5,14,0,False,False,False,False
@@ -36,7 +36,7 @@ Frankfort rt 3",Removable,0,5,20,0,False,False,False,False
 452244,,Vincent Colletti,H276*,2026-06-10,2026-06-25,2026-06-24,In Production,HENRY,0.0,NE RT 2,"M -closed, T 7:15-9pm, W 8-5, Th 1-9, F 8-1
 pt appt 6/26",Fixed,0,3,14,0,False,False,False,False
 452386,,Sneha Naik,E195*,2026-06-11,2026-06-25,2026-06-24,In Production,PORCIP NINI,0.0,CENT RT1,"M,T-Closed, / W, TH, F 8-4",Implants,0,5,13,0,False,False,False,False
-452403,,Mark Kolozenski,D222$,2026-06-11,2026-06-25,2026-06-24,In Production,REMIPMARGARET,0.0,SE RT 3,sx 7/16,Implants,2,5,13,0,False,False,False,False
+452403,,Mark Kolozenski,D222$,2026-06-11,2026-06-25,2026-06-24,In Production,REMIPMARGARET,0.0,SE RT 3,sx 7/16,Removable,2,5,13,0,False,False,False,False
 452448,,Rachel Cuadros,E141*,2026-06-12,2026-06-25,2026-06-24,In Production,STAINGLAZE,0.0,SE RT 3,,Fixed,0,3,12,0,False,False,False,False
 452693,,Simon Tadros,H234,2026-06-16,2026-06-25,2026-06-24,In Production,STAINGLAZE,0.0,NWIND RT 6,"M,W,F  9-6/ T,Th 12-6
 PT APPT 6/26",Fixed,0,3,8,0,False,False,False,False
@@ -44,10 +44,10 @@ PT APPT 6/26",Fixed,0,3,8,0,False,False,False,False
 452782,,Matthew Lackney,F11,2026-06-17,2026-06-26,2026-06-24,In Production,PORCIP NINI,0.0,UPS: 03,,Implants,0,5,7,0,False,False,False,False
 452783,,Joshua Willard,EVDSGN-061726839755,2026-06-17,2026-06-29,2026-06-24,In Production,REMPREP,0.0,UPS: 03,,Removable,0,5,7,0,False,False,False,False
 452802,,Katy Correa,EVDSGN-061726839763,2026-06-17,2026-06-25,2026-06-24,In Production,PORCIP NINI,0.0,SW RT 5,,Implants,0,5,7,0,False,False,False,False
-452868,,David Dardick,P369*,2026-06-18,2026-06-25,2026-06-24,In Production,REMIPLIZ,0.0,FNW RT 8,M-Th 9-6,Implants,0,5,6,0,False,False,False,False
+452868,,David Dardick,P369*,2026-06-18,2026-06-25,2026-06-24,In Production,REMIPLIZ,0.0,FNW RT 8,M-Th 9-6,Removable,0,5,6,0,False,False,False,False
 452896,,Michael Boyle,P559*,2026-06-18,2026-06-25,2026-06-24,In Production,DIGITALREMOVABLE,0.0,FNW RT 8,"M 10-6, T 7-4, W 10-7, Th 8-4, F 7-1",Removable,0,5,6,0,False,False,False,False
 452962,,Donald Provenzale,E135,2026-06-19,2026-06-25,2026-06-24,In Production,REMIPSABRINA,0.0,CENT RT1,"DD 6/25
-Deliver by noon per office. Pt appointed at 2",Implants,0,5,5,0,False,False,False,False
+Deliver by noon per office. Pt appointed at 2",Removable,0,5,5,0,False,False,False,False
 452967,,Colton Sylvester,E365,2026-06-19,2026-06-25,2026-06-24,In Production,STAINGLAZE,0.0,UPS: 03,"DD 6/25, PT APPT 6/26",Fixed,0,3,5,0,False,False,False,False
 453071,,Pinal Patel,V131*,2026-06-22,2026-06-25,2026-06-24,In Production,REMPREP,0.0,WEST RT 4,,Removable,0,5,2,0,False,False,False,False
 453141,,Jason Douts,H295,2026-06-23,2026-06-25,2026-06-24,In Production,PORCIP DEAN,0.0,UPS: 03,DD 6/25,Implants,0,5,1,0,False,False,False,False
@@ -55,7 +55,7 @@ Deliver by noon per office. Pt appointed at 2",Implants,0,5,5,0,False,False,Fals
 450981,,Rohan Bansal,D111*$,2026-05-26,2026-06-26,2026-06-25,In Production,REMIPMARY,0.0,SE RT 3,"dd 6/26 sx 6/30 deliver to 
 Dr Khan 
 7625 W. 159th St
-Tinley Park Rt 3",Implants,0,5,29,0,False,False,False,False
+Tinley Park Rt 3",Removable,0,5,29,0,False,False,False,False
 451368,,Umang Patel,D282$,2026-06-01,2026-06-26,2026-06-25,In Production,PRINTROOM 2,0.0,SW RT 5,,CAD_CAM,0,2,23,0,False,False,False,False
 451526,,Tariq Riyal,H26*,2026-06-01,2026-06-26,2026-06-25,In Production,GUIDES,0.0,GL,,Surgical,0,7,23,0,False,False,False,False
 451906,,Scott Walkinshaw,H108*,2026-06-05,2026-06-26,2026-06-25,In Production,PORCWALL,0.0,GL,"T, W 9-6
@@ -65,12 +65,12 @@ M, TH, F at montrose 9-6",Fixed,0,3,19,0,False,False,False,False
 452396,,David Dardick,V90*,2026-06-11,2026-06-26,2026-06-25,In Production,PORCIP NINI,0.0,FNW RT 8,"M-Th 9-6
 DD 6/26",Implants,0,5,13,0,False,False,False,False
 452424,,Gilbert Villasenor,E226,2026-06-12,2026-06-26,2026-06-25,In Production,STAINGLAZE,0.0,GL,PT APPT 6/29 AT 6PM,Fixed,0,3,12,0,False,False,False,False
-452455,,Sean Cullinan,E312,2026-06-22,2026-06-26,2026-06-25,In Production,REMIPLIZ,0.0,GL,DD 6/26,Implants,0,5,2,0,False,False,False,False
-452493,,Demetrios Sarantopoulos,D256$,2026-06-12,2026-06-26,2026-06-25,In Production,REMIPMARGARET,0.0,NE RT 2,,Implants,2,5,12,0,False,False,False,False
+452455,,Sean Cullinan,E312,2026-06-22,2026-06-26,2026-06-25,In Production,REMIPLIZ,0.0,GL,DD 6/26,Removable,0,5,2,0,False,False,False,False
+452493,,Demetrios Sarantopoulos,D256$,2026-06-12,2026-06-26,2026-06-25,In Production,REMIPMARGARET,0.0,NE RT 2,,Removable,2,5,12,0,False,False,False,False
 452680,,Harvey Satz,H237*,2026-06-16,2026-06-30,2026-06-25,In Production,SPLFINISH,0.0,UPS: 03,,Fixed,0,3,8,0,False,False,False,False
 452699,,Gina Piccioni,H214,2026-06-16,2026-06-26,2026-06-25,In Production,PORCIP DEAN,0.0,NE RT 2,,Implants,0,5,8,0,False,False,False,False
 452758,,Rajul Patel,F71,2026-06-17,2026-06-26,2026-06-25,In Production,PORCWALL,0.0,GL,pt appt 07/01,Fixed,0,3,7,0,False,False,False,False
-452780,,Harsh Patel,F130*,2026-06-17,2026-06-26,2026-06-25,In Production,REMIPLIZ,0.0,SW RT 5,,Implants,0,5,7,0,False,False,False,False
+452780,,Harsh Patel,F130*,2026-06-17,2026-06-26,2026-06-25,In Production,REMIPLIZ,0.0,SW RT 5,,Removable,0,5,7,0,False,False,False,False
 452792,,Catherine Rhim,F222,2026-06-17,2026-06-26,2026-06-25,In Production,STAINGLAZE,0.0,SW RT 5,"DD 7/6, PT APPT 7/7",Fixed,0,3,7,0,False,False,False,False
 452798,,Abigail Cortis,F240,2026-06-17,2026-06-26,2026-06-25,In Production,MATCHING TABLE,0.0,WEST RT 4,DD 6/24,Fixed,0,3,7,0,False,False,False,False
 452850,,Loretta Lam,P378,2026-06-18,2026-06-26,2026-06-25,In Production,REMPREP,0.0,GL,"M-Th 8-5 / closed Fridays
@@ -97,12 +97,12 @@ DD 6/26",Implants,0,5,6,0,False,False,False,False
 453022,,Haytham Safi,V31,2026-06-22,2026-06-26,2026-06-25,In Production,RUSHMILLINGSHELF,0.0,GL,DD 6/26 PT APPT 6/29,CAD_CAM,0,2,2,0,False,False,False,False
 453038,,Osama Serraj,EVDSGN-062026111246,2026-06-22,2026-06-26,2026-06-25,In Production,STAINGLAZE,0.0,SW RT 5,,Fixed,0,3,2,0,False,False,False,False
 453056,,Mark Anderson,V106*,2026-06-22,2026-06-26,2026-06-25,In Production,REMIPLIZ,0.0,SE RT 3,"M 11-7 / T 9-5 / W 9-3 / Th 10-7
-dd 6/26... place in Dr's box, office is closed!",Implants,0,5,2,0,False,False,False,False
+dd 6/26... place in Dr's box, office is closed!",Removable,0,5,2,0,False,False,False,False
 453112,,Andrew Jursik,EVDSGN-062226113704,2026-06-22,2026-06-26,2026-06-25,In Production,JIANNI'S DESK,0.0,NE RT 2,DD 6/26 DELIVER BEFORE 12PM. PT APPT ON 6/26 @12PM,Unknown,0,5,2,0,False,False,False,False
-453157,,Elaina Callahan,H84!,2026-06-22,2026-06-26,2026-06-25,In Production,REMIPMARY,0.0,SW RT 5,DD 6/26,Implants,0,5,2,0,False,False,False,False
+453157,,Elaina Callahan,H84!,2026-06-22,2026-06-26,2026-06-25,In Production,REMIPMARY,0.0,SW RT 5,DD 6/26,Removable,0,5,2,0,False,False,False,False
 450878,,Mark Anderson,E151*,2026-05-21,2026-06-29,2026-06-26,In Production,PRINTROOM 2,0.0,SE RT 3,"M 11-7 / T 9-5 / W 9-3 / Th 10-7
 new dd 6/5 lmor/hf",CAD_CAM,0,2,34,0,False,False,False,False
-451258,,Loretta Lam,E136,2026-06-17,2026-06-29,2026-06-26,In Production,REMIPDOM,0.0,GL,DD 6/29 PT APPT 6/30,Implants,0,5,7,0,False,False,False,False
+451258,,Loretta Lam,E136,2026-06-17,2026-06-29,2026-06-26,In Production,REMIPDOM,0.0,GL,DD 6/29 PT APPT 6/30,Removable,0,5,7,0,False,False,False,False
 451949,,Devang Thakkar,E221,2026-06-05,2026-06-29,2026-06-26,In Production,GUIDES,0.0,NWIND RT 6,PT APPT 7/2,Surgical,2,7,19,0,False,False,False,False
 451966,,Gina Piccioni,D333$*,2026-06-08,2026-06-29,2026-06-26,In Production,PORCIP DEAN,0.0,NE RT 2,,Implants,0,5,16,0,False,False,False,False
 452418,,Mark Huberty,E56,2026-06-12,2026-06-29,2026-06-26,In Production,PORCIP NINI,0.0,UPS: 03,"Pick up or deliveries between 8am-1pm only
@@ -114,18 +114,18 @@ DD ASAP",Hold_Stalled,0,1,12,0,False,False,False,False
 452692,,Mikhail Korolyov,H96*,2026-06-16,2026-06-29,2026-06-26,In Production,STAINGLAZE,0.0,GL,,Fixed,0,3,8,0,False,False,False,False
 452703,,Jerome Correa,H163,2026-06-16,2026-06-29,2026-06-26,In Production,MILLINGIP,0.0,SE RT 3,"DD 6/29,P T APPT 6/30",Implants,0,5,8,0,False,False,False,False
 452705,,Jerome Correa,H95,2026-06-16,2026-06-29,2026-06-26,In Production,PORCIP DEAN,0.0,SE RT 3,DD 6/29 PT APPT 6/30,Implants,0,5,8,0,False,False,False,False
-452755,,Nicholas Tokarski,F49,2026-06-17,2026-06-29,2026-06-26,In Production,REMIPLIZ,0.0,GL,,Implants,0,5,7,0,False,False,False,False
+452755,,Nicholas Tokarski,F49,2026-06-17,2026-06-29,2026-06-26,In Production,REMIPLIZ,0.0,GL,,Removable,0,5,7,0,False,False,False,False
 452776,,Beata Lezerkiewicz,F44,2026-06-17,2026-06-29,2026-06-26,In Production,SCANNING,0.0,CENT RT1,DD 6/29 PT APPT 6/30,Surgical,0,7,7,0,False,False,False,False
 452797,,Giana Paterno,F4,2026-06-17,2026-06-29,2026-06-26,In Production,PORCWALL,0.0,WEST RT 4,DD 6/29,Fixed,0,3,7,0,False,False,False,False
 452845,,Ine Suh,P143,2026-06-18,2026-06-29,2026-06-26,In Production,CADSTALLED,0.0,GL,DD 6/29 PT APPT 6/30,CAD_CAM,1,2,6,0,False,False,False,False
-452852,,Terri Tiersky,P467,2026-06-18,2026-06-29,2026-06-26,In Production,REMIPLIZ,0.0,GL,DD 7/13 PT APPT 7/14,Implants,2,5,6,0,False,False,False,False
+452852,,Terri Tiersky,P467,2026-06-18,2026-06-29,2026-06-26,In Production,REMIPLIZ,0.0,GL,DD 7/13 PT APPT 7/14,Removable,2,5,6,0,False,False,False,False
 452864,,Daniel Berquist,P509,2026-06-18,2026-06-29,2026-06-26,In Production,PORCIP DEAN,0.0,UPS: 03,"double check UPS ground would deliver next day as they have been delivering 5-7 days later
 DD 7/1",Implants,0,5,6,0,False,False,False,False
 452869,,Tarikh Patel,P566,2026-06-18,2026-06-29,2026-06-26,In Production,PORCWALL,0.0,SW RT 5,DD 7/1 PT APPT 7/13,Fixed,0,3,6,0,False,False,False,False
 452876,,Christine Petrilla,P732,2026-06-18,2026-06-29,2026-06-26,In Production,PORCIP DEAN,0.0,CENT RT1,DD 7/6,Implants,0,5,6,0,False,False,False,False
 452902,,Joseph McCartin,P198,2026-06-18,2026-06-29,2026-06-26,In Production,MILLINGIP,0.0,SE RT 3,DD 7/6,Implants,0,5,6,0,False,False,False,False
 452903,,Aneta Paniczko,P131,2026-06-18,2026-06-29,2026-06-26,In Production,DIGITALREMOVABLE,0.0,CENT RT1,,Removable,0,5,6,0,False,False,False,False
-452913,,Tarek Safadi,P138*,2026-06-18,2026-06-29,2026-06-26,In Production,REMIPLIZ,0.0,NWIND RT 6,,Implants,0,5,6,0,False,False,False,False
+452913,,Tarek Safadi,P138*,2026-06-18,2026-06-29,2026-06-26,In Production,REMIPLIZ,0.0,NWIND RT 6,,Removable,0,5,6,0,False,False,False,False
 452933,,Garrett Obenauf,E69,2026-06-19,2026-06-29,2026-06-26,In Production,GRINDING,0.0,FNE RT 7,DD 7/1 PT APPT 7/2,Fixed,0,3,5,0,False,False,False,False
 452947,,Mirette Hanna,E73,2026-06-19,2026-06-29,2026-06-26,In Production,MILLINGIP,0.0,SW RT 5,DD 7/2,Implants,0,5,5,0,False,False,False,False
 452950,,Paul Lukawski,E66,2026-06-19,2026-06-29,2026-06-26,In Production,MILLINGIP,0.0,SW RT 5,"M, T, F 9-5 / W closed/ Th 11-7
@@ -135,7 +135,7 @@ DD 7/8 PT APPT 7/9",Implants,0,5,5,0,False,False,False,False
 452959,,Hwaiyin Chang,E205,2026-06-19,2026-06-29,2026-06-26,In Production,MILLINGIP,0.0,CENT RT1,DD 6/30,Implants,0,5,5,0,False,False,False,False
 452965,,Beata Lezerkiewicz,E220,2026-06-19,2026-06-29,2026-06-26,In Production,MILLING BRUX,0.0,CENT RT1,DD 7/7,CAD_CAM,0,2,5,0,False,False,False,False
 452966,,Beata Lezerkiewicz,E143,2026-06-19,2026-06-29,2026-06-26,In Production,MILLING BRUX,0.0,CENT RT1,DD 7/7,CAD_CAM,0,2,5,0,False,False,False,False
-452971,,Brian Danielewicz,D313$,2026-06-19,2026-06-29,2026-06-26,In Production,REMIPMARY,0.0,FNE RT 7,,Implants,0,5,5,0,False,False,False,False
+452971,,Brian Danielewicz,D313$,2026-06-19,2026-06-29,2026-06-26,In Production,REMIPMARY,0.0,FNE RT 7,,Removable,0,5,5,0,False,False,False,False
 452977,,Leo Skrypkun,E357,2026-06-19,2026-06-29,2026-06-26,In Production,SENTFORDESIGN,0.0,SE RT 3,,CAD_CAM,0,2,5,0,False,False,False,False
 452984,,Gary Tapak,E199,2026-06-19,2026-06-29,2026-06-26,In Production,MILLING EZ,0.0,SE RT 3,DD 6/30/CARMEN/SS,CAD_CAM,0,2,5,0,False,False,False,False
 452989,,James Lovelace,E64,2026-06-19,2026-06-29,2026-06-26,In Production,MILLINGIP,0.0,NE RT 2,"closed 11/28, 12/26
@@ -174,18 +174,18 @@ DD ASAP",Removable,0,5,1,0,False,False,False,False
 451553,,Rinkle Goyal,H81,2026-06-02,2026-06-30,2026-06-29,In Production,STAINGLAZE,0.0,GL,,Fixed,0,3,22,0,False,False,False,False
 451693,,James Javorski,P705,2026-06-17,2026-06-30,2026-06-29,In Production,REMTRYINWALL,0.0,SE RT 3,"DD 7/6, PT APPT 7/9",Removable,0,5,7,0,False,False,False,False
 451888,,Alisa Martin,E314,2026-06-05,2026-07-06,2026-06-29,In Production,REMPREP,0.0,UPS: 03,DD ASAP,Removable,1,5,19,0,False,False,False,False
-452326,,John Athos,D118$,2026-06-11,2026-06-30,2026-06-29,In Production,REMIPMARGARET,0.0,SE RT 3,,Implants,2,5,13,0,False,False,False,False
+452326,,John Athos,D118$,2026-06-11,2026-06-30,2026-06-29,In Production,REMIPMARGARET,0.0,SE RT 3,,Removable,2,5,13,0,False,False,False,False
 452470,,Hwaiyin Chang,E233,2026-06-12,2026-06-30,2026-06-29,In Production,STAINGLAZE,0.0,CENT RT1,DD 7/2,Fixed,0,3,12,0,False,False,False,False
 452581,,Zack Zaibak,F152*,2026-06-15,2026-06-30,2026-06-29,In Production,GUIDES,0.0,SE RT 3,,Surgical,2,7,9,0,False,False,False,False
 452645,,Mark Prakash,H249,2026-06-16,2026-06-30,2026-06-29,In Production,REMOUT,0.0,GL,NEW DD 6/30/DR GUZMAN/SS,Removable,0,5,8,0,False,False,False,False
-452651,,Anna Zborek,X38,2026-06-16,2026-06-30,2026-06-29,In Production,REMIPMARY,0.0,GL,,Implants,2,5,8,0,False,False,False,False
+452651,,Anna Zborek,X38,2026-06-16,2026-06-30,2026-06-29,In Production,REMIPMARY,0.0,GL,,Removable,2,5,8,0,False,False,False,False
 452685,,Derek Berquist,E144,2026-06-16,2026-06-30,2026-06-29,In Production,REMOUT,0.0,NWIND RT 6,,Removable,2,5,8,0,False,False,False,False
 452689,,Juana Ryckowski,H211*,2026-06-16,2026-06-30,2026-06-29,In Production,REMOUT,0.0,NWIND RT 6,,Removable,2,5,8,0,False,False,False,False
 452704,,Jerome Correa,H255,2026-06-16,2026-06-30,2026-06-29,In Production,STAINGLAZE,0.0,SE RT 3,DD 7/2 PT APPT 7/7,Fixed,0,3,8,0,False,False,False,False
 452707,,Luan Tran,H300*,2026-06-16,2026-06-30,2026-06-29,In Production,PORCIP DEAN,0.0,GL,,Implants,0,5,8,0,False,False,False,False
 452736,,Eman Alsahlani,F6*,2026-06-16,2026-06-30,2026-06-29,In Production,CADSTALLED,0.0,GL,"M, Th 8-5 / T 8-6 / F 8-3",CAD_CAM,2,2,8,0,False,False,False,False
 452744,,Shaista Hasan,F235*,2026-06-17,2026-06-30,2026-06-29,In Production,METALFINISHING,0.0,NE RT 2,,Fixed,0,3,7,0,False,False,False,False
-452766,,Michael Frantal,F175,2026-06-17,2026-06-30,2026-06-29,In Production,REMIPDOM,0.0,UPS: 03,DD 6/30 PT APPT 7/1,Implants,2,5,7,0,False,False,False,False
+452766,,Michael Frantal,F175,2026-06-17,2026-06-30,2026-06-29,In Production,REMIPDOM,0.0,UPS: 03,DD 6/30 PT APPT 7/1,Removable,2,5,7,0,False,False,False,False
 452788,,James Fieldhouse,F91*,2026-06-17,2026-06-30,2026-06-29,In Production,STAINGLAZE,0.0,NE RT 2,closed 12/23-01/02,Fixed,0,3,7,0,False,False,False,False
 452817,,Ryann Maloney,F24,2026-06-17,2026-06-30,2026-06-29,In Production,PORCIP DEAN,0.0,NWIND RT 6,"M 9-6 / T 7-7 / W 8-7 / Th 8-6 / F 7-2
 DD 7/7, PT APPT 7/9",Implants,0,5,7,0,False,False,False,False
@@ -229,7 +229,7 @@ DD 6/30",Surgical,1,7,2,0,False,False,False,False
 453089,,Simon Tadros,V21,2026-06-22,2026-06-30,2026-06-29,In Production,SCANNING,0.0,NWIND RT 6,"M,W,F  9-6/ T,Th 12-6",Surgical,0,7,2,0,False,False,False,False
 453092,,Simon Tadros,V78,2026-06-22,2026-06-30,2026-06-29,In Production,SCANNING,0.0,NWIND RT 6,"M,W,F  9-6/ T,Th 12-6",Surgical,0,7,2,0,False,False,False,False
 453095,,Tarek Safadi,V289,2026-06-22,2026-06-30,2026-06-29,In Production,SCANNING,0.0,NWIND RT 6,,Surgical,0,7,2,0,False,False,False,False
-453103,,Brian Gambla,V286,2026-06-22,2026-06-30,2026-06-29,In Production,REMIPDOM,0.0,SE RT 3,,Implants,0,5,2,0,False,False,False,False
+453103,,Brian Gambla,V286,2026-06-22,2026-06-30,2026-06-29,In Production,REMIPDOM,0.0,SE RT 3,,Removable,0,5,2,0,False,False,False,False
 453105,,Pinal Patel,EVDSGN-062226104638,2026-06-22,2026-06-30,2026-06-29,In Production,EVD SUBMITTED,0.0,WEST RT 4,DD 7/6,Scheduling,1,2,2,0,False,False,False,False
 453106,,Manpreet Singh,EVDSGN-062226115926,2026-06-22,2026-06-30,2026-06-29,In Production,EVD SUBMITTED,0.0,WEST RT 4,,Scheduling,1,2,2,0,False,False,False,False
 453113,,Mark Kuchta,EVDSGN-062226130747,2026-06-22,2026-06-30,2026-06-29,In Production,EVD SUBMITTED,0.0,FNE RT 7,,Scheduling,1,2,2,0,False,False,False,False
@@ -248,13 +248,13 @@ Arlington Heights il rt 7",Removable,0,5,1,0,False,False,False,False
 451619,,Meg Eber,D79$*,2026-06-02,2026-07-01,2026-06-30,In Production,REMIPMARY,0.0,SE RT 3,"dd 7/1, sx 7/7 deliver to 
 Dr Pagni
 4435 95th st.
-Oak Lawn Route 3",Implants,0,5,22,0,False,False,False,False
-451680,,Angela Paros,P555,2026-06-18,2026-07-01,2026-06-30,In Production,REMIPLIZ,0.0,SW RT 5,DD 7/1,Implants,0,5,6,0,False,False,False,False
-451683,,Christopher Pottorff,DX6$,2026-06-03,2026-07-01,2026-06-30,In Production,REMIPMARGARET,0.0,FNW RT 8,,Implants,0,5,21,0,False,False,False,False
+Oak Lawn Route 3",Removable,0,5,22,0,False,False,False,False
+451680,,Angela Paros,P555,2026-06-18,2026-07-01,2026-06-30,In Production,REMIPLIZ,0.0,SW RT 5,DD 7/1,Removable,0,5,6,0,False,False,False,False
+451683,,Christopher Pottorff,DX6$,2026-06-03,2026-07-01,2026-06-30,In Production,REMIPMARGARET,0.0,FNW RT 8,,Removable,0,5,21,0,False,False,False,False
 452138,,Sunil Sinha,H245,2026-06-09,2026-07-01,2026-06-30,In Production,MILLING BRUX,0.0,SE RT 3,,CAD_CAM,0,2,15,0,False,False,False,False
 452140,,Krupa Patel,F23,2026-06-17,2026-07-01,2026-06-30,In Production,REMOUT,0.0,SW RT 5,NEW DD 7/1/JONALYN/SS,Removable,2,5,7,0,False,False,False,False
-452276,,Niki Demakakos-Kasper,D286$,2026-06-10,2026-07-01,2026-06-30,In Production,REMIPMARGARET,0.0,SE RT 3,,Implants,2,5,14,0,False,False,False,False
-452457,,Nirvana Leix,P135,2026-06-19,2026-07-01,2026-06-30,In Production,REMIPLIZ,0.0,FNW RT 8,DD 7/1,Implants,0,5,5,0,False,False,False,False
+452276,,Niki Demakakos-Kasper,D286$,2026-06-10,2026-07-01,2026-06-30,In Production,REMIPMARGARET,0.0,SE RT 3,,Removable,2,5,14,0,False,False,False,False
+452457,,Nirvana Leix,P135,2026-06-19,2026-07-01,2026-06-30,In Production,REMIPLIZ,0.0,FNW RT 8,DD 7/1,Removable,0,5,5,0,False,False,False,False
 452664,,Mirette Hanna,H106,2026-06-16,2026-07-01,2026-06-30,In Production,PORCIP DEAN,0.0,SW RT 5,DD 7/1,Implants,0,5,8,0,False,False,False,False
 452725,,Jeffrey Schur,P96*,2026-06-16,2026-07-07,2026-06-30,In Production,SPLFINISH,0.0,UPS: 03,M-W 7-3:30/4 Th-varies closed Fridays,Fixed,0,3,8,0,False,False,False,False
 452778,,Ringo Leung,P554*,2026-06-17,2026-07-01,2026-06-30,In Production,CADSTALLED,0.0,NWIND RT 6,box is on west side by dumpster,CAD_CAM,2,2,7,0,False,False,False,False
@@ -293,7 +293,7 @@ DD ASAP",Removable,0,5,2,0,False,False,False,False
 453096,,Randy Scarpiniti,V39,2026-06-22,2026-07-01,2026-06-30,In Production,REMIPLIZ,0.0,NE RT 2,"Box in back 
 M & W 8-5 , Th 10-7,
 Closed Tue and Fri
-DD 7/1 LEAVE IN BOX",Implants,1,5,2,0,False,False,False,False
+DD 7/1 LEAVE IN BOX",Removable,1,5,2,0,False,False,False,False
 453097,,Mikhail Korolyov,EVDSGN-062226105841,2026-06-22,2026-07-01,2026-06-30,In Production,EVD SUBMITTED,0.0,GL,NEW DD 7/1 PT APPT 7/6/DANA/SS,Scheduling,1,2,2,0,False,False,False,False
 453117,,Osama Serraj,EVDSGN-062226141947,2026-06-22,2026-07-01,2026-06-30,In Production,EVD SUBMITTED,0.0,SW RT 5,DD 7/2,Scheduling,0,2,2,0,False,False,False,False
 453120,,Brian Walczak,EVDSGN-062226144715,2026-06-22,2026-07-01,2026-06-30,In Production,EVD SUBMITTED,0.0,SE RT 3,"M, T 8-8 / W 1-8 / Th 8-4 / F 7-3

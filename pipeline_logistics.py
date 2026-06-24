@@ -233,6 +233,28 @@ def compute_logistics(cases_df: pd.DataFrame,
         if before - len(cases_df):
             log.info("Logistics: dropped %d dummy-account rows", before - len(cases_df))
 
+    # ── Drop invoiced cases (they've shipped — no longer in production) ───────
+    # Sales_Data.csv is the authoritative list of invoiced case numbers.
+    # Any case appearing there should be excluded from the logistics view.
+    try:
+        import yaml as _yaml
+        _cfg_path = base_dir / "config.yaml"
+        _watch = Path(_yaml.safe_load(_cfg_path.read_text())["data_source"]["csv"]["watch_folder"])
+        _sales_path = _watch / "Sales_Data.csv"
+        if _sales_path.exists():
+            _sales = pd.read_csv(_sales_path, usecols=["CaseNumber"], dtype=str,
+                                 on_bad_lines="skip", engine="python")
+            _invoiced = set(_sales["CaseNumber"].dropna().astype(str).str.strip())
+            before = len(cases_df)
+            cases_df = cases_df[
+                ~cases_df["Cases_CaseNumber"].astype(str).str.strip().isin(_invoiced)
+            ].copy()
+            dropped = before - len(cases_df)
+            if dropped:
+                log.info("Logistics: dropped %d invoiced cases (found in Sales_Data.csv)", dropped)
+    except Exception as _e:
+        log.warning("Logistics: could not filter invoiced cases: %s", _e)
+
     # ── Extract per-case product lines BEFORE dedup ───────────────────────────
     # WIP.csv is case × product × task granularity — one row per task per
     # product. Capture those lines into case_product_lines.csv for the dig-in
