@@ -425,9 +425,7 @@ def render_live_html(depts: dict, employees: list, reasons: list, report: dict, 
             html = html[:idx] + new_block + html[end:]
 
     # ── 3. Update MONTH_LABELS ─────────────────────────────────────
-if __name__ == '__main__':
-    main()
- = _re.sub(
+    html = _re.sub(
         r"(const MONTH_LABELS = \{[^}]*)\}",
         lambda m: (
             m.group(0) if f"'{month_key}'" in m.group(0)
@@ -448,3 +446,6 @@ if __name__ == '__main__':
 
     out_path.write_text(html, encoding="utf-8")
     print(f"rendered HTML  -> {out_path.name}  ({out_path.stat().st_size:,} bytes)")
+
+if __name__ == "__main__":
+    main()
