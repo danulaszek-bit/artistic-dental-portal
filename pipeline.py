@@ -1086,7 +1086,7 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
     # ── OUT side: prefer Sales Summary By Date (authoritative units + net),
     #             fall back to Active_30_day.csv (always fresh, case-level only).
     today = pd.Timestamp.today().normalize()
-    summary_path = folder / "SalesSummaryByDate.csv"
+    summary_path = Path(r"C:\reports\SalesSummaryByDate.csv")
     summary = pd.DataFrame()
     if summary_path.exists():
         try:
@@ -1129,6 +1129,13 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
             if not a.empty and "invoice_date" in a.columns and "invoice_total" in a.columns:
                 a["inv_date"] = pd.to_datetime(a["invoice_date"], errors="coerce").dt.normalize()
                 a = a[a["inv_date"].notna() & (a["inv_date"] >= cutoff)]
+                # Strip non-unit product lines (infection control, shipping, fees)
+                # so unit counts match the Sales Summary By Date report.
+                NON_UNIT_PRODUCTS = {"INFCONT", "DELIVERY", "CRNCASECON"}
+                if "product_id" in a.columns:
+                    before = len(a)
+                    a = a[~a["product_id"].fillna("").str.upper().isin(NON_UNIT_PRODUCTS)]
+                    log.debug("Sales_Data fallback: dropped %d non-unit rows", before - len(a))
                 agg_dict = {"dollars_invoiced": ("invoice_total", "sum")}
                 if "case_number" in a.columns:
                     agg_dict["cases_out"] = ("case_number", "nunique")
