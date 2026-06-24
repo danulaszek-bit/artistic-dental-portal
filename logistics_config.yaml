@@ -17,7 +17,7 @@ departments:
   Fixed:
     # Crown, bridge, finishing, glazing — fixed restorations
     prefixes: [FIXED, STAIN, PORCWALL, BRUX, SPLFINISH]
-    names:    [CEMENT, FRED, HENRY, KEVIN, GRINDING]
+    names:    [CEMENT, FRED, HENRY, KEVIN, GRINDING, METALFINISHING, "MATCHING TABLE", WAX]
     threshold_days: 3   # alert if case at a Fixed station > 3 days
 
   Implants:
@@ -37,7 +37,7 @@ departments:
     prefixes: []
     names:    [PRINTING, PRINTINGIP, SINTERING, MILLING, CADOUT, CADSTALL, CADSTALLED,
                SENTFORDESIGN, "MILLING EZ", "MILLING BRUX", "MILLING AO4",
-               "MILLING EMAX", RUSHMILLINGSHELF]
+               "MILLING EMAX", "MILLING BRIDGE", "PRINTROOM 2", RUSHMILLINGSHELF]
     threshold_days: 2
 
   Scheduling:

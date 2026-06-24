@@ -794,15 +794,13 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     # Compute unit-based remake rate directly from prod_by_dept.xls.
     # This matches what the Production Manager dashboard shows (remake units / total units).
     try:
-        from mt_reports_parser import load_prod_by_dept as _lpbd
-        _mt_folder = Path(CFG["data_source"]["csv"]["watch_folder"])
-        _pbd = _lpbd(_mt_folder)
-        _new = _pbd["new_units"].sum() if "new_units" in _pbd.columns else 0
-        _rem = _pbd["remake_units"].sum() if "remake_units" in _pbd.columns else 0
-        _tot = _new + _rem
-        overall_remake = round(_rem / _tot * 100, 2) if _tot > 0 else 0
-        log.info("Remake rate from prod_by_dept (unit-based): %.2f%%  (%d remakes / %d total)",
-                 overall_remake, _rem, _tot)
+        _prod_kpis_path = BASE_DIR / "cache" / "latest" / "production_kpis.json"
+        _prod_kpis = json.loads(_prod_kpis_path.read_text(encoding="utf-8"))
+        _rate = float(_prod_kpis.get("unit_remake_rate", 0))
+        if _rate <= 0:
+            raise ValueError("production_kpis.json has zero rate — falling back")
+        overall_remake = _rate
+        log.info("Remake rate from production_kpis.json (unit-based): %.2f%%", overall_remake)
     except Exception as _e:
         overall_remake = (ytd_remake / ytd_total * 100) if ytd_total else 0
         log.info("Remake rate fallback (dollar-based): %.2f%%  (%s)", overall_remake, _e)
@@ -1287,25 +1285,31 @@ def run_pipeline():
     log.info("Saved local cache: %s", latest_dir)
 
     # ── Logistics module: per-case station tracking + KPIs ──────────────────
-    # wip_raw holds the Cases_*-column output of build_unified_wip() which
-    # pipeline_logistics.py expects. Already in tables from _load_case_files().
+    # Primary source: Daily Shipping & Logistics Report (Custom).csv
+    #   → has accurate current WIP location + doctor name, 312 cases / month
+    # Fallback: unified WIP from build_unified_wip() (older, location may lag)
     try:
         from pipeline_logistics import compute_logistics
-        raw_cases = tables.get("wip_raw", pd.DataFrame())
-        if raw_cases.empty:
-            # Safety fallback: rebuild if tables didn't populate it
-            raw_cases = build_unified_wip(watch_folder)
+        from mt_reports_parser import load_shipping_logistics_report
+        shipping_df = load_shipping_logistics_report(watch_folder)
+        if not shipping_df.empty:
+            log.info("Logistics: using Shipping & Logistics Report (%d cases)", len(shipping_df))
+            raw_cases = shipping_df
+        else:
+            log.warning("Logistics: Shipping report not found — falling back to unified WIP")
+            raw_cases = tables.get("wip_raw", pd.DataFrame())
+            if raw_cases.empty:
+                raw_cases = build_unified_wip(watch_folder)
         if not raw_cases.empty:
-            log.info("Logistics: using unified WIP (%d rows)", len(raw_cases))
             compute_logistics(
                 cases_df=raw_cases,
                 base_dir=BASE_DIR,
                 cache_dir=CACHE_DIR,
                 latest_dir=latest_dir,
             )
-            log.info("Logistics: cache/latest/cases_logistics.csv + logistics_summary.csv written")
+            log.info("Logistics: cases_logistics.csv + logistics_summary.csv written")
         else:
-            log.warning("Logistics: no WIP data available — skipping")
+            log.warning("Logistics: no case data available — skipping")
     except Exception as exc:
         log.error("Logistics module failed (other outputs unaffected): %s", exc)
 

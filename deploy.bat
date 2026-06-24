@@ -24,6 +24,8 @@ git add requirements.txt
 git add pipeline.py
 git add mt_reports_parser.py
 git add production_pipeline.py
+git add pipeline_logistics.py
+git add logistics_config.yaml
 git add dashboard.py
 git add retention.py
 git add import_case_history.py

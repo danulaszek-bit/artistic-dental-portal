@@ -1290,3 +1290,73 @@ def load_internal_remakes(folder: Path, year: int = None, month: int = None):
         out[current_code] += 1
 
     return dict(out)
+
+
+# ── Shipping & Logistics Report parser ───────────────────────────────────────
+
+def load_shipping_logistics_report(folder: Path) -> "pd.DataFrame":
+    """
+    Parse 'Daily Shipping & Logistics Report (Custom).csv' into a DataFrame
+    with Cases_*-column names compatible with pipeline_logistics.compute_logistics().
+
+    The report is exported from Magic Touch in a wide, repeated-header layout:
+      cols 0-2  : repeated report header (ignored)
+      cols 3-11 : repeated column-label strings (ignored)
+      col  12   : ship-date group header (ignored)
+      col  13   : Doctor / Customer Name
+      col  14   : Case # (numeric)
+      col  15   : Pan #
+      col  16   : Current WIP Location
+      col  17   : Date In
+      col  18   : Ship Date
+      col  19   : Due Date
+      col  20   : Carrier / Route
+      col  21   : Delivery Notes
+
+    Deduplicates on Case # keeping the LAST row (most recently seen location).
+    Returns empty DataFrame if no file found.
+    """
+    import pandas as pd
+
+    pattern = "Daily Shipping & Logistics Report (Custom)*.csv"
+    candidates = sorted(folder.glob(pattern))
+    if not candidates:
+        import logging
+        logging.getLogger("mt_reports_parser").warning(
+            "load_shipping_logistics_report: no file matching %s in %s", pattern, folder)
+        return pd.DataFrame()
+
+    path = candidates[-1]
+    df = pd.read_csv(path, header=None, skiprows=3, encoding="latin-1")
+
+    # Keep only rows that have a numeric case number in col 14
+    df[14] = pd.to_numeric(df[14], errors="coerce")
+    data = df[df[14].notna()].copy()
+
+    # Deduplicate: keep last row per case# (same data, different ship-date group
+    # sections; the location value is consistent so last is fine)
+    data = data.drop_duplicates(subset=[14], keep="last").reset_index(drop=True)
+
+    # Due date column has "MM/DD/YY  H:MM PM" format — strip time portion
+    due_raw = data[19].astype(str).str.split().str[0]
+
+    result = pd.DataFrame({
+        "Cases_CaseNumber":   data[14].astype(int).astype(str),
+        "Cases_DoctorName":   data[13].fillna("").astype(str).str.strip(),
+        "Cases_PanNumber":    data[15].fillna("").astype(str).str.strip(),
+        "Cases_LastLocation": data[16].fillna("").astype(str).str.strip(),
+        "Cases_DateIn":       pd.to_datetime(data[17], errors="coerce"),
+        "Cases_ShipDate":     pd.to_datetime(data[18], errors="coerce"),
+        "Cases_DueDate":      pd.to_datetime(due_raw, errors="coerce"),
+        "Cases_Carrier":      data[20].fillna("").astype(str).str.strip(),
+        "Cases_Notes":        data[21].fillna("").astype(str).str.strip(),
+        # Required by compute_logistics — all current-month cases are in production
+        "Cases_Status":       "In Production",
+        "Cases_TotalCharge":  0.0,
+        "Cases_CustomerID":   "",
+    })
+
+    import logging
+    logging.getLogger("mt_reports_parser").info(
+        "load_shipping_logistics_report: %d unique cases from %s", len(result), path.name)
+    return result
