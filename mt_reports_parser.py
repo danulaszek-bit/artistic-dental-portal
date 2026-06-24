@@ -1337,6 +1337,17 @@ def load_shipping_logistics_report(folder: Path) -> "pd.DataFrame":
     # sections; the location value is consistent so last is fine)
     data = data.drop_duplicates(subset=[14], keep="last").reset_index(drop=True)
 
+    # Dummy/test accounts excluded by doctor name (no CustomerID in this report).
+    # Must happen BEFORE due_raw extraction so all Series share the same index.
+    EXCLUDED_DOCTORS = {"MURRPHY LAWSTON", "MURPHY LAWSTON"}
+    doctor_norm = data[13].fillna("").astype(str).str.strip().str.upper()
+    before = len(data)
+    data = data[~doctor_norm.isin(EXCLUDED_DOCTORS)].reset_index(drop=True)
+    if before - len(data):
+        import logging
+        logging.getLogger("mt_reports_parser").info(
+            "load_shipping_logistics_report: dropped %d dummy-account rows", before - len(data))
+
     # Due date column has "MM/DD/YY  H:MM PM" format — strip time portion
     due_raw = data[19].astype(str).str.split().str[0]
 
