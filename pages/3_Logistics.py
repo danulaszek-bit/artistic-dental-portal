@@ -471,6 +471,17 @@ with ctl[3]:
     case_search = st.text_input("🔍 Search by Case #", value="", key="case_search",
                                  placeholder="e.g. 448962")
 
+# Route filter — second row
+_all_routes = sorted(view["Cases_Carrier"].fillna("").str.strip().unique().tolist())
+_all_routes = [r for r in _all_routes if r]
+selected_routes = st.multiselect(
+    "🚚 Filter by Route",
+    options=_all_routes,
+    default=[],
+    placeholder="All routes shown — select one or more to filter",
+    key="filt_routes",
+)
+
 active_buckets = []
 if show_past_due:  active_buckets.append("Past Due")
 if show_due_today: active_buckets.append("Due Today")
@@ -479,6 +490,8 @@ if show_due_next:  active_buckets.append("Due Next Biz Day")
 table_view = view.copy()
 if active_buckets:
     table_view = table_view[table_view["ship_status"].isin(active_buckets)]
+if selected_routes:
+    table_view = table_view[table_view["Cases_Carrier"].isin(selected_routes)]
 if case_search.strip():
     q = case_search.strip()
     table_view = table_view[
