@@ -1113,8 +1113,7 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
         out_grp = pd.DataFrame({
             "date":              summary["date"],
             "cases_out":         summary["inv_new"],
-            "units_out":         summary["units_new"] + summary["units_credit"]
-                                 + summary["units_remake"],
+            "units_out":         summary["units_new"],
             "dollars_invoiced":  summary["total_invoiced"].round(2),
             "dollars_net":       summary["net_sales"].round(2),
         })
