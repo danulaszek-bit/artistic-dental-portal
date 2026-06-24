@@ -22,13 +22,13 @@ departments:
 
   Implants:
     # Porcelain implants, milling implants
-    prefixes: [PORCIP, MILLINGIP, REMIP]   # REMIP* = removable implant techs
+    prefixes: [PORCIP, MILLINGIP]
     names:    []
     threshold_days: 5
 
   Removable:
-    # Dentures, partials — but NOT removable implants (those go to Implants above)
-    prefixes: [REM]                         # catches REMQC, REMOUT, REMPREP — REMIP* already claimed above
+    # Dentures, partials, removable implants — REM = removable dept prefix (IP = in progress, not implants)
+    prefixes: [REM]
     names:    [DIGITALREMOVABLE]
     threshold_days: 5
 
