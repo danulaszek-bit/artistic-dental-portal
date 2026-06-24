@@ -603,39 +603,24 @@ def show_case_detail(row):
         st.write(f"Age in lab: **{age} days**")
         if overdue > 0:
             st.write(f"Days past due: **{overdue}**")
+    carrier = row.get("Cases_Carrier", "") or "—"
+    notes   = row.get("Cases_Notes",   "") or ""
+
     with c2:
-        st.markdown("**Location & Value**")
+        st.markdown("**Location & Shipping**")
         st.write(f"Last Location: **{loc}**")
         st.write(f"Days at this station: **{at_loc}**")
-        st.write(f"Total charge: **{fmt_currency(charge)}**")
+        st.write(f"Route / Carrier: **{carrier}**")
         flags = []
         if bool(row.get("flag_past_due", False)):   flags.append("Past due")
         if bool(row.get("flag_stuck", False)):       flags.append("Stuck at station")
         if bool(row.get("flag_high_value_aged", False)): flags.append("High-value aged")
         st.write(f"Flags: **{', '.join(flags) if flags else 'none'}**")
 
-    st.divider()
-    st.markdown("**Products on this case**")
-    lines = load_case_product_lines()
-    case_lines = lines[lines["Cases_CaseNumber"].astype(str) == str(case_no)] if not lines.empty else lines
-    if case_lines.empty:
-        st.caption("No product-line data found for this case.")
-    else:
-        show = case_lines[["Products_Type","Products_ProductID"]].copy()
-        # Group identical product entries together with a count
-        show = (show.groupby(["Products_Type","Products_ProductID"], dropna=False)
-                    .size().reset_index(name="Count")
-                    .rename(columns={"Products_Type": "Type",
-                                      "Products_ProductID": "Product ID"}))
-        show["Type"] = show["Type"].fillna("(unspecified)")
-        show["Product ID"] = show["Product ID"].fillna("(unspecified)")
-        show = show.sort_values(["Type","Product ID"])
-        st.dataframe(show, hide_index=True, use_container_width=True, height=180)
-        st.caption(
-            f"{len(case_lines)} line(s) across {show['Type'].nunique()} product type(s). "
-            "Per-line pricing isn't in the Magic Touch export, so 'most valuable product' "
-            "would require an external price lookup."
-        )
+    if notes:
+        st.divider()
+        st.markdown("**Delivery Notes**")
+        st.info(notes)
 
 
 # If a row was selected, open the dialog
