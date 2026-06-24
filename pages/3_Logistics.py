@@ -501,7 +501,7 @@ display_cols = [
     ("age_days",         "Age"),
     ("days_at_station",  "At Loc"),
     ("days_overdue",     "Days Late"),
-    ("Cases_TotalCharge","$"),
+    ("Cases_Carrier",    "Route"),
     ("is_behind",        "Behind"),
 ]
 cols_present = [(c, n) for c, n in display_cols if c in table_view.columns]
@@ -546,7 +546,7 @@ _col_widths = {
     "Age":         "small",
     "At Loc":      "small",
     "Days Late":   "small",
-    "$":           "small",
+    "Route":       "small",
     "Behind":      "small",
 }
 column_config = {
