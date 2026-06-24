@@ -1086,7 +1086,7 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
     # ── OUT side: prefer Sales Summary By Date (authoritative units + net),
     #             fall back to Active_30_day.csv (always fresh, case-level only).
     today = pd.Timestamp.today().normalize()
-    summary_path = Path(r"C:\reports\SalesSummaryByDate.csv")
+    summary_path = folder / "SalesSummaryByDate.csv"
     summary = pd.DataFrame()
     if summary_path.exists():
         try:
