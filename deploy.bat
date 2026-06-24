@@ -14,7 +14,13 @@ git status --short
 echo.
 echo === Running pipelines ===
 python production_pipeline.py
+if errorlevel 1 (
+    echo WARNING: production_pipeline.py exited with errors — remake rate may fall back
+)
 python pipeline.py
+if errorlevel 1 (
+    echo WARNING: pipeline.py exited with errors
+)
 
 echo.
 echo === Adding files ===

@@ -798,12 +798,32 @@ def compute_kpis(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
         _prod_kpis = json.loads(_prod_kpis_path.read_text(encoding="utf-8"))
         _rate = float(_prod_kpis.get("unit_remake_rate", 0))
         if _rate <= 0:
-            raise ValueError("production_kpis.json has zero rate — falling back")
+            raise ValueError("production_kpis.json has zero rate — trying production_data.json")
         overall_remake = _rate
         log.info("Remake rate from production_kpis.json (unit-based): %.2f%%", overall_remake)
     except Exception as _e:
-        overall_remake = (ytd_remake / ytd_total * 100) if ytd_total else 0
-        log.info("Remake rate fallback (dollar-based): %.2f%%  (%s)", overall_remake, _e)
+        # Second chance: derive unit-based rate from production_data.json (always committed)
+        try:
+            _prod_data_path = BASE_DIR / "cache" / "latest" / "production_data.json"
+            _prod_data = json.loads(_prod_data_path.read_text(encoding="utf-8"))
+            _depts = _prod_data.get("depts", {})
+            _u_total   = sum(v.get("total",   0) for v in _depts.values())
+            _u_remakes = sum(v.get("remakes", 0) for v in _depts.values())
+            if _u_total > 0 and _u_remakes > 0:
+                overall_remake = round(_u_remakes / _u_total * 100, 2)
+                log.info("Remake rate from production_data.json (unit-based fallback): %.2f%%", overall_remake)
+                # Write production_kpis.json so next run finds it directly
+                _prod_kpis_path.write_text(json.dumps({
+                    "total_units":      _u_total,
+                    "total_remakes":    _u_remakes,
+                    "unit_remake_rate": overall_remake,
+                    "_generated":       "derived-from-production_data.json",
+                }, indent=1), encoding="utf-8")
+            else:
+                raise ValueError(f"production_data.json has zero units ({_e})")
+        except Exception as _e2:
+            overall_remake = (ytd_remake / ytd_total * 100) if ytd_total else 0
+            log.info("Remake rate final fallback (dollar-based): %.2f%%  (%s)", overall_remake, _e2)
     kpis["kpi_gauges"] = pd.DataFrame([{
         "ytd_revenue":          ytd_total,
         "ytd_prior_revenue":    ly_prorated,   # prorated to same elapsed portion of year
