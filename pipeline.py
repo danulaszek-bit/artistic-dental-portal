@@ -1129,21 +1129,20 @@ def compute_daily_sales(folder: Path, days_back: int = 365) -> pd.DataFrame:
             if not a.empty and "invoice_date" in a.columns and "invoice_total" in a.columns:
                 a["inv_date"] = pd.to_datetime(a["invoice_date"], errors="coerce").dt.normalize()
                 a = a[a["inv_date"].notna() & (a["inv_date"] >= cutoff)]
+                agg_dict = {"dollars_invoiced": ("invoice_total", "sum")}
                 if "case_number" in a.columns:
-                    out_grp = (
-                        a.groupby("inv_date")
-                         .agg(cases_out=("case_number", "nunique"),
-                              dollars_invoiced=("invoice_total", "sum"))
-                         .reset_index().rename(columns={"inv_date": "date"})
-                    )
-                else:
-                    out_grp = (
-                        a.groupby("inv_date")
-                         .agg(dollars_invoiced=("invoice_total", "sum"))
-                         .reset_index().rename(columns={"inv_date": "date"})
-                    )
+                    agg_dict["cases_out"] = ("case_number", "nunique")
+                if "quantity" in a.columns:
+                    agg_dict["units_out"] = ("quantity", "sum")
+                out_grp = (
+                    a.groupby("inv_date")
+                     .agg(**agg_dict)
+                     .reset_index().rename(columns={"inv_date": "date"})
+                )
+                if "cases_out" not in out_grp.columns:
                     out_grp["cases_out"] = 0
-                out_grp["units_out"]        = out_grp["cases_out"]
+                if "units_out" not in out_grp.columns:
+                    out_grp["units_out"] = out_grp["cases_out"]
                 out_grp["dollars_net"]      = out_grp["dollars_invoiced"].round(2)
                 out_grp["dollars_invoiced"] = out_grp["dollars_invoiced"].round(2)
                 out_source = "Sales_Data.csv (invoice-line fallback; cases=distinct case_numbers)"
