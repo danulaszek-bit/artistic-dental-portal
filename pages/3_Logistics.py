@@ -245,165 +245,7 @@ if show_behind_only:
     view = view[view["is_behind"]]
 
 
-# ── On-time ship trend (last several months) ─────────────────────────────────
-try:
-    _ot = pd.read_csv(LATEST_DIR / "on_time_ship.csv")
-except Exception:
-    _ot = pd.DataFrame()
-if not _ot.empty:
-    section("On-time ship rate — monthly trend")
-    c_chart, c_table = st.columns([3, 2])
-    with c_chart:
-        fig = go.Figure()
-        fig.add_bar(x=_ot["month"], y=_ot["on_time_pct"],
-                    marker_color=[COLORS["green"] if v >= 90 else COLORS["gold"] if v >= 80 else COLORS["red"]
-                                  for v in _ot["on_time_pct"]],
-                    text=_ot["on_time_pct"].apply(lambda v: f"{v:.1f}%"),
-                    textposition="outside")
-        fig.update_layout(yaxis=dict(range=[0, 105], title="On-time %"),
-                          xaxis_title="",
-                          margin=dict(l=10, r=10, t=10, b=10),
-                          height=260,
-                          plot_bgcolor="white", paper_bgcolor="white")
-        st.plotly_chart(fig, use_container_width=True)
-    with c_table:
-        show = _ot.copy()
-        show["On-Time"] = show["on_time"].astype(int)
-        show["Late"]    = show["late"].astype(int)
-        show["Cases"]   = show["cases"].astype(int)
-        show["On-Time %"] = show["on_time_pct"].apply(lambda v: f"{v:.1f}%")
-        st.dataframe(show[["month", "Cases", "On-Time", "Late", "On-Time %"]]
-                       .rename(columns={"month": "Month"}),
-                     hide_index=True, use_container_width=True, height=260)
-
-
-# ── Department breakdown ──────────────────────────────────────────────────────
-section("Department breakdown")
-
-dept_summary = (
-    view.groupby("pseudo_dept")
-    .agg(open_count=("Cases_CaseNumber", "count"),
-         overdue=("flag_past_due", "sum"),
-         stuck=("flag_stuck", "sum"),
-         behind=("is_behind", "sum"),
-         median_age=("age_days", "median"),
-         value_at_risk=("Cases_TotalCharge", lambda x: x[view.loc[x.index, "is_behind"]].sum()))
-    .reset_index()
-    .sort_values("open_count", ascending=False)
-)
-
-c1, c2 = st.columns([2, 3])
-with c1:
-    if not dept_summary.empty:
-        fig = go.Figure(go.Bar(
-            x=dept_summary["open_count"],
-            y=dept_summary["pseudo_dept"],
-            orientation="h",
-            marker=dict(
-                color=dept_summary["behind"] / dept_summary["open_count"].replace(0, 1),
-                colorscale=[[0, COLORS["teal"]], [0.3, COLORS["gold"]], [1, COLORS["red"]]],
-                showscale=True,
-                colorbar=dict(title="% behind", thickness=10, ticksuffix="%",
-                              tickformat=".0%")
-            ),
-            text=dept_summary.apply(
-                lambda r: f"  {int(r['open_count'])} ({int(r['behind'])} behind)", axis=1),
-            textposition="outside",
-        ))
-        fig.update_layout(plot_bgcolor="white", paper_bgcolor="white",
-                          yaxis=dict(autorange="reversed"),
-                          margin=dict(l=10, r=40, t=20, b=10),
-                          height=320,
-                          xaxis_title="Open cases")
-        st.plotly_chart(fig, use_container_width=True)
-
-with c2:
-    if not dept_summary.empty:
-        display = dept_summary.copy()
-        display["value_at_risk"] = display["value_at_risk"].apply(fmt_currency)
-        display["median_age"] = display["median_age"].apply(lambda v: f"{int(v) if pd.notna(v) else 0}d")
-        display = display.rename(columns={
-            "pseudo_dept": "Department",
-            "open_count": "Open",
-            "overdue": "Past Due",
-            "stuck": "Stuck",
-            "behind": "Behind",
-            "median_age": "Median Age",
-            "value_at_risk": "$ at Risk",
-        })
-        st.dataframe(display, use_container_width=True, height=320, hide_index=True)
-
-
-# ── Top stuck locations ───────────────────────────────────────────────────────
-section("Top stuck locations")
-
-behind = view[view["is_behind"]]
-if not behind.empty:
-    loc_summary = (
-        behind.groupby("Cases_LastLocation")
-        .agg(cases=("Cases_CaseNumber", "count"),
-             avg_days_late=("days_overdue", "mean"),
-             max_days_late=("days_overdue", "max"),
-             avg_days_at_station=("days_at_station", "mean"),
-             value=("Cases_TotalCharge", "sum"))
-        .reset_index()
-        .sort_values("cases", ascending=False)
-        .head(20)
-    )
-    display = loc_summary.copy()
-    display["avg_days_late"] = display["avg_days_late"].round(1)
-    display["avg_days_at_station"] = display["avg_days_at_station"].round(1)
-    display["max_days_late"] = display["max_days_late"].astype(int)
-    display["value"] = display["value"].apply(fmt_currency)
-    display = display.rename(columns={
-        "Cases_LastLocation": "Location",
-        "cases": "Behind",
-        "avg_days_late": "Avg Days Late",
-        "max_days_late": "Max Days Late",
-        "avg_days_at_station": "Avg Days at Station",
-        "value": "Value",
-    })
-    st.dataframe(display, use_container_width=True, hide_index=True)
-else:
-    st.success("No cases flagged behind in the current filter.")
-
-
-# ── Aging waterfall ───────────────────────────────────────────────────────────
-section("Aging waterfall — open cases by age bucket")
-
-def bucket(age):
-    if age <= 3:  return "0-3d"
-    if age <= 7:  return "4-7d"
-    if age <= 14: return "8-14d"
-    if age <= 30: return "15-30d"
-    return "30+d"
-
-if not view.empty:
-    waterfall = view.copy()
-    waterfall["bucket"] = waterfall["age_days"].apply(bucket)
-    bucket_order = ["0-3d", "4-7d", "8-14d", "15-30d", "30+d"]
-    pivot = (
-        waterfall.groupby(["bucket", "pseudo_dept"])
-        .size()
-        .reset_index(name="count")
-    )
-    pivot["bucket"] = pd.Categorical(pivot["bucket"], categories=bucket_order, ordered=True)
-    pivot = pivot.sort_values("bucket")
-
-    fig = px.bar(pivot, x="bucket", y="count", color="pseudo_dept",
-                 color_discrete_sequence=px.colors.qualitative.Set2)
-    fig.update_layout(plot_bgcolor="white", paper_bgcolor="white",
-                      margin=dict(l=10, r=10, t=20, b=10),
-                      height=300,
-                      legend=dict(orientation="h", y=-0.2),
-                      xaxis_title="Age in lab",
-                      yaxis_title="Cases",
-                      barmode="stack")
-    st.plotly_chart(fig, use_container_width=True)
-
-
-# ── Case detail ───────────────────────────────────────────────────────────────
-# Helpers — keep in sync with pipeline.py get_lab_holidays()
+# ── Ship-status helpers (needed by Tab 1) ────────────────────────────────────
 def _lab_holidays(year):
     out = []
     for month, day in [(1, 1), (7, 4), (12, 25)]:
@@ -424,163 +266,43 @@ def _lab_holidays(year):
     return set(out)
 
 def _next_business_day(from_date):
-    """Return the next business day strictly after from_date (skip weekends + lab holidays)."""
     d = pd.Timestamp(from_date).normalize() + pd.Timedelta(days=1)
     hol = _lab_holidays(d.year) | _lab_holidays(d.year + 1)
     while d.weekday() >= 5 or d in hol:
         d += pd.Timedelta(days=1)
     return d
 
-# Compute ship_status per row using today + lab calendar (based on Cases_ShipDate)
-today = pd.Timestamp.today().normalize()
+today   = pd.Timestamp.today().normalize()
 next_biz = _next_business_day(today)
 
 def _ship_status(ship):
-    if pd.isna(ship):
-        return ""
+    if pd.isna(ship): return ""
     d = pd.Timestamp(ship).normalize()
-    if d < today:    return "Past Due"
-    if d == today:   return "Due Today"
+    if d < today:     return "Past Due"
+    if d == today:    return "Due Today"
     if d == next_biz: return "Due Next Biz Day"
     return ""
 
 view = view.copy()
 if "Cases_ShipDate" in view.columns:
-    ship_dates = pd.to_datetime(view["Cases_ShipDate"], errors="coerce")
-    view["ship_status"] = ship_dates.apply(_ship_status)
+    view["ship_status"] = pd.to_datetime(view["Cases_ShipDate"], errors="coerce").apply(_ship_status)
 else:
-    # Cache file predates the ShipDate addition — fall back to DueDate so the
-    # toggles still work until the next pipeline run updates the cache.
     view["Cases_ShipDate"] = pd.NaT
     if "Cases_DueDate" in view.columns:
-        fallback = pd.to_datetime(view["Cases_DueDate"], errors="coerce")
-        view["ship_status"] = fallback.apply(_ship_status)
+        view["ship_status"] = pd.to_datetime(view["Cases_DueDate"], errors="coerce").apply(_ship_status)
     else:
         view["ship_status"] = ""
 
-# Filter controls — sit directly above the Case detail table
-ctl = st.columns([1, 1, 1, 2])
-with ctl[0]:
-    show_past_due  = st.checkbox("🔴 Past Due (ship)",      value=False, key="filt_past_due")
-with ctl[1]:
-    show_due_today = st.checkbox("🟡 Ships Today",          value=False, key="filt_due_today")
-with ctl[2]:
-    show_due_next  = st.checkbox(f"🟢 Ships Next Biz Day ({next_biz.strftime('%a %b %d')})",
-                                  value=False, key="filt_due_next")
-with ctl[3]:
-    case_search = st.text_input("🔍 Search by Case #", value="", key="case_search",
-                                 placeholder="e.g. 448962")
-
-# Route filter — second row
-_all_routes = sorted(view["Cases_Carrier"].fillna("").str.strip().unique().tolist())
-_all_routes = [r for r in _all_routes if r]
-selected_routes = st.multiselect(
-    "🚚 Filter by Route",
-    options=_all_routes,
-    default=[],
-    placeholder="All routes shown — select one or more to filter",
-    key="filt_routes",
-)
-
-active_buckets = []
-if show_past_due:  active_buckets.append("Past Due")
-if show_due_today: active_buckets.append("Due Today")
-if show_due_next:  active_buckets.append("Due Next Biz Day")
-
-table_view = view.copy()
-if active_buckets:
-    table_view = table_view[table_view["ship_status"].isin(active_buckets)]
-if selected_routes:
-    table_view = table_view[table_view["Cases_Carrier"].isin(selected_routes)]
-if case_search.strip():
-    q = case_search.strip()
-    table_view = table_view[
-        table_view["Cases_CaseNumber"].fillna("").astype(str).str.contains(q, case=False, regex=False)
-    ]
-
-section(f"Case detail ({len(table_view)} shown of {len(view)})")
-
-display_cols = [
-    ("Cases_CaseNumber", "Case #"),
-    ("ship_status",      "Ship Status"),
-    ("Cases_DoctorName", "Doctor"),
-    ("Cases_PanNumber",  "Pan#"),
-    ("pseudo_dept",      "Dept"),
-    ("Cases_Status",     "Status"),
-    ("Cases_LastLocation", "Location"),
-    ("Cases_DateIn",     "Date In"),
-    ("Cases_DueDate",    "Due"),
-    ("Cases_ShipDate",   "Ship"),
-    ("age_days",         "Age"),
-    ("days_at_station",  "At Loc"),
-    ("days_overdue",     "Days Late"),
-    ("Cases_Carrier",    "Route"),
-    ("is_behind",        "Behind"),
-]
-cols_present = [(c, n) for c, n in display_cols if c in table_view.columns]
-view_display = table_view[[c for c, _ in cols_present]].copy()
-view_display.columns = [n for _, n in cols_present]
-
-# Sort by days late descending — most urgent first; carry sort order to table_view too
-# so row-index → underlying case lookup works after selection.
-if "Days Late" in view_display.columns:
-    sort_order = view_display.sort_values("Days Late", ascending=False).index
-    view_display = view_display.loc[sort_order]
-    table_view  = table_view.loc[sort_order]
-view_display = view_display.reset_index(drop=True)
-table_view   = table_view.reset_index(drop=True)
-
-# Format dollar + date columns to be compact
-if "$" in view_display.columns:
-    view_display["$"] = view_display["$"].apply(fmt_currency)
-for dcol in ("Date In", "Due", "Ship"):
-    if dcol in view_display.columns:
-        view_display[dcol] = pd.to_datetime(view_display[dcol], errors="coerce").dt.strftime("%m/%d/%y")
-
-# Ship Status icon prefix
-if "Ship Status" in view_display.columns:
-    icon = {"Past Due": "🔴", "Due Today": "🟡", "Due Next Biz Day": "🟢"}
-    view_display["Ship Status"] = view_display["Ship Status"].apply(
-        lambda s: f"{icon.get(s,'')} {s}".strip() if s else ""
-    )
-
-# Tightened per-column widths (Streamlit only offers small/medium/large presets)
-_col_widths = {
-    "Case #":      "small",
-    "Ship Status": "medium",
-    "Doctor":      "medium",
-    "Pan#":        "small",
-    "Dept":        "small",
-    "Status":      "small",
-    "Location":    "medium",
-    "Date In":     "small",
-    "Due":         "small",
-    "Ship":        "small",
-    "Age":         "small",
-    "At Loc":      "small",
-    "Days Late":   "small",
-    "Route":       "small",
-    "Behind":      "small",
-}
-column_config = {
-    name: st.column_config.Column(width=width)
-    for name, width in _col_widths.items() if name in view_display.columns
-}
-
-selection = st.dataframe(
-    view_display,
-    use_container_width=True, height=500, hide_index=True,
-    column_config=column_config,
-    selection_mode="single-row",
-    on_select="rerun",
-    key="case_detail_table",
-)
+# Load on-time data once (used in Tab 4)
+try:
+    _ot = pd.read_csv(LATEST_DIR / "on_time_ship.csv")
+except Exception:
+    _ot = pd.DataFrame()
 
 
-# ── Case dig-in dialog ────────────────────────────────────────────────────────
+# ── Case dig-in dialog (defined at module level, called inside Tab 1) ─────────
 @st.dialog("🦷 Case Detail", width="large")
 def show_case_detail(row):
-    """Pop-up with full per-case details for the row that was clicked."""
     case_no  = row.get("Cases_CaseNumber", "—")
     doctor   = row.get("Cases_DoctorName", "—") or "—"
     customer = row.get("Cases_CustomerID", "—") or "—"
@@ -588,25 +310,22 @@ def show_case_detail(row):
     status   = row.get("Cases_Status", "—") or "—"
     dept     = row.get("pseudo_dept", "—") or "—"
     loc      = row.get("Cases_LastLocation", "") or "(no station)"
-    charge   = row.get("Cases_TotalCharge", 0) or 0
     age      = int(row.get("age_days", 0) or 0)
     at_loc   = int(row.get("days_at_station", 0) or 0)
     overdue  = int(row.get("days_overdue", 0) or 0)
     ship_st  = row.get("ship_status", "") or "On schedule"
+    carrier  = row.get("Cases_Carrier", "") or "—"
+    notes    = row.get("Cases_Notes",   "") or ""
 
     def _fmt_date(v):
         d = pd.to_datetime(v, errors="coerce")
         return d.strftime("%a %b %d, %Y") if pd.notna(d) else "—"
 
-    # Header row
     st.markdown(f"### Case #{case_no}  ·  {doctor}")
     st.caption(f"Customer ID {customer}  ·  Pan {pan}  ·  Status {status}  ·  Dept {dept}")
+    icon_map = {"Past Due": "🔴", "Due Today": "🟡", "Due Next Biz Day": "🟢"}
+    st.markdown(f"**{icon_map.get(ship_st, '🟦')} {ship_st}**")
 
-    # Status banner
-    icon = {"Past Due": "🔴", "Due Today": "🟡", "Due Next Biz Day": "🟢"}.get(ship_st, "🟦")
-    st.markdown(f"**{icon} {ship_st}**")
-
-    # Two-column detail card
     c1, c2 = st.columns(2)
     with c1:
         st.markdown("**Schedule**")
@@ -616,39 +335,285 @@ def show_case_detail(row):
         st.write(f"Age in lab: **{age} days**")
         if overdue > 0:
             st.write(f"Days past due: **{overdue}**")
-    carrier = row.get("Cases_Carrier", "") or "—"
-    notes   = row.get("Cases_Notes",   "") or ""
-
     with c2:
         st.markdown("**Location & Shipping**")
         st.write(f"Last Location: **{loc}**")
         st.write(f"Days at this station: **{at_loc}**")
         st.write(f"Route / Carrier: **{carrier}**")
         flags = []
-        if bool(row.get("flag_past_due", False)):   flags.append("Past due")
-        if bool(row.get("flag_stuck", False)):       flags.append("Stuck at station")
+        if bool(row.get("flag_past_due", False)):        flags.append("Past due")
+        if bool(row.get("flag_stuck", False)):            flags.append("Stuck at station")
         if bool(row.get("flag_high_value_aged", False)): flags.append("High-value aged")
         st.write(f"Flags: **{', '.join(flags) if flags else 'none'}**")
-
     if notes:
         st.divider()
         st.markdown("**Delivery Notes**")
         st.info(notes)
 
 
-# If a row was selected, open the dialog
-_sel = (selection.selection.rows if selection is not None and hasattr(selection, "selection") else [])
-if _sel:
-    show_case_detail(table_view.iloc[_sel[0]])
+# ── Tabs ──────────────────────────────────────────────────────────────────────
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    "📋 Case Detail",
+    "📊 Dept Breakdown",
+    "📍 Top Stuck Locations",
+    "✅ On-Time Ship Rate",
+    "📈 Aging Waterfall",
+])
 
-# Download — reflects the same filters as the visible table
-csv_bytes = table_view.to_csv(index=False).encode("utf-8")
-st.download_button("⬇ Download filtered case list (CSV)",
-                   data=csv_bytes,
-                   file_name=f"logistics_cases_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
-                   mime="text/csv")
 
-# Footer
+# ── Tab 1: Case Detail ────────────────────────────────────────────────────────
+with tab1:
+    ctl = st.columns([1, 1, 1, 2])
+    with ctl[0]:
+        show_past_due  = st.checkbox("🔴 Past Due (ship)",  value=False, key="filt_past_due")
+    with ctl[1]:
+        show_due_today = st.checkbox("🟡 Ships Today",      value=False, key="filt_due_today")
+    with ctl[2]:
+        show_due_next  = st.checkbox(
+            f"🟢 Ships Next Biz Day ({next_biz.strftime('%a %b %d')})",
+            value=False, key="filt_due_next")
+    with ctl[3]:
+        case_search = st.text_input("🔍 Search by Case #", value="", key="case_search",
+                                     placeholder="e.g. 448962")
+
+    _all_routes = sorted(view["Cases_Carrier"].fillna("").str.strip().unique().tolist())
+    _all_routes = [r for r in _all_routes if r]
+    selected_routes = st.multiselect(
+        "🚚 Filter by Route",
+        options=_all_routes,
+        default=[],
+        placeholder="All routes shown — select one or more to filter",
+        key="filt_routes",
+    )
+
+    active_buckets = []
+    if show_past_due:  active_buckets.append("Past Due")
+    if show_due_today: active_buckets.append("Due Today")
+    if show_due_next:  active_buckets.append("Due Next Biz Day")
+
+    table_view = view.copy()
+    if active_buckets:
+        table_view = table_view[table_view["ship_status"].isin(active_buckets)]
+    if selected_routes:
+        table_view = table_view[table_view["Cases_Carrier"].isin(selected_routes)]
+    if case_search.strip():
+        q = case_search.strip()
+        table_view = table_view[
+            table_view["Cases_CaseNumber"].fillna("").astype(str).str.contains(q, case=False, regex=False)
+        ]
+
+    section(f"Case detail ({len(table_view)} shown of {len(view)})")
+
+    display_cols = [
+        ("Cases_CaseNumber",  "Case #"),
+        ("ship_status",       "Ship Status"),
+        ("Cases_DoctorName",  "Doctor"),
+        ("Cases_PanNumber",   "Pan#"),
+        ("pseudo_dept",       "Dept"),
+        ("Cases_Status",      "Status"),
+        ("Cases_LastLocation","Location"),
+        ("Cases_DateIn",      "Date In"),
+        ("Cases_DueDate",     "Due"),
+        ("Cases_ShipDate",    "Ship"),
+        ("age_days",          "Age"),
+        ("days_at_station",   "At Loc"),
+        ("days_overdue",      "Days Late"),
+        ("Cases_Carrier",     "Route"),
+        ("is_behind",         "Behind"),
+    ]
+    cols_present = [(c, n) for c, n in display_cols if c in table_view.columns]
+    view_display = table_view[[c for c, _ in cols_present]].copy()
+    view_display.columns = [n for _, n in cols_present]
+
+    if "Days Late" in view_display.columns:
+        sort_order   = view_display.sort_values("Days Late", ascending=False).index
+        view_display = view_display.loc[sort_order]
+        table_view   = table_view.loc[sort_order]
+    view_display = view_display.reset_index(drop=True)
+    table_view   = table_view.reset_index(drop=True)
+
+    for dcol in ("Date In", "Due", "Ship"):
+        if dcol in view_display.columns:
+            view_display[dcol] = pd.to_datetime(view_display[dcol], errors="coerce").dt.strftime("%m/%d/%y")
+    if "Ship Status" in view_display.columns:
+        _icons = {"Past Due": "🔴", "Due Today": "🟡", "Due Next Biz Day": "🟢"}
+        view_display["Ship Status"] = view_display["Ship Status"].apply(
+            lambda s: f"{_icons.get(s,'')} {s}".strip() if s else ""
+        )
+
+    _col_widths = {
+        "Case #": "small", "Ship Status": "medium", "Doctor": "medium",
+        "Pan#": "small", "Dept": "small", "Status": "small", "Location": "medium",
+        "Date In": "small", "Due": "small", "Ship": "small",
+        "Age": "small", "At Loc": "small", "Days Late": "small",
+        "Route": "small", "Behind": "small",
+    }
+    column_config = {
+        name: st.column_config.Column(width=w)
+        for name, w in _col_widths.items() if name in view_display.columns
+    }
+
+    selection = st.dataframe(
+        view_display,
+        use_container_width=True, height=500, hide_index=True,
+        column_config=column_config,
+        selection_mode="single-row",
+        on_select="rerun",
+        key="case_detail_table",
+    )
+
+    _sel = (selection.selection.rows
+            if selection is not None and hasattr(selection, "selection") else [])
+    if _sel:
+        show_case_detail(table_view.iloc[_sel[0]])
+
+    csv_bytes = table_view.to_csv(index=False).encode("utf-8")
+    st.download_button("⬇ Download filtered case list (CSV)",
+                       data=csv_bytes,
+                       file_name=f"logistics_cases_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
+                       mime="text/csv")
+
+
+# ── Tab 2: Dept Breakdown ─────────────────────────────────────────────────────
+with tab2:
+    dept_summary = (
+        view.groupby("pseudo_dept")
+        .agg(open_count=("Cases_CaseNumber", "count"),
+             overdue=("flag_past_due", "sum"),
+             stuck=("flag_stuck", "sum"),
+             behind=("is_behind", "sum"),
+             median_age=("age_days", "median"),
+             value_at_risk=("Cases_TotalCharge", lambda x: x[view.loc[x.index, "is_behind"]].sum()))
+        .reset_index()
+        .sort_values("open_count", ascending=False)
+    )
+    c1, c2 = st.columns([2, 3])
+    with c1:
+        if not dept_summary.empty:
+            fig = go.Figure(go.Bar(
+                x=dept_summary["open_count"],
+                y=dept_summary["pseudo_dept"],
+                orientation="h",
+                marker=dict(
+                    color=dept_summary["behind"] / dept_summary["open_count"].replace(0, 1),
+                    colorscale=[[0, COLORS["teal"]], [0.3, COLORS["gold"]], [1, COLORS["red"]]],
+                    showscale=True,
+                    colorbar=dict(title="% behind", thickness=10, ticksuffix="%", tickformat=".0%"),
+                ),
+                text=dept_summary.apply(
+                    lambda r: f"  {int(r['open_count'])} ({int(r['behind'])} behind)", axis=1),
+                textposition="outside",
+            ))
+            fig.update_layout(plot_bgcolor="white", paper_bgcolor="white",
+                              yaxis=dict(autorange="reversed"),
+                              margin=dict(l=10, r=40, t=20, b=10),
+                              height=320, xaxis_title="Open cases")
+            st.plotly_chart(fig, use_container_width=True)
+    with c2:
+        if not dept_summary.empty:
+            disp = dept_summary.copy()
+            disp["value_at_risk"] = disp["value_at_risk"].apply(fmt_currency)
+            disp["median_age"] = disp["median_age"].apply(lambda v: f"{int(v) if pd.notna(v) else 0}d")
+            disp = disp.rename(columns={
+                "pseudo_dept": "Department", "open_count": "Open",
+                "overdue": "Past Due", "stuck": "Stuck", "behind": "Behind",
+                "median_age": "Median Age", "value_at_risk": "$ at Risk",
+            })
+            st.dataframe(disp, use_container_width=True, height=320, hide_index=True)
+
+
+# ── Tab 3: Top Stuck Locations ────────────────────────────────────────────────
+with tab3:
+    behind_df = view[view["is_behind"]]
+    if not behind_df.empty:
+        loc_summary = (
+            behind_df.groupby("Cases_LastLocation")
+            .agg(cases=("Cases_CaseNumber", "count"),
+                 avg_days_late=("days_overdue", "mean"),
+                 max_days_late=("days_overdue", "max"),
+                 avg_days_at_station=("days_at_station", "mean"),
+                 value=("Cases_TotalCharge", "sum"))
+            .reset_index()
+            .sort_values("cases", ascending=False)
+            .head(20)
+        )
+        disp = loc_summary.copy()
+        disp["avg_days_late"]       = disp["avg_days_late"].round(1)
+        disp["avg_days_at_station"] = disp["avg_days_at_station"].round(1)
+        disp["max_days_late"]       = disp["max_days_late"].astype(int)
+        disp["value"]               = disp["value"].apply(fmt_currency)
+        disp = disp.rename(columns={
+            "Cases_LastLocation": "Location", "cases": "Behind",
+            "avg_days_late": "Avg Days Late", "max_days_late": "Max Days Late",
+            "avg_days_at_station": "Avg Days at Station", "value": "Value",
+        })
+        st.dataframe(disp, use_container_width=True, hide_index=True)
+    else:
+        st.success("No cases flagged behind in the current filter.")
+
+
+# ── Tab 4: On-Time Ship Rate ──────────────────────────────────────────────────
+with tab4:
+    if not _ot.empty:
+        c_chart, c_table = st.columns([3, 2])
+        with c_chart:
+            fig = go.Figure()
+            fig.add_bar(
+                x=_ot["month"], y=_ot["on_time_pct"],
+                marker_color=[COLORS["green"] if v >= 90 else COLORS["gold"] if v >= 80 else COLORS["red"]
+                              for v in _ot["on_time_pct"]],
+                text=_ot["on_time_pct"].apply(lambda v: f"{v:.1f}%"),
+                textposition="outside")
+            fig.update_layout(yaxis=dict(range=[0, 105], title="On-time %"),
+                              xaxis_title="",
+                              margin=dict(l=10, r=10, t=10, b=10),
+                              height=300,
+                              plot_bgcolor="white", paper_bgcolor="white")
+            st.plotly_chart(fig, use_container_width=True)
+        with c_table:
+            show_ot = _ot.copy()
+            show_ot["On-Time"]   = show_ot["on_time"].astype(int)
+            show_ot["Late"]      = show_ot["late"].astype(int)
+            show_ot["Cases"]     = show_ot["cases"].astype(int)
+            show_ot["On-Time %"] = show_ot["on_time_pct"].apply(lambda v: f"{v:.1f}%")
+            st.dataframe(show_ot[["month", "Cases", "On-Time", "Late", "On-Time %"]]
+                           .rename(columns={"month": "Month"}),
+                         hide_index=True, use_container_width=True, height=300)
+    else:
+        st.info("On-time ship data not yet available — run the pipeline to generate it.")
+
+
+# ── Tab 5: Aging Waterfall ────────────────────────────────────────────────────
+with tab5:
+    def _bucket(age):
+        if age <= 3:  return "0-3d"
+        if age <= 7:  return "4-7d"
+        if age <= 14: return "8-14d"
+        if age <= 30: return "15-30d"
+        return "30+d"
+
+    if not view.empty:
+        wf = view.copy()
+        wf["bucket"] = wf["age_days"].apply(_bucket)
+        bucket_order = ["0-3d", "4-7d", "8-14d", "15-30d", "30+d"]
+        pivot = (
+            wf.groupby(["bucket", "pseudo_dept"])
+            .size().reset_index(name="count")
+        )
+        pivot["bucket"] = pd.Categorical(pivot["bucket"], categories=bucket_order, ordered=True)
+        pivot = pivot.sort_values("bucket")
+        fig = px.bar(pivot, x="bucket", y="count", color="pseudo_dept",
+                     color_discrete_sequence=px.colors.qualitative.Set2)
+        fig.update_layout(plot_bgcolor="white", paper_bgcolor="white",
+                          margin=dict(l=10, r=10, t=20, b=10),
+                          height=400,
+                          legend=dict(orientation="h", y=-0.2),
+                          xaxis_title="Age in lab", yaxis_title="Cases",
+                          barmode="stack")
+        st.plotly_chart(fig, use_container_width=True)
+
+
+# ── Footer (outside tabs) ─────────────────────────────────────────────────────
 st.divider()
 if not summary.empty and "computed_at" in summary.columns:
     st.caption(f"Last pipeline run: **{summary.iloc[0]['computed_at']}** · "
