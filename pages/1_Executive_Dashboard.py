@@ -1168,6 +1168,202 @@ def render_product_mix(mix_df):
     st.dataframe(styled, use_container_width=True, hide_index=True, height=260)
 
 
+def render_monthly_sales_trend(daily_df):
+    """13-month grouped bar chart: calendar months on x-axis, one series per year.
+    Uses monthly_sales_history.csv which combines current + historical Sales Summary files.
+    Falls back to daily_df if history file not available.
+    """
+    import numpy as np
+
+    section("\u2014 Daily Sales Average by Month")
+
+    # ── Load monthly_sales_history.csv ───────────────────────────────────────
+    hist_path = BASE_DIR / "cache" / "latest" / "monthly_sales_history.csv"
+    if hist_path.exists():
+        try:
+            hist = pd.read_csv(hist_path)
+            hist["year"]  = hist["year"].astype(int)
+            hist["month"] = hist["month"].astype(int)
+            hist["daily_avg"] = pd.to_numeric(hist["daily_avg"], errors="coerce").fillna(0)
+        except Exception:
+            hist = pd.DataFrame()
+    else:
+        hist = pd.DataFrame()
+
+    if hist.empty:
+        st.info("No sales history data yet — run the pipeline to generate it.")
+        return
+
+    today       = pd.Timestamp.today().normalize()
+    cur_year    = today.year
+    cur_month   = today.month
+    years       = sorted(hist["year"].unique())
+
+    # ── Projection for current month ─────────────────────────────────────────
+    def _total_biz(year, month):
+        import datetime
+        s = datetime.date(int(year), int(month), 1)
+        nm = (int(month) % 12) + 1
+        ny = int(year) + (1 if int(month) == 12 else 0)
+        return max(int(np.busday_count(s, datetime.date(ny, nm, 1))), 1)
+
+    def _elapsed_biz(year, month):
+        import datetime
+        s = datetime.date(int(year), int(month), 1)
+        e = min(today.date(), datetime.date(
+            int(year) + (1 if int(month) == 12 else 0),
+            (int(month) % 12) + 1, 1))
+        return max(int(np.busday_count(s, e)), 1)
+
+    proj_daily = None
+    proj_total = None
+    proj_note  = ""
+    ly_proj    = None
+
+    cur_row = hist[(hist["year"] == cur_year) & (hist["month"] == cur_month)]
+    if not cur_row.empty:
+        cur       = cur_row.iloc[0]
+        actual_so = float(cur["total_net"]) if "total_net" in cur else float(cur["daily_avg"]) * _elapsed_biz(cur_year, cur_month)
+        elapsed   = _elapsed_biz(cur_year, cur_month)
+        total_biz = _total_biz(cur_year, cur_month)
+        remaining = max(total_biz - elapsed, 0)
+
+        run_daily = actual_so / elapsed
+        run_proj  = actual_so + run_daily * remaining
+
+        # LY same month
+        ly_row = hist[(hist["year"] == cur_year - 1) & (hist["month"] == cur_month)]
+        if not ly_row.empty:
+            ly_biz   = _total_biz(cur_year - 1, cur_month)
+            ly_total = float(ly_row.iloc[0]["total_net"]) if "total_net" in ly_row.iloc[0] else float(ly_row.iloc[0]["daily_avg"]) * ly_biz
+            ly_proj  = ly_total / ly_biz * total_biz
+            ly_daily = ly_total / ly_biz
+        else:
+            ly_daily = None
+
+        # Trend: last 6-9 complete months same year + prior year
+        complete = hist[~((hist["year"] == cur_year) & (hist["month"] == cur_month))].copy()
+        complete = complete.sort_values(["year", "month"]).tail(9)
+        if len(complete) >= 3:
+            xs = np.arange(len(complete), dtype=float)
+            ys = complete["daily_avg"].values.astype(float)
+            slope, intercept = np.polyfit(xs, ys, 1)
+            trend_daily = slope * len(complete) + intercept
+            trend_proj  = trend_daily * total_biz
+        else:
+            trend_daily = run_daily
+            trend_proj  = run_proj
+
+        if ly_proj is not None:
+            blended_total = run_proj * 0.50 + ly_proj * 0.25 + trend_proj * 0.25
+            proj_note = "50% run-rate \u00b7 25% LY \u00b7 25% trend"
+        else:
+            blended_total = run_proj * 0.65 + trend_proj * 0.35
+            proj_note = "65% run-rate \u00b7 35% trend"
+
+        proj_daily = blended_total / total_biz
+        proj_total = blended_total
+
+    # ── KPI cards ────────────────────────────────────────────────────────────
+    if proj_total is not None and not cur_row.empty:
+        elapsed_n = _elapsed_biz(cur_year, cur_month)
+        total_n   = _total_biz(cur_year, cur_month)
+        actual_so_disp = float(cur_row.iloc[0]["total_net"]) if "total_net" in cur_row.iloc[0] else proj_daily * elapsed_n
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            kpi_card("MTD Net Sales", f"${actual_so_disp:,.0f}",
+                     f"{elapsed_n} of {total_n} biz days ({elapsed_n/total_n*100:.0f}%)")
+        with c2:
+            kpi_card("Projected Month Total", f"${proj_total:,.0f}", proj_note)
+        with c3:
+            if ly_proj is not None:
+                delta = proj_total - ly_proj
+                sign  = "+" if delta >= 0 else ""
+                kpi_card("vs Same Month LY", f"{sign}${delta:,.0f}",
+                         f"LY same month: ${ly_proj:,.0f}")
+            else:
+                kpi_card("Projected Daily Avg", f"${proj_daily:,.0f}", "")
+
+    # ── Build grouped bar chart ───────────────────────────────────────────────
+    MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    YEAR_COLORS = [COLORS["acc"], COLORS["teal"], COLORS["grn"], COLORS["pur"],
+                   COLORS["org"], COLORS["ylw"]]
+
+    fig = go.Figure()
+
+    for i, year in enumerate(years):
+        ydata = hist[hist["year"] == year].set_index("month")["daily_avg"]
+        y_vals = []
+        labels = []
+        for m in range(1, 13):
+            # Skip future months of current year
+            if year == cur_year and m > cur_month:
+                y_vals.append(None)
+            else:
+                y_vals.append(float(ydata.get(m, 0)) if m in ydata.index else None)
+            labels.append(MONTHS[m - 1])
+
+        color = YEAR_COLORS[i % len(YEAR_COLORS)]
+
+        # Current year current month: split actual vs projected
+        if year == cur_year and proj_daily is not None:
+            cur_m_idx = cur_month - 1
+            actual_avg = float(ydata.get(cur_month, 0)) if cur_month in ydata.index else 0
+            y_vals[cur_m_idx] = actual_avg   # actual so far
+            fig.add_trace(go.Bar(
+                x=MONTHS, y=y_vals,
+                name=str(year),
+                marker_color=color,
+                hovertemplate="<b>" + str(year) + " %{x}</b><br>Daily Avg: $%{y:,.0f}<extra></extra>",
+            ))
+            # Projected delta stacked on top
+            proj_delta = [None] * 12
+            if proj_daily > actual_avg:
+                proj_delta[cur_m_idx] = proj_daily - actual_avg
+            fig.add_trace(go.Bar(
+                x=MONTHS, y=proj_delta,
+                name=f"{year} proj",
+                marker_color=color.replace(")", ", 0.30)").replace("rgb", "rgba") if "rgb" in color else color + "4d",
+                marker_line=dict(color=color, width=1),
+                showlegend=False,
+                hovertemplate="<b>Projected add\'l</b><br>+$%{y:,.0f}/day<extra></extra>",
+            ))
+            # Dashed line at projected level
+            if proj_daily > 0:
+                fig.add_shape(type="line",
+                    x0=MONTHS[cur_m_idx], x1=MONTHS[cur_m_idx],
+                    y0=actual_avg, y1=proj_daily,
+                    xref="x", yref="y",
+                    line=dict(color=color, width=2, dash="dot"),
+                )
+                fig.add_annotation(
+                    x=MONTHS[cur_m_idx], y=proj_daily,
+                    text=f"  proj: ${proj_daily:,.0f}",
+                    showarrow=False, yanchor="bottom", xanchor="left",
+                    font=dict(color=color, size=10),
+                )
+        else:
+            fig.add_trace(go.Bar(
+                x=MONTHS, y=y_vals,
+                name=str(year),
+                marker_color=color,
+                hovertemplate="<b>" + str(year) + " %{x}</b><br>Daily Avg: $%{y:,.0f}<extra></extra>",
+            ))
+
+    fig.update_layout(barmode="group")
+    style_plotly(fig, height=460)
+    fig.update_layout(
+        yaxis=dict(tickprefix="$", tickformat=",.0f"),
+        xaxis_title="",
+        yaxis_title="Avg Daily Net Sales",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        margin=dict(l=10, r=10, t=40, b=10),
+    )
+    st.plotly_chart(fig, use_container_width=True)
+    if proj_note:
+        st.caption(f"Daily avg = monthly net sales \u00f7 business days. Projection: {proj_note}.")
+
+
 def render_implants(impl_df):
     section("🔬 Implant Pipeline")
     if impl_df.empty:
@@ -1214,19 +1410,19 @@ render_mtd(gauges)
 st.divider()
 
 tabs = st.tabs([
-    "📅 Daily Sales", "🥧 Product Mix",
-    "💰 Profitability", "⭐ Pareto Top 20%", "🔧 WIP",
-    "👥 Active Accounts", "🔁 Remakes", "🔬 Implants",
+    "\U0001f4c5 Daily Sales", "\U0001f4ca Sales Trend", "\U0001f967 Product Mix",
+    "\U0001f4b0 Profitability", "\u2b50 Pareto Top 20%", "\U0001f527 WIP",
+    "\U0001f465 Active Accounts", "\U0001f501 Remakes",
 ])
 with tabs[0]: render_daily_sales(daily_sales)
-with tabs[1]: render_product_mix(product_mix)
-with tabs[2]: render_profitability(prof)
-with tabs[3]: render_pareto(pareto, prof)
-with tabs[4]: render_wip(wip_summary, wip_detail)
-with tabs[5]: render_active(active_30d)
-with tabs[6]: render_remakes(remakes_detail, remake_reason, remake_history,
+with tabs[1]: render_monthly_sales_trend(daily_sales)
+with tabs[2]: render_product_mix(product_mix)
+with tabs[3]: render_profitability(prof)
+with tabs[4]: render_pareto(pareto, prof)
+with tabs[5]: render_wip(wip_summary, wip_detail)
+with tabs[6]: render_active(active_30d)
+with tabs[7]: render_remakes(remakes_detail, remake_reason, remake_history,
                               remake_by_dept, remake_by_dept_reason, remakes_full)
-with tabs[7]: render_implants(implants)
 
 st.divider()
 st.caption("Artistic Dental Studio - Executive Dashboard - Data refreshed nightly at 6 AM")

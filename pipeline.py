@@ -960,47 +960,67 @@ def _parse_int(s) -> int:
 
 
 def _parse_sales_summary(path: Path) -> pd.DataFrame:
-    """Parse Magic Touch's Sales Summary By Date Crystal Report CSV.
+    """Parse Magic Touch Sales Summary By Date CSV — handles two export formats:
 
-    Authoritative source for daily billing — matches the printed Sales Summary
-    Report By Date exactly. Returns one row per date with:
+    Normal format: one row per date (date in column 0, 14 metrics follow).
+    Wide format:   entire report in one giant CSV row; dates are embedded after
+                   the column-header fields (used by historical/Sales_YYYY.csv).
+
+    Returns one row per date with:
         date, customers, inv_new, inv_credit, inv_remake,
         units_new, units_credit, units_remake,
         credit_dollars, discounts, remake_sales, metal_charges, total_tax,
         total_invoiced, net_sales
     """
     import csv
-    rows_out = []
-    with open(path, encoding="utf-8-sig", newline="") as f:
-        reader = csv.reader(f)
-        for r in reader:
-            if not r:
-                continue
-            first = r[0].strip() if r else ""
+
+    def _extract_rows(fields):
+        """Given a flat list of field values, yield (date, [14 metrics]) tuples."""
+        i = 0
+        while i < len(fields):
+            val = fields[i].strip()
             try:
-                d = pd.to_datetime(first, errors="raise").normalize()
+                d = pd.to_datetime(val, errors="raise").normalize()
             except Exception:
+                i += 1
                 continue
-            # Expect 15 fields per data row (date + 14 metrics)
-            if len(r) < 15:
+            # Need at least 14 more fields and the 13th should be a money value
+            if i + 14 >= len(fields):
+                i += 1
                 continue
-            rows_out.append({
-                "date":           d,
-                "customers":      _parse_int(r[1]),
-                "inv_new":        _parse_int(r[2]),
-                "inv_credit":     _parse_int(r[3]),
-                "inv_remake":     _parse_int(r[4]),
-                "units_new":      _parse_int(r[5]),
-                "units_credit":   _parse_int(r[6]),
-                "units_remake":   _parse_int(r[7]),
-                "credit_dollars": _parse_money(r[8]),
-                "discounts":      _parse_money(r[9]),
-                "remake_sales":   _parse_money(r[10]),
-                "metal_charges":  _parse_money(r[11]),
-                "total_tax":      _parse_money(r[12]),
-                "total_invoiced": _parse_money(r[13]),
-                "net_sales":      _parse_money(r[14]),
-            })
+            metrics = fields[i + 1: i + 15]
+            # Sanity: last two fields should look like money (contain $ or digits)
+            if any(c.isdigit() for c in metrics[-1]) and any(c.isdigit() for c in metrics[-2]):
+                yield d, metrics
+                i += 15
+            else:
+                i += 1
+
+    # Read all fields into a flat list (handles both row-per-date and wide formats)
+    all_fields = []
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        for row in csv.reader(f):
+            all_fields.extend(row)
+
+    rows_out = []
+    for d, m in _extract_rows(all_fields):
+        rows_out.append({
+            "date":           d,
+            "customers":      _parse_int(m[0]),
+            "inv_new":        _parse_int(m[1]),
+            "inv_credit":     _parse_int(m[2]),
+            "inv_remake":     _parse_int(m[3]),
+            "units_new":      _parse_int(m[4]),
+            "units_credit":   _parse_int(m[5]),
+            "units_remake":   _parse_int(m[6]),
+            "credit_dollars": _parse_money(m[7]),
+            "discounts":      _parse_money(m[8]),
+            "remake_sales":   _parse_money(m[9]),
+            "metal_charges":  _parse_money(m[10]),
+            "total_tax":      _parse_money(m[11]),
+            "total_invoiced": _parse_money(m[12]),
+            "net_sales":      _parse_money(m[13]),
+        })
     return pd.DataFrame(rows_out)
 
 
@@ -1237,6 +1257,70 @@ def upload_to_drive(service, local_path: Path, drive_folder_id: str) -> str:
 #  MAIN
 # ══════════════════════════════════════════════════════════════════════════════
 
+
+def build_monthly_sales_history(watch_folder: Path, base_dir: Path) -> pd.DataFrame:
+    """Combine current-year SalesSummaryByDate.csv + historical/Sales_YYYY.csv files
+    into monthly_sales_history.csv with daily averages per year/month.
+    Auto-discovers any Sales_YYYY.csv in the historical/ folder.
+    Returns DataFrame: year, month, month_label, total_net, biz_days, daily_avg.
+    """
+    import numpy as np
+    from datetime import date as _date
+
+    all_dfs = []
+
+    cur = watch_folder / "SalesSummaryByDate.csv"
+    if cur.exists():
+        try:
+            all_dfs.append(_parse_sales_summary(cur))
+            log.info("Monthly history: loaded %s", cur.name)
+        except Exception as exc:
+            log.warning("Monthly history: failed to parse %s: %s", cur, exc)
+
+    hist_dir = base_dir / "historical"
+    if hist_dir.exists():
+        for hf in sorted(hist_dir.glob("Sales_*.csv")):
+            try:
+                all_dfs.append(_parse_sales_summary(hf))
+                log.info("Monthly history: loaded %s", hf.name)
+            except Exception as exc:
+                log.warning("Monthly history: failed to parse %s: %s", hf, exc)
+
+    if not all_dfs:
+        log.warning("Monthly history: no source files found")
+        return pd.DataFrame()
+
+    combined = pd.concat(all_dfs, ignore_index=True)
+    combined["date"] = pd.to_datetime(combined["date"], errors="coerce")
+    combined = combined.dropna(subset=["date"])
+    combined["net_sales"] = pd.to_numeric(combined.get("net_sales", 0), errors="coerce").fillna(0)
+    combined["year"]  = combined["date"].dt.year
+    combined["month"] = combined["date"].dt.month
+
+    # Deduplicate dates (current-year file overlaps with historical if re-exported)
+    combined = combined.sort_values("net_sales", ascending=False)
+    combined = combined.drop_duplicates(subset=["date"], keep="first")
+
+    def _biz_days(year, month):
+        s = _date(int(year), int(month), 1)
+        nm = (int(month) % 12) + 1
+        ny = int(year) + (1 if int(month) == 12 else 0)
+        return max(int(np.busday_count(s, _date(ny, nm, 1))), 1)
+
+    grp = combined.groupby(["year", "month"]).agg(
+        total_net=("net_sales", "sum"),
+    ).reset_index()
+
+    grp["biz_days"]    = grp.apply(lambda r: _biz_days(r["year"], r["month"]), axis=1)
+    grp["daily_avg"]   = grp["total_net"] / grp["biz_days"]
+    grp["month_label"] = pd.to_datetime(
+        grp["year"].astype(str) + "-" + grp["month"].astype(str).str.zfill(2) + "-01"
+    ).dt.strftime("%b")
+
+    log.info("Monthly history: %d rows, years %s", len(grp), sorted(grp["year"].unique()))
+    return grp
+
+
 def run_pipeline():
     log.info("=" * 60)
     log.info("Pipeline started  %s", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -1285,6 +1369,15 @@ def run_pipeline():
             log.info("Daily sales: %d days computed", len(daily))
     except Exception as exc:
         log.warning("Daily sales computation failed (other outputs unaffected): %s", exc)
+
+    # ── Multi-year monthly sales history (for trend chart) ──────────────────
+    try:
+        hist = build_monthly_sales_history(watch_folder, BASE_DIR)
+        if not hist.empty:
+            hist.to_csv(latest_dir / "monthly_sales_history.csv", index=False)
+            log.info("Monthly sales history: %d rows", len(hist))
+    except Exception as exc:
+        log.warning("Monthly sales history failed: %s", exc)
 
     # ── On-time ship rate (trailing 90 days) ────────────────────────────────
     try:
