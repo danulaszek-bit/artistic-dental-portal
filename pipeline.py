@@ -1279,7 +1279,7 @@ def build_monthly_sales_history(watch_folder: Path, base_dir: Path) -> pd.DataFr
 
     hist_dir = base_dir / "historical"
     if hist_dir.exists():
-        for hf in sorted(hist_dir.glob("Sales_*.csv")):
+        for hf in sorted(hist_dir.glob("Sales*.csv")):
             try:
                 all_dfs.append(_parse_sales_summary(hf))
                 log.info("Monthly history: loaded %s", hf.name)
