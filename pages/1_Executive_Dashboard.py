@@ -1317,16 +1317,19 @@ def render_monthly_sales_trend(daily_df):
                 hovertemplate="<b>" + str(year) + " %{x}</b><br>Daily Avg: $%{y:,.0f}<extra></extra>",
             ))
             # Projected delta stacked on top
-            proj_delta = [None] * 12
+            proj_delta = [0] * 12
             if proj_daily > actual_avg:
                 proj_delta[cur_m_idx] = proj_daily - actual_avg
+            _h = color.lstrip("#")
+            _rc, _gc, _bc = int(_h[0:2], 16), int(_h[2:4], 16), int(_h[4:6], 16)
+            proj_color = f"rgba({_rc},{_gc},{_bc},0.30)"
             fig.add_trace(go.Bar(
                 x=MONTHS, y=proj_delta,
                 name=f"{year} proj",
-                marker_color=color.replace(")", ", 0.30)").replace("rgb", "rgba") if "rgb" in color else color + "4d",
+                marker_color=proj_color,
                 marker_line=dict(color=color, width=1),
                 showlegend=False,
-                hovertemplate="<b>Projected add\'l</b><br>+$%{y:,.0f}/day<extra></extra>",
+                hovertemplate="<b>Projected add'l</b><br>+$%{y:,.0f}/day<extra></extra>",
             ))
             # Dashed line at projected level
             if proj_daily > 0:
