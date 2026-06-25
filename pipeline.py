@@ -1317,6 +1317,9 @@ def build_monthly_sales_history(watch_folder: Path, base_dir: Path) -> pd.DataFr
         grp["year"].astype(str) + "-" + grp["month"].astype(str).str.zfill(2) + "-01"
     ).dt.strftime("%b")
 
+    # Only keep 2022 onward
+    grp = grp[grp["year"] >= 2022].reset_index(drop=True)
+
     log.info("Monthly history: %d rows, years %s", len(grp), sorted(grp["year"].unique()))
     return grp
 
