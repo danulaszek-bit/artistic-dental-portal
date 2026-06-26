@@ -425,10 +425,14 @@ with tab1:
     view_display = table_view[[c for c, _ in cols_present]].copy()
     view_display.columns = [n for _, n in cols_present]
 
-    if "Days Late" in view_display.columns:
-        sort_order   = view_display.sort_values("Days Late", ascending=False).index
-        view_display = view_display.loc[sort_order]
-        table_view   = table_view.loc[sort_order]
+    # Sort: ship date ascending, then directional routes before UPS/GL
+    _sort_df = pd.DataFrame(index=table_view.index)
+    _sort_df["_ship"] = pd.to_datetime(table_view.get("Cases_ShipDate"), errors="coerce")
+    _carrier_str = table_view.get("Cases_Carrier", pd.Series("", index=table_view.index)).fillna("").str.upper()
+    _sort_df["_carrier_tier"] = _carrier_str.str.contains(r"\bUPS\b|^GL\b", regex=True).astype(int)
+    sort_order   = _sort_df.sort_values(["_ship", "_carrier_tier"], ascending=[True, True]).index
+    view_display = view_display.loc[sort_order]
+    table_view   = table_view.loc[sort_order]
     view_display = view_display.reset_index(drop=True)
     table_view   = table_view.reset_index(drop=True)
 
