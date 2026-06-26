@@ -1,6 +1,5 @@
 case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_lab,overdue
 452965,LEZBEA,,2026-06-19,2026-06-29,In Production,119.51,7,False
-452966,LEZBEA,,2026-06-19,2026-06-29,In Production,119.51,7,False
 448218,TESTDANN,DANNY ULASZEK,2026-04-21,2026-05-05,In Production,0.0,66,True
 450878,ANDMAR,,2026-05-21,2026-06-30,In Production,838.62,36,False
 452943,ALSEMA,,2026-06-19,2026-07-02,In Production,630.04,7,False
@@ -8,6 +7,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 431543,CHUMAN,,2025-10-02,2025-10-10,In Production,376.0,267,True
 451966,PICGIN,,2026-06-08,2026-06-29,In Production,1536.38,18,False
 452133,NUCMAG,Magdaleno Nucum,2026-06-09,2026-06-29,In Production,544.05,17,False
+452744,HASSHA,,2026-06-17,2026-06-30,In Production,0.0,9,False
 452778,LEURIN,,2026-06-17,2026-07-01,In Production,455.24,9,False
 452788,FIEJAM,,2026-06-17,2026-06-30,In Production,630.04,9,False
 452807,LOVJAM,,2026-06-17,2026-07-09,In Production,1193.61,9,False
@@ -129,7 +129,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 451736,NIEMAR,Mark Niemiec,2026-06-03,2026-06-18,In Production,107.42,23,True
 453147,KUCMAR,,2026-06-23,2026-07-07,In Production,2045.9,3,False
 453238,WITMAT,,2026-06-24,2026-07-06,In Production,514.33,2,False
-453161,DOUJASVA,,2026-06-23,2026-06-29,In Production,0.0,3,False
 453455,NISLIN,,2026-06-26,2026-06-30,In Production,0.0,0,False
 452955,RHICAT,,2026-06-19,2026-07-01,In Production,0.0,7,False
 452985,TAPGAR,,2026-06-19,2026-07-07,In Production,498.01,7,False
@@ -176,7 +175,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 453170,CHUMAN,,2026-06-23,2026-07-01,In Production,169.82,3,False
 453176,NUCMAG,,2026-06-23,2026-07-08,In Production,206.48,3,False
 453255,MCCSCO,,2026-06-24,2026-07-06,In Production,344.55,2,False
-452797,PATGIA,,2026-06-17,2026-06-29,In Production,101.28,9,False
 452854,CHAROB,,2026-06-18,2026-07-06,In Production,989.03,8,False
 453026,NISLIN,,2026-06-22,2026-07-01,In Production,79.79,4,False
 453030,OBEGAR,,2026-06-22,2026-07-01,In Production,73.49,4,False
