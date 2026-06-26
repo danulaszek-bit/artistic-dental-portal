@@ -1293,12 +1293,13 @@ def build_monthly_sales_history(watch_folder: Path, base_dir: Path) -> pd.DataFr
     combined = pd.concat(all_dfs, ignore_index=True)
     combined["date"] = pd.to_datetime(combined["date"], errors="coerce")
     combined = combined.dropna(subset=["date"])
-    combined["net_sales"] = pd.to_numeric(combined.get("net_sales", 0), errors="coerce").fillna(0)
+    # Use total_invoiced (gross revenue) so history matches the KPI MTD Revenue figure
+    combined["total_invoiced"] = pd.to_numeric(combined.get("total_invoiced", 0), errors="coerce").fillna(0)
     combined["year"]  = combined["date"].dt.year
     combined["month"] = combined["date"].dt.month
 
     # Deduplicate dates (current-year file overlaps with historical if re-exported)
-    combined = combined.sort_values("net_sales", ascending=False)
+    combined = combined.sort_values("total_invoiced", ascending=False)
     combined = combined.drop_duplicates(subset=["date"], keep="first")
 
     def _biz_days(year, month):
@@ -1308,7 +1309,7 @@ def build_monthly_sales_history(watch_folder: Path, base_dir: Path) -> pd.DataFr
         return max(int(np.busday_count(s, _date(ny, nm, 1))), 1)
 
     grp = combined.groupby(["year", "month"]).agg(
-        total_net=("net_sales", "sum"),
+        total_net=("total_invoiced", "sum"),
     ).reset_index()
 
     grp["biz_days"]    = grp.apply(lambda r: _biz_days(r["year"], r["month"]), axis=1)

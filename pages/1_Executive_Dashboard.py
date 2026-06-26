@@ -1271,7 +1271,7 @@ def render_monthly_sales_trend(daily_df):
         actual_so_disp = float(cur_row.iloc[0]["total_net"]) if "total_net" in cur_row.iloc[0] else proj_daily * elapsed_n
         c1, c2, c3 = st.columns(3)
         with c1:
-            kpi_card("MTD Net Sales", f"${actual_so_disp:,.0f}",
+            kpi_card("MTD Revenue", f"${actual_so_disp:,.0f}",
                      f"{elapsed_n} of {total_n} biz days ({elapsed_n/total_n*100:.0f}%)")
         with c2:
             kpi_card("Projected Month Total", f"${proj_total:,.0f}", proj_note)
