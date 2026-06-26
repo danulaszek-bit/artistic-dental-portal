@@ -1328,39 +1328,89 @@ def load_shipping_logistics_report(folder: Path) -> "pd.DataFrame":
     """
     import pandas as pd
 
+    import logging
+    log_lr = logging.getLogger("mt_reports_parser")
+    EXCLUDED_DOCTORS = {"MURRPHY LAWSTON", "MURPHY LAWSTON"}
+
+    # ── Prefer new XLS format (DailyShipping&LogisticsReport.xls) ───────────
+    xls_path = folder / "DailyShipping&LogisticsReport.xls"
+    if xls_path.exists():
+        try:
+            import xlrd
+            wb  = xlrd.open_workbook(str(xls_path))
+            ws  = wb.sheet_by_index(0)
+            dm  = wb.datemode
+
+            rows_out = []
+            for i in range(ws.nrows):
+                row = [ws.cell_value(i, c) for c in range(ws.ncols)]
+                # Data rows have a numeric case number > 100000 in col 3
+                try:
+                    case_num = float(row[3])
+                    if case_num < 100000:
+                        continue
+                except (ValueError, TypeError):
+                    continue
+
+                def _xls_dt(val):
+                    try:
+                        return xlrd.xldate_as_datetime(float(val), dm) if val else None
+                    except Exception:
+                        return None
+
+                due_str = str(row[14]).split()[0] if row[14] else ""
+                rows_out.append({
+                    "Cases_CaseNumber":   str(int(case_num)),
+                    "Cases_DoctorName":   str(row[0]).strip(),
+                    "Cases_PanNumber":    str(row[5]).strip(),
+                    "Cases_LastLocation": str(row[7]).strip(),
+                    "Cases_DateIn":       _xls_dt(row[10]),
+                    "Cases_ShipDate":     _xls_dt(row[12]),
+                    "Cases_DueDate":      pd.to_datetime(due_str, errors="coerce") if due_str else None,
+                    "Cases_Carrier":      str(row[17]).strip(),
+                    "Cases_Notes":        str(row[20]).strip(),
+                    "Cases_Status":       "In Production",
+                    "Cases_TotalCharge":  0.0,
+                    "Cases_CustomerID":   "",
+                })
+
+            result = pd.DataFrame(rows_out)
+            result = result.drop_duplicates(subset=["Cases_CaseNumber"], keep="last").reset_index(drop=True)
+
+            # Drop dummy accounts
+            doctor_norm = result["Cases_DoctorName"].str.upper()
+            before = len(result)
+            result = result[~doctor_norm.isin(EXCLUDED_DOCTORS)].reset_index(drop=True)
+            if before - len(result):
+                log_lr.info("load_shipping_logistics_report: dropped %d dummy-account rows", before - len(result))
+
+            log_lr.info("load_shipping_logistics_report: %d unique cases from %s", len(result), xls_path.name)
+            return result
+        except Exception as exc:
+            log_lr.warning("load_shipping_logistics_report: XLS parse failed (%s), falling back to CSV", exc)
+
+    # ── Fallback: legacy CSV format ──────────────────────────────────────────
     pattern = "Daily Shipping & Logistics Report (Custom)*.csv"
     candidates = sorted(folder.glob(pattern))
     if not candidates:
-        import logging
-        logging.getLogger("mt_reports_parser").warning(
+        log_lr.warning(
             "load_shipping_logistics_report: no file matching %s in %s", pattern, folder)
         return pd.DataFrame()
 
     path = candidates[-1]
     df = pd.read_csv(path, header=None, skiprows=3, encoding="latin-1")
 
-    # Keep only rows that have a numeric case number in col 14
     df[14] = pd.to_numeric(df[14], errors="coerce")
     data = df[df[14].notna()].copy()
-
-    # Deduplicate: keep last row per case# (same data, different ship-date group
-    # sections; the location value is consistent so last is fine)
     data = data.drop_duplicates(subset=[14], keep="last").reset_index(drop=True)
 
-    # Dummy/test accounts excluded by doctor name (no CustomerID in this report).
-    # Must happen BEFORE due_raw extraction so all Series share the same index.
-    EXCLUDED_DOCTORS = {"MURRPHY LAWSTON", "MURPHY LAWSTON"}
     doctor_norm = data[13].fillna("").astype(str).str.strip().str.upper()
     before = len(data)
     data = data[~doctor_norm.isin(EXCLUDED_DOCTORS)].reset_index(drop=True)
     if before - len(data):
-        import logging
-        logging.getLogger("mt_reports_parser").info(
-            "load_shipping_logistics_report: dropped %d dummy-account rows", before - len(data))
+        log_lr.info("load_shipping_logistics_report: dropped %d dummy-account rows", before - len(data))
 
-    # Due date column has "MM/DD/YY  H:MM PM" format — strip time portion
     due_raw = data[19].astype(str).str.split().str[0]
-
     result = pd.DataFrame({
         "Cases_CaseNumber":   data[14].astype(int).astype(str),
         "Cases_DoctorName":   data[13].fillna("").astype(str).str.strip(),
@@ -1371,13 +1421,10 @@ def load_shipping_logistics_report(folder: Path) -> "pd.DataFrame":
         "Cases_DueDate":      pd.to_datetime(due_raw, errors="coerce"),
         "Cases_Carrier":      data[20].fillna("").astype(str).str.strip(),
         "Cases_Notes":        data[21].fillna("").astype(str).str.strip(),
-        # Required by compute_logistics — all current-month cases are in production
         "Cases_Status":       "In Production",
         "Cases_TotalCharge":  0.0,
         "Cases_CustomerID":   "",
     })
 
-    import logging
-    logging.getLogger("mt_reports_parser").info(
-        "load_shipping_logistics_report: %d unique cases from %s", len(result), path.name)
+    log_lr.info("load_shipping_logistics_report: %d unique cases from %s (CSV fallback)", len(result), path.name)
     return result
