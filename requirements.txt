@@ -1,7 +1,8 @@
 # ── Core pipeline ───────────────────────────────────────────
 pandas>=2.0
 numpy>=1.25
-openpyxl>=3.1          # Excel read/write
+openpyxl>=3.1          # Excel read/write (.xlsx)
+xlrd>=2.0.1            # Excel read for legacy .xls binary format
 pyyaml>=6.0            # config.yaml parsing
 schedule>=1.2          # job scheduling
 pyarrow>=14.0          # Parquet support
