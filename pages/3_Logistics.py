@@ -469,7 +469,16 @@ with tab1:
     _sel = (selection.selection.rows
             if selection is not None and hasattr(selection, "selection") else [])
     if _sel:
-        show_case_detail(table_view.iloc[_sel[0]])
+        # Use case number from view_display (not raw row index) to guard against
+        # stale session-state index pointing at the wrong row after a sort change.
+        _row_pos = _sel[0]
+        if _row_pos < len(view_display) and "Case #" in view_display.columns:
+            _case_num = str(view_display.iloc[_row_pos]["Case #"]).strip()
+            _match = table_view[table_view["Cases_CaseNumber"].astype(str).str.strip() == _case_num]
+            _detail_row = _match.iloc[0] if not _match.empty else table_view.iloc[_row_pos]
+        else:
+            _detail_row = table_view.iloc[_row_pos]
+        show_case_detail(_detail_row)
 
     csv_bytes = table_view.to_csv(index=False).encode("utf-8")
     st.download_button("⬇ Download filtered case list (CSV)",
