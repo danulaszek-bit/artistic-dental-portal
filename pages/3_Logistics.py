@@ -109,7 +109,7 @@ def section(title):
 
 
 # ── Data loading ──────────────────────────────────────────────────────────────
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=60)
 def load_case_product_lines():
     p = LATEST_DIR / "case_product_lines.csv"
     if not p.exists():
@@ -117,7 +117,7 @@ def load_case_product_lines():
     return pd.read_csv(p, dtype={"Cases_CaseNumber": str})
 
 
-@st.cache_data(ttl=600)  # 10-minute cache
+@st.cache_data(ttl=60)  # 3-minute cache
 def load_logistics_data():
     cases_path = LATEST_DIR / "cases_logistics.csv"
     summary_path = LATEST_DIR / "logistics_summary.csv"
