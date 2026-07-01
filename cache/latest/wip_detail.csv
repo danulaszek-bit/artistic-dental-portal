@@ -55,10 +55,9 @@ case_number,account_id,date_in,due_date,status,total_charge,days_in_lab,overdue
 450375,ANDMAR,2026-05-15,2026-07-10,In Production,0.0,47,False
 451271,RYASEA,2026-05-28,2026-06-12,In Production,53.11,34,True
 452043,RINJOH,2026-06-08,2026-07-08,In Production,511.5,23,False
-452511,KHASUM,2026-06-12,2026-07-07,Outsourced,0.0,19,False
+452511,KHASUM,2026-06-12,2026-07-07,In Production,0.0,19,False
 452996,LOVJAM,2026-06-19,2026-07-09,In Production,6.99,12,False
 453020,NISLIN,2026-06-19,2026-07-06,In Production,596.56,12,False
-453048,SIETOM,2026-06-22,2026-07-10,Outsourced,70.59,9,False
 453049,ATHJOH,2026-06-22,2026-07-28,In Production,0.0,9,False
 453110,ARANAD,2026-06-22,2026-07-06,In Production,490.93,9,False
 453209,SEERAN,2026-06-23,2026-07-10,Outsourced,261.88,8,False
@@ -162,7 +161,6 @@ case_number,account_id,date_in,due_date,status,total_charge,days_in_lab,overdue
 450873,PERLUI,2026-05-21,2026-06-08,In Production,269.99,41,True
 451021,THADEVOP,2026-05-26,2026-06-16,In Production,277.91,36,True
 451058,SLAMICJOL,2026-05-27,2026-06-18,In Production,200.0,35,True
-451180,SLAMIC,2026-05-28,2026-06-15,In Production,292.91,34,True
 451516,PERLUI,2026-06-01,2026-06-22,In Production,269.99,30,True
 451719,SLAMICDYE,2026-06-03,2026-06-19,In Production,0.0,28,True
 452488,SLAMICJOL,2026-06-12,2026-06-23,In Production,222.92,19,True
@@ -235,8 +233,8 @@ case_number,account_id,date_in,due_date,status,total_charge,days_in_lab,overdue
 453473,MADABD,2026-06-26,2026-07-02,In Production,77.58,5,False
 453478,RYASEA,2026-06-26,2026-07-08,In Production,129.51,5,False
 453483,PATGIA,2026-06-26,2026-07-07,In Production,79.79,5,False
-453485,SAMJACSTC,2026-06-26,2026-07-07,In Production,79.79,5,False
 453484,SAMJACSTC,2026-06-26,2026-07-09,In Production,79.79,5,False
+453485,SAMJACSTC,2026-06-26,2026-07-07,In Production,79.79,5,False
 453486,PATGIA,2026-06-26,2026-07-06,In Production,79.79,5,False
 453490,SAMJACSTC,2026-06-26,2026-07-07,In Production,0.0,5,False
 453498,MALRYA,2026-06-26,2026-07-06,In Production,364.18,5,False
@@ -312,7 +310,6 @@ case_number,account_id,date_in,due_date,status,total_charge,days_in_lab,overdue
 453627,TOKNIC,2026-06-30,2026-07-14,In Production,391.59,1,False
 452771,KAUHAR,2026-06-22,2026-07-02,In Production,0.0,9,False
 453259,KHASUM,2026-06-24,2026-07-02,In Production,278.4,7,False
-453276,HAFMAR,2026-06-24,2026-07-06,In Production,150.19,7,False
 453359,JONKAR,2026-06-25,2026-07-06,In Production,101.71,6,False
 453360,MALKEV,2026-06-25,2026-07-06,In Production,0.0,6,False
 453559,CALELA,2026-06-29,2026-07-02,In Production,240.73,2,False
@@ -327,7 +324,7 @@ case_number,account_id,date_in,due_date,status,total_charge,days_in_lab,overdue
 452927,SAFTAR,2026-06-18,2026-07-02,In Production,314.22,13,False
 452987,JAVJAM,2026-06-19,2026-07-02,In Production,317.73,12,False
 453059,VINSHY,2026-06-22,2026-06-29,In Production,286.54,9,True
-453107,SINMAN,2026-06-22,2026-07-06,Outsourced,102.29,9,False
+453107,SINMAN,2026-06-22,2026-07-06,In Production,102.29,9,False
 453132,ATHJOH,2026-06-23,2026-07-07,Outsourced,321.37,8,False
 453188,GAFMEG,2026-06-23,2026-07-09,In Production,317.73,8,False
 453232,WALBRIOP,2026-06-23,2026-07-08,Outsourced,1663.07,8,False
@@ -348,8 +345,8 @@ case_number,account_id,date_in,due_date,status,total_charge,days_in_lab,overdue
 453346,GRAVICDES,2026-06-25,2026-07-08,In Production,83.72,6,False
 453399,CHINIC,2026-06-25,2026-07-13,In Production,160.43,6,False
 453405,SLAMICJOL,2026-06-25,2026-07-09,In Production,222.92,6,False
-453407,JANUPACR,2026-06-25,2026-07-10,In Production,222.92,6,False
 453408,SLAMICJOL,2026-06-25,2026-07-09,In Production,277.91,6,False
+453407,JANUPACR,2026-06-25,2026-07-10,In Production,222.92,6,False
 453416,PATAMIPA,2026-06-25,2026-07-06,In Production,131.97,6,False
 453583,EDGBLA,2026-06-29,2026-07-13,In Production,170.43,2,False
 453630,DALKATCH,2026-06-30,2026-07-13,In Production,161.6,1,False
