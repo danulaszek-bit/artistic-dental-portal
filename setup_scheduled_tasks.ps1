@@ -28,7 +28,8 @@ $taskNames = @(
     "Artistic Dental - Cases Export",
     "Artistic Dental - Sales Export",
     "Artistic Dental Pipeline",
-    "Artistic Dental Git Push"
+    "Artistic Dental Git Push",
+    "Artistic Dental Logistics"
 )
 foreach ($t in $taskNames) {
     if (Get-ScheduledTask -TaskName $t -ErrorAction SilentlyContinue) {
@@ -43,6 +44,7 @@ $batFiles = @{
     "Artistic Dental - Sales Export" = "$workDir\run_sales.bat"
     "Artistic Dental Pipeline"        = "$workDir\run_pipeline.bat"
     "Artistic Dental Git Push"        = "$workDir\git_push.bat"
+    "Artistic Dental Logistics"       = "$workDir\run_logistics.bat"
 }
 foreach ($f in $batFiles.Values) {
     if (-not (Test-Path $f)) {
@@ -52,8 +54,9 @@ foreach ($f in $batFiles.Values) {
 }
 
 # --- Common settings (ALL the flags we want, explicitly) ---
-$repeatInterval     = New-TimeSpan -Hours 2      # exports + git push: every 2h
-$repeatIntervalPipe = New-TimeSpan -Minutes 3    # pipeline: every 3 min
+$repeatInterval      = New-TimeSpan -Hours 2      # exports + git push: every 2h
+$repeatIntervalPipe  = New-TimeSpan -Minutes 3    # full pipeline: every 3 min
+$repeatIntervalLogis = New-TimeSpan -Minutes 1    # logistics only: every 1 min
 $repeatDuration     = New-TimeSpan -Hours 14
 
 $settings = New-ScheduledTaskSettingsSet `
@@ -121,5 +124,12 @@ Register-BatTask `
     -StartTime "5:30 AM" `
     -Description "Computes retention/active KPIs, commits, pushes to GitHub."
 
+Register-BatTask `
+    -Name "Artistic Dental Logistics" `
+    -BatFile "$workDir\run_logistics.bat" `
+    -StartTime "5:21 AM" `
+    -Description "Logistics-only mini pipeline: XLS -> cases_logistics.csv -> GitHub push." `
+    -Interval $repeatIntervalLogis
+
 Write-Host ""
-Write-Host "Done. All 4 tasks are now ready. Right-click any in Task Scheduler -> Run."
+Write-Host "Done. All 5 tasks are now ready. Right-click any in Task Scheduler -> Run."
