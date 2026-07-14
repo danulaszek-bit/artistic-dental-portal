@@ -1,12 +1,26 @@
 {
- "period": "7/7/2026",
+ "period": "7/14/2026",
  "depts": {
   "-- Undefined --": {
-   "new": 1,
-   "remakes": 0,
-   "total": 1,
+   "new": 5,
+   "remakes": 1,
+   "total": 6,
    "adjustments": 0,
    "products": [
+    {
+     "id": "HNNY77",
+     "desc": "Hi-Noble 77% AU/Yellow",
+     "new": 4,
+     "remakes": 0,
+     "total": 4
+    },
+    {
+     "id": "NOWARRANTY",
+     "desc": "No Remake or Adjustment Warranty",
+     "new": 0,
+     "remakes": 1,
+     "total": 1
+    },
     {
      "id": "RUSH",
      "desc": "Rush Fee",
@@ -18,17 +32,17 @@
    "adjProducts": []
   },
   "C&B": {
-   "new": 262,
-   "remakes": 14,
-   "total": 276,
-   "adjustments": 6,
+   "new": 716,
+   "remakes": 44,
+   "total": 760,
+   "adjustments": 10,
    "products": [
     {
      "id": "CRNBRUX",
      "desc": "BRUXZIR",
-     "new": 73,
-     "remakes": 3,
-     "total": 76
+     "new": 204,
+     "remakes": 16,
+     "total": 220
     },
     {
      "id": "CRNCHAR",
@@ -40,16 +54,16 @@
     {
      "id": "CRNCS",
      "desc": "CUSTOM SHADING",
-     "new": 3,
+     "new": 8,
      "remakes": 0,
-     "total": 3
+     "total": 8
     },
     {
      "id": "CRNEMAXL",
      "desc": "LAYERED EMAX",
-     "new": 1,
+     "new": 2,
      "remakes": 0,
-     "total": 1
+     "total": 2
     },
     {
      "id": "CRNEMAXM",
@@ -61,9 +75,16 @@
     {
      "id": "CRNEZZ",
      "desc": "ARTISTIC EZ",
-     "new": 12,
-     "remakes": 1,
-     "total": 13
+     "new": 48,
+     "remakes": 3,
+     "total": 51
+    },
+    {
+     "id": "CRNFCC",
+     "desc": "FULL CAST CROWN",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
     },
     {
      "id": "CRNFCCNP",
@@ -75,65 +96,93 @@
     {
      "id": "CRNMLBDGWG",
      "desc": "MARYLAND BRIDGE WING",
-     "new": 2,
-     "remakes": 0,
-     "total": 2
-    },
-    {
-     "id": "CRNPFMB",
-     "desc": "PFM BASE",
      "new": 4,
      "remakes": 0,
      "total": 4
     },
     {
-     "id": "CRNZILAYA",
-     "desc": "LAYERED ZIRC",
+     "id": "CRNPFMB",
+     "desc": "PFM BASE",
+     "new": 8,
+     "remakes": 0,
+     "total": 8
+    },
+    {
+     "id": "CRNPOSTCOR",
+     "desc": "POST AND CORE",
      "new": 2,
      "remakes": 0,
      "total": 2
     },
     {
+     "id": "CRNSTLEXPT",
+     "desc": "STL FILE EXPORT",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
+    },
+    {
+     "id": "CRNTEMP",
+     "desc": "ACRYLIC TEMPORARY",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
+    },
+    {
+     "id": "CRNTEMPWNG",
+     "desc": "ACRYLIC TEMPORARY WING",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
+    },
+    {
+     "id": "CRNZILAYA",
+     "desc": "LAYERED ZIRC",
+     "new": 17,
+     "remakes": 0,
+     "total": 17
+    },
+    {
      "id": "DIGBRUXCRN",
      "desc": "DIGITAL BRUXZIR",
-     "new": 84,
-     "remakes": 6,
-     "total": 90
+     "new": 235,
+     "remakes": 18,
+     "total": 253
     },
     {
      "id": "DIGDWXDWU",
      "desc": "DIGITAL DIAGNOSTIC WAXUP",
-     "new": 19,
+     "new": 35,
      "remakes": 0,
-     "total": 19
+     "total": 35
     },
     {
      "id": "DIGEMAXL",
      "desc": "DIGITAL EMAX LAYERED",
-     "new": 3,
-     "remakes": 1,
-     "total": 4
+     "new": 14,
+     "remakes": 2,
+     "total": 16
     },
     {
      "id": "DIGEMAXMCRN",
      "desc": "DIGITAL EMAX MONO",
-     "new": 3,
+     "new": 9,
      "remakes": 0,
-     "total": 3
+     "total": 9
     },
     {
      "id": "DIGEMAXVEN",
      "desc": "DIGITAL EMAX VENEER",
      "new": 0,
-     "remakes": 2,
-     "total": 2
+     "remakes": 4,
+     "total": 4
     },
     {
      "id": "DIGEZZCRN",
      "desc": "DIGITAL ARTISTIC EZ",
-     "new": 42,
+     "new": 83,
      "remakes": 0,
-     "total": 42
+     "total": 83
     },
     {
      "id": "DIGFCCNP",
@@ -152,16 +201,23 @@
     {
      "id": "DIGLAYCRN",
      "desc": "DIGITAL LAYERED ZIRC",
-     "new": 3,
+     "new": 23,
      "remakes": 0,
-     "total": 3
+     "total": 23
     },
     {
      "id": "DIGPFMCRN",
      "desc": "DIGITAL PFM",
-     "new": 5,
+     "new": 7,
      "remakes": 0,
-     "total": 5
+     "total": 7
+    },
+    {
+     "id": "MODC1",
+     "desc": "PRINTED STUDY MODEL 1 ARCH",
+     "new": 4,
+     "remakes": 0,
+     "total": 4
     }
    ],
    "adjProducts": [
@@ -169,65 +225,114 @@
      "id": "CRNZAD",
      "desc": "ZIRC ADJUST",
      "new": 1,
-     "remakes": 5,
-     "total": 6
+     "remakes": 9,
+     "total": 10
     }
    ]
   },
   "Removables": {
-   "new": 38,
-   "remakes": 8,
-   "total": 46,
-   "adjustments": 7,
+   "new": 80,
+   "remakes": 14,
+   "total": 94,
+   "adjustments": 17,
    "products": [
     {
-     "id": "DENAO4ZIRC",
-     "desc": "ALL ON 4 ZIRC DENTURE FINISH W/ H/S COMFORT GUARD",
+     "id": "CSPHOTO1",
+     "desc": "PHOTOGRAMMETRY PACKAGE 1",
      "new": 2,
      "remakes": 0,
      "total": 2
+    },
+    {
+     "id": "DENAO4",
+     "desc": "Digital A04 With Surgical Guide",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
+    },
+    {
+     "id": "DENAO4TMP",
+     "desc": "ALL ON 4 - TEMP DENTURE W/ SURG GUIDE",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
+    },
+    {
+     "id": "DENAO4TMPD",
+     "desc": "DIGITAL ALL ON 4 - TEMP DENTURE W/ SURG GUIDE",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
+    },
+    {
+     "id": "DENAO4ZIRC",
+     "desc": "ALL ON 4 ZIRC DENTURE FINISH W/ H/S COMFORT GUARD",
+     "new": 6,
+     "remakes": 0,
+     "total": 6
+    },
+    {
+     "id": "DENAO4ZPT",
+     "desc": "ALL ON 4 ZIRC DENTURE PROTOTYPE",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
+    },
+    {
+     "id": "DENAOFHSC",
+     "desc": "ALL ON 4 COMFORT H/S BITE SPLINT",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
     },
     {
      "id": "PARTLESS PROTOYPE",
      "desc": "PARTLESS PROTOTYPE",
      "new": 1,
-     "remakes": 0,
-     "total": 1
+     "remakes": 2,
+     "total": 3
     },
     {
      "id": "SMARTADDSITE",
      "desc": "SMART CONVERSION ADD SITE",
-     "new": 1,
+     "new": 2,
      "remakes": 0,
-     "total": 1
+     "total": 2
     },
     {
      "id": "SMARTPARTS",
      "desc": "SMART CONVERSION PARTS",
-     "new": 5,
+     "new": 11,
      "remakes": 0,
-     "total": 5
+     "total": 11
     },
     {
      "id": "DENBB",
      "desc": "ACRYLIC BASE&BITE RIM",
-     "new": 9,
+     "new": 17,
      "remakes": 2,
-     "total": 11
+     "total": 19
     },
     {
      "id": "DENBLEACH",
      "desc": "BLEACHING TRAY",
+     "new": 6,
+     "remakes": 0,
+     "total": 6
+    },
+    {
+     "id": "DENCUSTRAY",
+     "desc": "CUSTOM TRAY",
      "new": 4,
      "remakes": 0,
      "total": 4
     },
     {
-     "id": "DENCUSTRAY",
-     "desc": "CUSTOM TRAY",
-     "new": 2,
+     "id": "DENFULEFIN",
+     "desc": "FULL DENTURE FINISH ECONOMY TEETH",
+     "new": 1,
      "remakes": 0,
-     "total": 2
+     "total": 1
     },
     {
      "id": "DENFULLEC",
@@ -237,18 +342,39 @@
      "total": 1
     },
     {
+     "id": "DENFULPFIN",
+     "desc": "FULL DENTURE FINISH PREMIUM TEETH",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
+    },
+    {
      "id": "DENPROC",
      "desc": "PROCESS FINISH",
-     "new": 3,
+     "new": 6,
      "remakes": 0,
-     "total": 3
+     "total": 6
+    },
+    {
+     "id": "DENRELINEH",
+     "desc": "HEATCURE RELINE",
+     "new": 1,
+     "remakes": 3,
+     "total": 4
     },
     {
      "id": "DENSET>9",
      "desc": "SET UP 1-9 TEETH",
-     "new": 0,
+     "new": 2,
      "remakes": 4,
-     "total": 4
+     "total": 6
+    },
+    {
+     "id": "DIGDENCL",
+     "desc": "DIGITAL CLONE DENTURE",
+     "new": 0,
+     "remakes": 1,
+     "total": 1
     },
     {
      "id": "DIGDENECO",
@@ -267,18 +393,25 @@
     {
      "id": "ORTVFRET",
      "desc": "VF RETAINER",
-     "new": 6,
+     "new": 9,
      "remakes": 2,
-     "total": 8
+     "total": 11
     }
    ],
    "adjProducts": [
     {
+     "id": "CSSAO4REP",
+     "desc": "ALL ON 4 REPAIR",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
+    },
+    {
      "id": "DENREPCOM",
      "desc": "COMPLEX REPAIR",
-     "new": 4,
-     "remakes": 0,
-     "total": 4
+     "new": 9,
+     "remakes": 1,
+     "total": 10
     },
     {
      "id": "DENREPSDAY",
@@ -286,15 +419,29 @@
      "new": 3,
      "remakes": 0,
      "total": 3
+    },
+    {
+     "id": "REMADJ",
+     "desc": "REMOVABLE ADJUSTMENT",
+     "new": 1,
+     "remakes": 1,
+     "total": 2
     }
    ]
   },
   "IMPLANTS": {
-   "new": 19,
+   "new": 46,
    "remakes": 1,
-   "total": 20,
+   "total": 47,
    "adjustments": 0,
    "products": [
+    {
+     "id": "GENIMPLPART",
+     "desc": "GENUINE IMPLANTS PARTS",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
+    },
     {
      "id": "GENSTRAUANALOG",
      "desc": "GENUINE STRAUMANN ANALOG STONE MODEL",
@@ -303,11 +450,25 @@
      "total": 1
     },
     {
+     "id": "ATLTIABUTSMT",
+     "desc": "ATLANTIS GENUINE TI ABUTMENT SCREWMENTABLE",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
+    },
+    {
      "id": "BIOSR",
      "desc": "BIOHORIZONS GENUINE TI-BASE FOR SCREW RETAINED CROWN",
-     "new": 2,
+     "new": 3,
      "remakes": 0,
-     "total": 2
+     "total": 3
+    },
+    {
+     "id": "BIOTIABUT",
+     "desc": "BIOHORIZON GENUINE TI ABUTMENT",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
     },
     {
      "id": "MEGTIABUT",
@@ -315,6 +476,13 @@
      "new": 0,
      "remakes": 1,
      "total": 1
+    },
+    {
+     "id": "MISSR",
+     "desc": "MIS GENUINE TI-BASE FOR SCREW RETAINED CROWN",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
     },
     {
      "id": "NOBSR",
@@ -326,27 +494,41 @@
     {
      "id": "SCREWRETCRN",
      "desc": "SCREW RETAINED CROWN TI-BASE",
-     "new": 9,
+     "new": 16,
      "remakes": 0,
-     "total": 9
+     "total": 16
     },
     {
      "id": "SMTCRN",
      "desc": "SCREWMENTABLE TI ABUTMENT",
-     "new": 1,
+     "new": 8,
      "remakes": 0,
-     "total": 1
+     "total": 8
     },
     {
      "id": "STRSMT",
      "desc": "STRAUMANN GENUINE SCREWMENTABLE TI ABUTMENT",
-     "new": 3,
+     "new": 6,
      "remakes": 0,
-     "total": 3
+     "total": 6
     },
     {
      "id": "STRSR",
      "desc": "STRAUMANN GENUINE TI-BASE FOR SCREW RETAINED CROWN",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
+    },
+    {
+     "id": "TIABUT",
+     "desc": "TITAINIUM ABUTMENT",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
+    },
+    {
+     "id": "ZIMSR",
+     "desc": "ZIMMER GENUINE TI BASE FOR SCREW RETAINED CROWN",
      "new": 1,
      "remakes": 0,
      "total": 1
@@ -355,9 +537,9 @@
    "adjProducts": []
   },
   "Surgical Guides": {
-   "new": 781,
-   "remakes": 62,
-   "total": 843,
+   "new": 1986,
+   "remakes": 156,
+   "total": 2142,
    "adjustments": 0,
    "products": [
     {
@@ -370,67 +552,83 @@
     {
      "id": "SGADDSITE",
      "desc": "SURGICAL GUIDE ADDITIONAL SITE",
-     "new": 5,
+     "new": 9,
      "remakes": 0,
-     "total": 5
+     "total": 9
     },
     {
      "id": "SGSTNTBSKY",
      "desc": "CO-DIAGNOSTIX SURGICAL GUIDE",
-     "new": 7,
+     "new": 12,
      "remakes": 0,
-     "total": 7
+     "total": 12
     },
     {
      "id": "Lab Total:",
      "desc": "",
-     "new": 384,
-     "remakes": 31,
-     "total": 415
+     "new": 982,
+     "remakes": 78,
+     "total": 1060
     },
     {
      "id": "GrandTotals:",
      "desc": "",
-     "new": 384,
-     "remakes": 31,
-     "total": 415
+     "new": 982,
+     "remakes": 78,
+     "total": 1060
+    }
+   ],
+   "adjProducts": []
+  },
+  "Ortho": {
+   "new": 2,
+   "remakes": 0,
+   "total": 2,
+   "adjustments": 0,
+   "products": [
+    {
+     "id": "ORTSPMAINT",
+     "desc": "SPACE MAINTAINER",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
     }
    ],
    "adjProducts": []
   },
   "PARTIAL": {
-   "new": 19,
-   "remakes": 3,
-   "total": 22,
+   "new": 35,
+   "remakes": 6,
+   "total": 41,
    "adjustments": 0,
    "products": [
     {
      "id": "DENFLIP1",
      "desc": "4-FLIPPER 1-4 TEETH",
      "new": 2,
-     "remakes": 0,
-     "total": 2
+     "remakes": 1,
+     "total": 3
     },
     {
      "id": "DIGFLIP1",
      "desc": "5-DIGITAL FLIPPER 1-5 TEETH",
-     "new": 1,
-     "remakes": 1,
-     "total": 2
+     "new": 5,
+     "remakes": 3,
+     "total": 8
     },
     {
      "id": "PARCASTFIN",
      "desc": "CAST PARTIAL FRAME PROCESS AND FINISH",
-     "new": 1,
+     "new": 6,
      "remakes": 0,
-     "total": 1
+     "total": 6
     },
     {
      "id": "PARTIAL",
      "desc": "PARTIAL FRAMEWORK",
-     "new": 5,
+     "new": 7,
      "remakes": 0,
-     "total": 5
+     "total": 7
     },
     {
      "id": "PARTIALCLEAR",
@@ -442,9 +640,16 @@
     {
      "id": "PARTIALDUR",
      "desc": "FLEXI PARTIAL W/ PINK CLASPS",
-     "new": 9,
+     "new": 13,
      "remakes": 2,
-     "total": 11
+     "total": 15
+    },
+    {
+     "id": "PARTIALUNI",
+     "desc": "UNILATERAL FLEXI PARTIAL",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
     }
    ],
    "adjProducts": []
@@ -466,17 +671,17 @@
    "adjProducts": []
   },
   "SPLINTS": {
-   "new": 22,
-   "remakes": 0,
-   "total": 22,
+   "new": 57,
+   "remakes": 1,
+   "total": 58,
    "adjustments": 0,
    "products": [
     {
      "id": "CRA",
      "desc": "CRA",
-     "new": 6,
+     "new": 10,
      "remakes": 0,
-     "total": 6
+     "total": 10
     },
     {
      "id": "CRABSPLIN",
@@ -488,27 +693,34 @@
     {
      "id": "CRADUAL",
      "desc": "DUAL CRA",
-     "new": 3,
+     "new": 11,
      "remakes": 0,
-     "total": 3
+     "total": 11
     },
     {
      "id": "CRAHSC",
      "desc": "COMFORT H/S BITE SPLINT",
-     "new": 8,
+     "new": 21,
      "remakes": 0,
-     "total": 8
+     "total": 21
     },
     {
      "id": "CRANTIAPP",
      "desc": "NTI APPLIANCE",
-     "new": 1,
-     "remakes": 0,
-     "total": 1
+     "new": 3,
+     "remakes": 1,
+     "total": 4
     },
     {
      "id": "CRATHERM",
      "desc": "THERMOPLASTIC CRA",
+     "new": 2,
+     "remakes": 0,
+     "total": 2
+    },
+    {
+     "id": "DENMTHGRD",
+     "desc": "MOUTHGUARD",
      "new": 1,
      "remakes": 0,
      "total": 1
@@ -516,9 +728,16 @@
     {
      "id": "DIGCRAHARD",
      "desc": "DIGITAL CRA HARD",
-     "new": 2,
+     "new": 7,
      "remakes": 0,
-     "total": 2
+     "total": 7
+    },
+    {
+     "id": "DIGCRATHERM",
+     "desc": "DIGITAL THERMOPLASTIC CRA",
+     "new": 1,
+     "remakes": 0,
+     "total": 1
     }
    ],
    "adjProducts": []
@@ -570,9 +789,9 @@
    "code": "KENSCA",
    "name": "Kennedy, Scarlette",
    "dept": "",
-   "units": 356,
+   "units": 382,
    "hours": 152.0,
-   "uph": 2.34,
+   "uph": 2.51,
    "remakes": 0,
    "adjustments": 0
   },
@@ -580,10 +799,10 @@
    "code": "Evident",
    "name": "Scan, Evident",
    "dept": "",
-   "units": 347,
+   "units": 374,
    "hours": 0.0,
    "uph": 0.0,
-   "remakes": 0,
+   "remakes": 1,
    "adjustments": 0
   },
   {
@@ -591,7 +810,7 @@
    "name": "Vena, Paul",
    "dept": "",
    "units": 0,
-   "hours": 352.0,
+   "hours": 376.0,
    "uph": 0.0,
    "remakes": 0,
    "adjustments": 0
@@ -610,9 +829,9 @@
    "code": "AREVHE",
    "name": "Arevalo, Henry O.",
    "dept": "C&B",
-   "units": 4255,
+   "units": 4341,
    "hours": 0.0,
-   "uph": 3.61,
+   "uph": 3.62,
    "remakes": 0,
    "adjustments": 0
   },
@@ -620,10 +839,10 @@
    "code": "3SHAPE",
    "name": "3SHAPE AUTO, DESIGN",
    "dept": "C&B",
-   "units": 1024,
+   "units": 1062,
    "hours": 0.0,
    "uph": 0.0,
-   "remakes": 0,
+   "remakes": 2,
    "adjustments": 0
   },
   {
@@ -640,29 +859,29 @@
    "code": "GAMMA-TECH",
    "name": "GAMMA TECH, DESIGN",
    "dept": "C&B",
-   "units": 4589,
+   "units": 4763,
    "hours": 0.0,
    "uph": 0.0,
-   "remakes": 0,
+   "remakes": 1,
    "adjustments": 0
   },
   {
    "code": "PRINKE",
    "name": "Prince, Kevin",
    "dept": "C&B",
-   "units": 3051,
+   "units": 3203,
    "hours": 26.4,
-   "uph": 2.76,
-   "remakes": 0,
+   "uph": 2.81,
+   "remakes": 3,
    "adjustments": 0
   },
   {
    "code": "ALMSEN",
    "name": "Almaraz, Sendy",
    "dept": "C&B",
-   "units": 4710,
-   "hours": 906.4,
-   "uph": 4.38,
+   "units": 4893,
+   "hours": 941.7,
+   "uph": 4.39,
    "remakes": 0,
    "adjustments": 0
   },
@@ -690,9 +909,9 @@
    "code": "POZDOM",
    "name": "Pozzie, Dominic",
    "dept": "Removables",
-   "units": 477,
+   "units": 486,
    "hours": 36.7,
-   "uph": 5.38,
+   "uph": 5.48,
    "remakes": 0,
    "adjustments": 0
   },
@@ -700,9 +919,9 @@
    "code": "WIKAMA",
    "name": "Wikarska, Malgorzata",
    "dept": "Removables",
-   "units": 691,
+   "units": 731,
    "hours": 96.0,
-   "uph": 7.2,
+   "uph": 7.61,
    "remakes": 0,
    "adjustments": 0
   },
@@ -741,7 +960,7 @@
    "name": "Anderson, Paul",
    "dept": "DELIVERY",
    "units": 0,
-   "hours": 29.1,
+   "hours": 33.5,
    "uph": 0.0,
    "remakes": 0,
    "adjustments": 0
@@ -751,7 +970,7 @@
    "name": "Balun, Mark",
    "dept": "DELIVERY",
    "units": 0,
-   "hours": 437.1,
+   "hours": 459.4,
    "uph": 0.0,
    "remakes": 0,
    "adjustments": 0
@@ -811,7 +1030,7 @@
    "name": "Plica, Louis",
    "dept": "DELIVERY",
    "units": 0,
-   "hours": 327.2,
+   "hours": 340.6,
    "uph": 0.0,
    "remakes": 0,
    "adjustments": 0
@@ -831,7 +1050,7 @@
    "name": "Sampson, Jeffrey",
    "dept": "DELIVERY",
    "units": 0,
-   "hours": 617.2,
+   "hours": 645.0,
    "uph": 0.0,
    "remakes": 0,
    "adjustments": 0
@@ -841,7 +1060,7 @@
    "name": "W Ahner, Joseph",
    "dept": "DELIVERY",
    "units": 0,
-   "hours": 95.3,
+   "hours": 106.3,
    "uph": 0.0,
    "remakes": 0,
    "adjustments": 0
@@ -851,7 +1070,7 @@
    "name": "W Stout, David",
    "dept": "DELIVERY",
    "units": 0,
-   "hours": 443.6,
+   "hours": 464.2,
    "uph": 0.0,
    "remakes": 0,
    "adjustments": 0
@@ -861,7 +1080,7 @@
    "name": "Wolske, James",
    "dept": "DELIVERY",
    "units": 0,
-   "hours": 437.9,
+   "hours": 456.6,
    "uph": 0.0,
    "remakes": 0,
    "adjustments": 0
@@ -870,7 +1089,7 @@
    "code": "DELEAL",
    "name": "De Leon, Alvin",
    "dept": "C&B",
-   "units": 5063,
+   "units": 5233,
    "hours": 0.0,
    "uph": 0.0,
    "remakes": 0,
@@ -880,10 +1099,10 @@
    "code": "IOVFRE",
    "name": "Iovino, Fred",
    "dept": "C&B",
-   "units": 9687,
+   "units": 10154,
    "hours": 0.0,
-   "uph": 7.9,
-   "remakes": 0,
+   "uph": 8.01,
+   "remakes": 1,
    "adjustments": 0
   },
   {
@@ -920,19 +1139,19 @@
    "code": "KAZERI",
    "name": "Kazda, Erik",
    "dept": "C&B",
-   "units": 1176,
+   "units": 1293,
    "hours": 0.0,
-   "uph": 0.94,
-   "remakes": 0,
+   "uph": 1.0,
+   "remakes": 1,
    "adjustments": 0
   },
   {
    "code": "PODBES",
    "name": "PODVORICA, BESIR",
    "dept": "C&B",
-   "units": 3747,
-   "hours": 987.2,
-   "uph": 3.51,
+   "units": 3813,
+   "hours": 0.0,
+   "uph": 3.47,
    "remakes": 0,
    "adjustments": 0
   },
@@ -940,9 +1159,9 @@
    "code": "GORMAT",
    "name": "Gorbach, Matthew",
    "dept": "Surgical Guides",
-   "units": 611,
+   "units": 614,
    "hours": 18.3,
-   "uph": 2.67,
+   "uph": 2.68,
    "remakes": 0,
    "adjustments": 0
   },
@@ -950,9 +1169,9 @@
    "code": "VEGANI",
    "name": "Barrios, Nini",
    "dept": "C&B",
-   "units": 3878,
+   "units": 4057,
    "hours": 40.0,
-   "uph": 96.95,
+   "uph": 101.42,
    "remakes": 0,
    "adjustments": 0
   },
@@ -960,9 +1179,9 @@
    "code": "SALPAL",
    "name": "Salazar, Paloma",
    "dept": "C&B",
-   "units": 6067,
-   "hours": 979.5,
-   "uph": 5.78,
+   "units": 6331,
+   "hours": 0.0,
+   "uph": 5.88,
    "remakes": 0,
    "adjustments": 0
   },
@@ -970,9 +1189,9 @@
    "code": "ZEMBEDR",
    "name": "Zemmouri, Bedreddine",
    "dept": "C&B",
-   "units": 3119,
+   "units": 3164,
    "hours": 18.1,
-   "uph": 30.55,
+   "uph": 30.99,
    "remakes": 0,
    "adjustments": 0
   },
@@ -980,9 +1199,9 @@
    "code": "GIBPCEL",
    "name": "Gibson, Celene",
    "dept": "C&B",
-   "units": 4968,
-   "hours": 928.9,
-   "uph": 4.89,
+   "units": 5195,
+   "hours": 964.9,
+   "uph": 4.93,
    "remakes": 0,
    "adjustments": 0
   },
@@ -990,9 +1209,9 @@
    "code": "FLOBRE",
    "name": "Flores, Brenda",
    "dept": "Removables",
-   "units": 7197,
-   "hours": 941.2,
-   "uph": 6.91,
+   "units": 7417,
+   "hours": 970.9,
+   "uph": 6.93,
    "remakes": 1,
    "adjustments": 0
   },
@@ -1010,9 +1229,9 @@
    "code": "OHAJOH",
    "name": "O'Hale, John",
    "dept": "C&B",
-   "units": 213,
-   "hours": 795.4,
-   "uph": 0.25,
+   "units": 375,
+   "hours": 827.5,
+   "uph": 0.43,
    "remakes": 0,
    "adjustments": 0
   },
@@ -1020,9 +1239,9 @@
    "code": "AJEBLE",
    "name": "Ajeti, Blerta",
    "dept": "Removables",
-   "units": 1125,
-   "hours": 492.0,
-   "uph": 2.02,
+   "units": 1177,
+   "hours": 516.5,
+   "uph": 2.03,
    "remakes": 1,
    "adjustments": 0
   },
@@ -1030,9 +1249,9 @@
    "code": "CONWSA",
    "name": "Conway, Sabrina",
    "dept": "Removables",
-   "units": 2802,
+   "units": 2887,
    "hours": 96.0,
-   "uph": 29.19,
+   "uph": 30.07,
    "remakes": 0,
    "adjustments": 0
   },
@@ -1040,9 +1259,9 @@
    "code": "EARLMA",
    "name": "Earley, Mary",
    "dept": "Removables",
-   "units": 2420,
-   "hours": 934.6,
-   "uph": 2.23,
+   "units": 2516,
+   "hours": 972.4,
+   "uph": 2.24,
    "remakes": 0,
    "adjustments": 0
   },
@@ -1050,9 +1269,9 @@
    "code": "TAPLIZ",
    "name": "Tapia, Lizbet",
    "dept": "Removables",
-   "units": 1148,
-   "hours": 812.1,
-   "uph": 1.26,
+   "units": 1159,
+   "hours": 819.1,
+   "uph": 1.27,
    "remakes": 0,
    "adjustments": 0
   },
@@ -1070,19 +1289,19 @@
    "code": "AJEZYM",
    "name": "Ajeti, Zymber",
    "dept": "SPLINTS",
-   "units": 875,
-   "hours": 423.3,
-   "uph": 1.63,
-   "remakes": 1,
+   "units": 901,
+   "hours": 438.1,
+   "uph": 1.64,
+   "remakes": 2,
    "adjustments": 0
   },
   {
    "code": "CHRICH",
    "name": "Christensen, Chance",
    "dept": "SPLINTS",
-   "units": 3397,
+   "units": 3515,
    "hours": 96.0,
-   "uph": 35.39,
+   "uph": 36.61,
    "remakes": 1,
    "adjustments": 0
   },
@@ -1090,10 +1309,10 @@
    "code": "CARLUC",
    "name": "Cardoza, Lucero",
    "dept": "C&B",
-   "units": 6618,
-   "hours": 532.2,
-   "uph": 10.33,
-   "remakes": 0,
+   "units": 6887,
+   "hours": 564.9,
+   "uph": 10.23,
+   "remakes": 2,
    "adjustments": 0
   }
  ],
@@ -1138,19 +1357,19 @@
   {
    "month": "Jun 2026",
    "ym": "2026-06",
-   "units": 3239,
+   "units": 3246,
    "remakes": 0,
    "remake_rate": 0
   },
   {
    "month": "Jul 2026",
    "ym": "2026-07",
-   "units": 426,
+   "units": 1134,
    "remakes": 0,
    "remake_rate": 0
   }
  ],
  "deptWeekly": [],
  "deptMonthly": [],
- "_generated": "2026-07-07T11:33:14"
+ "_generated": "2026-07-14T10:02:47"
 }
