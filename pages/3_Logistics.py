@@ -24,8 +24,15 @@ try:
 except Exception:
     LAB_TZ = timezone(timedelta(hours=-5))   # fallback: Central Daylight Time
 
+try:
+    from streamlit_autorefresh import st_autorefresh
+except Exception:
+    st_autorefresh = None                    # page still works without the package
+
 # Highlight the data-freshness badge red once data is older than this.
 STALE_AFTER_MIN = 15
+# Re-run this page in place on this cadence (keeps it on-screen, no navigation).
+AUTO_REFRESH_SEC = 30
 
 import pandas as pd
 import streamlit as st
@@ -185,7 +192,7 @@ def load_case_product_lines():
     return pd.read_csv(p, dtype={"Cases_CaseNumber": str})
 
 
-@st.cache_data(ttl=60)  # 3-minute cache
+@st.cache_data(ttl=AUTO_REFRESH_SEC)  # re-read data each auto-refresh cycle
 def load_logistics_data():
     cases_path = LATEST_DIR / "cases_logistics.csv"
     summary_path = LATEST_DIR / "logistics_summary.csv"
@@ -196,6 +203,14 @@ def load_logistics_data():
                         low_memory=False)
     summary = pd.read_csv(summary_path) if summary_path.exists() else pd.DataFrame()
     return cases, summary
+
+
+# ── Auto-refresh in place ─────────────────────────────────────────────────────
+# Re-runs this page every AUTO_REFRESH_SEC without navigating away, so a wall
+# display stays on the Logistics dashboard and keeps its data + freshness badge
+# current hands-free.
+if st_autorefresh is not None:
+    st_autorefresh(interval=AUTO_REFRESH_SEC * 1000, key="logistics_autorefresh")
 
 
 # ── Header ────────────────────────────────────────────────────────────────────

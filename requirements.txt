@@ -17,6 +17,7 @@ google-api-python-client>=2.90
 # ── Dashboard ────────────────────────────────────────────────
 streamlit>=1.32
 plotly>=5.18
+streamlit-autorefresh>=1.0.1   # auto-refresh Logistics page in place
 
 # ── Phase 2: ODBC (uncomment when Magic Touch confirms) ──────
 # pyodbc>=5.0
