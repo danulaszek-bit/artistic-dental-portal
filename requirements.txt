@@ -6,6 +6,7 @@ xlrd>=2.0.1            # Excel read for legacy .xls binary format
 pyyaml>=6.0            # config.yaml parsing
 schedule>=1.2          # job scheduling
 pyarrow>=14.0          # Parquet support
+tzdata>=2024.1         # IANA tz database for zoneinfo (data-freshness clock)
 
 # ── Google Drive ─────────────────────────────────────────────
 google-auth>=2.20

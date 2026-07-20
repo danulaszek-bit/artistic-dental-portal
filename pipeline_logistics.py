@@ -447,7 +447,9 @@ def compute_logistics(cases_df: pd.DataFrame,
         "value_at_risk":   float(cases_logistics.loc[cases_logistics["is_behind"], "Cases_TotalCharge"].sum()),
         "oldest_age_days": int(cases_logistics["age_days"].max() if len(cases_logistics) else 0),
         "median_age_days": int(cases_logistics["age_days"].median() if len(cases_logistics) else 0),
-        "computed_at":     datetime.now().isoformat(timespec="seconds"),
+        # Timezone-aware so data age is unambiguous wherever the app runs
+        # (e.g. Streamlit Cloud in UTC vs the lab PC in Central time).
+        "computed_at":     datetime.now().astimezone().isoformat(timespec="seconds"),
     }])
 
     # Persist

@@ -15,8 +15,17 @@ hasn't been integrated yet — shows an info message rather than crashing.
 """
 
 import math
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
+
+try:
+    from zoneinfo import ZoneInfo
+    LAB_TZ = ZoneInfo("America/Chicago")     # lab-local time (handles CST/CDT)
+except Exception:
+    LAB_TZ = timezone(timedelta(hours=-5))   # fallback: Central Daylight Time
+
+# Highlight the data-freshness badge red once data is older than this.
+STALE_AFTER_MIN = 15
 
 import pandas as pd
 import streamlit as st
@@ -90,6 +99,19 @@ st.markdown(f"""
       padding-bottom: .25rem;
       border-bottom: 2px solid {COLORS['teal']};
   }}
+  .freshness {{
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 12px; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 600;
+      border: 1px solid transparent;
+  }}
+  .freshness .dot {{ width: 8px; height: 8px; border-radius: 50%; }}
+  .freshness.fresh {{ background: rgba(46,204,113,.12); color: #1e8449; border-color: rgba(46,204,113,.35); }}
+  .freshness.fresh .dot {{ background: {COLORS['green']}; }}
+  .freshness.stale {{ background: rgba(231,76,60,.14); color: #c0392b; border-color: rgba(231,76,60,.5); }}
+  .freshness.stale .dot {{ background: {COLORS['red']}; }}
+  .freshness.unknown {{ background: rgba(108,122,138,.12); color: {COLORS['muted']}; border-color: rgba(108,122,138,.35); }}
+  .freshness.unknown .dot {{ background: {COLORS['muted']}; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -106,6 +128,52 @@ def kpi_card(label, value, sub="", status="neutral"):
 
 def section(title):
     st.markdown(f'<div class="section-head">{title}</div>', unsafe_allow_html=True)
+
+
+def render_freshness(computed_at):
+    """Show how old the pipeline data is; red once older than STALE_AFTER_MIN.
+
+    `computed_at` is the pipeline's stamp (logistics_summary.csv). Naive stamps
+    are treated as lab-local (Chicago) so the age is correct even when this app
+    runs on Streamlit Cloud (UTC).
+    """
+    if not computed_at or (isinstance(computed_at, float) and math.isnan(computed_at)):
+        st.markdown('<div class="freshness unknown"><span class="dot"></span>'
+                    'Data age unknown</div>', unsafe_allow_html=True)
+        return
+    try:
+        dt = datetime.fromisoformat(str(computed_at))
+    except ValueError:
+        st.markdown('<div class="freshness unknown"><span class="dot"></span>'
+                    'Data age unknown</div>', unsafe_allow_html=True)
+        return
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=LAB_TZ)
+
+    age_min = (datetime.now(timezone.utc) - dt).total_seconds() / 60.0
+    stale = age_min > STALE_AFTER_MIN
+
+    if age_min < 1:
+        age_txt = "just now"
+    elif age_min < 60:
+        age_txt = f"{int(round(age_min))} min ago"
+    elif age_min < 60 * 24:
+        age_txt = f"{age_min / 60:.1f} hr ago"
+    else:
+        age_txt = f"{int(age_min // (60 * 24))} d ago"
+
+    # %-I (no leading zero) is a Linux extension; fall back on Windows.
+    try:
+        clock = dt.astimezone(LAB_TZ).strftime("%-I:%M %p")
+    except ValueError:
+        clock = dt.astimezone(LAB_TZ).strftime("%I:%M %p").lstrip("0")
+
+    cls = "stale" if stale else "fresh"
+    label = f"Data updated {age_txt} · {clock}"
+    if stale:
+        label += f"  ⚠ over {STALE_AFTER_MIN} min old"
+    st.markdown(f'<div class="freshness {cls}"><span class="dot"></span>{label}</div>',
+                unsafe_allow_html=True)
 
 
 # ── Data loading ──────────────────────────────────────────────────────────────
@@ -155,6 +223,8 @@ if cases is None or cases.empty:
 
 # ── KPI row ───────────────────────────────────────────────────────────────────
 s = summary.iloc[0] if not summary.empty else {}
+
+render_freshness(s.get("computed_at") if not summary.empty else None)
 
 cols = st.columns(5)
 with cols[0]:
