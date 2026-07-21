@@ -45,6 +45,9 @@ dashboard_fix*.zip
 # === Cache directories — only `cache/latest/` is committed ===
 cache/snapshot_*/
 
+# === Manager-portal user data (goals, PTO) — local only, not pipeline output ===
+data/
+
 # === Scratch / review folders ===
 _scar_dash_review/
 .claude/

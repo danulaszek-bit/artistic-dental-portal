@@ -234,9 +234,10 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# Navigation cards — 2x2 grid
+# Navigation cards — 2x3 grid
 row1_c1, row1_c2 = st.columns(2)
 row2_c1, row2_c2 = st.columns(2)
+row3_c1, row3_c2 = st.columns(2)
 
 with row1_c1:
     st.markdown("""
@@ -273,12 +274,36 @@ with row2_c1:
 
 with row2_c2:
     st.markdown("""
-    <a class="nav-card" href="/Production_Manager" target="_self">
-      <div class="nav-icon">🔧</div>
-      <div class="nav-title">Production Manager</div>
-      <div class="nav-desc">Lab production by department, technician performance, employee
-      productivity, units in, and remake analysis. Day / week / month trends with
-      product-level drill-down.</div>
+    <a class="nav-card" href="/GM_Summary" target="_self">
+      <div class="nav-icon">📋</div>
+      <div class="nav-title">GM Summary</div>
+      <div class="nav-desc">Company-wide production by department: units, remakes,
+      technician performance, top remake reasons, and product-level remake rates.
+      Day / week / month trends with drill-down.</div>
+      <div style="margin-top:14px;color:#58a6ff;font-size:13px;font-weight:600">Open →</div>
+    </a>
+    """, unsafe_allow_html=True)
+
+with row3_c1:
+    st.markdown("""
+    <a class="nav-card" href="/Fixed_Dashboard" target="_self">
+      <div class="nav-icon">🦷</div>
+      <div class="nav-title">Fixed Dashboard</div>
+      <div class="nav-desc">Manager workspace for Crown &amp; Bridge, CAD/CAM, and Ceramics:
+      editable technician goals, PTO entry with PTO-adjusted capacity projection,
+      and per-technician drill-down.</div>
+      <div style="margin-top:14px;color:#58a6ff;font-size:13px;font-weight:600">Open →</div>
+    </a>
+    """, unsafe_allow_html=True)
+
+with row3_c2:
+    st.markdown("""
+    <a class="nav-card" href="/Removable_Dashboard" target="_self">
+      <div class="nav-icon">🦶</div>
+      <div class="nav-title">Removable Dashboard</div>
+      <div class="nav-desc">Manager workspace for Removables, Chairside, Splints, Partial,
+      Ortho, Implants, and Surgical Guides: editable technician goals, PTO entry,
+      and per-technician drill-down.</div>
       <div style="margin-top:14px;color:#58a6ff;font-size:13px;font-weight:600">Open →</div>
     </a>
     """, unsafe_allow_html=True)

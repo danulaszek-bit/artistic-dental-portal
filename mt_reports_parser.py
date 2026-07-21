@@ -36,6 +36,21 @@ def _enc(path: Path, fallback: str = "utf-8-sig") -> str:
     return fallback
 
 
+def _hhmm_to_decimal(s) -> float:
+    """Convert 'HH:MM' or 'H:MM' to decimal hours."""
+    s = str(s).strip()
+    if ":" in s:
+        parts = s.split(":")
+        try:
+            return int(parts[0]) + int(parts[1]) / 60
+        except (ValueError, IndexError):
+            return 0.0
+    try:
+        return float(s)
+    except ValueError:
+        return 0.0
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 #  1. Sales_Data.csv  — invoice-line level
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -818,52 +833,67 @@ def build_unified_wip(folder: Path) -> pd.DataFrame:
 
 def load_remake_reasons(folder: Path) -> pd.DataFrame:
     """
-    Hierarchical 3-column layout:
-      Reason group header:  ['Remake Reason: Contacts']
-      Customer row:         ['FELNIC', 'Nick Feller']
-      Case row:             ['451669', 'Thomas Lewis']
-    Returns one row per case with remake_reason, account_id, case_number,
-    customer_name, patient_name (PHI).
+    "Remake Reasons Case Detail Report" — grouped-by-reason layout:
+      Group header:  ["Case Count: 2","Case Mix-Up"]
+      Column header: ["Date In","Invoiced","Case #","Customer","Product ID",
+                       "Single","Bridge","Remake","Entered By"]  (repeats per group)
+      Detail row:    [date_in, invoiced, case#, account_id, product_id,
+                       single, bridge, remake_type, entered_by]
+      Footer:        ["Total Remake Cases for Reason ""X"":  N"]  (skipped)
+
+    A case can have multiple product lines under the same reason — this
+    returns one row per (reason, case, product) line; aggregate on distinct
+    case_number, not row count, to avoid over-counting multi-line cases.
+
+    Returns: remake_reason, date_in, invoiced, case_number, account_id,
+    product_id, single, bridge, remake_type (e.g. "Remake 100%",
+    "Adjustments", "Flat Remake Discount"), entered_by.
     """
+    import csv as _csv
     path = folder / "remake_reasons.csv"
     if not path.exists():
         return pd.DataFrame()
 
-    df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
-                     on_bad_lines="skip", engine="python")
+    enc = _enc(path)
+    with open(path, newline="", encoding=enc, errors="replace") as f:
+        records = list(_csv.reader(f))
 
     rows = []
-    current_reason   = ""
-    current_cust_id  = ""
-    current_cust_name= ""
+    current_reason = ""
 
-    for _, row in df.iterrows():
-        vals = [str(v).strip() for v in row.tolist() if str(v).strip()]
-        if not vals:
+    for rec in records:
+        vals = [str(v).strip() for v in rec]
+        if not vals or not vals[0]:
             continue
         c0 = vals[0]
 
-        # Reason group header
-        if c0.startswith("Remake Reason:"):
-            current_reason = c0.replace("Remake Reason:", "").strip()
-            current_cust_id = current_cust_name = ""
+        # Group header: "Case Count: 2","Case Mix-Up"
+        if c0.startswith("Case Count:") and len(vals) >= 2:
+            current_reason = vals[1].strip()
             continue
 
-        # Distinguish customer row (alpha ID) from case row (numeric)
-        if len(vals) >= 2:
-            if not c0.replace("-","").replace("_","").isdigit():
-                # Customer row
-                current_cust_id   = c0
-                current_cust_name = vals[1]
-            elif c0.isdigit():
-                # Case row
-                rows.append({
-                    "remake_reason": current_reason,
-                    "account_id":    current_cust_id,
-                    "customer_name": current_cust_name,
-                    "case_number":   c0,
-                    "patient_name":  vals[1],   # PHI
-                })
+        # Column header / report title / footer rows — skip
+        if c0 == "Date In" or c0.startswith("Total Remake Cases") or \
+           c0.startswith("Remake Reasons Case Detail Report"):
+            continue
+
+        # Detail row: first col is a date like "7/6/2026"
+        if current_reason and len(vals) >= 9 and re.match(r"^\d{1,2}/\d{1,2}/\d{2,4}$", c0):
+            case_num = vals[2].strip()
+            if not case_num.isdigit():
+                continue
+            rows.append({
+                "remake_reason": current_reason,
+                "date_in":       c0,
+                "invoiced":      vals[1],
+                "case_number":   case_num,
+                "account_id":    vals[3],
+                "product_id":    vals[4],
+                "single":        vals[5],
+                "bridge":        vals[6],
+                "remake_type":   vals[7],
+                "entered_by":    vals[8],
+            })
 
     return pd.DataFrame(rows) if rows else pd.DataFrame()
 
@@ -949,20 +979,7 @@ def load_employee_productivity(folder: Path) -> pd.DataFrame:
 
     wb = xlrd.open_workbook(str(path))
     sh = wb.sheet_by_index(0)
-
-    def _hours_to_decimal(s: str) -> float:
-        """Convert 'HH:MM' or 'H:MM' to decimal hours."""
-        s = str(s).strip()
-        if ":" in s:
-            parts = s.split(":")
-            try:
-                return int(parts[0]) + int(parts[1]) / 60
-            except (ValueError, IndexError):
-                return 0.0
-        try:
-            return float(s)
-        except ValueError:
-            return 0.0
+    _hours_to_decimal = _hhmm_to_decimal
 
     rows = []
     current_dept = ""
@@ -1050,7 +1067,12 @@ def load_prod_by_dept(folder: Path) -> pd.DataFrame:
       Product row:    col 0 = "PRODID-Description", col 3 = New Units, col 4 = Rmk Units
       Totals row:     col 0 is blank
     Returns one row per product: department, product_id, description,
-    new_units, remake_units.
+    new_units, remake_units, remake_discount, sales_discount, credit_discount,
+    metal_charges, total_invoiced, net_sales.
+    remake_discount/net_sales are the primary source for department-level
+    "dollars remade vs. dollars in sales" — Magic Touch computes Remake Discount
+    from its own case-level remake-type weighting, so no separate manual
+    100%/50%/adjustment weighting needs to be reconstructed here.
     Picks the freshest of prod_by_dept.xls / prod_by_dept.csv via _resolve_path.
     """
     path = _resolve_path(folder, "prod_by_dept.xls")
@@ -1155,12 +1177,24 @@ def load_prod_by_dept(folder: Path) -> pd.DataFrame:
         else:
             prod_id, desc = c0, ""
 
+        # Dollar columns (cols 6-12): Credit Discount, Sales Discount,
+        # Remake Discount, Metal Charges, Total Tax, Total Invoiced, Net Sales.
+        # Guard on row length — some historical exports may be narrower.
+        def _col(idx):
+            return _money(row[idx]) if len(row) > idx and row[idx] else 0.0
+
         results.append({
-            "department":   current_dept,
-            "product_id":   prod_id.strip(),
-            "description":  desc.strip(),
-            "new_units":    new_u,
-            "remake_units": remake_u,
+            "department":       current_dept,
+            "product_id":       prod_id.strip(),
+            "description":      desc.strip(),
+            "new_units":        new_u,
+            "remake_units":     remake_u,
+            "credit_discount":  _col(6),
+            "sales_discount":   _col(7),
+            "remake_discount":  _col(8),
+            "metal_charges":    _col(9),
+            "total_invoiced":   _col(11),
+            "net_sales":        _col(12),
         })
 
     return pd.DataFrame(results) if results else pd.DataFrame()
@@ -1428,3 +1462,103 @@ def load_shipping_logistics_report(folder: Path) -> "pd.DataFrame":
 
     log_lr.info("load_shipping_logistics_report: %d unique cases from %s (CSV fallback)", len(result), path.name)
     return result
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  11. Employees TimeClock Detail (Export).csv  — daily punch segments
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def load_timeclock(folder: Path) -> pd.DataFrame:
+    """
+    Quirky export: every row repeats the 11 column-label strings
+    ('LabName','Employee ID',' FirstName','  LastName','Activity','Date In',
+    'Time In','Date Out','Time Out','Total Hours','Comments') as literal values
+    in columns 0-10 of EVERY row (not just a header row) — real data follows
+    positionally in columns 11-21. There is no usable header row to key off.
+
+    Returns one row per punch segment: employee_id, first_name, last_name,
+    activity, date_in, time_in, date_out, time_out, hours (decimal), comments.
+    `activity` values seen: Production, Non-Production, Break, Vacation,
+    Personal, Bereavement — useful both for hours-worked and as a historical
+    PTO/absence cross-check.
+    """
+    path = folder / "Employees TimeClock Detail (Export).csv"
+    if not path.exists():
+        return pd.DataFrame()
+
+    df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
+                     on_bad_lines="skip", engine="python", encoding=_enc(path))
+    if df.shape[1] < 22:
+        return pd.DataFrame()
+
+    out = df.iloc[:, 11:22].copy()
+    out.columns = [
+        "lab_name", "employee_id", "first_name", "last_name", "activity",
+        "date_in", "time_in", "date_out", "time_out", "total_hours", "comments",
+    ]
+    out = out[out["employee_id"].str.strip() != ""].copy()
+
+    out["hours"] = out["total_hours"].apply(_hhmm_to_decimal)
+    out["date_in"]  = pd.to_datetime(out["date_in"],  errors="coerce")
+    out["date_out"] = pd.to_datetime(out["date_out"], errors="coerce")
+
+    return out.drop(columns=["lab_name", "total_hours"]).reset_index(drop=True)
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  12. Issued (29).csv  — Clixon materials issued, per department/date
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def load_materials_issued(folder: Path) -> pd.DataFrame:
+    """
+    Clean tabular CSV (UTF-8 BOM), real header row. One row per material
+    issuance transaction. Per-department `,Total:,` subtotal rows (blank
+    Company/Product, "Total:" in the Issue Date column) are dropped — they're
+    redundant with summing the detail rows, kept here only as an implicit
+    cross-check opportunity, not loaded as data.
+
+    No employee-code column exists in this report — cost is attributed by
+    `Issued Dept.` (department) and free-text `Requested By` (name, not a
+    tech_code), so this drives department-level, not per-technician, material
+    cost tracking.
+
+    Returns: requested_by, vendor, case_number, department, issue_date, qty,
+    issued_value.
+    """
+    path = folder / "Issued (29).csv"
+    if not path.exists():
+        return pd.DataFrame()
+
+    df = pd.read_csv(path, dtype=str, keep_default_na=False,
+                     on_bad_lines="skip", engine="python", encoding="utf-8-sig")
+    df.columns = [c.strip() for c in df.columns]
+
+    rename = {
+        "Requested By":  "requested_by",
+        "Vendor":        "vendor",
+        "Case #":        "case_number",
+        "Issued Dept.":  "department",
+        "Issue Date":    "issue_date",
+        "Qty":           "qty",
+        "Issued Value":  "issued_value",
+    }
+    df = df.rename(columns={k: v for k, v in rename.items() if k in df.columns})
+
+    # Drop subtotal rows: Issue Date literally reads "Total:"
+    if "issue_date" in df.columns:
+        df = df[df["issue_date"].str.strip() != "Total:"].copy()
+
+    # Drop fully blank rows (no department)
+    if "department" in df.columns:
+        df = df[df["department"].str.strip() != ""].copy()
+
+    if "qty" in df.columns:
+        df["qty"] = pd.to_numeric(df["qty"], errors="coerce").fillna(0)
+    if "issued_value" in df.columns:
+        df["issued_value"] = df["issued_value"].apply(_money)
+    if "issue_date" in df.columns:
+        df["issue_date"] = pd.to_datetime(df["issue_date"], errors="coerce")
+
+    keep = [c for c in ("requested_by", "vendor", "case_number", "department",
+                        "issue_date", "qty", "issued_value") if c in df.columns]
+    return df[keep].reset_index(drop=True)
