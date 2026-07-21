@@ -8,8 +8,14 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM --- Run production pipeline (GM Summary + Fixed/Removable dashboards) ---
+py production_pipeline.py
+if errorlevel 1 (
+    echo [%date% %time%] WARNING: production_pipeline.py exited with error - production dashboards may show stale data
+)
+
 REM --- Check if cache/latest/ actually changed ---
-git add cache/latest/
+git add cache/latest/ assets/production_dashboard_live.html
 git diff --cached --quiet
 if errorlevel 1 (
     REM Data changed — stamp _data_version.py to trigger Streamlit Cloud redeploy
