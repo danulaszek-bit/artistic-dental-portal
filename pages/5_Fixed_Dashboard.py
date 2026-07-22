@@ -34,7 +34,7 @@ st.set_page_config(
     page_title="Fixed Dashboard — Artistic Dental",
     page_icon="🔧",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 st.markdown(BASE_CSS, unsafe_allow_html=True)
 require_password("fixed", "Fixed Dashboard")
@@ -97,6 +97,15 @@ full_pto_today = sum(1 for p in techs["pto_today"] if p == "full")
 active_today = len(techs) - full_pto_today
 projected_pct = goals_store.projected_capacity_pct(DASHBOARD, today)
 
+# Labor & materials data — computed up front so the KPI tiles can sit with
+# the main KPI row; drill-down tables render further down the page.
+from materials_calc import load_materials
+from pathlib import Path as _Path
+labor = goals_store.get_labor_history(DASHBOARD)
+mats = load_materials(_Path("C:/MT_Reports_Local"), DASHBOARD)
+ldf = pd.DataFrame(labor) if labor else pd.DataFrame()
+today_str = today.isoformat()
+
 c1, c2, c3, c4 = st.columns(4)
 with c1:
     st.markdown(tile_html("Overall % of Goal — Today", f"{overall_pct}%",
@@ -114,6 +123,26 @@ with c4:
     st.markdown(tile_html("Projected Output Today", f"{projected_pct}%",
                           "of full-roster capacity, PTO-adjusted",
                           status_color(projected_pct)), unsafe_allow_html=True)
+
+# Labor & Materials KPI row — directly under the production KPIs
+lc1, lc2, lc3, lc4 = st.columns(4)
+with lc1:
+    v = ldf[ldf["work_date"] == today_str]["dollars"].sum() if not ldf.empty else 0
+    st.markdown(tile_html("Labor Today (est.)", f"${v:,.0f}",
+                          "hourly + piece + salary/250"), unsafe_allow_html=True)
+with lc2:
+    v = ldf["dollars"].sum() if not ldf.empty else 0
+    sub = f"{ldf['work_date'].min()} → {ldf['work_date'].max()}" if not ldf.empty else "no data yet"
+    st.markdown(tile_html("Labor — Window", f"${v:,.0f}", sub), unsafe_allow_html=True)
+with lc3:
+    v = mats[mats["issue_date"].dt.date == today]["issued_value"].sum() if not mats.empty else 0
+    st.markdown(tile_html("Materials Today", f"${v:,.0f}", "Clixon issued value"),
+               unsafe_allow_html=True)
+with lc4:
+    v = mats["issued_value"].sum() if not mats.empty else 0
+    sub = (f"{mats['issue_date'].min():%m/%d} → {mats['issue_date'].max():%m/%d}"
+           if not mats.empty else "no Clixon export found")
+    st.markdown(tile_html("Materials — Window", f"${v:,.0f}", sub), unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -198,8 +227,10 @@ st.dataframe(
     hide_index=True,
     use_container_width=True,
 )
-st.page_link("pages/7_Fixed_Settings.py",
-             label="⚙️ Edit goals, pay types & task rates → Employee Settings")
+
+with st.expander("⚙️ Employee Settings — pay types, task rates & goals"):
+    from settings_page import render_settings_body
+    render_settings_body("Fixed", "Fixed")
 
 # ── Drill-down ─────────────────────────────────────────────────────────────────
 st.markdown("### Technician Detail")
@@ -244,9 +275,6 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("### Scheduling & Capacity — Fixed")
 pto_col, cap_col = st.columns([1.4, 1])
 
-AREA_CHOICES = ["Chairside", "Removables", "Splints", "Partial", "Ortho",
-                "Crown & Bridge", "CAD/CAM", "Ceramics", "Fixed QC", "Model/Die"]
-
 with pto_col:
     upcoming = goals_store.list_upcoming_pto(DASHBOARD, days=14)
     ool = goals_store.list_upcoming_out_of_lab(DASHBOARD, days=14)
@@ -261,25 +289,8 @@ with pto_col:
                      hide_index=True, use_container_width=True)
     else:
         st.caption("Nothing scheduled in the next 14 days.")
-
-    with st.form("add_sched_form", clear_on_submit=True):
-        st.markdown("**Schedule PTO / Out-of-Lab**")
-        f1, f2, f3 = st.columns([2, 1, 1.4])
-        who = f1.selectbox("Technician", techs["name"].tolist())
-        sched_date = f2.date_input("Date", value=today + timedelta(days=1))
-        entry_type = f3.radio("Type", ["PTO full", "PTO half", "Out of lab"], horizontal=True)
-        target_area = st.selectbox("Charge labor to (out-of-lab only)", AREA_CHOICES)
-        note = st.text_input("Note (optional)")
-        if st.form_submit_button("Add", type="primary"):
-            code = techs[techs["name"] == who]["tech_code"].iloc[0]
-            if entry_type == "Out of lab":
-                goals_store.add_out_of_lab(code, sched_date, target_area, note)
-                st.success(f"{who} scheduled out of lab {sched_date} — labor charges to {target_area}.")
-            else:
-                portion = "full" if entry_type == "PTO full" else "half"
-                goals_store.add_pto(code, sched_date, portion, note)
-                st.success(f"Added {portion}-day PTO for {who} on {sched_date}.")
-            st.rerun()
+    st.page_link("pages/7_Team_Schedule.py",
+                 label="📅 Add PTO / Out-of-Lab → Team Schedule (no password needed)")
 
 with cap_col:
     days_ahead = [today + timedelta(days=i) for i in range(7)]
@@ -300,33 +311,52 @@ with cap_col:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ── Labor (estimated) — local-only, never leaves this machine ────────────────
-st.markdown("### Labor — Estimated ($)")
-labor = goals_store.get_labor_history(DASHBOARD)
-if labor:
-    ldf = pd.DataFrame(labor)
-    today_str = today.isoformat()
-    today_total = ldf[ldf["work_date"] == today_str]["dollars"].sum()
-    window_total = ldf["dollars"].sum()
-    lc1, lc2 = st.columns(2)
-    with lc1:
-        st.markdown(tile_html("Labor Today (est.)", f"${today_total:,.0f}",
-                              "hourly + piece + salary/250"), unsafe_allow_html=True)
-    with lc2:
-        st.markdown(tile_html("Labor — Recorded Window", f"${window_total:,.0f}",
-                              f"{ldf['work_date'].min()} → {ldf['work_date'].max()}"),
-                   unsafe_allow_html=True)
-    by_area = (ldf.groupby("area")["dollars"].sum().reset_index()
-                  .rename(columns={"area": "Area", "dollars": "Labor $"})
-                  .sort_values("Labor $", ascending=False))
-    st.dataframe(by_area, hide_index=True, use_container_width=True,
-                 column_config={"Labor $": st.column_config.NumberColumn(format="$%.0f")})
-    if (ldf["source"] == "actual").any():
-        st.caption("Includes reconciled payroll actuals where available; estimates elsewhere.")
+# ── Labor & Materials drill-down — local-only, never leaves this machine ─────
+st.markdown("### Labor & Materials — Drill-down")
+
+# Drill-down level 1: by area
+area_parts = []
+if not ldf.empty:
+    area_parts.append(ldf.groupby("area")["dollars"].sum().rename("Labor $"))
+if not mats.empty:
+    area_parts.append(mats.groupby("area")["issued_value"].sum().rename("Materials $"))
+if area_parts:
+    by_area = pd.concat(area_parts, axis=1).fillna(0).reset_index().rename(columns={"index": "Area", "area": "Area"})
+    st.markdown("**By area**")
+    st.dataframe(by_area.sort_values(by_area.columns[1], ascending=False),
+                 hide_index=True, use_container_width=True,
+                 column_config={c: st.column_config.NumberColumn(format="$%.0f")
+                                for c in by_area.columns if c != "Area"})
+
+# Drill-down level 2: by employee
+emp_l, emp_m = st.columns(2)
+with emp_l:
+    st.markdown("**Labor by employee**")
+    if not ldf.empty:
+        name_map = dict(zip(techs["tech_code"], techs["name"]))
+        le = (ldf.groupby(["tech_code", "pay_type"])["dollars"].sum().reset_index())
+        le["Employee"] = le["tech_code"].map(name_map).fillna(le["tech_code"])
+        st.dataframe(le.rename(columns={"pay_type": "Pay Type", "dollars": "Labor $"})
+                       [["Employee", "Pay Type", "Labor $"]]
+                       .sort_values("Labor $", ascending=False),
+                     hide_index=True, use_container_width=True,
+                     column_config={"Labor $": st.column_config.NumberColumn(format="$%.2f")})
     else:
-        st.caption("Estimates only — payroll reconciliation not yet imported.")
-else:
-    st.caption("No labor data yet — set pay types in Employee Settings; the hourly "
-               "pipeline records estimates from there. (Empty on the cloud copy by design.)")
+        st.caption("No labor estimates yet — set pay types in ⚙️ Employee Settings above.")
+with emp_m:
+    st.markdown("**Materials by employee (requester)**")
+    if not mats.empty:
+        me = (mats.groupby("matched_name")
+                  .agg(**{"Materials $": ("issued_value", "sum"), "Items": ("qty", "sum")})
+                  .reset_index().rename(columns={"matched_name": "Employee"})
+                  .sort_values("Materials $", ascending=False))
+        st.dataframe(me, hide_index=True, use_container_width=True,
+                     column_config={"Materials $": st.column_config.NumberColumn(format="$%.2f")})
+    else:
+        st.caption("No Clixon materials export in C:\\MT_Reports_Local — schedule the "
+                   "'Issued' report to enable materials tracking.")
+
+if not ldf.empty and (ldf["source"] == "actual").any():
+    st.caption("Labor includes reconciled payroll actuals where available; estimates elsewhere.")
 
 st.caption("Artistic Dental Studio · Fixed Dashboard · goals, pay and scheduling persist immediately to the local store")

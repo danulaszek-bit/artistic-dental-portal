@@ -1533,7 +1533,13 @@ def load_materials_issued(folder: Path) -> pd.DataFrame:
     """
     path = folder / "Issued (29).csv"
     if not path.exists():
-        return pd.DataFrame()
+        # Scheduled Clixon exports may land under a different suffix — take
+        # the freshest CSV matching the report's stem.
+        candidates = sorted(folder.glob("Issued*.csv"),
+                            key=lambda p: p.stat().st_mtime)
+        if not candidates:
+            return pd.DataFrame()
+        path = candidates[-1]
 
     df = pd.read_csv(path, dtype=str, keep_default_na=False,
                      on_bad_lines="skip", engine="python", encoding="utf-8-sig")

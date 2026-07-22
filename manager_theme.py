@@ -60,6 +60,33 @@ h1, h2, h3 {{ font-family: 'Syne', sans-serif !important; color: {COLORS['txt']}
     font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
     padding: 3px 8px; border-radius: 999px; background: {COLORS['acc']}; color: white;
 }}
+
+/* ---- Widget readability on the dark background ----
+   These pages force a dark bg while the Streamlit theme is light, so widget
+   text (radio options, labels, select values) defaults to near-black.
+   Force all form/control text to light ink. */
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] label,
+.stRadio label p, .stRadio label span, .stRadio [role="radiogroup"] p,
+.stCheckbox label p, .stCheckbox label span,
+[data-testid="stExpander"] summary p, [data-testid="stExpander"] summary span,
+.stSelectbox div[data-baseweb="select"] div,
+.stMultiSelect div[data-baseweb="select"] div,
+[data-testid="stForm"] p, [data-testid="stForm"] label,
+.stMarkdown p {{
+    color: {COLORS['txt']} !important;
+}}
+.stTextInput input, .stNumberInput input, .stDateInput input {{
+    color: {COLORS['txt']} !important;
+    background-color: {COLORS['sfc2']} !important;
+}}
+.stSelectbox div[data-baseweb="select"] > div {{
+    background-color: {COLORS['sfc2']} !important;
+}}
+[data-testid="stForm"] {{
+    border: 1px solid {COLORS['bdr']}; border-radius: 10px;
+    background: {COLORS['sfc']};
+}}
 </style>
 """
 

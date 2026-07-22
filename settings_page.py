@@ -24,8 +24,7 @@ import pandas as pd
 import streamlit as st
 
 import goals_store
-from auth_gate import require_password
-from manager_theme import COLORS, BASE_CSS
+from manager_theme import COLORS
 from mt_reports_parser import load_tech_productivity
 
 MT_FOLDER = Path("C:/MT_Reports_Local")
@@ -43,21 +42,12 @@ def _tasks_completed() -> pd.DataFrame:
     )
 
 
-def render_settings(dashboard: str, label: str, pw_key: str) -> None:
-    st.set_page_config(page_title=f"{label} Settings — Artistic Dental",
-                       page_icon="⚙️", layout="wide",
-                       initial_sidebar_state="collapsed")
-    st.markdown(BASE_CSS, unsafe_allow_html=True)
-    require_password(pw_key, f"{label} — Employee Settings")
-
+def render_settings_body(dashboard: str, label: str) -> None:
+    """Employee-settings UI, embedded inside the (already password-gated)
+    manager dashboard — pay type/rate, piece-pay task rates, and goals.
+    No page_config or gate of its own."""
     st.markdown(f"""
-    <div style="font-size:13px;color:{COLORS['txt2']};margin-bottom:4px;">
-      <a href="/{label.replace(' ', '_')}_Dashboard" target="_self"
-         style="color:{COLORS['txt2']};text-decoration:none;">{label} Dashboard</a>
-      &nbsp;›&nbsp;<b style="color:{COLORS['txt']};">Employee Settings</b>
-    </div>
-    <h1 style="margin-top:0;">⚙️ {label} — Employee Settings</h1>
-    <p style="color:{COLORS['txt2']};font-size:14px;margin-top:-6px;">
+    <p style="color:{COLORS['txt2']};font-size:14px;">
       Pay configuration and goals. All changes are effective-dated from today —
       history is never rewritten.
     </p>
@@ -69,7 +59,7 @@ def render_settings(dashboard: str, label: str, pw_key: str) -> None:
         st.stop()
 
     names = {t["name"]: t for t in techs}
-    who = st.selectbox("Employee", list(names.keys()))
+    who = st.selectbox("Employee", list(names.keys()), key=f"settings_emp_{dashboard}")
     tech = names[who]
     code = tech["tech_code"]
 
