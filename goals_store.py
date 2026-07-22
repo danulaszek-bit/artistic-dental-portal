@@ -63,7 +63,8 @@ def init_db() -> None:
             id         INTEGER PRIMARY KEY AUTOINCREMENT,
             tech_code  TEXT NOT NULL,
             pto_date   TEXT NOT NULL,       -- ISO date
-            portion    TEXT NOT NULL,       -- 'half' | 'full'
+            portion    TEXT NOT NULL,       -- 'half' | 'full'  (half = 4-hour increment)
+            paid       INTEGER NOT NULL DEFAULT 1,  -- 0 = unpaid time off
             note       TEXT DEFAULT '',
             created_at TEXT NOT NULL
         );
@@ -132,7 +133,17 @@ def init_db() -> None:
         """)
 
 
+def _migrate() -> None:
+    """Additive migrations for DBs created before a column existed."""
+    with _conn() as conn:
+        try:
+            conn.execute("ALTER TABLE pto ADD COLUMN paid INTEGER NOT NULL DEFAULT 1")
+        except sqlite3.OperationalError:
+            pass  # column already exists
+
+
 init_db()
+_migrate()
 
 
 # ── Technician roster ─────────────────────────────────────────────────────────
@@ -219,20 +230,24 @@ def get_goal_history(tech_code: str) -> list[dict]:
 
 # ── PTO (half-day minimum increment) ──────────────────────────────────────────
 
-def add_pto(tech_code: str, pto_date: date, portion: str = "full", note: str = "") -> None:
+def add_pto(tech_code: str, pto_date: date, portion: str = "full", note: str = "",
+            paid: bool = True) -> None:
+    """portion 'half' = a 4-hour increment. paid=False records unpaid time off
+    (same capacity impact; salaried labor is NOT charged for the unpaid part)."""
     if portion not in ("half", "full"):
         raise ValueError("portion must be 'half' or 'full'")
     with _conn() as conn:
         conn.execute(
-            "INSERT INTO pto (tech_code, pto_date, portion, note, created_at) "
-            "VALUES (?, ?, ?, ?, ?)",
-            (tech_code, pto_date.isoformat(), portion, note,
+            "INSERT INTO pto (tech_code, pto_date, portion, paid, note, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (tech_code, pto_date.isoformat(), portion, 1 if paid else 0, note,
              datetime.now().isoformat(timespec="seconds")),
         )
 
 
 def get_pto_on(tech_code: str, on_date: date) -> str | None:
-    """Returns 'half', 'full', or None for a specific technician/date."""
+    """Returns 'half', 'full', or None for a specific technician/date
+    (paid or unpaid alike — capacity treats both as absence)."""
     with _conn() as conn:
         row = conn.execute(
             "SELECT portion FROM pto WHERE tech_code = ? AND pto_date = ?",
@@ -241,13 +256,23 @@ def get_pto_on(tech_code: str, on_date: date) -> str | None:
     return row["portion"] if row else None
 
 
+def get_pto_detail_on(tech_code: str, on_date: date) -> dict | None:
+    """{'portion': 'half'|'full', 'paid': bool} or None."""
+    with _conn() as conn:
+        row = conn.execute(
+            "SELECT portion, paid FROM pto WHERE tech_code = ? AND pto_date = ?",
+            (tech_code, on_date.isoformat()),
+        ).fetchone()
+    return {"portion": row["portion"], "paid": bool(row["paid"])} if row else None
+
+
 def list_upcoming_pto(dashboard: str | None = None, days: int = 7) -> list[dict]:
     """PTO entries from today through `days` ahead, joined with technician
     name/area, newest-scheduled first."""
     today = date.today().isoformat()
     end   = (date.today() + timedelta(days=days)).isoformat()
     q = """
-        SELECT p.tech_code, t.name, t.area, t.dashboard, p.pto_date, p.portion, p.note
+        SELECT p.tech_code, t.name, t.area, t.dashboard, p.pto_date, p.portion, p.paid, p.note
         FROM pto p JOIN technicians t ON t.tech_code = p.tech_code
         WHERE p.pto_date BETWEEN ? AND ?
     """

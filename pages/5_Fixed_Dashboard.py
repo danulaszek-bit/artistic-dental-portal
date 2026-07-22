@@ -213,9 +213,11 @@ st.markdown(f"### {sel_area} — Technicians" if sel_area else f"### All Fixed �
 view = techs[techs["area"] == sel_area].copy() if sel_area else techs.copy()
 view = view.sort_values("name")
 view["out_today"] = view["tech_code"].apply(lambda c: goals_store.get_out_of_lab_on(c, today))
+view["pto_detail"] = view["tech_code"].apply(lambda c: goals_store.get_pto_detail_on(c, today))
 view["PTO / Out"] = view.apply(
     lambda r: f"Out — {r['out_today']}" if r["out_today"]
-    else {"full": "PTO Full", "half": "PTO Half"}.get(r["pto_today"], "—"), axis=1)
+    else (f"{'PTO' if r['pto_detail']['paid'] else 'Unpaid'} "
+          f"{r['pto_detail']['portion'].title()}" if r["pto_detail"] else "—"), axis=1)
 
 display_df = view.rename(columns={
     "name": "Technician", "station": "Station", "goal": "Today's Goal",
@@ -280,7 +282,8 @@ with pto_col:
     ool = goals_store.list_upcoming_out_of_lab(DASHBOARD, days=14)
     sched_rows = (
         [{"Technician": p["name"], "Area": p["area"], "Date": p["pto_date"],
-          "Type": f"PTO ({p['portion']})", "Note": p["note"]} for p in upcoming]
+          "Type": f"{'PTO' if p.get('paid', 1) else 'Unpaid'} ({p['portion']})",
+          "Note": p["note"]} for p in upcoming]
         + [{"Technician": o["name"], "Area": o["area"], "Date": o["work_date"],
             "Type": f"Out of lab → {o['target_area']}", "Note": o["note"]} for o in ool]
     )

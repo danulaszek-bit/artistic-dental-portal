@@ -118,14 +118,20 @@ def compute_labor_estimates(mt_folder: Path) -> tuple[pd.DataFrame, list[dict]]:
                         dollars += info["units"] * rate
 
             elif pay["pay_type"] == "salary":
-                day_on = (
-                    (code, d_str) in hours_by_day
-                    or (code, d_str) in task_days
-                    or goals_store.get_pto_on(code, d) is not None
-                    or ool_area is not None
-                )
-                if day_on:
-                    dollars = pay["base_rate"] / SALARY_WORKING_DAYS
+                pto = goals_store.get_pto_detail_on(code, d)
+                if pto and not pto["paid"]:
+                    # Unpaid time off: no salary charge for the unpaid portion.
+                    # A half-day (4-hour) unpaid absence charges half the day.
+                    fraction = 0.0 if pto["portion"] == "full" else 0.5
+                else:
+                    day_on = (
+                        (code, d_str) in hours_by_day
+                        or (code, d_str) in task_days
+                        or pto is not None          # paid PTO still charges
+                        or ool_area is not None
+                    )
+                    fraction = 1.0 if day_on else 0.0
+                dollars = pay["base_rate"] / SALARY_WORKING_DAYS * fraction
 
             if dollars > 0:
                 rows.append({

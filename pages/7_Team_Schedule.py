@@ -65,8 +65,13 @@ with form_col:
         sched_date = f1.date_input("Start date", value=today + timedelta(days=1))
         n_days = f2.number_input("Business days", min_value=1, max_value=30, value=1, step=1,
                                  help="Weekends are skipped automatically — a week's vacation is 5.")
-        entry_type = st.radio("Type", ["PTO full day", "PTO half day", "Out of lab"],
-                              horizontal=True)
+        entry_type = st.radio(
+            "Type",
+            ["PTO full day", "PTO half day", "Unpaid full day", "Unpaid half day", "Out of lab"],
+            horizontal=True,
+            help="Half day = 4-hour increment. Unpaid = held home without pay — "
+                 "capacity adjusts the same, but no labor dollars are charged.",
+        )
         target_area = st.selectbox("Working for which department? (out-of-lab only)",
                                    AREA_CHOICES)
         note = st.text_input("Note (optional)")
@@ -78,12 +83,13 @@ with form_col:
                     goals_store.add_out_of_lab(t["tech_code"], d, target_area, note)
                 else:
                     goals_store.add_pto(t["tech_code"], d,
-                                        "full" if "full" in entry_type else "half", note)
+                                        "full" if "full" in entry_type else "half", note,
+                                        paid=not entry_type.startswith("Unpaid"))
             span = f"{days[0]}" if len(days) == 1 else f"{days[0]} → {days[-1]} ({len(days)} business days)"
             if entry_type == "Out of lab":
                 st.success(f"{t['name']} — out of lab {span}, working for {target_area}.")
             else:
-                st.success(f"{t['name']} — PTO {span}.")
+                st.success(f"{t['name']} — {entry_type.lower()} {span}.")
             st.rerun()
 
 with list_col:
@@ -93,7 +99,8 @@ with list_col:
     sched_rows = (
         [{"Date": p["pto_date"], "Employee": p["name"],
           "Dept": f"{p['dashboard']} · {p['area']}",
-          "Type": f"PTO ({p['portion']})", "Note": p["note"]} for p in upcoming]
+          "Type": f"{'PTO' if p.get('paid', 1) else 'Unpaid'} ({p['portion']})",
+          "Note": p["note"]} for p in upcoming]
         + [{"Date": o["work_date"], "Employee": o["name"],
             "Dept": f"{o['dashboard']} · {o['area']}",
             "Type": f"Out of lab → {o['target_area']}", "Note": o["note"]} for o in ool]
