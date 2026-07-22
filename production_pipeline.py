@@ -662,6 +662,16 @@ def main():
     seeded = sync_goals_store(techs)
     append_daily_snapshot(fin, techs)
 
+    # Labor estimates → local SQLite only (labor_history). Deliberately NOT a
+    # cache/latest CSV: pay-derived figures must never reach the committed/
+    # cloud-visible artifacts.
+    try:
+        import labor_calc
+        labor_rows, unrated_combos = labor_calc.persist_estimates(MT_FOLDER)
+    except Exception as exc:
+        print(f"WARNING: labor estimate pass failed ({exc}) - continuing")
+        labor_rows, unrated_combos = 0, 0
+
     gm_report, gm_depts, gm_employees, gm_reasons = build_gm_summary_html()
 
     print("-- Production pipeline ---------------------------")
@@ -691,6 +701,8 @@ def main():
     print(f"GM Summary depts   : {gm_report.get('depts_count', 0)}  "
           f"(employees={gm_report.get('employees_count', 0)}, "
           f"reasons={gm_report.get('reasons_count', 0)})")
+    print(f"labor estimates    : {labor_rows} day-rows upserted (local DB), "
+          f"{unrated_combos} unrated piece-task combo(s)")
 
 
 if __name__ == "__main__":

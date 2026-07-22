@@ -1484,7 +1484,13 @@ def load_timeclock(folder: Path) -> pd.DataFrame:
     """
     path = folder / "Employees TimeClock Detail (Export).csv"
     if not path.exists():
-        return pd.DataFrame()
+        # Scheduled exports may land under a slightly different name — take
+        # the freshest CSV matching the report's stem.
+        candidates = sorted(folder.glob("Employees TimeClock*.csv"),
+                            key=lambda p: p.stat().st_mtime)
+        if not candidates:
+            return pd.DataFrame()
+        path = candidates[-1]
 
     df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
                      on_bad_lines="skip", engine="python", encoding=_enc(path))

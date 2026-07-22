@@ -55,7 +55,7 @@ foreach ($f in $batFiles.Values) {
 
 # --- Common settings (ALL the flags we want, explicitly) ---
 $repeatInterval      = New-TimeSpan -Hours 2      # exports + git push: every 2h
-$repeatIntervalPipe  = New-TimeSpan -Minutes 3    # full pipeline: every 3 min
+$repeatIntervalPipe  = New-TimeSpan -Hours 1      # full pipeline: hourly at :20 (staggered behind the :00/:10 exports)
 $repeatIntervalLogis = New-TimeSpan -Minutes 1    # logistics only: every 1 min
 $repeatDuration     = New-TimeSpan -Hours 14
 

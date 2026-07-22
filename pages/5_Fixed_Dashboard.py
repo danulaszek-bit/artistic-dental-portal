@@ -23,6 +23,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 import goals_store
+from auth_gate import require_password
 from manager_theme import COLORS, BASE_CSS, tile_html, meter_html, status_color
 
 BASE_DIR   = Path(__file__).parent.parent
@@ -36,6 +37,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 st.markdown(BASE_CSS, unsafe_allow_html=True)
+require_password("fixed", "Fixed Dashboard")
 
 
 @st.cache_data(ttl=120)
@@ -181,35 +183,23 @@ st.markdown(f"### {sel_area} — Technicians" if sel_area else f"### All Fixed �
 
 view = techs[techs["area"] == sel_area].copy() if sel_area else techs.copy()
 view = view.sort_values("name")
-view["PTO"] = view["pto_today"].apply(lambda p: {"full": "Full day", "half": "Half day"}.get(p, "—"))
-view["New Goal"] = view["goal"]
+view["out_today"] = view["tech_code"].apply(lambda c: goals_store.get_out_of_lab_on(c, today))
+view["PTO / Out"] = view.apply(
+    lambda r: f"Out — {r['out_today']}" if r["out_today"]
+    else {"full": "PTO Full", "half": "PTO Half"}.get(r["pto_today"], "—"), axis=1)
 
 display_df = view.rename(columns={
     "name": "Technician", "station": "Station", "goal": "Today's Goal",
     "today_units": "Completed", "pct_of_goal": "% of Goal",
 })
 
-edited = st.data_editor(
-    display_df,
-    column_order=["Technician", "Station", "Today's Goal", "Completed", "% of Goal", "PTO", "New Goal"],
-    disabled=["Technician", "Station", "Today's Goal", "Completed", "% of Goal", "PTO"],
+st.dataframe(
+    display_df[["Technician", "Station", "Today's Goal", "Completed", "% of Goal", "PTO / Out"]],
     hide_index=True,
     use_container_width=True,
-    key="fixed_tech_editor",
 )
-
-if st.button("Save Goal Changes", type="primary"):
-    changed = 0
-    for _, row in edited.iterrows():
-        if row["New Goal"] != row["Today's Goal"] and row["New Goal"] > 0:
-            goals_store.set_goal(row["tech_code"], float(row["New Goal"]))
-            changed += 1
-    if changed:
-        st.cache_data.clear()
-        st.success(f"Updated {changed} goal(s).")
-        st.rerun()
-    else:
-        st.info("No goal changes to save.")
+st.page_link("pages/7_Fixed_Settings.py",
+             label="⚙️ Edit goals, pay types & task rates → Employee Settings")
 
 # ── Drill-down ─────────────────────────────────────────────────────────────────
 st.markdown("### Technician Detail")
@@ -250,33 +240,45 @@ if pick:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ── PTO & capacity ─────────────────────────────────────────────────────────────
-st.markdown("### PTO & Capacity — Fixed")
+# ── Scheduling & capacity ─────────────────────────────────────────────────────
+st.markdown("### Scheduling & Capacity — Fixed")
 pto_col, cap_col = st.columns([1.4, 1])
+
+AREA_CHOICES = ["Chairside", "Removables", "Splints", "Partial", "Ortho",
+                "Crown & Bridge", "CAD/CAM", "Ceramics", "Fixed QC", "Model/Die"]
 
 with pto_col:
     upcoming = goals_store.list_upcoming_pto(DASHBOARD, days=14)
-    if upcoming:
-        st.dataframe(
-            pd.DataFrame(upcoming)[["name", "area", "pto_date", "portion", "note"]]
-              .rename(columns={"name": "Technician", "area": "Area",
-                               "pto_date": "Date", "portion": "Portion", "note": "Note"}),
-            hide_index=True, use_container_width=True,
-        )
+    ool = goals_store.list_upcoming_out_of_lab(DASHBOARD, days=14)
+    sched_rows = (
+        [{"Technician": p["name"], "Area": p["area"], "Date": p["pto_date"],
+          "Type": f"PTO ({p['portion']})", "Note": p["note"]} for p in upcoming]
+        + [{"Technician": o["name"], "Area": o["area"], "Date": o["work_date"],
+            "Type": f"Out of lab → {o['target_area']}", "Note": o["note"]} for o in ool]
+    )
+    if sched_rows:
+        st.dataframe(pd.DataFrame(sched_rows).sort_values("Date"),
+                     hide_index=True, use_container_width=True)
     else:
-        st.caption("No upcoming PTO scheduled in the next 14 days.")
+        st.caption("Nothing scheduled in the next 14 days.")
 
-    with st.form("add_pto_form", clear_on_submit=True):
-        st.markdown("**Add PTO**")
-        f1, f2, f3 = st.columns([2, 1, 1])
+    with st.form("add_sched_form", clear_on_submit=True):
+        st.markdown("**Schedule PTO / Out-of-Lab**")
+        f1, f2, f3 = st.columns([2, 1, 1.4])
         who = f1.selectbox("Technician", techs["name"].tolist())
-        pto_date_input = f2.date_input("Date", value=today + timedelta(days=1))
-        portion = f3.radio("Portion", ["full", "half"], horizontal=True)
+        sched_date = f2.date_input("Date", value=today + timedelta(days=1))
+        entry_type = f3.radio("Type", ["PTO full", "PTO half", "Out of lab"], horizontal=True)
+        target_area = st.selectbox("Charge labor to (out-of-lab only)", AREA_CHOICES)
         note = st.text_input("Note (optional)")
-        if st.form_submit_button("Add PTO", type="primary"):
+        if st.form_submit_button("Add", type="primary"):
             code = techs[techs["name"] == who]["tech_code"].iloc[0]
-            goals_store.add_pto(code, pto_date_input, portion, note)
-            st.success(f"Added {portion}-day PTO for {who} on {pto_date_input}.")
+            if entry_type == "Out of lab":
+                goals_store.add_out_of_lab(code, sched_date, target_area, note)
+                st.success(f"{who} scheduled out of lab {sched_date} — labor charges to {target_area}.")
+            else:
+                portion = "full" if entry_type == "PTO full" else "half"
+                goals_store.add_pto(code, sched_date, portion, note)
+                st.success(f"Added {portion}-day PTO for {who} on {sched_date}.")
             st.rerun()
 
 with cap_col:
@@ -296,4 +298,35 @@ with cap_col:
     )
     st.plotly_chart(fig, use_container_width=True)
 
-st.caption("Artistic Dental Studio · Fixed Dashboard · goals and PTO persist immediately to goals_store.py")
+st.markdown("<br>", unsafe_allow_html=True)
+
+# ── Labor (estimated) — local-only, never leaves this machine ────────────────
+st.markdown("### Labor — Estimated ($)")
+labor = goals_store.get_labor_history(DASHBOARD)
+if labor:
+    ldf = pd.DataFrame(labor)
+    today_str = today.isoformat()
+    today_total = ldf[ldf["work_date"] == today_str]["dollars"].sum()
+    window_total = ldf["dollars"].sum()
+    lc1, lc2 = st.columns(2)
+    with lc1:
+        st.markdown(tile_html("Labor Today (est.)", f"${today_total:,.0f}",
+                              "hourly + piece + salary/250"), unsafe_allow_html=True)
+    with lc2:
+        st.markdown(tile_html("Labor — Recorded Window", f"${window_total:,.0f}",
+                              f"{ldf['work_date'].min()} → {ldf['work_date'].max()}"),
+                   unsafe_allow_html=True)
+    by_area = (ldf.groupby("area")["dollars"].sum().reset_index()
+                  .rename(columns={"area": "Area", "dollars": "Labor $"})
+                  .sort_values("Labor $", ascending=False))
+    st.dataframe(by_area, hide_index=True, use_container_width=True,
+                 column_config={"Labor $": st.column_config.NumberColumn(format="$%.0f")})
+    if (ldf["source"] == "actual").any():
+        st.caption("Includes reconciled payroll actuals where available; estimates elsewhere.")
+    else:
+        st.caption("Estimates only — payroll reconciliation not yet imported.")
+else:
+    st.caption("No labor data yet — set pay types in Employee Settings; the hourly "
+               "pipeline records estimates from there. (Empty on the cloud copy by design.)")
+
+st.caption("Artistic Dental Studio · Fixed Dashboard · goals, pay and scheduling persist immediately to the local store")

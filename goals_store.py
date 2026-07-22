@@ -69,6 +69,66 @@ def init_db() -> None:
         );
         CREATE INDEX IF NOT EXISTS idx_pto_tech_date
             ON pto (tech_code, pto_date);
+
+        -- Pay type + base rate, effective-dated like goals.
+        -- base_rate meaning depends on pay_type:
+        --   hourly -> $/hour · salary -> annual $ · unit -> unused (0; task_rates apply)
+        CREATE TABLE IF NOT EXISTS pay_settings (
+            id             INTEGER PRIMARY KEY AUTOINCREMENT,
+            tech_code      TEXT NOT NULL,
+            pay_type       TEXT NOT NULL,   -- 'hourly' | 'unit' | 'salary'
+            base_rate      REAL NOT NULL DEFAULT 0,
+            effective_date TEXT NOT NULL,
+            created_at     TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_pay_tech_date
+            ON pay_settings (tech_code, effective_date);
+
+        -- Piece-pay: per-employee, per-MagicTouch-task-code rate, effective-dated.
+        CREATE TABLE IF NOT EXISTS task_rates (
+            id             INTEGER PRIMARY KEY AUTOINCREMENT,
+            tech_code      TEXT NOT NULL,
+            task_code      TEXT NOT NULL,
+            task_desc      TEXT DEFAULT '',
+            rate           REAL NOT NULL,
+            effective_date TEXT NOT NULL,
+            created_at     TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_taskrates_lookup
+            ON task_rates (tech_code, task_code, effective_date);
+
+        -- Scheduled out-of-lab work (usually Chairside): excluded from capacity
+        -- on both sides of the ratio, labor $ charged to target_area instead of
+        -- the technician's home area.
+        CREATE TABLE IF NOT EXISTS out_of_lab (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            tech_code   TEXT NOT NULL,
+            work_date   TEXT NOT NULL,      -- ISO date
+            target_area TEXT NOT NULL,      -- area the labor $ charges to
+            note        TEXT DEFAULT '',
+            created_at  TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_ool_tech_date
+            ON out_of_lab (tech_code, work_date);
+
+        -- Daily labor dollars per technician. source='estimated' rows are
+        -- recomputed/upserted by the pipeline; a future payroll-reconciliation
+        -- import will overwrite periods with source='actual' rows, which
+        -- estimates never replace.
+        CREATE TABLE IF NOT EXISTS labor_history (
+            id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            work_date  TEXT NOT NULL,
+            tech_code  TEXT NOT NULL,
+            area       TEXT NOT NULL,       -- area charged (home or out-of-lab target)
+            dashboard  TEXT NOT NULL,
+            pay_type   TEXT NOT NULL,
+            dollars    REAL NOT NULL,
+            source     TEXT NOT NULL DEFAULT 'estimated',  -- 'estimated' | 'actual'
+            created_at TEXT NOT NULL,
+            UNIQUE (work_date, tech_code, area, source)
+        );
+        CREATE INDEX IF NOT EXISTS idx_labor_date
+            ON labor_history (work_date, dashboard);
         """)
 
 
@@ -205,6 +265,8 @@ def projected_capacity_pct(dashboard: str, on_date: date | None = None) -> float
     Sum of PTO-adjusted goals ÷ sum of full goals, as a percentage, for all
     active technicians in `dashboard` ('Fixed' or 'Removable') on `on_date`
     (defaults to today). A half-day PTO counts as 50% available, full-day 0%.
+    An out-of-lab day removes the technician from BOTH sides of the ratio —
+    they aren't expected to produce in-lab, so the department % isn't dinged.
     Returns 100.0 if there are no active technicians with a goal set (nothing
     to project against, rather than a misleading 0%).
     """
@@ -216,6 +278,8 @@ def projected_capacity_pct(dashboard: str, on_date: date | None = None) -> float
         goal = get_goal_on(t["tech_code"], d)
         if not goal:
             continue
+        if get_out_of_lab_on(t["tech_code"], d):
+            continue  # excluded from numerator AND denominator
         total_goal += goal
         portion = get_pto_on(t["tech_code"], d)
         factor = 0.0 if portion == "full" else (0.5 if portion == "half" else 1.0)
@@ -224,3 +288,162 @@ def projected_capacity_pct(dashboard: str, on_date: date | None = None) -> float
     if total_goal <= 0:
         return 100.0
     return round(available_goal / total_goal * 100, 1)
+
+
+# ── Pay settings (effective-dated, like goals) ────────────────────────────────
+
+def set_pay_setting(tech_code: str, pay_type: str, base_rate: float = 0.0,
+                    effective_date: date | None = None) -> None:
+    if pay_type not in ("hourly", "unit", "salary"):
+        raise ValueError("pay_type must be 'hourly', 'unit', or 'salary'")
+    eff = (effective_date or date.today()).isoformat()
+    with _conn() as conn:
+        conn.execute(
+            "INSERT INTO pay_settings (tech_code, pay_type, base_rate, effective_date, created_at) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (tech_code, pay_type, base_rate, eff,
+             datetime.now().isoformat(timespec="seconds")),
+        )
+
+
+def get_pay_setting_on(tech_code: str, on_date: date | None = None) -> dict | None:
+    """The pay setting in effect on `on_date` — {'pay_type', 'base_rate'} or None."""
+    d = (on_date or date.today()).isoformat()
+    with _conn() as conn:
+        row = conn.execute(
+            "SELECT pay_type, base_rate FROM pay_settings "
+            "WHERE tech_code = ? AND effective_date <= ? "
+            "ORDER BY effective_date DESC, id DESC LIMIT 1",
+            (tech_code, d),
+        ).fetchone()
+    return dict(row) if row else None
+
+
+# ── Piece-pay task rates (per employee × task code, effective-dated) ─────────
+
+def set_task_rate(tech_code: str, task_code: str, rate: float,
+                  task_desc: str = "", effective_date: date | None = None) -> None:
+    eff = (effective_date or date.today()).isoformat()
+    with _conn() as conn:
+        conn.execute(
+            "INSERT INTO task_rates (tech_code, task_code, task_desc, rate, effective_date, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (tech_code, str(task_code), task_desc, rate, eff,
+             datetime.now().isoformat(timespec="seconds")),
+        )
+
+
+def get_task_rate_on(tech_code: str, task_code: str, on_date: date | None = None) -> float | None:
+    d = (on_date or date.today()).isoformat()
+    with _conn() as conn:
+        row = conn.execute(
+            "SELECT rate FROM task_rates "
+            "WHERE tech_code = ? AND task_code = ? AND effective_date <= ? "
+            "ORDER BY effective_date DESC, id DESC LIMIT 1",
+            (tech_code, str(task_code), d),
+        ).fetchone()
+    return row["rate"] if row else None
+
+
+def get_current_task_rates(tech_code: str) -> dict[str, float]:
+    """{task_code: rate} — latest effective rate per task for one technician."""
+    d = date.today().isoformat()
+    with _conn() as conn:
+        rows = conn.execute(
+            "SELECT task_code, rate FROM task_rates "
+            "WHERE tech_code = ? AND effective_date <= ? "
+            "ORDER BY effective_date ASC, id ASC",
+            (tech_code, d),
+        ).fetchall()
+    out: dict[str, float] = {}
+    for r in rows:               # later (more recent) rows overwrite earlier ones
+        out[r["task_code"]] = r["rate"]
+    return out
+
+
+# ── Out-of-lab scheduling ─────────────────────────────────────────────────────
+
+def add_out_of_lab(tech_code: str, work_date: date, target_area: str, note: str = "") -> None:
+    with _conn() as conn:
+        conn.execute(
+            "INSERT INTO out_of_lab (tech_code, work_date, target_area, note, created_at) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (tech_code, work_date.isoformat(), target_area, note,
+             datetime.now().isoformat(timespec="seconds")),
+        )
+
+
+def get_out_of_lab_on(tech_code: str, on_date: date) -> str | None:
+    """Target area if the technician is scheduled out of lab that day, else None."""
+    with _conn() as conn:
+        row = conn.execute(
+            "SELECT target_area FROM out_of_lab WHERE tech_code = ? AND work_date = ?",
+            (tech_code, on_date.isoformat()),
+        ).fetchone()
+    return row["target_area"] if row else None
+
+
+def list_upcoming_out_of_lab(dashboard: str | None = None, days: int = 14) -> list[dict]:
+    today = date.today().isoformat()
+    end   = (date.today() + timedelta(days=days)).isoformat()
+    q = """
+        SELECT o.tech_code, t.name, t.area, t.dashboard, o.work_date, o.target_area, o.note
+        FROM out_of_lab o JOIN technicians t ON t.tech_code = o.tech_code
+        WHERE o.work_date BETWEEN ? AND ?
+    """
+    params = [today, end]
+    if dashboard:
+        q += " AND t.dashboard = ?"
+        params.append(dashboard)
+    q += " ORDER BY o.work_date"
+    with _conn() as conn:
+        return [dict(r) for r in conn.execute(q, params).fetchall()]
+
+
+# ── Labor history (estimated now; actuals overwrite later via reconciliation) ─
+
+def upsert_labor_estimates(rows: list[dict]) -> int:
+    """
+    Upsert source='estimated' daily labor rows: {'work_date' (ISO str),
+    'tech_code', 'area', 'dashboard', 'pay_type', 'dollars'}. Never touches
+    source='actual' rows — once a payroll reconciliation lands for a period,
+    those actuals stand.
+    """
+    n = 0
+    now = datetime.now().isoformat(timespec="seconds")
+    with _conn() as conn:
+        for r in rows:
+            conn.execute(
+                "INSERT INTO labor_history (work_date, tech_code, area, dashboard, pay_type, dollars, source, created_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, 'estimated', ?) "
+                "ON CONFLICT(work_date, tech_code, area, source) DO UPDATE SET "
+                "  dollars=excluded.dollars, pay_type=excluded.pay_type, "
+                "  dashboard=excluded.dashboard, created_at=excluded.created_at",
+                (r["work_date"], r["tech_code"], r["area"], r["dashboard"],
+                 r["pay_type"], r["dollars"], now),
+            )
+            n += 1
+    return n
+
+
+def get_labor_history(dashboard: str | None = None, start: date | None = None,
+                      end: date | None = None) -> list[dict]:
+    """
+    Daily labor rows, preferring 'actual' over 'estimated' when both exist for
+    the same (date, tech): actuals win, estimates for covered dates are dropped.
+    """
+    q = "SELECT work_date, tech_code, area, dashboard, pay_type, dollars, source FROM labor_history WHERE 1=1"
+    params: list = []
+    if dashboard:
+        q += " AND dashboard = ?"; params.append(dashboard)
+    if start:
+        q += " AND work_date >= ?"; params.append(start.isoformat())
+    if end:
+        q += " AND work_date <= ?"; params.append(end.isoformat())
+    q += " ORDER BY work_date"
+    with _conn() as conn:
+        rows = [dict(r) for r in conn.execute(q, params).fetchall()]
+
+    actual_keys = {(r["work_date"], r["tech_code"]) for r in rows if r["source"] == "actual"}
+    return [r for r in rows
+            if r["source"] == "actual" or (r["work_date"], r["tech_code"]) not in actual_keys]
