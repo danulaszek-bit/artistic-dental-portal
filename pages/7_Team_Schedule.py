@@ -34,9 +34,13 @@ st.markdown(f"""
 </p>
 """, unsafe_allow_html=True)
 
+from env_notice import manager_tools_available, render_lan_notice
+if not manager_tools_available():
+    render_lan_notice("scheduling tools")
+
 techs = goals_store.list_technicians(active_only=True)
 if not techs:
-    st.warning("No technician roster yet — run the pipeline first.")
+    st.warning("No technician roster yet — run `py production_pipeline.py` on the lab PC first.")
     st.stop()
 
 today = date.today()

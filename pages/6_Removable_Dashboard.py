@@ -32,6 +32,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 st.markdown(BASE_CSS, unsafe_allow_html=True)
+from env_notice import manager_tools_available, render_lan_notice
+if not manager_tools_available():
+    render_lan_notice("Removable manager dashboard")
 require_password("removable", "Removable Dashboard")
 
 

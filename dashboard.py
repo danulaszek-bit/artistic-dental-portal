@@ -226,6 +226,18 @@ def load_summary() -> dict:
 # ── Page Body ──────────────────────────────────────────────────────────────────
 data = load_summary()
 
+# On the lab PC, show its LAN address so managers know where to reach the
+# read-write tools (Fixed/Removable dashboards + Team Schedule live here, not
+# on the public cloud copy).
+try:
+    from env_notice import manager_tools_available, lab_lan_url
+    if manager_tools_available():
+        st.success(f"🖥️ **Manager tools (scheduling, goals, pay) are served from this "
+                   f"lab PC** — reach them from any device on the lab network at "
+                   f"**{lab_lan_url()}**")
+except Exception:
+    pass
+
 st.markdown(f"""
 <div class="hero">
   <div class="hero-title">🦷 Artistic Dental Studio — Partner Portal</div>
