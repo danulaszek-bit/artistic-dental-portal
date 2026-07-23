@@ -23,7 +23,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 454874,HUBMAR,,2026-07-16,2026-07-30,In Production,1975.55,7,False
 454901,WITMAT,,2026-07-16,2026-07-30,In Production,441.35,7,False
 454909,LUKPAU,,2026-07-16,2026-08-03,In Production,1351.83,7,False
-454934,WALBRIOP,,2026-07-16,2026-07-24,In Production,225.23,7,False
+454934,WALBRIOP,Brian Walczak,2026-07-16,2026-07-24,In Production,225.23,7,False
 454945,SUHINE,,2026-07-17,2026-07-27,In Production,491.89,6,False
 454958,FULDAV,,2026-07-17,2026-07-31,In Production,598.44,6,False
 454966,PAIADI,,2026-07-17,2026-07-31,In Production,644.49,6,False
@@ -41,9 +41,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 455232,FELNIC,,2026-07-21,2026-07-29,In Production,182.09,2,False
 455266,CORKAT,,2026-07-22,2026-07-29,In Production,193.35,1,False
 455287,FELNIC,,2026-07-22,2026-07-29,In Production,91.05,1,False
-454442,HANPATSK,,2026-07-10,2026-07-27,In Production,1224.34,13,False
 454444,LEEALI,,2026-07-10,2026-07-27,In Production,0.0,13,False
-454687,MALRYA,,2026-07-14,2026-08-06,In Production,284.38,9,False
 454716,TADSIM,,2026-07-14,2026-07-28,In Production,336.44,9,False
 454929,BAPBEN,,2026-07-16,2026-07-30,In Production,337.47,7,False
 455006,JANREBP,,2026-07-17,2026-07-27,In Production,0.0,6,False
@@ -71,9 +69,10 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 455131,KHASUM,,2026-07-20,2026-08-03,In Production,0.0,3,False
 455197,HOLMARLA,,2026-07-21,2026-07-29,In Production,269.69,2,False
 454302,KHASUM,,2026-07-21,2026-07-29,In Production,187.59,2,False
+455225,BAPBENNR,,2026-07-21,2026-07-31,In Production,1131.44,2,False
 455310,PAPAMI,,2026-07-22,2026-07-30,In Production,200.06,1,False
 455339,RIYTARCHI,,2026-07-23,2026-08-05,In Production,695.4,0,False
-454688,AKADAN,,2026-07-14,2026-07-24,In Production,312.06,9,False
+454688,AKADAN,Dana Akawi,2026-07-14,2026-07-24,In Production,312.06,9,False
 454916,MALRYA,,2026-07-16,2026-07-29,In Production,79.79,7,False
 454969,MALRYA,,2026-07-17,2026-07-31,In Production,137.08,6,False
 454979,TADSIM,,2026-07-17,2026-07-27,In Production,79.79,6,False
@@ -115,20 +114,14 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 455246,NIEJOS,,2026-07-22,2026-07-30,In Production,87.81,1,False
 455249,NIEJOS,,2026-07-22,2026-07-31,In Production,87.81,1,False
 454246,ATHJOH,,2026-07-08,2026-07-31,In Production,561.63,15,False
-454251,FISRON,,2026-07-08,2026-07-24,In Production,534.03,15,False
 454711,ATHJOH,,2026-07-14,2026-07-29,In Production,206.04,9,False
 454060,SEERAN,,2026-07-15,2026-07-29,In Production,155.73,8,False
-454869,NIEMAR,Mark Niemiec,2026-07-16,2026-07-29,In Production,337.76,7,False
-454996,BOYMIC,,2026-07-17,2026-07-24,In Production,103.48,6,False
-455011,CORABI,,2026-07-17,2026-07-28,In Production,175.08,6,False
-455026,BREKEVEL,,2026-07-20,2026-07-28,In Production,106.22,3,False
 455037,BRZDANI,,2026-07-20,2026-07-28,In Production,365.35,3,False
 455060,ARANAD,,2026-07-20,2026-07-27,In Production,193.99,3,False
 455063,RYASEA,,2026-07-20,2026-07-27,In Production,251.05,3,False
 455091,NEWDAV,,2026-07-20,2026-07-27,In Production,159.57,3,False
 455097,TYSMONLB,,2026-07-20,2026-08-05,In Production,293.76,3,False
 455099,MCCMICH,,2026-07-20,2026-08-10,In Production,568.62,3,False
-455102,ALSDIN,,2026-07-20,2026-07-29,In Production,106.24,3,False
 455123,RAITHO,,2026-07-20,2026-07-27,In Production,53.1,3,False
 455224,KASNIK,,2026-07-21,2026-07-29,In Production,249.77,2,False
 455234,KORVIC,,2026-07-21,2026-07-28,In Production,251.05,2,False
@@ -159,11 +152,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 455127,SINMAN,,2026-07-20,2026-07-28,In Production,92.06,3,False
 455129,CZAAUS,,2026-07-20,2026-07-28,In Production,92.06,3,False
 455130,BAPBEN,,2026-07-20,2026-07-28,In Production,80.82,3,False
-455133,KORMIK,,2026-07-21,2026-07-28,In Production,79.79,2,False
 455135,BOYMIC,,2026-07-21,2026-07-27,In Production,79.79,2,False
 455137,JURAND,,2026-07-21,2026-07-28,In Production,79.79,2,False
-455138,BOYMIC,,2026-07-21,2026-07-28,In Production,79.79,2,False
-455139,KORMIK,,2026-07-21,2026-07-28,In Production,79.79,2,False
 455149,PATSHIBV,,2026-07-21,2026-07-28,In Production,325.28,2,False
 455153,VERANI,,2026-07-21,2026-07-28,In Production,182.09,2,False
 455161,CORKAT,,2026-07-21,2026-07-28,In Production,211.76,2,False
@@ -203,11 +193,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 455206,CORJER,,2026-07-21,2026-08-06,In Production,79.79,2,False
 455294,TYSMONLB,Monika Tyszkowski,2026-07-22,2026-07-23,In Production,405.05,1,True
 455316,KHAALI,,2026-07-22,2026-08-05,In Production,0.0,1,False
-454579,ZMEMAG,,2026-07-13,2026-07-24,In Production,104.0,10,False
 454873,HUBMAR,,2026-07-16,2026-07-28,In Production,231.81,7,False
-454744,TUCELILV,,2026-07-15,2026-07-27,In Production,129.74,8,False
 454904,AHMSAN,,2026-07-16,2026-07-29,In Production,441.75,7,False
-455056,FELNIC,,2026-07-20,2026-07-27,In Production,0.0,3,False
 438294,MULKEV,,2025-12-22,2026-01-12,In Production,0.0,213,True
 448148,THADEVOP,,2026-04-21,2026-05-05,In Production,283.77,93,True
 450497,JANUPAMI,,2026-05-18,2026-06-05,In Production,200.0,66,True
@@ -247,13 +234,11 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 455221,KORMIK,,2026-07-21,2026-07-28,In Production,79.79,2,False
 455241,AGRKAR,,2026-07-21,2026-07-31,In Production,802.96,2,False
 455257,CORABI,,2026-07-22,2026-07-29,In Production,116.62,1,False
-455319,BALJOS,,2026-07-22,2026-07-30,In Production,70.59,1,False
 452598,IWAAGG,,2026-06-15,2026-07-29,In Production,0.0,38,False
 454180,WYLDUS,Dustin Wylde,2026-07-07,2026-07-23,In Production,3065.76,16,True
 454871,HUBMAR,,2026-07-16,2026-07-30,In Production,661.45,7,False
 454946,NIEJOS,,2026-07-17,2026-07-27,In Production,249.44,6,False
 455141,SUHINE,,2026-07-21,2026-07-30,In Production,249.44,2,False
-454677,MORCHR,,2026-07-14,2026-07-27,In Production,252.49,9,False
 454796,PATMAR,,2026-07-15,2026-07-30,In Production,1172.53,8,False
 454919,MALRYA,,2026-07-16,2026-07-28,In Production,284.38,7,False
 455104,SOOANUHE,,2026-07-20,2026-07-30,In Production,119.51,3,False
@@ -271,7 +256,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 455143,SUHINE,,2026-07-21,2026-07-30,In Production,87.81,2,False
 455171,VOHSAF,,2026-07-21,2026-08-03,In Production,0.0,2,False
 440906,KMADAN,,2026-01-27,2026-05-13,In Production,92.06,177,True
-455331,PATPINNV,,2026-07-22,2026-07-24,In Production,141.17,1,False
 455170,BEAJOH,,2026-07-21,2026-08-04,In Production,418.9,2,False
 455192,CHUMAN,,2026-07-21,2026-07-31,In Production,111.46,2,False
 455204,CUARACMOK,,2026-07-21,2026-08-05,In Production,0.0,2,False
@@ -305,18 +289,18 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 455407,CHUMANRV,,2026-07-23,2026-07-31,In Production,159.27,0,False
 455408,CHUMANRV,,2026-07-23,2026-07-31,In Production,254.73,0,False
 454613,SACELI,,2026-07-13,2026-07-27,In Production,163.85,10,False
-454706,VERVIN,,2026-07-14,2026-07-24,In Production,176.36,9,False
+454706,VERVIN,Vincent Versaci,2026-07-14,2026-07-24,In Production,176.36,9,False
 454756,ROUBRA,,2026-07-15,2026-07-28,In Production,163.85,8,False
 454936,LEURINSV,,2026-07-16,2026-07-28,In Production,91.05,7,False
 454957,JURAND,,2026-07-17,2026-07-27,In Production,159.76,6,False
-455009,JURAND,,2026-07-17,2026-07-24,In Production,143.82,6,False
+455009,JURAND,Andrew Jursik,2026-07-17,2026-07-24,In Production,143.82,6,False
 455066,VANLAU,,2026-07-20,2026-07-28,In Production,163.85,3,False
 455255,KORJAMEP,,2026-07-22,2026-07-30,In Production,159.76,1,False
 455264,MCCKAT,,2026-07-22,2026-07-30,In Production,163.85,1,False
 455267,ROUBRA,,2026-07-22,2026-07-30,In Production,163.85,1,False
 455280,BRELEO,,2026-07-22,2026-07-30,In Production,174.47,1,False
 455292,KORJAMEP,,2026-07-22,2026-07-30,In Production,159.76,1,False
-454827,ATHJOH,,2026-07-15,2026-07-24,In Production,184.31,8,False
+454827,ATHJOH,John Athos,2026-07-15,2026-07-24,In Production,184.31,8,False
 454883,WADAMY,,2026-07-16,2026-07-28,In Production,118.84,7,False
 454932,WILJOS,,2026-07-16,2026-07-30,In Production,148.74,7,False
 455028,COLVIN,,2026-07-20,2026-08-05,In Production,0.0,3,False
@@ -335,11 +319,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 454923,KOLMARFF,,2026-07-16,2026-08-07,In Production,467.34,7,False
 455083,SARDEMRI,,2026-07-20,2026-07-31,In Production,518.49,3,False
 454864,JONKAR,,2026-07-16,2026-07-29,In Production,315.6,7,False
-454911,JUEDAV,,2026-07-16,2026-07-24,In Production,78.59,7,False
 454308,MORCHR,,2026-07-16,2026-07-29,In Production,171.68,7,False
 454416,AKADAN,,2026-07-16,2026-07-29,In Production,155.73,7,False
-454978,CHANHWA,,2026-07-17,2026-07-27,In Production,387.47,6,False
-455158,TOKNIC,,2026-07-21,2026-07-30,In Production,136.57,2,False
 454823,KHASUM,,2026-07-21,2026-07-31,In Production,336.38,2,False
 455010,GAFMEG,,2026-07-21,2026-07-29,In Production,150.36,2,False
 452631,ZOLMAR,,2026-06-16,2026-07-27,In Production,0.0,37,False
@@ -357,7 +338,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 454392,ALSDIN,,2026-07-09,2026-07-31,In Production,333.66,14,False
 454410,BARKEVCW,,2026-07-09,2026-07-29,In Production,1331.78,14,False
 454277,ATHJOH,,2026-07-08,2026-08-05,Outsourced,1536.38,15,False
-454788,GOEPAN,,2026-07-15,2026-07-28,In Production,389.92,8,False
 454828,BRERIC,,2026-07-15,2026-07-29,Outsourced,215.0,8,False
 454843,WALBRIOP,,2026-07-15,2026-07-29,In Production,267.28,8,False
 454857,SWEMAT,,2026-07-16,2026-07-29,Outsourced,204.59,7,False
