@@ -53,32 +53,65 @@ def main():
         latest_dir=LATEST_DIR,
     )
     log.info("cases_logistics.csv + logistics_summary.csv written")
+    # ↑ Local data is now fresh EVERY run (task fires ~1/min), so the wall
+    #   display / LAN dashboard stays minute-fresh regardless of push cadence.
 
-    # ── Push to GitHub only if files changed ────────────────────────────────
+    # ── Push to GitHub (throttled to every PUSH_INTERVAL_SEC) ────────────────
+    # The git push is what syncs the CLOUD copy. Pushing every minute writes
+    # to .git 1,440x/day — each write is a chance for an interrupted push to
+    # corrupt a ref. Throttling to 3 min cuts that risk ~3x; the cloud lags a
+    # few minutes at most, the local display does not.
     repo = str(BASE_DIR)
-    subprocess.run(["git", "add", "cache/latest/cases_logistics.csv",
-                    "cache/latest/logistics_summary.csv"], cwd=repo, check=True)
+    PUSH_INTERVAL_SEC = 180
+    import time
+    state_file = BASE_DIR / ".logistics_push_state"
+    try:
+        last_push = float(state_file.read_text().strip())
+    except (OSError, ValueError):
+        last_push = 0.0
+    if time.time() - last_push < PUSH_INTERVAL_SEC:
+        log.info("Push throttled (<%ds since last) — data written locally, "
+                 "cloud sync next cycle", PUSH_INTERVAL_SEC)
+        return
 
-    diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=repo)
-    if diff.returncode != 0:
-        # Stamp _data_version.py so Streamlit Cloud redeploys
-        ver_file = BASE_DIR / "_data_version.py"
-        from datetime import datetime
-        ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        ver_file.write_text(
-            "# Auto-generated — do not edit manually.\n"
-            "# Changing this file forces Streamlit Cloud to redeploy.\n"
-            f'DATA_VERSION = "{ts}"\n'
-        )
-        subprocess.run(["git", "add", "_data_version.py"], cwd=repo, check=True)
-        subprocess.run(
-            ["git", "commit", "-m", f"Logistics update {ts}"],
-            cwd=repo, check=True,
-        )
-        subprocess.run(["git", "push", "origin", "main"], cwd=repo, check=True)
-        log.info("Pushed to GitHub — Streamlit will redeploy")
-    else:
-        log.info("No logistics changes — skipping push")
+    # Self-heal any ref corruption left by a previously interrupted push,
+    # BEFORE attempting git operations, so a broken ref auto-recovers instead
+    # of freezing the cloud for hours.
+    from git_health import repair_if_broken
+    repair_if_broken(BASE_DIR)
+
+    # Skip git entirely if another process holds a lock (will retry next cycle)
+    lock_files = [BASE_DIR / ".git" / lk for lk in ("index.lock", "HEAD.lock")]
+    if any(lk.exists() for lk in lock_files):
+        log.warning("Git lock detected — skipping push this cycle (will retry next run)")
+        return
+
+    try:
+        subprocess.run(["git", "add", "cache/latest/cases_logistics.csv",
+                        "cache/latest/logistics_summary.csv"], cwd=repo, check=True)
+
+        diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=repo)
+        if diff.returncode != 0:
+            # Stamp _data_version.py so Streamlit Cloud redeploys
+            from datetime import datetime
+            ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            ver_file = BASE_DIR / "_data_version.py"
+            ver_file.write_text(
+                "# Auto-generated — do not edit manually.\n"
+                "# Changing this file forces Streamlit Cloud to redeploy.\n"
+                f'DATA_VERSION = "{ts}"\n'
+            )
+            subprocess.run(["git", "add", "_data_version.py"], cwd=repo, check=True)
+            subprocess.run(["git", "commit", "-m", f"Logistics update {ts}"],
+                           cwd=repo, check=True)
+            subprocess.run(["git", "push", "origin", "main"], cwd=repo, check=True)
+            state_file.write_text(str(time.time()))
+            log.info("Pushed to GitHub — Streamlit will redeploy")
+        else:
+            state_file.write_text(str(time.time()))  # nothing to push; still reset the clock
+            log.info("No logistics changes — skipping push")
+    except subprocess.CalledProcessError as e:
+        log.warning("Git operation failed (%s) — will retry next cycle", e)
 
 
 if __name__ == "__main__":

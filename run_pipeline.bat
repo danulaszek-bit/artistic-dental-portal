@@ -1,6 +1,9 @@
 @echo off
 cd /d C:\ArtisticDentalPortal
 
+REM --- Self-heal any git ref corruption left by an interrupted push ---
+py -c "from git_health import repair_if_broken; from pathlib import Path; repair_if_broken(Path('.'))"
+
 REM --- Run pipeline ---
 py pipeline.py
 if errorlevel 1 (
