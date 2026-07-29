@@ -59,7 +59,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455407,,Manas Chug,P515,2026-07-23 12:28:00,2026-07-31,2026-07-30 15:00:00,In Production,RUSHMILLINGSHELF,0.0,SW RT 5,,CAD_CAM,0,2,5,0,False,False,False,False
 455408,,Manas Chug,P583,2026-07-23 12:30:00,2026-07-31,2026-07-30 15:00:00,In Production,MILLING BRIDGE,0.0,SW RT 5,,CAD_CAM,1,2,5,0,False,False,False,False
 455417,,Simmi Kapur,P817,2026-07-23 12:43:00,2026-07-31,2026-07-30 15:00:00,In Production,MILLING BRUX,0.0,NE RT 2,,CAD_CAM,1,2,5,0,False,False,False,False
-455422,,Khadija Sulemanjee,P125,2026-07-23 12:59:00,2026-07-31,2026-07-30 15:00:00,In Production,PORCIP DEAN,0.0,NWIND RT 6,,Implants,0,5,5,0,False,False,False,False
+455422,,Khadija Sulemanjee,P125,2026-07-23 12:59:00,2026-07-31,2026-07-30 15:00:00,In Production,PORCIP DEAN,0.0,NWIND RT 6,,Implants,1,5,5,0,False,False,False,False
 455425,,Meghan Gaffney,P842,2026-07-23 13:26:00,2026-07-31,2026-07-30 15:00:00,In Production,GRINDING,0.0,SE RT 3,,Fixed,0,3,5,0,False,False,False,False
 455450,,Mikhail Korolyov,D235*,2026-07-23 15:00:00,2026-07-31,2026-07-30 15:00:00,In Production,PRINTROOM 2,0.0,GL,,CAD_CAM,0,2,5,0,False,False,False,False
 455456,,Manpreet Singh,EVDSGN-072326134347,2026-07-23 16:19:00,2026-07-31,2026-07-30 15:00:00,In Production,STAINGLAZE,0.0,WEST RT 4,,Fixed,0,3,5,0,False,False,False,False
@@ -70,10 +70,10 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455468,,James Fieldhouse,E57*,2026-07-23 17:58:00,2026-07-31,2026-07-30 15:00:00,In Production,REMIPMARY,0.0,NE RT 2,,Removable,0,5,5,0,False,False,False,False
 455482,,Mikhail Korolyov,EVDSGN-072426054958,2026-07-24 09:25:00,2026-07-31,2026-07-30 15:00:00,In Production,STAINGLAZE,0.0,GL,,Fixed,0,3,4,0,False,False,False,False
 455486,,Austin Czarnecki,EVDSGN-072326161516,2026-07-24 09:51:00,2026-07-31,2026-07-30 15:00:00,In Production,STAINGLAZE,0.0,FNW RT 8,,Fixed,0,3,4,0,False,False,False,False
-455492,,Thomas John Raia,E151*,2026-07-24 10:22:00,2026-07-31,2026-07-30 15:00:00,In Production,PRINTROOM 2,0.0,SW RT 5,,CAD_CAM,1,2,4,0,False,False,False,False
+455492,,Thomas John Raia,E151*,2026-07-24 10:22:00,2026-07-31,2026-07-30 15:00:00,In Production,PRINTROOM 2,0.0,SW RT 5,,CAD_CAM,2,2,4,0,False,False,False,False
 455494,,Nick Feller,EVDSGN-072426075230,2026-07-24 10:31:00,2026-07-31,2026-07-30 14:00:00,In Production,CTS,0.0,UPS: 03,,Surgical,0,7,4,0,False,False,False,False
 455512,,Manpreet Singh,EVDSGN-072426094635,2026-07-24 12:11:00,2026-07-31,2026-07-30 15:00:00,In Production,STAINGLAZE,0.0,WEST RT 4,,Fixed,0,3,4,0,False,False,False,False
-455521,,Gary Tapak,E181,2026-07-24 13:36:00,2026-07-31,2026-07-30 15:00:00,In Production,REMIPLIZ,0.0,SE RT 3,,Removable,1,5,4,0,False,False,False,False
+455521,,Gary Tapak,E181,2026-07-24 13:36:00,2026-07-31,2026-07-30 15:00:00,In Production,REMIPLIZ,0.0,SE RT 3,,Removable,2,5,4,0,False,False,False,False
 455548,,Mikhail Korolyov,V29,2026-07-27 09:12:00,2026-07-31,2026-07-30 15:00:00,In Production,PRINTROOM 2,0.0,GL,,CAD_CAM,1,2,1,0,False,False,False,False
 455549,,Amy Wadas,EVDSGN-072426154419,2026-07-27 09:10:00,2026-07-31,2026-07-30 15:00:00,In Production,STAINGLAZE,0.0,NWIND RT 6,,Fixed,0,3,1,0,False,False,False,False
 455695,,Krupa Patel,H47,2026-07-28 12:02:00,2026-07-31,2026-07-30 15:00:00,In Production,MILLINGIP,0.0,SW RT 5,,Implants,0,5,0,0,False,False,False,False
@@ -159,7 +159,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455472,,Linora Nissan,E154,2026-07-24 08:30:00,2026-08-04,2026-08-03 15:00:00,In Production,MILLING BRUX,0.0,GL,,CAD_CAM,1,2,4,0,False,False,False,False
 455473,,Joseph Nierzwicki,E83,2026-07-24 08:31:00,2026-08-04,2026-08-03 15:00:00,In Production,MILLING BRUX,0.0,GL,,CAD_CAM,0,2,4,0,False,False,False,False
 455474,,Kara Passolt-Kung,E149,2026-07-24 08:33:00,2026-08-04,2026-08-03 15:00:00,In Production,MILLING EMAX,0.0,FNE RT 7,,CAD_CAM,0,2,4,0,False,False,False,False
-455527,,John Athos,E184*,2026-07-24 14:44:00,2026-08-04,2026-08-03 15:00:00,In Production,PRINTROOM 2,0.0,SE RT 3,,CAD_CAM,1,2,4,0,False,False,False,False
+455527,,John Athos,E184*,2026-07-24 14:44:00,2026-08-04,2026-08-03 15:00:00,In Production,PRINTROOM 2,0.0,SE RT 3,,CAD_CAM,2,2,4,0,False,False,False,False
 455541,,Joseph Nierzwicki,V263,2026-07-27 08:51:00,2026-08-04,2026-08-03 15:00:00,In Production,MILLING BRUX,0.0,GL,,CAD_CAM,0,2,1,0,False,False,False,False
 455543,,Joseph Nierzwicki,V4,2026-07-27 08:54:00,2026-08-04,2026-08-03 15:00:00,In Production,SCANNING,0.0,GL,,Surgical,1,7,1,0,False,False,False,False
 455553,,Jane Lang,V259,2026-07-27 09:21:00,2026-08-04,2026-08-03 15:00:00,In Production,REMTRYINWALL,0.0,GL,,Removable,1,5,1,0,False,False,False,False
@@ -218,7 +218,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455209,,Devang Thakkar,H214,2026-07-21 13:10:00,2026-08-05,2026-08-04 15:00:00,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,6,7,7,0,False,False,False,False
 455241,,Kartiki Agrawal,V226*&,2026-07-21 18:23:00,2026-08-05,2026-08-04 15:00:00,In Production,MILLING BRIDGE,0.0,SW RT 5,,CAD_CAM,1,2,7,0,False,False,False,False
 455250,,Mark Huberty,F191*,2026-07-22 08:55:00,2026-08-05,2026-08-04 14:00:00,In Production,SPLFINISH,0.0,UPS: 03,,Fixed,0,3,6,0,False,False,False,False
-455279,,Richa Ranpura,D299$!,2026-07-22 11:28:00,2026-08-05,2026-08-04 15:00:00,In Production,SCANNINGAO4CART,0.0,CENT RT1,,Unknown,1,5,6,0,False,False,False,False
+455279,,Richa Ranpura,D299$!,2026-07-22 11:28:00,2026-08-05,2026-08-04 15:00:00,In Production,SCANNINGAO4CART,0.0,CENT RT1,,Unknown,2,5,6,0,False,False,False,False
 455296,,Raffi Leblebijian,F126*,2026-07-22 12:46:00,2026-08-05,2026-08-04 15:00:00,In Production,CTS,0.0,GL,,Surgical,0,7,6,0,False,False,False,False
 455299,,Neeva Patel,F122,2026-07-22 13:16:00,2026-08-05,2026-08-04 15:00:00,In Production,GRINDING,0.0,NWIND RT 6,,Fixed,0,3,6,0,False,False,False,False
 455304,,Scott Walkinshaw,F76*,2026-07-22 13:38:00,2026-08-05,2026-08-04 15:00:00,In Production,EVD SUBMITTED,0.0,GL,,Scheduling,1,2,6,0,False,False,False,False
