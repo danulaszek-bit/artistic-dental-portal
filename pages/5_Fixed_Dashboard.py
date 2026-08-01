@@ -102,12 +102,12 @@ projected_pct = goals_store.projected_capacity_pct(DASHBOARD, today)
 
 # Labor & materials data — computed up front so the KPI tiles can sit with
 # the main KPI row; drill-down tables render further down the page.
-from materials_calc import load_materials
-from pathlib import Path as _Path
+from materials_calc import dashboard_materials
 labor = goals_store.get_labor_history(DASHBOARD)
-mats = load_materials(_Path("C:/MT_Reports_Local"), DASHBOARD)
+mats = dashboard_materials(DASHBOARD)   # from accumulated local history
 ldf = pd.DataFrame(labor) if labor else pd.DataFrame()
 today_str = today.isoformat()
+week_start = today - timedelta(days=today.weekday())   # Monday
 
 c1, c2, c3, c4 = st.columns(4)
 with c1:
@@ -138,14 +138,15 @@ with lc2:
     sub = f"{ldf['work_date'].min()} → {ldf['work_date'].max()}" if not ldf.empty else "no data yet"
     st.markdown(tile_html("Labor — Window", f"${v:,.0f}", sub), unsafe_allow_html=True)
 with lc3:
-    v = mats[mats["issue_date"].dt.date == today]["issued_value"].sum() if not mats.empty else 0
-    st.markdown(tile_html("Materials Today", f"${v:,.0f}", "Clixon issued value"),
+    v = mats[mats["issue_date"].dt.date >= week_start]["issued_value"].sum() if not mats.empty else 0
+    st.markdown(tile_html("Materials This Week", f"${v:,.0f}", "Clixon issued value"),
                unsafe_allow_html=True)
 with lc4:
-    v = mats["issued_value"].sum() if not mats.empty else 0
-    sub = (f"{mats['issue_date'].min():%m/%d} → {mats['issue_date'].max():%m/%d}"
-           if not mats.empty else "no Clixon export found")
-    st.markdown(tile_html("Materials — Window", f"${v:,.0f}", sub), unsafe_allow_html=True)
+    v = (mats[(mats["issue_date"].dt.year == today.year) &
+              (mats["issue_date"].dt.month == today.month)]["issued_value"].sum()
+         if not mats.empty else 0)
+    sub = today.strftime("%B %Y") if not mats.empty else "no materials data yet"
+    st.markdown(tile_html("Materials This Month", f"${v:,.0f}", sub), unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -364,5 +365,34 @@ with emp_m:
 
 if not ldf.empty and (ldf["source"] == "actual").any():
     st.caption("Labor includes reconciled payroll actuals where available; estimates elsewhere.")
+
+# Requester-name aliases: map Clixon "Requested By" names that don't match the
+# roster (different name format, or ordered on someone's behalf) to a tech.
+with st.expander("🔗 Materials requester aliases — fix unmatched names"):
+    from materials_calc import unmatched_requesters
+    from pathlib import Path as _P
+    unmatched = unmatched_requesters(_P("C:/MT_Reports_Local"))
+    existing = goals_store.get_requester_aliases()
+    st.caption("Clixon lists who *requested* material by free-text name. Map any that "
+               "don't match a technician (name-format differences, or purchasing staff "
+               "ordering for a tech). Unmapped names still count toward the department total.")
+    if unmatched:
+        name_to_code = {t["name"]: t["tech_code"] for t in goals_store.list_technicians()}
+        with st.form("alias_form_fixed"):
+            pick_name = st.selectbox("Unmatched requester", unmatched)
+            pick_tech = st.selectbox("Maps to technician", ["(leave unmapped)"] + list(name_to_code))
+            if st.form_submit_button("Save alias"):
+                if pick_tech != "(leave unmapped)":
+                    goals_store.set_requester_alias(pick_name, name_to_code[pick_tech])
+                    st.success(f"'{pick_name}' → {pick_tech}. Re-runs of the pipeline will apply it.")
+                    st.rerun()
+    else:
+        st.caption("✓ No unmatched requesters in the current export.")
+    if existing:
+        code_to_name = {t["tech_code"]: t["name"] for t in goals_store.list_technicians()}
+        st.markdown("**Current aliases**")
+        st.dataframe(pd.DataFrame([{"Requester": k, "Technician": code_to_name.get(v, v)}
+                                   for k, v in existing.items()]),
+                     hide_index=True, use_container_width=True)
 
 st.caption("Artistic Dental Studio · Fixed Dashboard · goals, pay and scheduling persist immediately to the local store")

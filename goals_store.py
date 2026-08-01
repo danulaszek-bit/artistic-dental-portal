@@ -130,6 +130,37 @@ def init_db() -> None:
         );
         CREATE INDEX IF NOT EXISTS idx_labor_date
             ON labor_history (work_date, dashboard);
+
+        -- Materials issued (Clixon), ingested replace-by-week: the source file
+        -- is a week-to-date rolling export overwritten 2-3x/week, so the newest
+        -- export is always the most complete version of its week. Ingestion
+        -- deletes+reinserts a whole week at a time (keyed by week_start Monday),
+        -- which avoids both history loss and double-counting without needing a
+        -- per-transaction id the source doesn't provide.
+        CREATE TABLE IF NOT EXISTS materials_history (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            week_start   TEXT NOT NULL,       -- ISO date, Monday of the row's week
+            issue_date   TEXT NOT NULL,       -- ISO date
+            dashboard    TEXT NOT NULL,
+            area         TEXT NOT NULL,       -- from Clixon Issued Dept.
+            tech_code    TEXT DEFAULT '',     -- matched roster tech, '' if unmatched
+            matched_name TEXT DEFAULT '',     -- roster name or raw requester
+            requested_by TEXT DEFAULT '',     -- raw Clixon "Requested By"
+            qty          REAL NOT NULL DEFAULT 0,
+            dollars      REAL NOT NULL DEFAULT 0,
+            created_at   TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_materials_week
+            ON materials_history (week_start, dashboard);
+
+        -- Clixon "Requested By" free-text name -> roster tech_code, so material
+        -- requests whose name format differs from MagicTouch (or who order for
+        -- someone else) attribute to the right technician. Manager-editable.
+        CREATE TABLE IF NOT EXISTS requester_aliases (
+            raw_name   TEXT PRIMARY KEY,      -- exact Clixon "Requested By" text
+            tech_code  TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
         """)
 
 
@@ -472,3 +503,67 @@ def get_labor_history(dashboard: str | None = None, start: date | None = None,
     actual_keys = {(r["work_date"], r["tech_code"]) for r in rows if r["source"] == "actual"}
     return [r for r in rows
             if r["source"] == "actual" or (r["work_date"], r["tech_code"]) not in actual_keys]
+
+
+# ── Materials history (replace-by-week ingestion of the Clixon Issued export) ─
+
+def replace_materials_week(week_start: str, rows: list[dict]) -> int:
+    """
+    Replace ALL stored materials rows for one week (week_start = ISO Monday)
+    with `rows`. Each row: {'issue_date' (ISO str), 'dashboard', 'area',
+    'tech_code', 'matched_name', 'requested_by', 'qty', 'dollars'}. Because the
+    newest week-to-date export is the most complete version of its week, a full
+    replace is correct — no double-counting, no lost detail. Returns rows written.
+    """
+    now = datetime.now().isoformat(timespec="seconds")
+    with _conn() as conn:
+        conn.execute("DELETE FROM materials_history WHERE week_start = ?", (week_start,))
+        for r in rows:
+            conn.execute(
+                "INSERT INTO materials_history (week_start, issue_date, dashboard, area, "
+                "tech_code, matched_name, requested_by, qty, dollars, created_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (week_start, r["issue_date"], r["dashboard"], r["area"],
+                 r.get("tech_code", ""), r.get("matched_name", ""),
+                 r.get("requested_by", ""), r.get("qty", 0), r.get("dollars", 0), now),
+            )
+    return len(rows)
+
+
+def get_materials_history(dashboard: str | None = None, start: date | None = None,
+                          end: date | None = None) -> list[dict]:
+    q = ("SELECT issue_date, dashboard, area, tech_code, matched_name, requested_by, "
+         "qty, dollars FROM materials_history WHERE 1=1")
+    params: list = []
+    if dashboard:
+        q += " AND dashboard = ?"; params.append(dashboard)
+    if start:
+        q += " AND issue_date >= ?"; params.append(start.isoformat())
+    if end:
+        q += " AND issue_date <= ?"; params.append(end.isoformat())
+    q += " ORDER BY issue_date"
+    with _conn() as conn:
+        return [dict(r) for r in conn.execute(q, params).fetchall()]
+
+
+# ── Requester → tech aliases (Clixon "Requested By" name cleanup) ─────────────
+
+def set_requester_alias(raw_name: str, tech_code: str) -> None:
+    with _conn() as conn:
+        conn.execute(
+            "INSERT INTO requester_aliases (raw_name, tech_code, created_at) "
+            "VALUES (?, ?, ?) ON CONFLICT(raw_name) DO UPDATE SET tech_code=excluded.tech_code",
+            (raw_name.strip(), tech_code, datetime.now().isoformat(timespec="seconds")),
+        )
+
+
+def delete_requester_alias(raw_name: str) -> None:
+    with _conn() as conn:
+        conn.execute("DELETE FROM requester_aliases WHERE raw_name = ?", (raw_name.strip(),))
+
+
+def get_requester_aliases() -> dict[str, str]:
+    """{raw_name: tech_code} for all configured aliases."""
+    with _conn() as conn:
+        return {r["raw_name"]: r["tech_code"]
+                for r in conn.execute("SELECT raw_name, tech_code FROM requester_aliases").fetchall()}
