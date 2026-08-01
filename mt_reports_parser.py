@@ -1468,41 +1468,59 @@ def load_shipping_logistics_report(folder: Path) -> "pd.DataFrame":
 #  11. Employees TimeClock Detail (Export).csv  — daily punch segments
 # ═══════════════════════════════════════════════════════════════════════════════
 
+TIMECLOCK_COLS = [
+    "lab_name", "employee_id", "first_name", "last_name", "activity",
+    "date_in", "time_in", "date_out", "time_out", "total_hours", "comments",
+]
+
+
 def load_timeclock(folder: Path) -> pd.DataFrame:
     """
-    Quirky export: every row repeats the 11 column-label strings
-    ('LabName','Employee ID',' FirstName','  LastName','Activity','Date In',
-    'Time In','Date Out','Time Out','Total Hours','Comments') as literal values
-    in columns 0-10 of EVERY row (not just a header row) — real data follows
-    positionally in columns 11-21. There is no usable header row to key off.
+    "Employees TimeClock Detail" — one row per clock-in/out punch segment.
+    Handles two export layouts:
+      * CLEAN (current): a normal CSV — header row (LabName, Employee ID,
+        FirstName, LastName, Activity, Date In, Time In, Date Out, Time Out,
+        Total Hours, Comments) + 11 data columns.
+      * QUIRKY (older sample): every row repeated those 11 labels in cols 0-10
+        with the real values positionally in cols 11-21 (22 cols total).
 
-    Returns one row per punch segment: employee_id, first_name, last_name,
-    activity, date_in, time_in, date_out, time_out, hours (decimal), comments.
-    `activity` values seen: Production, Non-Production, Break, Vacation,
-    Personal, Bereavement — useful both for hours-worked and as a historical
-    PTO/absence cross-check.
+    Returns one row per segment: employee_id, first_name, last_name, activity,
+    date_in, time_in, date_out, time_out, hours (decimal), comments.
+    `activity` values include Production, Non-Production, Break, Vacation,
+    Personal, Bereavement, Non-Paid TO, Lunch, Holiday.
     """
     path = folder / "Employees TimeClock Detail (Export).csv"
     if not path.exists():
-        # Scheduled exports may land under a slightly different name — take
-        # the freshest CSV matching the report's stem.
         candidates = sorted(folder.glob("Employees TimeClock*.csv"),
                             key=lambda p: p.stat().st_mtime)
         if not candidates:
             return pd.DataFrame()
         path = candidates[-1]
 
-    df = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
-                     on_bad_lines="skip", engine="python", encoding=_enc(path))
-    if df.shape[1] < 22:
+    raw = pd.read_csv(path, header=None, dtype=str, keep_default_na=False,
+                      on_bad_lines="skip", engine="python", encoding=_enc(path))
+    if raw.empty:
         return pd.DataFrame()
 
-    out = df.iloc[:, 11:22].copy()
-    out.columns = [
-        "lab_name", "employee_id", "first_name", "last_name", "activity",
-        "date_in", "time_in", "date_out", "time_out", "total_hours", "comments",
-    ]
+    ncols = raw.shape[1]
+    first_row = [str(x).strip() for x in raw.iloc[0].tolist()]
+    header_here = any("Employee ID" in c for c in first_row)
+
+    if ncols >= 22:
+        # Quirky: real data in cols 11-21.
+        out = raw.iloc[:, 11:22].copy()
+    elif ncols >= 11:
+        # Clean: cols 0-10 are the data; drop the header row if present.
+        out = raw.iloc[:, :11].copy()
+        if header_here:
+            out = out.iloc[1:]
+    else:
+        return pd.DataFrame()
+
+    out.columns = TIMECLOCK_COLS
     out = out[out["employee_id"].str.strip() != ""].copy()
+    # Guard against any repeated-header rows sneaking through.
+    out = out[out["employee_id"].str.strip() != "Employee ID"].copy()
 
     out["hours"] = out["total_hours"].apply(_hhmm_to_decimal)
     out["date_in"]  = pd.to_datetime(out["date_in"],  errors="coerce")
