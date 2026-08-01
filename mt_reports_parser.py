@@ -1517,33 +1517,43 @@ def load_timeclock(folder: Path) -> pd.DataFrame:
 
 def load_materials_issued(folder: Path) -> pd.DataFrame:
     """
-    Clean tabular CSV (UTF-8 BOM), real header row. One row per material
-    issuance transaction. Per-department `,Total:,` subtotal rows (blank
-    Company/Product, "Total:" in the Issue Date column) are dropped — they're
-    redundant with summing the detail rows, kept here only as an implicit
-    cross-check opportunity, not loaded as data.
+    Clixon "Issued" materials report — one row per material issuance
+    transaction, real header row. Reads .xlsx / .xls / .csv (the vendor's
+    Excel export and the older CSV sample share the same 16-column layout).
+    Per-department and grand-total `Total:` subtotal rows (blank Company/
+    Product, "Total:" in the Issue Date column) are dropped.
 
-    No employee-code column exists in this report — cost is attributed by
-    `Issued Dept.` (department) and free-text `Requested By` (name, not a
-    tech_code), so this drives department-level, not per-technician, material
-    cost tracking.
+    Negative Qty / Issued Value rows are RESTOCKS/returns (material put back
+    into inventory) and are kept — they net against usage, matching the
+    report's own grand total.
+
+    Matches any file whose name contains "issued" (case-insensitive) so the
+    vendor's auto-incrementing export names ("Issued (30).xlsx", "Clixon
+    issued report …") work without renaming; the freshest is used.
+
+    No employee-code column exists — cost is attributed by `Issued Dept.`
+    (department) and free-text `Requested By` (name, not a tech_code).
 
     Returns: requested_by, vendor, case_number, department, issue_date, qty,
     issued_value.
     """
-    path = folder / "Issued (29).csv"
-    if not path.exists():
-        # Scheduled Clixon exports may land under a different suffix — take
-        # the freshest CSV matching the report's stem.
-        candidates = sorted(folder.glob("Issued*.csv"),
-                            key=lambda p: p.stat().st_mtime)
-        if not candidates:
-            return pd.DataFrame()
-        path = candidates[-1]
+    # Find the freshest issued-report file in any supported format.
+    candidates = [p for p in folder.glob("*")
+                  if "issued" in p.name.lower()
+                  and p.suffix.lower() in (".xlsx", ".xls", ".csv")]
+    if not candidates:
+        return pd.DataFrame()
+    path = max(candidates, key=lambda p: p.stat().st_mtime)
 
-    df = pd.read_csv(path, dtype=str, keep_default_na=False,
-                     on_bad_lines="skip", engine="python", encoding="utf-8-sig")
-    df.columns = [c.strip() for c in df.columns]
+    ext = path.suffix.lower()
+    if ext in (".xlsx", ".xls"):
+        engine = "openpyxl" if ext == ".xlsx" else None  # xlrd auto for .xls
+        df = pd.read_excel(path, dtype=str, engine=engine)
+        df = df.fillna("")
+    else:
+        df = pd.read_csv(path, dtype=str, keep_default_na=False,
+                         on_bad_lines="skip", engine="python", encoding="utf-8-sig")
+    df.columns = [str(c).strip() for c in df.columns]
 
     rename = {
         "Requested By":  "requested_by",
