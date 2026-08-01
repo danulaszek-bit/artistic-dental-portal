@@ -9,15 +9,15 @@ sitting in the same folder would fight it).
 
 Usage
 -----
-1. Put the history export here:
-       C:\\MT_Reports_Local\\Materials_History.xlsx     (.xls or .csv also fine)
-   The name deliberately does NOT contain "issued", so the hourly pipeline
-   ignores it — only this script reads it.
+1. Put the history export in the portal's historical/ folder (where the other
+   one-time backfills live — Sales History 2020.csv, Sales_2025.csv, etc.):
+       C:\\ArtisticDentalPortal\\historical\\Materials_History.xlsx   (.xls / .csv ok)
+   Keeping it here (not C:\\MT_Reports_Local) means the hourly rolling pipeline
+   never touches it — only this script reads it.
 2. Run once:
        py ingest_materials_history.py
 3. It ingests every week the file covers (replace-by-week) and prints a
-   summary. Safe to re-run — idempotent. After it succeeds you can delete or
-   archive the history file; the data now lives in the local DB.
+   summary. Safe to re-run — idempotent. The data lives in the local DB after.
 
 Pass a different path as an argument if the file is elsewhere:
        py ingest_materials_history.py "D:\\somewhere\\old_materials.xlsx"
@@ -27,7 +27,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-DEFAULT = Path("C:/MT_Reports_Local/Materials_History.xlsx")
+DEFAULT = Path(__file__).parent / "historical" / "Materials_History.xlsx"
 
 
 def main():
@@ -38,7 +38,8 @@ def main():
         found = next((p for p in alt if p.exists()), None)
         if not found:
             print(f"History file not found: {path}")
-            print("Place it at C:\\MT_Reports_Local\\Materials_History.xlsx (or pass a path).")
+            print("Place it at C:\\ArtisticDentalPortal\\historical\\Materials_History.xlsx "
+                  "(or pass a path).")
             sys.exit(1)
         path = found
 
