@@ -55,17 +55,18 @@ def _name_key(s: str) -> tuple[str, str] | None:
     return (parts[0].lower(), parts[-1].lower())
 
 
-def load_materials(mt_folder: Path, dashboard: str) -> pd.DataFrame:
+def map_and_match(df: pd.DataFrame, dashboard: str) -> pd.DataFrame:
     """
-    Issued-materials rows for one dashboard, with columns:
-    issue_date, area, requested_by, matched_name (roster name or raw
-    requester), tech_code (or ''), qty, issued_value.
-    Empty DataFrame when the Clixon export isn't present (e.g. cloud).
+    Map a raw parsed Issued frame (from load_materials_issued or
+    parse_issued_file) to one dashboard: apply CLIXON_MAP dept→area, filter to
+    the dashboard, and attribute each row to a technician (alias, then name
+    match). Columns: issue_date, area, requested_by, matched_name, tech_code,
+    qty, issued_value.
     """
-    df = load_materials_issued(mt_folder)
     if df.empty:
         return pd.DataFrame()
 
+    df = df.copy()
     df["bucket"] = df["department"].map(CLIXON_MAP)
     df = df.dropna(subset=["bucket"]).copy()
     df["dashboard"] = df["bucket"].apply(lambda b: b[0])
@@ -100,6 +101,11 @@ def load_materials(mt_folder: Path, dashboard: str) -> pd.DataFrame:
                "tech_code", "qty", "issued_value"]].reset_index(drop=True)
 
 
+def load_materials(mt_folder: Path, dashboard: str) -> pd.DataFrame:
+    """Freshest rolling Clixon export, mapped/matched for one dashboard."""
+    return map_and_match(load_materials_issued(mt_folder), dashboard)
+
+
 def dashboard_materials(dashboard: str) -> pd.DataFrame:
     """
     Materials for the dashboard's Labor & Materials section, read from the
@@ -130,21 +136,10 @@ def unmatched_requesters(mt_folder: Path) -> list[str]:
     return sorted(out)
 
 
-def persist_materials(mt_folder: Path) -> tuple[int, int]:
-    """
-    Ingest the current Clixon export into materials_history using replace-by-
-    week (the newest week-to-date file is the most complete for its week).
-    Returns (weeks_written, rows_written). Local-only — never a committed file.
-    """
+def _persist_mapped(frames: list) -> tuple[int, int]:
+    """Replace-by-week ingest from already-mapped per-dashboard frames."""
     import pandas as _pd
-
-    frames = []
-    for d in ("Fixed", "Removable"):
-        f = load_materials(mt_folder, d)
-        if not f.empty:
-            f = f.copy()
-            f["dashboard"] = d
-            frames.append(f)
+    frames = [f for f in frames if not f.empty]
     if not frames:
         return 0, 0
     m = _pd.concat(frames, ignore_index=True)
@@ -171,3 +166,33 @@ def persist_materials(mt_folder: Path) -> tuple[int, int]:
         total += goals_store.replace_materials_week(wk.isoformat(), rows)
         weeks += 1
     return weeks, total
+
+
+def _mapped_frames(raw_df: pd.DataFrame) -> list:
+    out = []
+    for d in ("Fixed", "Removable"):
+        f = map_and_match(raw_df, d)
+        if not f.empty:
+            f = f.copy()
+            f["dashboard"] = d
+            out.append(f)
+    return out
+
+
+def persist_materials(mt_folder: Path) -> tuple[int, int]:
+    """
+    Ingest the current (freshest) Clixon export into materials_history using
+    replace-by-week (the newest week-to-date file is the most complete for its
+    week). Returns (weeks_written, rows_written). Local-only.
+    """
+    return _persist_mapped(_mapped_frames(load_materials_issued(mt_folder)))
+
+
+def persist_materials_from_file(path: Path) -> tuple[int, int]:
+    """
+    One-time history backfill: ingest a SPECIFIC Clixon Issued file (any
+    covered span) via the same replace-by-week logic. Used by
+    ingest_materials_history.py, independent of the rolling freshest-file flow.
+    """
+    from mt_reports_parser import parse_issued_file
+    return _persist_mapped(_mapped_frames(parse_issued_file(path)))

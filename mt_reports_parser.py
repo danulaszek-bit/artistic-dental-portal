@@ -1544,7 +1544,15 @@ def load_materials_issued(folder: Path) -> pd.DataFrame:
     if not candidates:
         return pd.DataFrame()
     path = max(candidates, key=lambda p: p.stat().st_mtime)
+    return parse_issued_file(path)
 
+
+def parse_issued_file(path: Path) -> pd.DataFrame:
+    """Parse ONE Clixon Issued report file (xlsx/xls/csv) into the standardized
+    frame. Used by load_materials_issued (freshest rolling export) and by the
+    one-time history backfill, which points at a specific file."""
+    if not path.exists():
+        return pd.DataFrame()
     ext = path.suffix.lower()
     if ext in (".xlsx", ".xls"):
         engine = "openpyxl" if ext == ".xlsx" else None  # xlrd auto for .xls
