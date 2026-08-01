@@ -55,13 +55,25 @@ def _name_key(s: str) -> tuple[str, str] | None:
     return (parts[0].lower(), parts[-1].lower())
 
 
+DEPT_GENERAL = "Department (general)"
+
+
 def map_and_match(df: pd.DataFrame, dashboard: str) -> pd.DataFrame:
     """
     Map a raw parsed Issued frame (from load_materials_issued or
     parse_issued_file) to one dashboard: apply CLIXON_MAP dept→area, filter to
-    the dashboard, and attribute each row to a technician (alias, then name
-    match). Columns: issue_date, area, requested_by, matched_name, tech_code,
-    qty, issued_value.
+    the dashboard, and attribute each row to a technician.
+
+    Attribution rule (per Danny): a material is credited to a person ONLY when
+    the requester name matches a CURRENT ACTIVE-ROSTER technician (the roster
+    is rebuilt each run from EmployeeProductivity, so departed / long-inactive
+    staff automatically fall off). Everything else — unknown names, purchasing
+    staff, or past employees in the historical backfill — rolls into the
+    department-general bucket. No aliases: department-level history is the
+    goal, not comparisons to past employees.
+
+    Columns: issue_date, area, requested_by, matched_name, tech_code, qty,
+    issued_value. Unattributed rows get matched_name = DEPT_GENERAL, tech_code "".
     """
     if df.empty:
         return pd.DataFrame()
@@ -75,26 +87,18 @@ def map_and_match(df: pd.DataFrame, dashboard: str) -> pd.DataFrame:
     if df.empty:
         return pd.DataFrame()
 
-    roster = goals_store.list_technicians(active_only=True)
-    by_code = {t["tech_code"]: t for t in roster}
     by_key = {}
-    for t in roster:
+    for t in goals_store.list_technicians(active_only=True):
         k = _name_key(t["name"])
         if k:
             by_key[k] = t
-    aliases = goals_store.get_requester_aliases()   # {raw_name: tech_code}
 
     def _match(requested_by: str):
-        raw = str(requested_by).strip()
-        # 1. Explicit manager-set alias wins.
-        t = by_code.get(aliases.get(raw)) if raw in aliases else None
-        # 2. Fall back to (first, last) name-key match against the roster.
-        if not t:
-            k = _name_key(raw)
-            t = by_key.get(k) if k else None
+        k = _name_key(str(requested_by).strip())
+        t = by_key.get(k) if k else None
         if t:
             return pd.Series([t["name"], t["tech_code"]])
-        return pd.Series([raw or "(unattributed)", ""])
+        return pd.Series([DEPT_GENERAL, ""])   # unmatched / departed → dept general
 
     df[["matched_name", "tech_code"]] = df["requested_by"].apply(_match)
     return df[["issue_date", "area", "requested_by", "matched_name",
@@ -122,18 +126,6 @@ def dashboard_materials(dashboard: str) -> pd.DataFrame:
     df["issue_date"] = pd.to_datetime(df["issue_date"], errors="coerce")
     return df[["issue_date", "area", "requested_by", "matched_name",
                "tech_code", "qty", "issued_value"]]
-
-
-def unmatched_requesters(mt_folder: Path) -> list[str]:
-    """Distinct Clixon requester names from the current export that don't map
-    to a roster tech (across both dashboards) — surfaced in the alias editor."""
-    out: set[str] = set()
-    for dash in ("Fixed", "Removable"):
-        m = load_materials(mt_folder, dash)
-        if not m.empty:
-            out |= set(m[m["tech_code"] == ""]["requested_by"].str.strip())
-    out.discard("")
-    return sorted(out)
 
 
 def _persist_mapped(frames: list) -> tuple[int, int]:

@@ -365,34 +365,7 @@ with emp_m:
 
 if not ldf.empty and (ldf["source"] == "actual").any():
     st.caption("Labor includes reconciled payroll actuals where available; estimates elsewhere.")
-
-# Requester-name aliases: map Clixon "Requested By" names that don't match the
-# roster (different name format, or ordered on someone's behalf) to a tech.
-with st.expander("🔗 Materials requester aliases — fix unmatched names"):
-    from materials_calc import unmatched_requesters
-    from pathlib import Path as _P
-    unmatched = unmatched_requesters(_P("C:/MT_Reports_Local"))
-    existing = goals_store.get_requester_aliases()
-    st.caption("Clixon lists who *requested* material by free-text name. Map any that "
-               "don't match a technician (name-format differences, or purchasing staff "
-               "ordering for a tech). Unmapped names still count toward the department total.")
-    if unmatched:
-        name_to_code = {t["name"]: t["tech_code"] for t in goals_store.list_technicians()}
-        with st.form("alias_form_fixed"):
-            pick_name = st.selectbox("Unmatched requester", unmatched)
-            pick_tech = st.selectbox("Maps to technician", ["(leave unmapped)"] + list(name_to_code))
-            if st.form_submit_button("Save alias"):
-                if pick_tech != "(leave unmapped)":
-                    goals_store.set_requester_alias(pick_name, name_to_code[pick_tech])
-                    st.success(f"'{pick_name}' → {pick_tech}. Re-runs of the pipeline will apply it.")
-                    st.rerun()
-    else:
-        st.caption("✓ No unmatched requesters in the current export.")
-    if existing:
-        code_to_name = {t["tech_code"]: t["name"] for t in goals_store.list_technicians()}
-        st.markdown("**Current aliases**")
-        st.dataframe(pd.DataFrame([{"Requester": k, "Technician": code_to_name.get(v, v)}
-                                   for k, v in existing.items()]),
-                     hide_index=True, use_container_width=True)
+st.caption("Materials are credited to a technician only when the requester matches a current "
+           "active employee; everything else rolls into 'Department (general)'.")
 
 st.caption("Artistic Dental Studio · Fixed Dashboard · goals, pay and scheduling persist immediately to the local store")
