@@ -254,9 +254,9 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455979,,Nisha Patel,E101,2026-07-31 10:48:00,2026-08-10,2026-08-07 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,0,5,2,0,False,False,False,False
 455984,,Michael Lenart,E237,2026-07-31 11:06:00,2026-08-10,2026-08-07 15:00:00,In Production,DIETRIM,0.0,CENT RT1,,Unknown,0,5,2,0,False,False,False,False
 455985,,Michael Lenart,E303,2026-07-31 11:23:00,2026-08-10,2026-08-07 15:00:00,In Production,DIETRIM,0.0,CENT RT1,,Unknown,0,5,2,0,False,False,False,False
-455986,,Michael Lenart,E353,2026-07-31 11:24:00,2026-08-10,2026-08-07 15:00:00,In Production,PREP,0.0,CENT RT1,,Hold_Stalled,2,1,2,0,False,True,False,True
+455986,,Michael Lenart,E353,2026-07-31 11:24:00,2026-08-10,2026-08-07 15:00:00,In Production,PREP,0.0,CENT RT1,,Hold_Stalled,3,1,2,0,False,True,False,True
 455991,,Jacob Samuel,E120,2026-07-31 11:38:00,2026-08-10,2026-08-07 15:00:00,In Production,DIETRIM,0.0,WEST RT 4,,Unknown,0,5,2,0,False,False,False,False
-455993,,Jacob Samuel,E347,2026-07-31 11:41:00,2026-08-10,2026-08-07 15:00:00,In Production,PREP,0.0,WEST RT 4,,Hold_Stalled,2,1,2,0,False,True,False,True
+455993,,Jacob Samuel,E347,2026-07-31 11:41:00,2026-08-10,2026-08-07 15:00:00,In Production,PREP,0.0,WEST RT 4,,Hold_Stalled,3,1,2,0,False,True,False,True
 455994,,Thomas Remijas,E86,2026-07-31 11:43:00,2026-08-10,2026-08-07 15:00:00,In Production,DIETRIM,0.0,SE RT 3,,Unknown,0,5,2,0,False,False,False,False
 456013,,Austin Czarnecki,EVDSGN-073126100905,2026-07-31 12:47:00,2026-08-10,2026-08-07 15:00:00,In Production,MATCHING TABLE,0.0,FNW RT 8,,Fixed,0,3,2,0,False,False,False,False
 456014,,Benjamin Baptist,EVDSGN-073126101248,2026-07-31 12:52:00,2026-08-10,2026-08-07 15:00:00,In Production,EVD SUBMITTED,0.0,NE RT 2,,Scheduling,0,2,2,0,False,False,False,False
@@ -333,7 +333,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455861,,Loretta Lam,P499,2026-07-30 08:19:00,2026-08-13,2026-08-12 15:00:00,In Production,SENTFORDESIGN,0.0,GL,,CAD_CAM,0,2,3,0,False,False,False,False
 455871,,Brian Walczak,P765*,2026-07-30 09:41:00,2026-08-13,2026-08-12 15:00:00,In Production,PRINTING,0.0,SE RT 3,,CAD_CAM,0,2,3,0,False,False,False,False
 455970,,Sean Ryan,E371,2026-07-31 09:50:00,2026-08-13,2026-08-12 14:00:00,In Production,DIETRIM,0.0,UPS: 03,,Unknown,0,5,2,0,False,False,False,False
-455980,,Hwaiyin Chang,E96,2026-07-31 10:50:00,2026-08-13,2026-08-12 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,2,5,2,0,False,False,False,False
+455980,,Hwaiyin Chang,E96,2026-07-31 10:50:00,2026-08-13,2026-08-12 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,3,5,2,0,False,False,False,False
 455995,,Guy Henry Gattone,E327,2026-07-31 11:38:00,2026-08-13,2026-08-12 15:00:00,In Production,SCANNING,0.0,SE RT 3,,Surgical,0,7,2,0,False,False,False,False
 456001,,Peter Gallos,E332,2026-07-31 11:56:00,2026-08-13,2026-08-12 15:00:00,In Production,CTS,0.0,SW RT 5,,Surgical,0,7,2,0,False,False,False,False
 456018,,Neeva Patel,E344,2026-07-31 13:16:00,2026-08-13,2026-08-12 15:00:00,In Production,SCANNING,0.0,NWIND RT 6,,Surgical,0,7,2,0,False,False,False,False
@@ -351,4 +351,4 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450052,,Mark Kolozenski,D162$,2026-05-13 09:13:00,2026-08-18,2026-08-17 15:00:00,In Production,MILLING AO4,0.0,SE RT 3,,CAD_CAM,4,2,81,0,False,True,False,True
 453872,,David Dardick,P512*,2026-07-01 15:33:00,2026-08-18,2026-08-17 15:00:00,In Production,CTS,0.0,FNW RT 8,,Surgical,27,7,32,0,False,True,False,True
 455838,,Nicas Yiannias,P177*,2026-07-29 15:26:00,2026-08-20,2026-08-19 14:00:00,In Production,SENTFORDESIGN,0.0,UPS: 03,,CAD_CAM,0,2,4,0,False,False,False,False
-456005,,Vlad Crutcher,D335$!,2026-07-31 11:26:00,2026-08-28,2026-08-27 15:00:00,In Production,DIGITALREMOVABLE,0.0,GL,,Removable,2,5,2,0,False,False,False,False
+456005,,Vlad Crutcher,D335$!,2026-07-31 11:26:00,2026-08-28,2026-08-27 15:00:00,In Production,DIGITALREMOVABLE,0.0,GL,,Removable,3,5,2,0,False,False,False,False
