@@ -1,9 +1,9 @@
 Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,Cases_DueDate,Cases_ShipDate,Cases_Status,Cases_LastLocation,Cases_TotalCharge,Cases_Carrier,Cases_Notes,pseudo_dept,days_at_station,dept_threshold_days,age_days,days_overdue,flag_past_due,flag_stuck,flag_high_value_aged,is_behind
 438294,,Kevin Mullin,V871*,2025-12-22 10:39:00,2026-01-12,2026-01-08 14:00:00,In Production,GUIDES,0.0,UPS: 03,,Surgical,52,7,223,203,True,True,False,True
 448148,,Devang Thakkar,H292,2026-04-21 12:27:00,2026-05-05,2026-05-04 15:00:00,In Production,GUIDES,0.0,SE RT 3,,Surgical,52,7,103,90,True,True,False,True
-448213,,DANNY ULASZEK,EVDSGN-042226050419,2026-04-21 16:08:00,2026-05-05,2026-05-04 15:00:00,In Production,HENRY,0.0,CENT RT1,,Fixed,37,3,103,90,True,True,False,True
-448218,,DANNY ULASZEK,EVDSGN-042226054921,2026-04-21 16:56:00,2026-05-05,2026-05-04 15:00:00,In Production,HENRY,0.0,CENT RT1,,Fixed,37,3,103,90,True,True,False,True
-448224,,DANNY ULASZEK,EVDSGN-042226061019,2026-04-21 18:04:00,2026-05-05,2026-05-04 15:00:00,In Production,HENRY,0.0,CENT RT1,,Fixed,37,3,103,90,True,True,False,True
+448213,,DANNY ULASZEK,EVDSGN-042226050419,2026-04-21 16:08:00,2026-05-05,2026-05-04 15:00:00,In Production,HENRY,0.0,CENT RT1,,Fixed,38,3,103,90,True,True,False,True
+448218,,DANNY ULASZEK,EVDSGN-042226054921,2026-04-21 16:56:00,2026-05-05,2026-05-04 15:00:00,In Production,HENRY,0.0,CENT RT1,,Fixed,38,3,103,90,True,True,False,True
+448224,,DANNY ULASZEK,EVDSGN-042226061019,2026-04-21 18:04:00,2026-05-05,2026-05-04 15:00:00,In Production,HENRY,0.0,CENT RT1,,Fixed,38,3,103,90,True,True,False,True
 440906,,Daniel Kmak,N63*,2026-01-27 08:56:00,2026-05-13,2026-05-12 15:00:00,In Production,PORCIP NINI,0.0,NWIND RT 6,,Implants,52,5,187,82,True,True,False,True
 450497,,Upasna Janu,V61*,2026-05-18 16:22:00,2026-06-05,2026-06-04 14:00:00,In Production,GUIDES,0.0,UPS: 03,,Surgical,52,7,76,59,True,True,False,True
 450873,,Luis Peralta,F223*,2026-05-21 15:43:00,2026-06-08,2026-06-05 15:00:00,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,52,7,73,56,True,True,False,True
@@ -34,7 +34,6 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455602,,Neeva Patel,V125,2026-07-27 12:41:00,2026-08-04,2026-08-03 15:00:00,In Production,STAINGLAZE,0.0,NWIND RT 6,,Fixed,0,3,6,0,False,False,False,False
 455604,,Simon Tadros,V274,2026-07-27 12:42:00,2026-08-04,2026-08-03 15:00:00,In Production,STAINGLAZE,0.0,NWIND RT 6,,Fixed,0,3,6,0,False,False,False,False
 455612,,Catherine Rhim,V24,2026-07-27 13:45:00,2026-08-04,2026-08-03 15:00:00,In Production,STAINGLAZE,0.0,SW RT 5,,Fixed,0,3,6,0,False,False,False,False
-455614,,James Fieldhouse,V80,2026-07-27 13:58:00,2026-08-04,2026-08-03 15:00:00,In Production,FRED,0.0,NE RT 2,,Fixed,3,3,6,0,False,False,False,False
 455641,,Pinal Patel,EVDSGN-072726112117,2026-07-27 16:35:00,2026-08-04,2026-08-03 15:00:00,In Production,HENRY,0.0,WEST RT 4,,Fixed,3,3,6,0,False,False,False,False
 455650,,David Dardick,EVDSGN-072726140359,2026-07-27 17:23:00,2026-08-04,2026-08-03 15:00:00,In Production,HENRY,0.0,FNW RT 8,,Fixed,0,3,6,0,False,False,False,False
 455658,,Elizabeth Sacrey,H284*,2026-07-27 18:37:00,2026-08-04,2026-08-03 15:00:00,In Production,REMIPBLERTA,0.0,WEST RT 4,,Removable,0,5,6,0,False,False,False,False
@@ -48,6 +47,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455760,,Lena J. Casimir,EVDSGN-072826180243,2026-07-29 08:50:00,2026-08-04,2026-08-03 15:00:00,In Production,STAINGLAZE,0.0,GL,,Fixed,2,3,4,0,False,False,False,False
 455897,,Mark Niemiec,EVDSGN-073026100052,2026-07-30 12:41:00,2026-08-07,2026-08-03 14:00:00,In Production,PORCIP DEAN,0.0,UPS: 03,,Implants,0,5,3,0,False,False,False,False
 452600,,Catherine Rhim,F205,2026-07-27 14:35:00,2026-08-05,2026-08-04 15:00:00,In Production,REMIPDOM,0.0,SW RT 5,,Removable,3,5,6,0,False,False,False,False
+454277,,John Athos,X18$,2026-07-08 13:22:00,2026-08-05,2026-08-04 15:00:00,In Production,REMOUT,0.0,SE RT 3,,Removable,0,5,25,0,False,False,False,False
 455097,,Monika Tyszkowski,H72&*,2026-07-20 13:56:00,2026-08-05,2026-08-04 15:00:00,In Production,REMPREP,0.0,NE RT 2,,Removable,6,5,13,0,False,True,False,True
 455115,,Nicas Yiannias,H144*,2026-07-20 16:05:00,2026-08-05,2026-08-04 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,2,2,13,0,False,False,False,False
 455186,,Nicas Yiannias,H207*,2026-07-21 12:11:00,2026-08-05,2026-08-04 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,3,2,12,0,False,True,False,True
