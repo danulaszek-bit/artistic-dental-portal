@@ -34,23 +34,56 @@ from pathlib import Path
 
 import pandas as pd
 
-# Proliant department code → (dashboard, area). Areas match the technicians
-# table so actuals line up with the dashboards' area drill-down. Non-production
-# departments map to None and are dropped from labor attribution.
-PROLIANT_DEPT_MAP: dict[str, tuple[str, str] | None] = {
-    "101": None,                          # Distribution (shipping/logistics)
-    "102": ("GM", "Model/Die"),
-    "107": ("Fixed", "Crown & Bridge"),
-    "108": ("Fixed", "CAD/CAM"),
-    "113": ("Fixed", "Ceramics"),
-    "117": ("Removable", "Removables"),
-    "118": ("Removable", "Chairside"),
-    "180": None,                          # Selling
-    "181": None,                          # Sales & Marketing
-    "190": None,                          # Overhead
-    "191": None,                          # Clinical Technical Services (CTS)
-    "195": None,                          # Administration
+# Proliant department code → how its payroll is attributed, as a list of
+# (dashboard, area, weight) with weights summing to 1.0. Areas match the
+# technicians table so actuals line up with the dashboards' area drill-down.
+# None = non-production overhead, dropped from labor attribution.
+#
+# Per Danny (2026-08-05): on payroll, "Crown & Bridge" is synonymous with Fixed,
+# and ALL Model/Die work splits 50/50 between Fixed and Removable (it feeds both).
+PROLIANT_DEPT_MAP: dict[str, list[tuple[str, str, float]] | None] = {
+    "101": None,                                    # Distribution (shipping)
+    "102": [("Fixed", "Model/Die", 0.5),            # Model/Die serves both
+            ("Removable", "Model/Die", 0.5)],
+    "107": [("Fixed", "Crown & Bridge", 1.0)],
+    "108": [("Fixed", "CAD/CAM", 1.0)],
+    "113": [("Fixed", "Ceramics", 1.0)],
+    "117": [("Removable", "Removables", 1.0)],
+    "118": [("Removable", "Chairside", 1.0)],
+    "180": None,                                    # Selling
+    "181": None,                                    # Sales & Marketing
+    "190": None,                                    # Overhead
+    "191": None,                                    # Clinical Technical Services
+    "195": None,                                    # Administration
 }
+
+# Per-person attribution that overrides the department mapping, keyed by
+# normalized payroll name. These are people whose Proliant department does not
+# reflect the work they actually do — either a genuine cross-department split or
+# a clock-in that lands in the wrong department. Danny's calls, 2026-08-05:
+PAYROLL_ATTRIBUTION_OVERRIDES: dict[str, list[tuple[str, str, float]]] = {
+    # Runs Surgical Guides (Removable) and CAD/CAM (Fixed) — split for now.
+    "gorbach|matthew":  [("Fixed", "CAD/CAM", 0.5),
+                         ("Removable", "Removables", 0.5)],
+    # Payroll says Crown & Bridge; he is Fixed.
+    "deleon|alvin":     [("Fixed", "Crown & Bridge", 1.0)],
+    # Actually logistics, which serves both departments.
+    "ciaccio|jianni":   [("Fixed", "Logistics", 0.5),
+                         ("Removable", "Logistics", 0.5)],
+    # Clocks into CAD/CAM but the work is Model/Die → the 50/50 Model/Die rule.
+    "flores|brenda":    [("Fixed", "Model/Die", 0.5),
+                         ("Removable", "Model/Die", 0.5)],
+    # Payroll says Model/Die; he is Fixed 100%.
+    "arevalo|henry":    [("Fixed", "Crown & Bridge", 1.0)],
+    # Payroll says Model/Die; he runs printing → CAD/CAM.
+    "o'hale|john":      [("Fixed", "CAD/CAM", 1.0)],
+}
+
+
+def resolve_targets(name: str, dept_code: str) -> list[tuple[str, str, float]] | None:
+    """Weighted (dashboard, area, weight) targets for a check: person override
+    first, else the department default."""
+    return PAYROLL_ATTRIBUTION_OVERRIDES.get(_norm(name)) or PROLIANT_DEPT_MAP.get(dept_code)
 
 _SURNAME_RE = re.compile(r"^([A-Za-z][A-Za-z'.\-]*(?:\s[A-Za-z][A-Za-z'.\-]*)*),\s*$")
 _DEPT_RE    = re.compile(r"Department:\s*\((\w+)\)(.+)")
@@ -162,13 +195,10 @@ def parse_payroll_register(path: str | Path) -> pd.DataFrame:
 
         mt = _TOTALS_RE.search(joined)
         if mt and saw_chk and surname and dept:
-            mapped = PROLIANT_DEPT_MAP.get(dept[0])
             chk_d = date(int(chk[6:]), int(chk[:2]), int(chk[3:5]))
             p_start, p_end = period_for_check_date(chk_d)
             out.append({
                 "dept_code": dept[0], "dept_name": dept[1],
-                "dashboard": mapped[0] if mapped else None,
-                "area": mapped[1] if mapped else None,
                 "empid": empid,
                 "name": f"{surname}, {first}" if first else surname,
                 "chk_date": chk_d.isoformat(),
@@ -187,6 +217,13 @@ def parse_payroll_register(path: str | Path) -> pd.DataFrame:
     best = (df[df["name"].str.contains(", ")]
               .groupby("empid")["name"].agg(lambda s: s.value_counts().idxmax()))
     df["name"] = df["empid"].map(best).fillna(df["name"])
+
+    # Attribution resolves only now: per-person overrides key on the healed name.
+    tg = df.apply(lambda r: resolve_targets(r["name"], r["dept_code"]), axis=1)
+    df["targets"] = tg
+    df["dashboard"] = tg.apply(lambda t: t[0][0] if t else None)   # primary, for reporting
+    df["area"] = tg.apply(lambda t: t[0][1] if t else None)
+    df["is_split"] = tg.apply(lambda t: bool(t) and len(t) > 1)
     return df
 
 
@@ -251,20 +288,24 @@ def daily_actual_rows(df: pd.DataFrame) -> list[dict]:
                              date.fromisoformat(r["period_end"]))
         if not days:
             continue
-        gross = float(r["gross"])
-        per_day = round(gross / len(days), 2)
-        for i, d in enumerate(days):
-            # Give the last day the remainder so the period sums to gross exactly.
-            amt = per_day if i < len(days) - 1 else round(gross - per_day * (len(days) - 1), 2)
-            rows.append({
-                "work_date": d.isoformat(), "tech_code": r["tech_code"],
-                "area": r["area"], "dashboard": r["dashboard"],
-                "pay_type": "actual", "dollars": amt,
-            })
-    # Same tech can hit the same (day, area) twice (e.g. a bonus check) — sum.
+        for dash, area, weight in r["targets"]:
+            share = round(float(r["gross"]) * weight, 2)
+            per_day = round(share / len(days), 2)
+            for i, d in enumerate(days):
+                # Last day carries the remainder so each share sums exactly.
+                amt = (per_day if i < len(days) - 1
+                       else round(share - per_day * (len(days) - 1), 2))
+                rows.append({
+                    "work_date": d.isoformat(), "tech_code": r["tech_code"],
+                    "area": area, "dashboard": dash,
+                    "pay_type": "actual", "dollars": amt,
+                })
+    # Same tech can hit the same slot twice (e.g. a bonus check) — sum. The key
+    # includes dashboard so the two halves of a cross-department split, which
+    # share an area name, stay separate.
     agg: dict[tuple, dict] = {}
     for r in rows:
-        k = (r["work_date"], r["tech_code"], r["area"])
+        k = (r["work_date"], r["tech_code"], r["area"], r["dashboard"])
         if k in agg:
             agg[k]["dollars"] = round(agg[k]["dollars"] + r["dollars"], 2)
         else:

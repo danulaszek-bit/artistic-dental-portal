@@ -126,7 +126,12 @@ def init_db() -> None:
             dollars    REAL NOT NULL,
             source     TEXT NOT NULL DEFAULT 'estimated',  -- 'estimated' | 'actual'
             created_at TEXT NOT NULL,
-            UNIQUE (work_date, tech_code, area, source)
+            -- dashboard is part of the key: one person's day can charge two
+            -- dashboards at once (payroll splits, e.g. Model/Die 50/50 Fixed +
+            -- Removable), and those halves share an area name. Without
+            -- dashboard here the second half overwrites the first and half the
+            -- dollars vanish.
+            UNIQUE (work_date, tech_code, area, dashboard, source)
         );
         CREATE INDEX IF NOT EXISTS idx_labor_date
             ON labor_history (work_date, dashboard);
@@ -171,6 +176,37 @@ def _migrate() -> None:
             conn.execute("ALTER TABLE pto ADD COLUMN paid INTEGER NOT NULL DEFAULT 1")
         except sqlite3.OperationalError:
             pass  # column already exists
+
+        # labor_history's UNIQUE key gained `dashboard`: a payroll split charges
+        # one person's day to two dashboards under the same area name, and the
+        # old key (work_date, tech_code, area, source) made the second half
+        # overwrite the first. Rebuild the table when the old key is present.
+        row = conn.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name='labor_history'"
+        ).fetchone()
+        if row and "area, dashboard, source" not in (row["sql"] or ""):
+            conn.executescript("""
+                ALTER TABLE labor_history RENAME TO labor_history_old;
+                CREATE TABLE labor_history (
+                    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                    work_date  TEXT NOT NULL,
+                    tech_code  TEXT NOT NULL,
+                    area       TEXT NOT NULL,
+                    dashboard  TEXT NOT NULL,
+                    pay_type   TEXT NOT NULL,
+                    dollars    REAL NOT NULL,
+                    source     TEXT NOT NULL DEFAULT 'estimated',
+                    created_at TEXT NOT NULL,
+                    UNIQUE (work_date, tech_code, area, dashboard, source)
+                );
+                INSERT INTO labor_history
+                    (work_date, tech_code, area, dashboard, pay_type, dollars, source, created_at)
+                    SELECT work_date, tech_code, area, dashboard, pay_type, dollars,
+                           source, created_at FROM labor_history_old;
+                DROP TABLE labor_history_old;
+                CREATE INDEX IF NOT EXISTS idx_labor_date
+                    ON labor_history (work_date, dashboard);
+            """)
 
 
 init_db()
@@ -472,9 +508,9 @@ def upsert_labor_estimates(rows: list[dict]) -> int:
             conn.execute(
                 "INSERT INTO labor_history (work_date, tech_code, area, dashboard, pay_type, dollars, source, created_at) "
                 "VALUES (?, ?, ?, ?, ?, ?, 'estimated', ?) "
-                "ON CONFLICT(work_date, tech_code, area, source) DO UPDATE SET "
+                "ON CONFLICT(work_date, tech_code, area, dashboard, source) DO UPDATE SET "
                 "  dollars=excluded.dollars, pay_type=excluded.pay_type, "
-                "  dashboard=excluded.dashboard, created_at=excluded.created_at",
+                "  created_at=excluded.created_at",
                 (r["work_date"], r["tech_code"], r["area"], r["dashboard"],
                  r["pay_type"], r["dollars"], now),
             )
@@ -496,9 +532,9 @@ def upsert_labor_actuals(rows: list[dict]) -> int:
             conn.execute(
                 "INSERT INTO labor_history (work_date, tech_code, area, dashboard, pay_type, dollars, source, created_at) "
                 "VALUES (?, ?, ?, ?, ?, ?, 'actual', ?) "
-                "ON CONFLICT(work_date, tech_code, area, source) DO UPDATE SET "
+                "ON CONFLICT(work_date, tech_code, area, dashboard, source) DO UPDATE SET "
                 "  dollars=excluded.dollars, pay_type=excluded.pay_type, "
-                "  dashboard=excluded.dashboard, created_at=excluded.created_at",
+                "  created_at=excluded.created_at",
                 (r["work_date"], r["tech_code"], r["area"], r["dashboard"],
                  r["pay_type"], r["dollars"], now),
             )
@@ -507,10 +543,15 @@ def upsert_labor_actuals(rows: list[dict]) -> int:
 
 
 def clear_labor_actuals() -> int:
-    """Delete every source='actual' row (a payroll re-import replaces them)."""
+    """Delete every source='actual' row (a payroll re-import replaces them).
+    Counts first rather than trusting cursor.rowcount, which has reported 0
+    through this path even when rows were deleted."""
     with _conn() as conn:
-        cur = conn.execute("DELETE FROM labor_history WHERE source = 'actual'")
-        return cur.rowcount
+        n = conn.execute(
+            "SELECT COUNT(*) AS n FROM labor_history WHERE source = 'actual'"
+        ).fetchone()["n"]
+        conn.execute("DELETE FROM labor_history WHERE source = 'actual'")
+        return n
 
 
 def get_labor_history(dashboard: str | None = None, start: date | None = None,
