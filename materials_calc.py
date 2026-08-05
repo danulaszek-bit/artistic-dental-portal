@@ -166,14 +166,32 @@ def _persist_mapped(frames: list) -> tuple[int, int]:
 
 
 def _mapped_frames(raw_df: pd.DataFrame) -> list:
+    # Include GM (Model/Die) so materials_history is the COMPLETE production-
+    # materials store — the Fixed/Removable dashboards filter to their own, but
+    # the company-wide total (materials % on the Executive Dashboard) needs all
+    # production departments. Overhead depts (Distribution, Repair & Maintenance,
+    # etc.) stay excluded via CLIXON_MAP.
     out = []
-    for d in ("Fixed", "Removable"):
+    for d in ("Fixed", "Removable", "GM"):
         f = map_and_match(raw_df, d)
         if not f.empty:
             f = f.copy()
             f["dashboard"] = d
             out.append(f)
     return out
+
+
+def company_material_cost(year: int) -> float:
+    """Company-wide production material cost for `year` — sum of all
+    materials_history dollars (Fixed + Removable + Model/Die) whose issue_date
+    falls in that year. Used for the Executive Dashboard's materials-%-of-sales
+    KPI."""
+    rows = goals_store.get_materials_history()
+    if not rows:
+        return 0.0
+    df = pd.DataFrame(rows)
+    df["issue_date"] = pd.to_datetime(df["issue_date"], errors="coerce")
+    return round(float(df[df["issue_date"].dt.year == year]["dollars"].sum()), 2)
 
 
 def persist_materials(mt_folder: Path) -> tuple[int, int]:

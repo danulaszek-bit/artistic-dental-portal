@@ -307,7 +307,7 @@ def render_header():
             st.rerun()
 
 
-def render_kpi_row(gauges: pd.DataFrame):
+def render_kpi_row(gauges: pd.DataFrame, materials_summary: pd.DataFrame = None):
     if gauges.empty:
         st.warning("No KPI data available.")
         return
@@ -342,12 +342,18 @@ def render_kpi_row(gauges: pd.DataFrame):
                  f"last {ot_win}d · {ot_n:,} cases",
                  status="ok" if ot_pct >= 90 else "warn")
 
-    wip_val = g.get("wip_value", 0) or 0
-    wip_ov = int(g.get("wip_overdue", 0) or 0)
+    # Materials % of sales (YTD) — company-wide material cost ÷ YTD revenue.
+    # Material cost is the local pipeline's aggregate written to the committed
+    # materials_summary.csv (the detail DB stays local/LAN-only).
+    ytd_rev = float(g.get("ytd_revenue", 0) or 0)
+    mat_cost = 0.0
+    if materials_summary is not None and not materials_summary.empty:
+        mat_cost = float(materials_summary.iloc[0].get("ytd_material_cost", 0) or 0)
+    mat_pct = (mat_cost / ytd_rev * 100) if ytd_rev else 0.0
     with cols[4]:
-        kpi_card("WIP Value", fmt_currency(wip_val),
-                 f"{int(g.get('wip_count', 0) or 0)} cases · {wip_ov} overdue",
-                 status="warn" if wip_ov > 0 else "ok")
+        kpi_card("Materials % of Sales", f"{mat_pct:.1f}%",
+                 f"{fmt_currency(mat_cost)} materials / {fmt_currency(ytd_rev)} YTD",
+                 status="ok")
 
     active_30 = int(g.get("active_accounts_30d", 0) or 0)
     remakes_30 = int(g.get("remakes_30d", 0) or 0)
@@ -401,7 +407,7 @@ def render_mtd(gauges: pd.DataFrame):
     mtd_daily_avg = mtd / days_elapsed if days_elapsed else 0
     daily_target  = ly_target / days_in_month if days_in_month else 0
 
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4, c5 = st.columns(5)
     with c1:
         kpi_card("MTD Revenue", fmt_currency(mtd),
                  f"{days_elapsed} of {days_in_month} biz days", status="ok")
@@ -418,6 +424,12 @@ def render_mtd(gauges: pd.DataFrame):
         kpi_card("Daily Revenue Needed", fmt_currency(max(daily_needed, 0)),
                  f"to hit 7% · {days_remaining} biz days left",
                  status="ok" if daily_needed <= (mtd / max(days_elapsed,1)) else "warn")
+    with c5:
+        wip_val = g.get("wip_value", 0) or 0
+        wip_ov = int(g.get("wip_overdue", 0) or 0)
+        kpi_card("WIP Value", fmt_currency(wip_val),
+                 f"{int(g.get('wip_count', 0) or 0)} cases · {wip_ov} overdue",
+                 status="warn" if wip_ov > 0 else "ok")
 
     pct = min(projected / ly_target * 100, 150) if ly_target else 0
     bar_color = COLORS['grn'] if on_pace else COLORS['red']
@@ -1405,9 +1417,11 @@ remakes_full = data.get("remakes_full", pd.DataFrame())
 daily_sales = data.get("daily_sales", pd.DataFrame())
 product_mix = data.get("product_type_summary", pd.DataFrame())
 
+materials_summary = data.get("materials_summary", pd.DataFrame())
+
 render_header()
 st.divider()
-render_kpi_row(gauges)
+render_kpi_row(gauges, materials_summary)
 st.divider()
 render_mtd(gauges)
 st.divider()

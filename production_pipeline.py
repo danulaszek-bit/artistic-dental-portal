@@ -672,10 +672,16 @@ def main():
         print(f"WARNING: labor estimate pass failed ({exc}) - continuing")
         labor_rows, unrated_combos = 0, 0
 
-    # Materials → local materials_history, replace-by-day (never committed).
+    # Materials → local materials_history, replace-by-day (detail never committed).
     try:
         import materials_calc
         mat_days, mat_rows = materials_calc.persist_materials(MT_FOLDER)
+        # AGGREGATE company-wide YTD material cost -> committed CSV so the
+        # cloud-served Executive Dashboard can read it (the detail DB is local).
+        _yr = date.today().year
+        _mat_ytd = materials_calc.company_material_cost(_yr)
+        pd.DataFrame([{"year": _yr, "ytd_material_cost": _mat_ytd}]).to_csv(
+            OUT_DIR / "materials_summary.csv", index=False)
     except Exception as exc:
         print(f"WARNING: materials ingest failed ({exc}) - continuing")
         mat_days, mat_rows = 0, 0
