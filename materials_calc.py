@@ -29,14 +29,17 @@ from mt_reports_parser import load_materials_issued
 # Clixon "Issued Dept." → (dashboard, area). Absent keys are excluded.
 CLIXON_MAP = {
     "CAD/CAM":                  ("Fixed", "CAD/CAM"),
+    "Cad/Cam Implant and Attachment": ("Fixed", "CAD/CAM"),   # historical dept — Danny: Fixed/CAD-CAM
     "Ceramics":                 ("Fixed", "Ceramics"),
     "Crown and Bridge":         ("Fixed", "Crown & Bridge"),
     "Ingots and Discs":         ("Fixed", "Ingots & Discs"),
     "Removable":                ("Removable", "Removables"),
+    "Removable Supplies":       ("Removable", "Removables"),  # historical dept
     "Chairside":                ("Removable", "Chairside"),
     "Implants and Attachments": ("Removable", "Implants & Attachments"),
     "Model and Die":            ("GM", "Model/Die"),
-    # Excluded: Distribution, General Supplies, Unassigned
+    # Excluded (overhead / catch-all): Distribution, General Supplies,
+    # Unassigned, Repair and Maintenance.
 }
 
 
@@ -129,7 +132,11 @@ def dashboard_materials(dashboard: str) -> pd.DataFrame:
 
 
 def _persist_mapped(frames: list) -> tuple[int, int]:
-    """Replace-by-week ingest from already-mapped per-dashboard frames."""
+    """
+    Replace-by-DAY ingest from already-mapped per-dashboard frames: each source
+    overwrites only the exact days it contains (see replace_materials_dates).
+    Returns (distinct_days, rows_written).
+    """
     import pandas as _pd
     frames = [f for f in frames if not f.empty]
     if not frames:
@@ -140,24 +147,22 @@ def _persist_mapped(frames: list) -> tuple[int, int]:
     if m.empty:
         return 0, 0
 
-    # Monday of each row's week
     m["week_start"] = (m["issue_date"] - _pd.to_timedelta(m["issue_date"].dt.weekday, unit="D")).dt.date
 
-    weeks, total = 0, 0
-    for wk, grp in m.groupby("week_start"):
-        rows = [{
-            "issue_date":   r["issue_date"].date().isoformat(),
-            "dashboard":    r["dashboard"] if "dashboard" in grp.columns else "",
-            "area":         r["area"],
-            "tech_code":    r["tech_code"],
-            "matched_name": r["matched_name"],
-            "requested_by": r["requested_by"],
-            "qty":          float(r["qty"]),
-            "dollars":      float(r["issued_value"]),
-        } for _, r in grp.iterrows()]
-        total += goals_store.replace_materials_week(wk.isoformat(), rows)
-        weeks += 1
-    return weeks, total
+    rows = [{
+        "issue_date":   r["issue_date"].date().isoformat(),
+        "week_start":   r["week_start"].isoformat(),
+        "dashboard":    r["dashboard"],
+        "area":         r["area"],
+        "tech_code":    r["tech_code"],
+        "matched_name": r["matched_name"],
+        "requested_by": r["requested_by"],
+        "qty":          float(r["qty"]),
+        "dollars":      float(r["issued_value"]),
+    } for _, r in m.iterrows()]
+    n_days = m["issue_date"].dt.date.nunique()
+    total = goals_store.replace_materials_dates(rows)
+    return n_days, total
 
 
 def _mapped_frames(raw_df: pd.DataFrame) -> list:

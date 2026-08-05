@@ -45,8 +45,8 @@ def main():
 
     import materials_calc
     print(f"Ingesting materials history from: {path.name}")
-    weeks, rows = materials_calc.persist_materials_from_file(path)
-    print(f"Done — {rows} rows across {weeks} week(s) written to materials_history (local DB).")
+    days, rows = materials_calc.persist_materials_from_file(path)
+    print(f"Done — {rows} rows across {days} day(s) written to materials_history (local DB).")
     print("This span now shows on the manager dashboards. You can delete/archive the file.")
 
 

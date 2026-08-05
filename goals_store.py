@@ -507,23 +507,34 @@ def get_labor_history(dashboard: str | None = None, start: date | None = None,
 
 # ── Materials history (replace-by-week ingestion of the Clixon Issued export) ─
 
-def replace_materials_week(week_start: str, rows: list[dict]) -> int:
+def replace_materials_dates(rows: list[dict]) -> int:
     """
-    Replace ALL stored materials rows for one week (week_start = ISO Monday)
-    with `rows`. Each row: {'issue_date' (ISO str), 'dashboard', 'area',
-    'tech_code', 'matched_name', 'requested_by', 'qty', 'dollars'}. Because the
-    newest week-to-date export is the most complete version of its week, a full
-    replace is correct — no double-counting, no lost detail. Returns rows written.
+    Replace stored materials rows by DAY: delete every existing row whose
+    issue_date appears in `rows`, then insert `rows`. Each row: {'issue_date'
+    (ISO str), 'week_start' (ISO Monday, for reference), 'dashboard', 'area',
+    'tech_code', 'matched_name', 'requested_by', 'qty', 'dollars'}.
+
+    By-day (not by-week) replacement means a source only ever overwrites the
+    exact days it contains — so a one-time history backfill (days through, say,
+    6/30) and the rolling export (7/1+) can share a calendar week with no
+    collision, and each WTD export cleanly refreshes its own days. Idempotent.
+    Returns rows written.
     """
+    if not rows:
+        return 0
+    dates = sorted({r["issue_date"] for r in rows})
     now = datetime.now().isoformat(timespec="seconds")
     with _conn() as conn:
-        conn.execute("DELETE FROM materials_history WHERE week_start = ?", (week_start,))
+        for i in range(0, len(dates), 400):          # chunk to stay under SQL var limits
+            chunk = dates[i:i + 400]
+            ph = ",".join("?" * len(chunk))
+            conn.execute(f"DELETE FROM materials_history WHERE issue_date IN ({ph})", chunk)
         for r in rows:
             conn.execute(
                 "INSERT INTO materials_history (week_start, issue_date, dashboard, area, "
                 "tech_code, matched_name, requested_by, qty, dollars, created_at) "
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (week_start, r["issue_date"], r["dashboard"], r["area"],
+                (r.get("week_start", r["issue_date"]), r["issue_date"], r["dashboard"], r["area"],
                  r.get("tech_code", ""), r.get("matched_name", ""),
                  r.get("requested_by", ""), r.get("qty", 0), r.get("dollars", 0), now),
             )

@@ -672,13 +672,13 @@ def main():
         print(f"WARNING: labor estimate pass failed ({exc}) - continuing")
         labor_rows, unrated_combos = 0, 0
 
-    # Materials → local materials_history, replace-by-week (never committed).
+    # Materials → local materials_history, replace-by-day (never committed).
     try:
         import materials_calc
-        mat_weeks, mat_rows = materials_calc.persist_materials(MT_FOLDER)
+        mat_days, mat_rows = materials_calc.persist_materials(MT_FOLDER)
     except Exception as exc:
         print(f"WARNING: materials ingest failed ({exc}) - continuing")
-        mat_weeks, mat_rows = 0, 0
+        mat_days, mat_rows = 0, 0
 
     gm_report, gm_depts, gm_employees, gm_reasons = build_gm_summary_html()
 
@@ -711,7 +711,7 @@ def main():
           f"reasons={gm_report.get('reasons_count', 0)})")
     print(f"labor estimates    : {labor_rows} day-rows upserted (local DB), "
           f"{unrated_combos} unrated piece-task combo(s)")
-    print(f"materials ingested : {mat_rows} rows across {mat_weeks} week(s) (local DB)")
+    print(f"materials ingested : {mat_rows} rows across {mat_days} day(s) (local DB)")
 
 
 if __name__ == "__main__":
