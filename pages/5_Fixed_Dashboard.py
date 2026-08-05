@@ -43,19 +43,22 @@ if not manager_tools_available():
 require_password("fixed", "Fixed Dashboard")
 
 
+# `dashboard` is a real argument (not the module global) so each page gets its
+# own cache entry — otherwise the two identically-bodied load_data() functions
+# collide in st.cache_data and one page shows the other's technician roster.
 @st.cache_data(ttl=120)
-def load_data():
+def load_data(dashboard):
     fin_path   = LATEST_DIR / "dept_financials.csv"
     techs_path = LATEST_DIR / "tech_production.csv"
     fin   = pd.read_csv(fin_path)   if fin_path.exists()   else pd.DataFrame()
     techs = pd.read_csv(techs_path) if techs_path.exists() else pd.DataFrame()
     if not techs.empty:
-        techs = techs[techs["dashboard"] == DASHBOARD].copy()
+        techs = techs[techs["dashboard"] == dashboard].copy()
     period = techs["period"].iloc[0] if not techs.empty else "—"
     return fin, techs, period
 
 
-fin, techs, period = load_data()
+fin, techs, period = load_data(DASHBOARD)
 
 st.markdown(f"""
 <div class="crumb" style="font-size:13px;color:{COLORS['txt2']};margin-bottom:4px;">
@@ -124,7 +127,7 @@ week_start = today - timedelta(days=today.weekday())   # Monday
 c1, c2, c3, c4 = st.columns(4)
 with c1:
     st.markdown(tile_html("Overall % of Goal — Today", f"{overall_pct}%",
-                          f"{int((techs['goal'] > 0).sum())}/{len(techs)} techs with a goal set",
+                          f"{active_today}/{len(techs)} on schedule today",
                           status_color(overall_pct)), unsafe_allow_html=True)
 with c2:
     st.markdown(tile_html("Remake Rate ($)", f"{remake_pct}%",
@@ -155,11 +158,10 @@ _30d_cut = (today - timedelta(days=30)).isoformat()
 labor_30d = ldf[ldf["work_date"] >= _30d_cut]["dollars"].sum() if not ldf.empty else 0.0
 sales_30d = net_sales * 30 / days_ytd if net_sales else 0.0
 
-mat_period = 0.0
-if not mats.empty and p_start and p_end:
-    _m = (mats["issue_date"].dt.date >= pd.to_datetime(p_start).date()) & \
-         (mats["issue_date"].dt.date <= pd.to_datetime(p_end).date())
-    mat_period = mats[_m]["issued_value"].sum()
+# Materials windows mirror the labor windows: YTD % against exact YTD dept
+# sales, and a last-30-days % against the pro-rated 30-day sales base.
+mat_ytd = mats[mats["issue_date"].dt.year == today.year]["issued_value"].sum() if not mats.empty else 0.0
+mat_30d = mats[mats["issue_date"].dt.date >= date.fromisoformat(_30d_cut)]["issued_value"].sum() if not mats.empty else 0.0
 
 # Labor & Materials KPI row — directly under the production KPIs
 lc1, lc2, lc3, lc4 = st.columns(4)
@@ -174,13 +176,14 @@ with lc2:
                           f"${labor_ytd:,.0f} labor / ${net_sales:,.0f} sales"),
                unsafe_allow_html=True)
 with lc3:
-    pct = (mat_period / net_sales * 100) if net_sales else 0.0
-    st.markdown(tile_html("Materials % of Sales", f"{pct:.1f}%",
-                          f"${mat_period:,.0f} mat / ${net_sales:,.0f} sales"),
+    pct = (mat_30d / sales_30d * 100) if sales_30d else 0.0
+    st.markdown(tile_html("Materials % — Last 30 Days", f"{pct:.1f}%",
+                          f"${mat_30d:,.0f} mat / ~${sales_30d:,.0f} sales"),
                unsafe_allow_html=True)
 with lc4:
-    v = mats[mats["issue_date"].dt.year == today.year]["issued_value"].sum() if not mats.empty else 0
-    st.markdown(tile_html("Materials — YTD $", f"${v:,.0f}", f"{today.year} to date"),
+    pct = (mat_ytd / net_sales * 100) if net_sales else 0.0
+    st.markdown(tile_html("Materials % — YTD", f"{pct:.1f}%",
+                          f"${mat_ytd:,.0f} mat / ${net_sales:,.0f} sales"),
                unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
@@ -255,8 +258,11 @@ view["PTO / Out"] = view.apply(
     else (f"{'PTO' if r['pto_detail']['paid'] else 'Unpaid'} "
           f"{r['pto_detail']['portion'].title()}" if r["pto_detail"] else "—"), axis=1)
 
+# "Today's Goal" is the EFFECTIVE goal (PTO/out-of-lab adjusted): a full-PTO
+# tech reads 0, a half-day reads 50% — so the column matches the capacity math.
+view["today_goal_eff"] = view["eff_goal"].round(1)
 display_df = view.rename(columns={
-    "name": "Technician", "station": "Station", "goal": "Today's Goal",
+    "name": "Technician", "station": "Station", "today_goal_eff": "Today's Goal",
     "today_units": "Completed", "pct_of_goal": "% of Goal",
 })
 
