@@ -482,6 +482,37 @@ def upsert_labor_estimates(rows: list[dict]) -> int:
     return n
 
 
+def upsert_labor_actuals(rows: list[dict]) -> int:
+    """
+    Upsert source='actual' daily labor rows from a payroll import. Same shape as
+    upsert_labor_estimates. Actuals never touch the 'estimated' rows — both are
+    kept so the reconciliation report can compare them; get_labor_history()
+    prefers actuals wherever they exist.
+    """
+    n = 0
+    now = datetime.now().isoformat(timespec="seconds")
+    with _conn() as conn:
+        for r in rows:
+            conn.execute(
+                "INSERT INTO labor_history (work_date, tech_code, area, dashboard, pay_type, dollars, source, created_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, 'actual', ?) "
+                "ON CONFLICT(work_date, tech_code, area, source) DO UPDATE SET "
+                "  dollars=excluded.dollars, pay_type=excluded.pay_type, "
+                "  dashboard=excluded.dashboard, created_at=excluded.created_at",
+                (r["work_date"], r["tech_code"], r["area"], r["dashboard"],
+                 r["pay_type"], r["dollars"], now),
+            )
+            n += 1
+    return n
+
+
+def clear_labor_actuals() -> int:
+    """Delete every source='actual' row (a payroll re-import replaces them)."""
+    with _conn() as conn:
+        cur = conn.execute("DELETE FROM labor_history WHERE source = 'actual'")
+        return cur.rowcount
+
+
 def get_labor_history(dashboard: str | None = None, start: date | None = None,
                       end: date | None = None) -> list[dict]:
     """

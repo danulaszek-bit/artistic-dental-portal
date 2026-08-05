@@ -19,6 +19,10 @@ live_exports/
 *.xls
 *.xlsx
 sample_exports/
+# Local staging for raw source files (payroll registers, materials + sales
+# backfills). Payroll holds per-person compensation — never commit this folder.
+# Do not rely on the *.xlsx rule above: a .csv export would otherwise slip in.
+historical/
 
 # === Logs ===
 *.log
