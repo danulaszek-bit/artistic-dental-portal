@@ -77,27 +77,39 @@ if techs.empty:
 
 today = date.today()
 
-# Pull live goal + PTO per technician
+# Pull live goal + PTO/out-of-lab per technician, and an EFFECTIVE goal for
+# today that removes capacity for people who are out: full PTO or out-of-lab →
+# 0, half-day PTO → 50%. All "% of goal" math uses eff_goal so the department
+# isn't measured against goals for people who aren't there today.
 techs = techs.copy()
 techs["goal"] = techs["tech_code"].apply(lambda c: goals_store.get_current_goal(c) or 0)
 techs["pto_today"] = techs["tech_code"].apply(lambda c: goals_store.get_pto_on(c, today))
+techs["out_today"] = techs["tech_code"].apply(lambda c: goals_store.get_out_of_lab_on(c, today))
+
+def _avail_factor(r):
+    if r["out_today"]:
+        return 0.0
+    return {"full": 0.0, "half": 0.5}.get(r["pto_today"], 1.0)
+techs["avail_factor"] = techs.apply(_avail_factor, axis=1)
+techs["eff_goal"] = techs["goal"] * techs["avail_factor"]
 techs["pct_of_goal"] = techs.apply(
-    lambda r: round(r["today_units"] / r["goal"] * 100, 1) if r["goal"] else None, axis=1
+    lambda r: (round(r["today_units"] / r["eff_goal"] * 100, 1) if r["eff_goal"] > 0
+               else None), axis=1
 )
 
 # ── KPI tiles ──────────────────────────────────────────────────────────────────
-tracked = techs[techs["goal"] > 0]
 overall_pct = (
-    round(tracked["today_units"].sum() / tracked["goal"].sum() * 100, 1)
-    if tracked["goal"].sum() else 0.0
+    round(techs["today_units"].sum() / techs["eff_goal"].sum() * 100, 1)
+    if techs["eff_goal"].sum() else 0.0
 )
 fixed_fin = fin[fin["dashboard"] == "Fixed"] if not fin.empty else pd.DataFrame()
 remake_pct = fixed_fin["remake_rate_pct"].iloc[0] if not fixed_fin.empty else 0.0
 remake_disc = fixed_fin["remake_discount"].iloc[0] if not fixed_fin.empty else 0.0
 net_sales = fixed_fin["net_sales"].iloc[0] if not fixed_fin.empty else 0.0
 
-full_pto_today = sum(1 for p in techs["pto_today"] if p == "full")
-active_today = len(techs) - full_pto_today
+# Out today = fully unavailable (full PTO or out-of-lab); half-day still counts as present.
+out_today = int((techs["avail_factor"] == 0.0).sum())
+active_today = len(techs) - out_today
 projected_pct = goals_store.projected_capacity_pct(DASHBOARD, today)
 
 # Labor & materials data — computed up front so the KPI tiles can sit with
@@ -121,7 +133,7 @@ with c2:
                unsafe_allow_html=True)
 with c3:
     st.markdown(tile_html("Techs Active Today", f"{active_today} / {len(techs)}",
-                          f"{full_pto_today} on full-day PTO"), unsafe_allow_html=True)
+                          f"{out_today} out (PTO/out-of-lab)"), unsafe_allow_html=True)
 with c4:
     st.markdown(tile_html("Projected Output Today", f"{projected_pct}%",
                           "of full-roster capacity, PTO-adjusted",
@@ -182,15 +194,12 @@ if st.session_state.fixed_area is not None:
 area_cols = st.columns(len(areas_present)) if areas_present else []
 for col, area in zip(area_cols, areas_present):
     sub = techs[techs["area"] == area]
-    sub_tracked = sub[sub["goal"] > 0]
-    a_pct = (round(sub_tracked["today_units"].sum() / sub_tracked["goal"].sum() * 100, 1)
-             if sub_tracked["goal"].sum() else 0.0)
+    a_pct = (round(sub["today_units"].sum() / sub["eff_goal"].sum() * 100, 1)
+             if sub["eff_goal"].sum() else 0.0)
 
     station_html = ""
     stations = sub.groupby("station")["today_units"].sum()
-    station_goals = sub.groupby("station").apply(
-        lambda g: g[g["goal"] > 0]["goal"].sum(), include_groups=False
-    )
+    station_goals = sub.groupby("station")["eff_goal"].sum()
     if len(stations) > 1:
         rows_html = []
         palette = [COLORS["acc"], "#1baf7a", "#eda100", COLORS["pur"]]
