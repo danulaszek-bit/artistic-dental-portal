@@ -124,7 +124,7 @@ week_start = today - timedelta(days=today.weekday())   # Monday
 c1, c2, c3, c4 = st.columns(4)
 with c1:
     st.markdown(tile_html("Overall % of Goal — Today", f"{overall_pct}%",
-                          f"{len(tracked)}/{len(techs)} techs with a goal set",
+                          f"{int((techs['goal'] > 0).sum())}/{len(techs)} techs with a goal set",
                           status_color(overall_pct)), unsafe_allow_html=True)
 with c2:
     st.markdown(tile_html("Remake Rate ($)", f"{remake_pct}%",
