@@ -140,10 +140,16 @@ with c4:
 p_start = rem_fin["period_start"].iloc[0] if ("period_start" in rem_fin.columns and not rem_fin.empty) else ""
 p_end   = rem_fin["period_end"].iloc[0]   if ("period_end" in rem_fin.columns and not rem_fin.empty) else ""
 
-labor_period = 0.0
-if not ldf.empty and p_start and p_end:
-    _l = (ldf["work_date"] >= p_start) & (ldf["work_date"] <= p_end)
-    labor_period = ldf[_l]["dollars"].sum()
+# Labor windows: YTD uses the exact YTD dept sales (the report is YTD); the
+# 30-day figure pro-rates YTD dept sales to a 30-day window (no separate 30-day
+# per-dept sales exists), so its sales denominator is approximate (~).
+_ytd_start = date(today.year, 1, 1)
+days_ytd = max((today - _ytd_start).days + 1, 1)
+labor_ytd = ldf[ldf["work_date"] >= _ytd_start.isoformat()]["dollars"].sum() if not ldf.empty else 0.0
+_30d_cut = (today - timedelta(days=30)).isoformat()
+labor_30d = ldf[ldf["work_date"] >= _30d_cut]["dollars"].sum() if not ldf.empty else 0.0
+sales_30d = net_sales * 30 / days_ytd if net_sales else 0.0
+
 mat_period = 0.0
 if not mats.empty and p_start and p_end:
     _m = (mats["issue_date"].dt.date >= pd.to_datetime(p_start).date()) & \
@@ -153,14 +159,15 @@ if not mats.empty and p_start and p_end:
 # Labor & Materials KPI row — directly under the production KPIs
 lc1, lc2, lc3, lc4 = st.columns(4)
 with lc1:
-    pct = (labor_period / net_sales * 100) if net_sales else 0.0
-    st.markdown(tile_html("Labor % of Sales", f"{pct:.1f}%",
-                          f"${labor_period:,.0f} labor / ${net_sales:,.0f} sales"),
+    pct = (labor_30d / sales_30d * 100) if sales_30d else 0.0
+    st.markdown(tile_html("Labor % — Last 30 Days", f"{pct:.1f}%",
+                          f"${labor_30d:,.0f} labor / ~${sales_30d:,.0f} sales"),
                unsafe_allow_html=True)
 with lc2:
-    v = ldf["dollars"].sum() if not ldf.empty else 0
-    sub = "hourly + piece + salary; Proliant actuals when reconciled" if v else "no labor data yet"
-    st.markdown(tile_html("Labor $ (period)", f"${labor_period:,.0f}", sub), unsafe_allow_html=True)
+    pct = (labor_ytd / net_sales * 100) if net_sales else 0.0
+    st.markdown(tile_html("Labor % — YTD", f"{pct:.1f}%",
+                          f"${labor_ytd:,.0f} labor / ${net_sales:,.0f} sales"),
+               unsafe_allow_html=True)
 with lc3:
     pct = (mat_period / net_sales * 100) if net_sales else 0.0
     st.markdown(tile_html("Materials % of Sales", f"{pct:.1f}%",
