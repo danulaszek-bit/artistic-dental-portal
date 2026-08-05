@@ -117,8 +117,10 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", str(s or "").strip()).upper()
 
 
-def _read_period_from_xls(path: Path) -> str | None:
-    """Scan first 12 rows for a 'From: … To: …' period label."""
+def _read_period_dates(path: Path) -> tuple[str, str] | None:
+    """Scan the first ~12 rows (ALL columns — the 'From: … To: …' text isn't
+    always in column 0) for the report's date range. Returns (from, to) as
+    M/D/YYYY strings, or None."""
     if not path.exists():
         return None
     try:
@@ -126,13 +128,20 @@ def _read_period_from_xls(path: Path) -> str | None:
         wb = xlrd.open_workbook(str(path))
         sh = wb.sheet_by_index(0)
         for i in range(min(12, sh.nrows)):
-            cell = str(sh.cell_value(i, 0)).strip()
-            m = re.search(r"From:\s*([\d/]+)\s*To:\s*([\d/]+)", cell)
-            if m:
-                return f"{m.group(1)} – {m.group(2)}"
+            for j in range(sh.ncols):
+                cell = str(sh.cell_value(i, j))
+                m = re.search(r"From:\s*([\d/]+)\s*To:\s*([\d/]+)", cell)
+                if m:
+                    return m.group(1), m.group(2)
     except Exception:
         pass
     return None
+
+
+def _read_period_from_xls(path: Path) -> str | None:
+    """'From – To' label for display, or None."""
+    dr = _read_period_dates(path)
+    return f"{dr[0]} – {dr[1]}" if dr else None
 
 
 # ── 1. Department financials (dollars) — from prod_by_dept.xls ───────────────
@@ -158,6 +167,16 @@ def build_dept_financials(period: str) -> pd.DataFrame:
         axis=1,
     )
     fin["period"] = period
+    # Report's actual date range (ISO) so the dashboards can compute a
+    # period-MATCHED materials % (materials over the same window as these sales).
+    dr = _read_period_dates(MT_FOLDER / "prod_by_dept.xls")
+    def _iso(s):
+        try:
+            m, d, y = s.split("/"); return f"{int(y):04d}-{int(m):02d}-{int(d):02d}"
+        except Exception:
+            return ""
+    fin["period_start"] = _iso(dr[0]) if dr else ""
+    fin["period_end"]   = _iso(dr[1]) if dr else ""
     return fin
 
 
@@ -561,9 +580,12 @@ def gm_render_live_html(depts: dict, employees: list, reasons: list, report: dic
         "monthly": [], "deptWeekly": [], "deptMonthly": [], "period": report["period"],
     }
     s_json = _json.dumps(s_obj, separators=(",", ":"))
+    # Function replacement (not an f-string): a string replacement would treat
+    # the JSON's \uXXXX escapes as regex backslash sequences and raise
+    # "bad escape \u".
     html = _re.sub(
         r"const S=\{depts:\{\},.+?period:'No data loaded'\};",
-        f"const S={s_json};", html, flags=_re.DOTALL,
+        lambda _m: f"const S={s_json};", html, flags=_re.DOTALL,
     )
 
     techs_by_dept: dict[str, list] = {}

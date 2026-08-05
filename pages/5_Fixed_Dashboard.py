@@ -137,16 +137,26 @@ with lc2:
     v = ldf["dollars"].sum() if not ldf.empty else 0
     sub = f"{ldf['work_date'].min()} → {ldf['work_date'].max()}" if not ldf.empty else "no data yet"
     st.markdown(tile_html("Labor — Window", f"${v:,.0f}", sub), unsafe_allow_html=True)
+# Materials % of Sales — materials issued over the SAME window as the sales
+# report (period_start..period_end from prod_by_dept) ÷ that window's net sales.
+# Set the "Sales By Product Department" report to a YTD range and this becomes
+# a YTD % automatically.
+p_start = fixed_fin["period_start"].iloc[0] if ("period_start" in fixed_fin.columns and not fixed_fin.empty) else ""
+p_end   = fixed_fin["period_end"].iloc[0]   if ("period_end" in fixed_fin.columns and not fixed_fin.empty) else ""
+mat_period = 0.0
+if not mats.empty and p_start and p_end:
+    _m = (mats["issue_date"].dt.date >= pd.to_datetime(p_start).date()) & \
+         (mats["issue_date"].dt.date <= pd.to_datetime(p_end).date())
+    mat_period = mats[_m]["issued_value"].sum()
 with lc3:
-    v = mats[mats["issue_date"].dt.date >= week_start]["issued_value"].sum() if not mats.empty else 0
-    st.markdown(tile_html("Materials This Week", f"${v:,.0f}", "Clixon issued value"),
+    pct = (mat_period / net_sales * 100) if net_sales else 0.0
+    st.markdown(tile_html("Materials % of Sales", f"{pct:.1f}%",
+                          f"${mat_period:,.0f} mat / ${net_sales:,.0f} sales"),
                unsafe_allow_html=True)
 with lc4:
-    v = (mats[(mats["issue_date"].dt.year == today.year) &
-              (mats["issue_date"].dt.month == today.month)]["issued_value"].sum()
-         if not mats.empty else 0)
-    sub = today.strftime("%B %Y") if not mats.empty else "no materials data yet"
-    st.markdown(tile_html("Materials This Month", f"${v:,.0f}", sub), unsafe_allow_html=True)
+    v = mats[mats["issue_date"].dt.year == today.year]["issued_value"].sum() if not mats.empty else 0
+    st.markdown(tile_html("Materials — YTD $", f"${v:,.0f}", f"{today.year} to date"),
+               unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 

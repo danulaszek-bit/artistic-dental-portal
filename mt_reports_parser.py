@@ -1161,6 +1161,12 @@ def load_prod_by_dept(folder: Path) -> pd.DataFrame:
             continue
         if any(kw in c0 for kw in ("Product ID", "Invoicing Lab", "Sales By Product")):
             continue
+        # Skip report total/summary rows — these carry the report's GRAND TOTAL
+        # and would otherwise be counted as products under the last department
+        # section (was inflating Surgical Guides/Removable sales by ~$948K).
+        c0l = c0.lower()
+        if any(kw in c0l for kw in ("total:", "grandtotal", "grand total", "lab total")):
+            continue
 
         # Product row: "PRODID-Description" or "PRODID-Description (detail)"
         # New units = col 3, Remake units = col 4
