@@ -77,6 +77,8 @@ PAYROLL_ATTRIBUTION_OVERRIDES: dict[str, list[tuple[str, str, float]]] = {
     "arevalo|henry":    [("Fixed", "Crown & Bridge", 1.0)],
     # Payroll says Model/Die; he runs printing → CAD/CAM.
     "o'hale|john":      [("Fixed", "CAD/CAM", 1.0)],
+    # Punches Model/Die and never switches; the work is Ceramics.
+    "salazar|paloma":   [("Fixed", "Ceramics", 1.0)],
 }
 
 
