@@ -127,27 +127,33 @@ with c4:
                           "of full-roster capacity, PTO-adjusted",
                           status_color(projected_pct)), unsafe_allow_html=True)
 
-# Labor & Materials KPI row — directly under the production KPIs
-lc1, lc2, lc3, lc4 = st.columns(4)
-with lc1:
-    v = ldf[ldf["work_date"] == today_str]["dollars"].sum() if not ldf.empty else 0
-    st.markdown(tile_html("Labor Today (est.)", f"${v:,.0f}",
-                          "hourly + piece + salary/250"), unsafe_allow_html=True)
-with lc2:
-    v = ldf["dollars"].sum() if not ldf.empty else 0
-    sub = f"{ldf['work_date'].min()} → {ldf['work_date'].max()}" if not ldf.empty else "no data yet"
-    st.markdown(tile_html("Labor — Window", f"${v:,.0f}", sub), unsafe_allow_html=True)
-# Materials % of Sales — materials issued over the SAME window as the sales
-# report (period_start..period_end from prod_by_dept) ÷ that window's net sales.
-# Set the "Sales By Product Department" report to a YTD range and this becomes
-# a YTD % automatically.
+# Labor & Materials both expressed as % of DEPT SALES over the same window as
+# the sales report (period_start..period_end from prod_by_dept). Set that report
+# to a YTD range and these become YTD %s automatically.
 p_start = fixed_fin["period_start"].iloc[0] if ("period_start" in fixed_fin.columns and not fixed_fin.empty) else ""
 p_end   = fixed_fin["period_end"].iloc[0]   if ("period_end" in fixed_fin.columns and not fixed_fin.empty) else ""
+
+labor_period = 0.0
+if not ldf.empty and p_start and p_end:
+    _l = (ldf["work_date"] >= p_start) & (ldf["work_date"] <= p_end)
+    labor_period = ldf[_l]["dollars"].sum()
 mat_period = 0.0
 if not mats.empty and p_start and p_end:
     _m = (mats["issue_date"].dt.date >= pd.to_datetime(p_start).date()) & \
          (mats["issue_date"].dt.date <= pd.to_datetime(p_end).date())
     mat_period = mats[_m]["issued_value"].sum()
+
+# Labor & Materials KPI row — directly under the production KPIs
+lc1, lc2, lc3, lc4 = st.columns(4)
+with lc1:
+    pct = (labor_period / net_sales * 100) if net_sales else 0.0
+    st.markdown(tile_html("Labor % of Sales", f"{pct:.1f}%",
+                          f"${labor_period:,.0f} labor / ${net_sales:,.0f} sales"),
+               unsafe_allow_html=True)
+with lc2:
+    v = ldf["dollars"].sum() if not ldf.empty else 0
+    sub = "hourly + piece + salary; Proliant actuals when reconciled" if v else "no labor data yet"
+    st.markdown(tile_html("Labor $ (period)", f"${labor_period:,.0f}", sub), unsafe_allow_html=True)
 with lc3:
     pct = (mat_period / net_sales * 100) if net_sales else 0.0
     st.markdown(tile_html("Materials % of Sales", f"{pct:.1f}%",
@@ -331,7 +337,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 # ── Labor & Materials drill-down — local-only, never leaves this machine ─────
 st.markdown("### Labor & Materials — Drill-down")
 
-# Drill-down level 1: by area
+# Drill-down level 1: by area — labor & materials as % of dept sales
 area_parts = []
 if not ldf.empty:
     area_parts.append(ldf.groupby("area")["dollars"].sum().rename("Labor $"))
@@ -339,27 +345,38 @@ if not mats.empty:
     area_parts.append(mats.groupby("area")["issued_value"].sum().rename("Materials $"))
 if area_parts:
     by_area = pd.concat(area_parts, axis=1).fillna(0).reset_index().rename(columns={"index": "Area", "area": "Area"})
-    st.markdown("**By area**")
+    if net_sales:
+        if "Labor $" in by_area.columns:
+            by_area["Labor % Sales"] = (by_area["Labor $"] / net_sales * 100).round(1)
+        if "Materials $" in by_area.columns:
+            by_area["Materials % Sales"] = (by_area["Materials $"] / net_sales * 100).round(1)
+    st.markdown(f"**By area** — % against dept sales (${net_sales:,.0f})")
     st.dataframe(by_area.sort_values(by_area.columns[1], ascending=False),
                  hide_index=True, use_container_width=True,
-                 column_config={c: st.column_config.NumberColumn(format="$%.0f")
-                                for c in by_area.columns if c != "Area"})
+                 column_config={
+                     **{c: st.column_config.NumberColumn(format="$%.0f")
+                        for c in ("Labor $", "Materials $") if c in by_area.columns},
+                     **{c: st.column_config.NumberColumn(format="%.1f%%")
+                        for c in ("Labor % Sales", "Materials % Sales") if c in by_area.columns}})
 
 # Drill-down level 2: by employee
 emp_l, emp_m = st.columns(2)
 with emp_l:
-    st.markdown("**Labor by employee**")
+    st.markdown("**Labor by employee** — % of dept sales")
     if not ldf.empty:
         name_map = dict(zip(techs["tech_code"], techs["name"]))
         le = (ldf.groupby(["tech_code", "pay_type"])["dollars"].sum().reset_index())
         le["Employee"] = le["tech_code"].map(name_map).fillna(le["tech_code"])
-        st.dataframe(le.rename(columns={"pay_type": "Pay Type", "dollars": "Labor $"})
-                       [["Employee", "Pay Type", "Labor $"]]
-                       .sort_values("Labor $", ascending=False),
+        le = le.rename(columns={"pay_type": "Pay Type", "dollars": "Labor $"})
+        if net_sales:
+            le["% of Sales"] = (le["Labor $"] / net_sales * 100).round(2)
+        cols = ["Employee", "Pay Type", "Labor $"] + (["% of Sales"] if net_sales else [])
+        st.dataframe(le[cols].sort_values("Labor $", ascending=False),
                      hide_index=True, use_container_width=True,
-                     column_config={"Labor $": st.column_config.NumberColumn(format="$%.2f")})
+                     column_config={"Labor $": st.column_config.NumberColumn(format="$%.2f"),
+                                    "% of Sales": st.column_config.NumberColumn(format="%.2f%%")})
     else:
-        st.caption("No labor estimates yet — set pay types in ⚙️ Employee Settings above.")
+        st.caption("No labor data yet — set pay types in ⚙️ Employee Settings, or import Proliant actuals.")
 with emp_m:
     st.markdown("**Materials by employee (requester)**")
     if not mats.empty:
