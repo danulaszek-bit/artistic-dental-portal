@@ -288,7 +288,15 @@ if pick:
     def show_detail():
         st.caption(f"{t['station']} · {sel_area} · Fixed")
         d1, d2, d3 = st.columns(3)
-        d1.metric("Hours (period)", f"{t['hours']:.1f}")
+        # Hours come from the Employee Productivity report's "Production" time
+        # category, which only carries hours for staff who clock time categories
+        # in MagicTouch (mostly Chairside) — most bench techs just complete
+        # tasks. Show "—" rather than 0.0, which reads as "worked no hours".
+        d1.metric("Hours (period)", f"{t['hours']:.1f}" if t["hours"] > 0 else "—",
+                  help=("No hours recorded for this technician. Hours come from the "
+                        "MagicTouch TimeClock / Employee Productivity export; most "
+                        "bench techs don't clock time categories, so this stays "
+                        "blank until the TimeClock Detail export is populated."))
         d2.metric("Units Completed (period)", int(t["period_units"]))
         d3.metric("% of Goal — Today",
                   f"{t['pct_of_goal']}%" if pd.notna(t["pct_of_goal"]) else "—")
