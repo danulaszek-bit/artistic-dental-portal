@@ -10,6 +10,7 @@ Scheduled    : every 1-2 minutes via Task Scheduler (run_logistics.bat)
 """
 
 import logging
+import os
 import subprocess
 from datetime import date
 from pathlib import Path
@@ -86,11 +87,25 @@ def main():
         log.warning("Git lock detected — skipping push this cycle (will retry next run)")
         return
 
+    # Git must NEVER wait on a human here. This runs unattended every few
+    # minutes; when the credential store failed, git sat at "Username for
+    # 'https://github.com':" forever, wedging the scheduled task in Running and
+    # leaving elevated git processes behind that only a reboot/admin could kill.
+    # These make an auth failure return an error immediately instead.
+    genv = {
+        **os.environ,
+        "GIT_TERMINAL_PROMPT": "0",   # no stdin prompt
+        "GCM_INTERACTIVE": "never",   # no Git Credential Manager UI
+        "GIT_ASKPASS": "",            # no askpass helper
+        "SSH_ASKPASS": "",
+    }
+
     try:
         subprocess.run(["git", "add", "cache/latest/cases_logistics.csv",
-                        "cache/latest/logistics_summary.csv"], cwd=repo, check=True)
+                        "cache/latest/logistics_summary.csv"],
+                       cwd=repo, check=True, env=genv, timeout=60)
 
-        diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=repo)
+        diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=repo, env=genv)
         if diff.returncode != 0:
             # Stamp _data_version.py so Streamlit Cloud redeploys
             from datetime import datetime
@@ -101,17 +116,24 @@ def main():
                 "# Changing this file forces Streamlit Cloud to redeploy.\n"
                 f'DATA_VERSION = "{ts}"\n'
             )
-            subprocess.run(["git", "add", "_data_version.py"], cwd=repo, check=True)
+            subprocess.run(["git", "add", "_data_version.py"],
+                           cwd=repo, check=True, env=genv, timeout=60)
             subprocess.run(["git", "commit", "-m", f"Logistics update {ts}"],
-                           cwd=repo, check=True)
-            subprocess.run(["git", "push", "origin", "main"], cwd=repo, check=True)
+                           cwd=repo, check=True, env=genv, timeout=60)
+            subprocess.run(["git", "push", "origin", "main"],
+                           cwd=repo, check=True, env=genv, timeout=180)
             state_file.write_text(str(time.time()))
             log.info("Pushed to GitHub — Streamlit will redeploy")
         else:
             state_file.write_text(str(time.time()))  # nothing to push; still reset the clock
             log.info("No logistics changes — skipping push")
     except subprocess.CalledProcessError as e:
+        # Commits still accumulate locally and go out on a later cycle, so a
+        # failed push delays the cloud copy but never loses data.
         log.warning("Git operation failed (%s) — will retry next cycle", e)
+    except subprocess.TimeoutExpired as e:
+        log.error("Git timed out (%s) — check credentials; commits are queued "
+                  "locally and will push once auth works", e)
 
 
 if __name__ == "__main__":

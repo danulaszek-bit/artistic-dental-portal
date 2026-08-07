@@ -1,6 +1,15 @@
 @echo off
 cd /d C:\ArtisticDentalPortal
 
+REM --- Never let git block on a credential prompt. This runs unattended; a
+REM --- failed credential store once left git sitting at "Username for
+REM --- 'https://github.com':" forever, wedging the scheduled task. With these
+REM --- set, an auth failure returns an error immediately instead of hanging.
+set GIT_TERMINAL_PROMPT=0
+set GCM_INTERACTIVE=never
+set GIT_ASKPASS=
+set SSH_ASKPASS=
+
 REM --- Self-heal any git ref corruption left by an interrupted push ---
 py -c "from git_health import repair_if_broken; from pathlib import Path; repair_if_broken(Path('.'))"
 

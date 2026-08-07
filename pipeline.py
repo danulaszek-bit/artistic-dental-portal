@@ -1448,12 +1448,21 @@ def run_pipeline():
     # NOTE: no git stash/pull — this machine is the sole writer so pulling first
     # is unnecessary and caused stash pile-up that silently swallowed cache updates.
     try:
+        import os
         import subprocess
         repo_dir = str(BASE_DIR)
-        subprocess.run(["git", "add", "cache/latest/"], cwd=repo_dir, check=True)
-        result = subprocess.run(["git", "commit", "-m", f"Auto-update data {date.today()}"], cwd=repo_dir)
+        # Runs unattended — git must fail fast rather than block on a credential
+        # prompt (a failed credential store once hung this at "Username for
+        # 'https://github.com':" indefinitely).
+        genv = {**os.environ, "GIT_TERMINAL_PROMPT": "0", "GCM_INTERACTIVE": "never",
+                "GIT_ASKPASS": "", "SSH_ASKPASS": ""}
+        subprocess.run(["git", "add", "cache/latest/"],
+                       cwd=repo_dir, check=True, env=genv, timeout=60)
+        result = subprocess.run(["git", "commit", "-m", f"Auto-update data {date.today()}"],
+                                cwd=repo_dir, env=genv, timeout=60)
         if result.returncode == 0:
-            subprocess.run(["git", "push", "origin", "main"], cwd=repo_dir, check=True)
+            subprocess.run(["git", "push", "origin", "main"],
+                           cwd=repo_dir, check=True, env=genv, timeout=180)
             log.info("GitHub push complete.")
         else:
             log.info("Nothing new to push to GitHub.")
