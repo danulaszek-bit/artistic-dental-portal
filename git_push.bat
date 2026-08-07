@@ -7,6 +7,14 @@ REM ============================================================
 
 cd /d C:\ArtisticDentalPortal
 
+REM --- Never block on a credential prompt. This runs unattended; without these
+REM --- a failed credential store leaves git sitting at "Username for
+REM --- 'https://github.com':" forever, wedging the task and stalling the cloud.
+set GIT_TERMINAL_PROMPT=0
+set GCM_INTERACTIVE=never
+set GIT_ASKPASS=
+set SSH_ASKPASS=
+
 REM --- Step 1: Recompute retention KPIs ---
 echo [%date% %time%] Running compute_retention_kpis.py
 py compute_retention_kpis.py
