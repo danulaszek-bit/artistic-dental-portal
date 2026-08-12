@@ -18,7 +18,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455815,,Michael Kasper,D79$,2026-07-29 13:15:00,2026-08-06,2026-08-05 15:00:00,In Production,CTS,0.0,SE RT 3,,Surgical,12,7,13,6,True,True,False,True
 454920,,Michael Slavin,P143,2026-07-16 14:45:00,2026-08-07,2026-08-06 15:00:00,In Production,GUIDES,0.0,SW RT 5,,Surgical,21,7,26,5,True,True,False,True
 455405,,Ammar Adam,P427*,2026-07-23 12:20:00,2026-08-11,2026-08-10 15:00:00,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,14,7,19,1,True,True,False,True
-455711,,Michael Slavin,H303,2026-07-28 13:03:00,2026-08-11,2026-08-10 15:00:00,In Production,GUIDES,0.0,FNW RT 8,,Surgical,8,7,14,1,True,True,False,True
+455711,,Michael Slavin,H303,2026-07-28 13:03:00,2026-08-11,2026-08-10 15:00:00,In Production,GUIDES,0.0,FNW RT 8,,Surgical,12,7,14,1,True,True,False,True
 455483,,David Fiore,D224$*,2026-07-24 09:30:00,2026-08-12,2026-08-11 15:00:00,In Production,GUIDES,0.0,GL,,Surgical,13,7,18,0,False,True,False,True
 456365,,Pinal Patel,EVDSGN-080526092654,2026-08-05 13:14:00,2026-08-12,2026-08-11 15:00:00,In Production,CREDITHOLD,0.0,WEST RT 4,,Unknown,0,5,6,0,False,False,False,False
 456409,,Pinal Patel,E301*,2026-08-05 16:15:00,2026-08-12,2026-08-11 15:00:00,In Production,PRINTING,0.0,WEST RT 4,,CAD_CAM,1,2,6,0,False,False,False,False
@@ -71,7 +71,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 456685,,Todd Spragg,X7,2026-08-10 13:33:00,2026-08-13,2026-08-12 15:00:00,In Production,REMIPDOM,0.0,CENT RT1,,Removable,0,5,1,0,False,False,False,False
 448733,,Daniel Kmak,H143,2026-07-31 10:19:00,2026-08-14,2026-08-13 15:00:00,In Production,FRED,0.0,NWIND RT 6,,Fixed,0,3,11,0,False,False,False,False
 455384,,Robin Jungblut,D306$*,2026-07-23 11:12:00,2026-08-14,2026-08-13 15:00:00,In Production,REMIPMARY,0.0,FNW RT 8,,Removable,4,5,19,0,False,False,False,False
-455488,,Robert Placzek,H39,2026-08-04 10:05:00,2026-08-14,2026-08-13 15:00:00,In Production,REMIPLIZ,0.0,GL,,Removable,1,5,7,0,False,False,False,False
+455488,,Robert Placzek,H39,2026-08-04 10:05:00,2026-08-14,2026-08-13 15:00:00,In Production,REMIPLIZ,0.0,GL,,Removable,7,5,7,0,False,True,False,True
 455568,,Andrew Jursik,H299*,2026-07-27 10:04:00,2026-08-14,2026-08-13 15:00:00,In Production,PORCWALL,0.0,NE RT 2,,Fixed,0,3,15,0,False,False,False,False
 455916,,Jacob Samuel,P34,2026-07-30 13:07:00,2026-08-14,2026-08-13 15:00:00,In Production,GRINDING,0.0,WEST RT 4,,Fixed,1,3,12,0,False,False,False,False
 455921,,Matthew Witt,P839,2026-07-30 13:19:00,2026-08-14,2026-08-13 15:00:00,In Production,FRED CALLS,0.0,SE RT 3,,Unknown,11,5,12,0,False,True,False,True
@@ -288,10 +288,11 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 456707,,Linora Nissan,H230,2026-08-11 08:17:00,2026-08-20,2026-08-19 15:00:00,In Production,PORCWALL,0.0,GL,,Fixed,0,3,0,0,False,False,False,False
 456708,,Jad Atassi,H268!,2026-08-11 08:19:00,2026-08-20,2026-08-19 15:00:00,In Production,PORCWALL,0.0,GL,,Fixed,0,3,0,0,False,False,False,False
 456709,,Jad Atassi,H87!,2026-08-11 08:21:00,2026-08-20,2026-08-19 15:00:00,In Production,PORCWALL,0.0,GL,,Fixed,0,3,0,0,False,False,False,False
+456215,,Dina Alssaeaidi,H201*,2026-08-04 09:44:00,2026-08-21,2026-08-20 15:00:00,In Production,REMOUT,0.0,CENT RT1,,Removable,0,5,7,0,False,False,False,False
 456343,,Hwaiyin Chang,F222,2026-08-05 11:15:00,2026-08-21,2026-08-20 15:00:00,In Production,MILLINGIP,0.0,CENT RT1,,Implants,1,5,6,0,False,False,False,False
 456344,,James Fieldhouse,F234*,2026-08-05 11:17:00,2026-08-21,2026-08-20 15:00:00,In Production,SCANNING,0.0,NE RT 2,,Surgical,0,7,6,0,False,False,False,False
 456529,,Colton Sylvester,E357,2026-08-07 10:45:00,2026-08-21,2026-08-20 14:00:00,In Production,SCANNING,0.0,UPS: 03,,Surgical,0,7,4,0,False,False,False,False
-456577,,Richa Ranpura,D299$!,2026-08-07 13:55:00,2026-08-21,2026-08-20 15:00:00,In Production,REMIPMARGARET,0.0,CENT RT1,,Removable,1,5,4,0,False,False,False,False
+456577,,Richa Ranpura,D299$!,2026-08-07 13:55:00,2026-08-21,2026-08-20 15:00:00,In Production,REMIPMARGARET,0.0,CENT RT1,,Removable,0,5,4,0,False,False,False,False
 456601,,Eman Alsahlani,V258*,2026-08-07 16:38:00,2026-08-21,2026-08-20 15:00:00,In Production,SENTFORDESIGN,0.0,GL,,CAD_CAM,0,2,4,0,False,False,False,False
 456649,,Eric Kosnic,V287,2026-08-10 10:41:00,2026-08-24,2026-08-20 14:00:00,In Production,SPLFINISH,0.0,UPS: 03,,Fixed,1,3,1,0,False,False,False,False
 456650,,Lena J. Casimir,V244*,2026-08-10 10:38:00,2026-08-21,2026-08-20 15:00:00,In Production,PRINTING,0.0,GL,,CAD_CAM,0,2,1,0,False,False,False,False
