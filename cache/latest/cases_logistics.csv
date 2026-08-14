@@ -62,11 +62,11 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455622,,Manas Chug,V32,2026-07-27 14:39:00,2026-08-18,2026-08-17 15:00:00,In Production,PORCWALL,0.0,SW RT 5,,Fixed,2,3,17,0,False,False,False,False
 455640,,Simon Tadros,H4*,2026-07-27 16:30:00,2026-08-18,2026-08-17 15:00:00,In Production,PORCWALL,0.0,NWIND RT 6,,Fixed,0,3,17,0,False,False,False,False
 455719,,Karile Jonynas,P19,2026-08-06 14:02:00,2026-08-18,2026-08-17 14:00:00,In Production,REMOUT,0.0,GL,,Removable,0,5,7,0,False,False,False,False
-455801,,Amy Wadas,F100*,2026-07-29 12:27:00,2026-08-18,2026-08-17 15:00:00,In Production,MILLINGIP,0.0,NWIND RT 6,,Implants,0,5,15,0,False,False,False,False
-456071,,Aneta Paniczko,V288,2026-08-03 11:59:00,2026-08-18,2026-08-17 15:00:00,In Production,REMOUT,0.0,CENT RT1,,Removable,7,5,10,0,False,True,False,True
+455801,,Amy Wadas,F100*,2026-07-29 12:27:00,2026-08-18,2026-08-17 15:00:00,In Production,MILLINGIP,0.0,NWIND RT 6,,Implants,3,5,15,0,False,False,False,False
+456071,,Aneta Paniczko,V288,2026-08-03 11:59:00,2026-08-18,2026-08-17 15:00:00,In Production,REMOUT,0.0,CENT RT1,,Removable,0,5,10,0,False,False,False,False
 456086,,Michael Giuliano,V107,2026-08-03 13:28:00,2026-08-18,2026-08-17 15:00:00,In Production,PORCIP DEAN,0.0,FNE RT 7,,Implants,0,5,10,0,False,False,False,False
 456324,,Mark Huberty,F136,2026-08-05 10:42:00,2026-08-18,2026-08-17 14:00:00,In Production,MATCHING TABLE,0.0,UPS: 03,,Fixed,0,3,8,0,False,False,False,False
-456339,,Hwaiyin Chang,F92,2026-08-05 11:05:00,2026-08-18,2026-08-17 15:00:00,In Production,REMOUT,0.0,CENT RT1,,Removable,7,5,8,0,False,True,False,True
+456339,,Hwaiyin Chang,F92,2026-08-05 11:05:00,2026-08-18,2026-08-17 15:00:00,In Production,REMOUT,0.0,CENT RT1,,Removable,0,5,8,0,False,False,False,False
 456349,,Nicas Yiannias,F163*,2026-08-05 11:39:00,2026-08-18,2026-08-17 14:00:00,In Production,FRED,0.0,UPS: 03,,Fixed,2,3,8,0,False,False,False,False
 456355,,Sumayyah Khan,P574*,2026-08-05 12:09:00,2026-08-18,2026-08-17 15:00:00,In Production,REMIPDOM,0.0,CENT RT1,,Removable,0,5,8,0,False,False,False,False
 456395,,William Earley,F158,2026-08-05 14:08:00,2026-08-18,2026-08-17 15:00:00,In Production,REMOUT,0.0,SE RT 3,,Removable,2,5,8,0,False,False,False,False
@@ -183,7 +183,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 456345,,Ringo Leung,F53*,2026-08-05 11:26:00,2026-08-20,2026-08-19 15:00:00,In Production,MILLINGIP,0.0,NWIND RT 6,,Implants,6,5,8,0,False,True,False,True
 456449,,Brandon Murphy,D322,2026-08-06 10:01:00,2026-08-20,2026-08-19 15:00:00,In Production,REMIPDOM,0.0,NE RT 2,,Removable,2,5,7,0,False,False,False,False
 456509,,Juana Ryckowski,E217*,2026-08-06 18:20:00,2026-08-20,2026-08-19 15:00:00,In Production,STAINGLAZECART,0.0,NWIND RT 6,,Fixed,0,3,7,0,False,False,False,False
-456544,,Michael Giuliano,E121*,2026-08-07 11:52:00,2026-08-20,2026-08-19 15:00:00,In Production,FRED,0.0,FNE RT 7,,Fixed,0,3,6,0,False,False,False,False
+456544,,Michael Giuliano,E121*,2026-08-07 11:52:00,2026-08-20,2026-08-19 15:00:00,In Production,FRED,0.0,FNE RT 7,,Fixed,1,3,6,0,False,False,False,False
 456552,,Guy Henry Gattone,E496,2026-08-07 12:54:00,2026-08-20,2026-08-19 15:00:00,In Production,MILLINGIP,0.0,SE RT 3,,Implants,0,5,6,0,False,False,False,False
 456554,,Colleen Gaffney,E356,2026-08-07 12:56:00,2026-08-20,2026-08-19 15:00:00,In Production,MILLINGIP,0.0,SE RT 3,,Implants,0,5,6,0,False,False,False,False
 456555,,Catherine Rhim,E169,2026-08-07 12:57:00,2026-08-20,2026-08-19 15:00:00,In Production,MATCHING TABLE,0.0,SW RT 5,,Fixed,0,3,6,0,False,False,False,False
@@ -275,6 +275,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 457017,,Joseph Nierzwicki,E318,2026-08-14 08:29:00,2026-08-21,2026-08-20 15:00:00,In Production,REMPREP,0.0,GL,,Removable,0,5,-1,0,False,False,False,False
 446467,,Luis Peralta,D266$*,2026-08-04 07:43:00,2026-08-24,2026-08-21 15:00:00,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,9,7,9,0,False,True,False,True
 453976,,Mark Prakash,F177,2026-08-12 14:31:00,2026-08-24,2026-08-21 15:00:00,In Production,CTS,0.0,GL,,Surgical,1,7,1,0,False,False,False,False
+454306,,Muhammad Sohail,F210*,2026-07-08 15:24:00,2026-08-24,2026-08-21 15:00:00,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,35,7,36,0,False,True,False,True
 455727,,Rainah Hanif,H309,2026-08-11 15:45:00,2026-08-24,2026-08-21 15:00:00,In Production,REMIPLIZ,0.0,NE RT 2,,Removable,0,5,2,0,False,False,False,False
 456247,,Beata Lezerkiewicz,H122,2026-08-04 11:33:00,2026-08-24,2026-08-21 15:00:00,In Production,MATCHING TABLE,0.0,CENT RT1,,Fixed,0,3,9,0,False,False,False,False
 456422,,Carly Paragas,D306$,2026-08-10 07:40:00,2026-08-24,2026-08-21 15:00:00,In Production,REMIPMARY,0.0,SE RT 3,,Removable,0,5,3,0,False,False,False,False
