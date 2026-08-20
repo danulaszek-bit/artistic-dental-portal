@@ -6,7 +6,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 450856,,Michael Slavin,P303,2026-05-21 13:58:00,2026-06-09,2026-06-08 15:00:00,In Production,GUIDES,0.0,SW RT 5,,Surgical,69,7,90,72,True,True,False,True
 451058,,Michael Slavin,H103*,2026-05-27 09:30:00,2026-06-18,2026-06-17 15:00:00,In Production,GUIDES,0.0,SW RT 5,,Surgical,69,7,84,63,True,True,False,True
 451719,,Michael Slavin,F166*,2026-06-03 13:08:00,2026-06-19,2026-06-18 15:00:00,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,69,7,77,62,True,True,False,True
-453210,,Michael Slavin,H91*,2026-06-23 16:07:00,2026-07-01,2026-06-30 15:00:00,In Production,GUIDES,0.0,SW RT 5,,Surgical,57,7,57,50,True,True,False,True
+453210,,Michael Slavin,H91*,2026-06-23 16:07:00,2026-07-01,2026-06-30 15:00:00,In Production,GUIDES,0.0,SW RT 5,,Surgical,1,7,57,50,True,False,False,True
 454721,,Michael Slavin,H163*,2026-07-14 15:40:00,2026-07-28,2026-07-27 15:00:00,In Production,GUIDES,0.0,SW RT 5,,Surgical,35,7,36,23,True,True,False,True
 454723,,Michael Slavin,H247*,2026-07-14 15:42:00,2026-07-28,2026-07-27 15:00:00,In Production,GUIDES,0.0,SW RT 5,,Surgical,35,7,36,23,True,True,False,True
 455685,,Raffi Leblebijian,H152,2026-07-28 11:06:00,2026-08-05,2026-08-04 14:00:00,In Production,GUIDES,0.0,UPS: 03,,Surgical,22,7,22,15,True,True,False,True
@@ -32,10 +32,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 456947,,Gary Tapak,P27,2026-08-13 12:02:00,2026-08-21,2026-08-20 15:00:00,In Production,STAINGLAZE,0.0,SE RT 3,,Fixed,0,3,6,0,False,False,False,False
 456951,,Brian Walczak,E233*,2026-08-13 12:24:00,2026-08-21,2026-08-20 15:00:00,In Production,PRINTING,0.0,SE RT 3,,CAD_CAM,0,2,6,0,False,False,False,False
 456970,,Jacob Samuel,P559,2026-08-13 13:40:00,2026-08-21,2026-08-20 15:00:00,In Production,STAINGLAZE,0.0,WEST RT 4,,Fixed,0,3,6,0,False,False,False,False
-456973,,Simon Tadros,P488,2026-08-13 13:48:00,2026-08-21,2026-08-20 15:00:00,In Production,STAINGLAZE,0.0,NWIND RT 6,,Fixed,0,3,6,0,False,False,False,False
-456975,,Simon Tadros,P69,2026-08-13 13:49:00,2026-08-21,2026-08-20 15:00:00,In Production,STAINGLAZE,0.0,NWIND RT 6,,Fixed,0,3,6,0,False,False,False,False
 456979,,Michael Kozek,D321$,2026-08-18 14:16:00,2026-08-21,2026-08-20 15:00:00,In Production,REMIPMARY,0.0,SE RT 3,,Removable,1,5,1,0,False,False,False,False
-457017,,Joseph Nierzwicki,E318,2026-08-14 08:29:00,2026-08-21,2026-08-20 15:00:00,In Production,STAINGLAZE,0.0,GL,,Fixed,0,3,5,0,False,False,False,False
 457029,,Mark Kuchta,E135*,2026-08-14 10:47:00,2026-08-21,2026-08-20 15:00:00,In Production,FRED,0.0,FNE RT 7,,Fixed,0,3,5,0,False,False,False,False
 457036,,Abigail Cortis,E23,2026-08-14 11:59:00,2026-08-21,2026-08-20 15:00:00,In Production,IOS,0.0,WEST RT 4,,Surgical,0,7,5,0,False,False,False,False
 457092,,Linora Nissan,V91,2026-08-17 08:39:00,2026-08-21,2026-08-20 15:00:00,In Production,FRED,0.0,GL,,Fixed,0,3,2,0,False,False,False,False
@@ -80,7 +77,6 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 457071,,Mirette Hanna,E66,2026-08-14 13:12:00,2026-08-24,2026-08-21 15:00:00,In Production,MILLINGIP,0.0,SW RT 5,,Implants,0,5,5,0,False,False,False,False
 457087,,Andrew Jursik,EVDSGN-081526062721,2026-08-17 08:27:00,2026-08-24,2026-08-21 15:00:00,In Production,STAINGLAZE,0.0,NE RT 2,,Fixed,0,3,2,0,False,False,False,False
 457093,,Rachel Cuadros,EVDSGN-081526112007,2026-08-17 08:42:00,2026-08-24,2026-08-21 15:00:00,In Production,IOS,0.0,SE RT 3,,Surgical,0,7,2,0,False,False,False,False
-457102,,Colton Sylvester,V239,2026-08-17 10:10:00,2026-08-24,2026-08-21 14:00:00,In Production,STAINGLAZE,0.0,UPS: 03,,Fixed,0,3,2,0,False,False,False,False
 457106,,Austin Czarnecki,EVDSGN-081726075829,2026-08-17 10:18:00,2026-08-24,2026-08-21 15:00:00,In Production,STAINGLAZE,0.0,FNW RT 8,,Fixed,0,3,2,0,False,False,False,False
 457107,,Ben Baptist,EVDSGN-081726080242,2026-08-17 10:24:00,2026-08-24,2026-08-21 15:00:00,In Production,STAINGLAZE,0.0,SE RT 3,,Fixed,0,3,2,0,False,False,False,False
 457114,,Peter Liang,EVDSGN-081726082550,2026-08-17 10:49:00,2026-08-24,2026-08-21 14:00:00,In Production,STAINGLAZE,0.0,UPS: 03,,Fixed,0,3,2,0,False,False,False,False
