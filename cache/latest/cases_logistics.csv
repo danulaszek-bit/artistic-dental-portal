@@ -23,10 +23,10 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 456871,,Benjamin Baptist,F199,2026-08-12 13:22:00,2026-08-27,2026-08-26 15:00:00,In Production,HENRY,0.0,NE RT 2,,Fixed,0,3,13,0,False,False,False,False
 457022,,Rachel Cuadros,E7,2026-08-14 09:53:00,2026-08-27,2026-08-26 15:00:00,In Production,FRED,0.0,SE RT 3,,Fixed,0,3,11,0,False,False,False,False
 457052,,Amjad Ali,E2,2026-08-14 12:24:00,2026-08-27,2026-08-26 15:00:00,In Production,PORCIP NINI,0.0,WEST RT 4,,Implants,0,5,11,0,False,False,False,False
-457072,,Aditya Pai,E56,2026-08-14 13:14:00,2026-08-27,2026-08-26 15:00:00,In Production,REMIPMARY,0.0,SW RT 5,,Removable,0,5,11,0,False,False,False,False
+457072,,Aditya Pai,E56,2026-08-14 13:14:00,2026-08-27,2026-08-26 15:00:00,In Production,REMQC,0.0,SW RT 5,,Removable,0,5,11,0,False,False,False,False
 458236,,Tom Siewert,H288*,2026-08-18 12:40:00,2026-08-27,2026-08-26 15:00:00,In Production,REMIPLIZ,0.0,GL,,Removable,0,5,7,0,False,False,False,False
 458240,,Simon Abu-Aita,H159,2026-08-18 13:02:00,2026-08-27,2026-08-26 15:00:00,In Production,PORCIP NINI,0.0,NWIND RT 6,,Implants,0,5,7,0,False,False,False,False
-458275,,Simon Tadros,F902*,2026-08-18 15:52:00,2026-08-27,2026-08-26 15:00:00,In Production,REMIPBLERTA,0.0,NWIND RT 6,,Removable,0,5,7,0,False,False,False,False
+458275,,Simon Tadros,F902*,2026-08-18 15:52:00,2026-08-27,2026-08-26 15:00:00,In Production,REMQC,0.0,NWIND RT 6,,Removable,0,5,7,0,False,False,False,False
 458288,,Lena J. Casimir,F916*,2026-08-18 17:38:00,2026-08-27,2026-08-26 15:00:00,In Production,FRED,0.0,GL,,Fixed,0,3,7,0,False,False,False,False
 458290,,Mark Anderson,F936*,2026-08-18 17:57:00,2026-08-27,2026-08-26 15:00:00,In Production,PORCIP NINI,0.0,SE RT 3,,Implants,0,5,7,0,False,False,False,False
 458331,,David Dardick,V286*,2026-08-19 11:11:00,2026-08-27,2026-08-26 15:00:00,In Production,PORCIP NINI,0.0,FNW RT 8,,Implants,0,5,6,0,False,False,False,False
@@ -46,7 +46,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458263,,Maggie Augustyn,F939*!,2026-08-18 14:30:00,2026-08-28,2026-08-27 15:00:00,In Production,HENRY,0.0,NE RT 2,,Fixed,0,3,7,0,False,False,False,False
 458276,,Fras Arbi Katbi,H85!,2026-08-18 15:57:00,2026-08-28,2026-08-27 15:00:00,In Production,MILLINGIP,0.0,SE RT 3,,Implants,0,5,7,0,False,False,False,False
 458284,,Logan Brown,EVDSGN-081826140307,2026-08-18 16:45:00,2026-08-28,2026-08-27 14:00:00,In Production,HENRY,0.0,UPS: 03,,Fixed,0,3,7,0,False,False,False,False
-458289,,Hazel Santiago-Macanip,F925,2026-08-18 17:44:00,2026-08-28,2026-08-27 15:00:00,In Production,SINTERING,0.0,SW RT 5,,CAD_CAM,0,2,7,0,False,False,False,False
+458289,,Hazel Santiago-Macanip,F925,2026-08-18 17:44:00,2026-08-28,2026-08-27 15:00:00,In Production,PRINTING,0.0,SW RT 5,,CAD_CAM,0,2,7,0,False,False,False,False
 458332,,Raffi Leblebijian,F148*,2026-08-19 11:14:00,2026-08-28,2026-08-27 14:00:00,In Production,PORCWALL,0.0,UPS: 03,,Fixed,0,3,6,0,False,False,False,False
 458345,,Paul Singh,F201*,2026-08-19 12:01:00,2026-08-28,2026-08-27 15:00:00,In Production,WAX,0.0,SW RT 5,,Fixed,0,3,6,0,False,False,False,False
 458347,,Simon Tadros,F157,2026-08-19 12:38:00,2026-08-28,2026-08-27 15:00:00,In Production,HENRY,0.0,NWIND RT 6,,Fixed,0,3,6,0,False,False,False,False
@@ -87,14 +87,14 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458452,,Manas Chug,P847,2026-08-20 12:22:00,2026-08-31,2026-08-28 15:00:00,In Production,MILLINGIP,0.0,WEST RT 4,,Implants,0,5,5,0,False,False,False,False
 458476,,Brian Walczak,P503*,2026-08-20 13:57:00,2026-08-31,2026-08-28 15:00:00,In Production,SPLFINISH,0.0,SE RT 3,,Fixed,0,3,5,0,False,False,False,False
 458519,,Linora Nissan,E233,2026-08-21 08:14:00,2026-08-31,2026-08-28 15:00:00,In Production,FRED,0.0,GL,,Fixed,0,3,4,0,False,False,False,False
-458546,,Mary Ann Hollis,E35,2026-08-21 11:12:00,2026-08-31,2026-08-28 15:00:00,In Production,SPLFINISH,0.0,NE RT 2,,Fixed,0,3,4,0,False,False,False,False
+458546,,Mary Ann Hollis,E35,2026-08-21 11:12:00,2026-08-31,2026-08-28 15:00:00,In Production,PRINTING,0.0,NE RT 2,,CAD_CAM,0,2,4,0,False,False,False,False
 458555,,Gary Tapak,E190,2026-08-21 12:18:00,2026-08-31,2026-08-28 15:00:00,In Production,FRED CALLS,0.0,SE RT 3,,Unknown,0,5,4,0,False,False,False,False
 458557,,Jacob Samuel,E496,2026-08-21 12:34:00,2026-08-31,2026-08-28 15:00:00,In Production,MILLING BRUX,0.0,WEST RT 4,,CAD_CAM,0,2,4,0,False,False,False,False
 458558,,Harsh Patel,E367,2026-08-21 12:31:00,2026-08-31,2026-08-28 15:00:00,In Production,MILLING BRUX,0.0,SW RT 5,,CAD_CAM,0,2,4,0,False,False,False,False
 458559,,Jacob Samuel,E357,2026-08-21 12:36:00,2026-08-31,2026-08-28 15:00:00,In Production,MILLING BRUX,0.0,WEST RT 4,,CAD_CAM,0,2,4,0,False,False,False,False
 458560,,Jacob Samuel,E16,2026-08-21 12:38:00,2026-08-31,2026-08-28 15:00:00,In Production,CADSTALLED,0.0,WEST RT 4,,CAD_CAM,0,2,4,0,False,False,False,False
 458561,,Jacob Samuel,E90,2026-08-21 12:40:00,2026-08-31,2026-08-28 15:00:00,In Production,MILLING BRUX,0.0,WEST RT 4,,CAD_CAM,0,2,4,0,False,False,False,False
-458584,,Poornima Gangaji,EVDSGN-082126143949,2026-08-21 18:05:00,2026-08-31,2026-08-28 15:00:00,In Production,HENRY,0.0,WEST RT 4,,Fixed,0,3,4,0,False,False,False,False
+458584,,Poornima Gangaji,EVDSGN-082126143949,2026-08-21 18:05:00,2026-08-31,2026-08-28 15:00:00,In Production,PREP,0.0,WEST RT 4,,Hold_Stalled,0,1,4,0,False,False,False,False
 458592,,Jad Atassi,EVDSGN-082226073756,2026-08-24 09:03:00,2026-08-31,2026-08-28 15:00:00,In Production,MATCHING TABLE,0.0,GL,,Fixed,0,3,1,0,False,False,False,False
 458593,,Jad Atassi,EVDSGN-082226082950,2026-08-24 09:09:00,2026-08-31,2026-08-28 15:00:00,In Production,STAINGLAZECART,0.0,GL,,Fixed,0,3,1,0,False,False,False,False
 458594,,Amiel Pappas,EVDSGN-082226083355,2026-08-24 09:14:00,2026-08-31,2026-08-28 15:00:00,In Production,STAINGLAZECART,0.0,SE RT 3,,Fixed,0,3,1,0,False,False,False,False
@@ -111,22 +111,23 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458651,,Brian Douts,EVDSGN-082426090012,2026-08-24 14:00:00,2026-08-31,2026-08-28 15:00:00,In Production,EVD SUBMITTED,0.0,NWIND RT 6,,Scheduling,0,2,1,0,False,False,False,False
 458652,,Seokjae Son,EVDSGN-082426090309,2026-08-24 14:06:00,2026-08-31,2026-08-28 15:00:00,In Production,MATCHING TABLE,0.0,SW RT 5,,Fixed,0,3,1,0,False,False,False,False
 458654,,Logan Brown,EVDSGN-082426091215,2026-08-24 14:16:00,2026-08-31,2026-08-28 14:00:00,In Production,STAINGLAZECART,0.0,UPS: 03,,Fixed,0,3,1,0,False,False,False,False
-458719,,Sarah Lopez,H157*,2026-08-25 10:39:00,2026-08-31,2026-08-28 15:00:00,In Production,DIGITALREMOVABLE,0.0,NWIND RT 6,,Removable,0,5,0,0,False,False,False,False
+458719,,Sarah Lopez,H157*,2026-08-25 10:39:00,2026-08-31,2026-08-28 15:00:00,In Production,PRINTING,0.0,NWIND RT 6,,CAD_CAM,0,2,0,0,False,False,False,False
+458795,,Fayda Hassan,EVDSGN-082526150049,2026-08-25 18:09:00,2026-08-31,2026-08-28 15:00:00,In Production,EVD SUBMITTED,0.0,SW RT 5,,Scheduling,0,2,0,0,False,False,False,False
 455561,,Nicholas Tokarski,H32,2026-08-18 09:48:00,2026-09-01,2026-08-31 15:00:00,In Production,REMIPLIZ,0.0,GL,,Removable,0,5,7,0,False,False,False,False
 456351,,Mark Niemiec,F165*,2026-08-05 11:44:00,2026-09-04,2026-08-31 14:00:00,In Production,REMOUT,0.0,UPS: 03,,Removable,0,5,20,0,False,False,False,False
 456659,,Rebecca Jans,V238*&,2026-08-10 11:14:00,2026-09-01,2026-08-31 15:00:00,In Production,MILLINGIP,0.0,SW RT 5,,Implants,0,5,15,0,False,False,False,False
 456701,,Nicholas Tokarski,E150,2026-08-18 15:01:00,2026-09-01,2026-08-31 15:00:00,In Production,REMIPLIZ,0.0,GL,,Removable,0,5,7,0,False,False,False,False
 456823,,Michael Frantal,D324*,2026-08-12 10:06:00,2026-09-01,2026-08-31 14:00:00,In Production,REMIPBLERTA,0.0,UPS: 03,,Removable,0,5,13,0,False,False,False,False
 456840,,Maria Barnes,D111$,2026-08-12 11:09:00,2026-09-01,2026-08-31 14:00:00,In Production,REMPROCESSSHELF,0.0,UPS: 03,,Removable,0,5,13,0,False,False,False,False
-456841,,Michael Kozek,D283$,2026-08-18 11:11:00,2026-09-01,2026-08-31 15:00:00,In Production,REMIPDOM,0.0,SE RT 3,,Removable,0,5,7,0,False,False,False,False
-458155,,Mark Niemiec,H155*,2026-08-17 16:33:00,2026-09-08,2026-08-31 14:00:00,In Production,CTS,0.0,UPS: 03,,Surgical,0,7,8,0,False,False,False,False
-458181,,Nicholas Tokarski,H39,2026-08-18 08:56:00,2026-09-01,2026-08-31 15:00:00,In Production,REMIPBLERTA,0.0,GL,,Removable,0,5,7,0,False,False,False,False
+456841,,Michael Kozek,D283$,2026-08-18 11:11:00,2026-09-01,2026-08-31 15:00:00,In Production,REMQC,0.0,SE RT 3,,Removable,0,5,7,0,False,False,False,False
+458155,,Mark Niemiec,H155*,2026-08-17 16:33:00,2026-09-08,2026-08-31 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,0,2,8,0,False,False,False,False
+458181,,Nicholas Tokarski,H39,2026-08-18 08:56:00,2026-09-01,2026-08-31 15:00:00,In Production,REMQC,0.0,GL,,Removable,0,5,7,0,False,False,False,False
 458221,,Matthew Witt,H206,2026-08-18 12:07:00,2026-09-01,2026-08-31 15:00:00,In Production,MILLINGIP,0.0,SE RT 3,,Implants,0,5,7,0,False,False,False,False
 458224,,Meghan Gaffney,H237,2026-08-18 12:14:00,2026-09-01,2026-08-31 15:00:00,In Production,MILLINGIP,0.0,SE RT 3,,Implants,0,5,7,0,False,False,False,False
 458228,,Rachel Cuadros,H929*,2026-08-18 12:22:00,2026-09-01,2026-08-31 15:00:00,In Production,PRINTING,0.0,SE RT 3,,CAD_CAM,0,2,7,0,False,False,False,False
-458286,,Elizabeth Sacrey,EVDSGN-081826140635,2026-08-18 16:55:00,2026-09-01,2026-08-31 15:00:00,In Production,SPLFINISH,0.0,WEST RT 4,,Fixed,0,3,7,0,False,False,False,False
+458286,,Elizabeth Sacrey,EVDSGN-081826140635,2026-08-18 16:55:00,2026-09-01,2026-08-31 15:00:00,In Production,PRINTING,0.0,WEST RT 4,,CAD_CAM,0,2,7,0,False,False,False,False
 458313,,Nick Feller,F60*,2026-08-19 10:09:00,2026-09-01,2026-08-31 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,0,2,6,0,False,False,False,False
-458328,,New Digital Doctor,F77*,2026-08-19 11:00:00,2026-09-01,2026-08-31 15:00:00,In Production,SINTERING,0.0,CENT RT1,,CAD_CAM,0,2,6,0,False,False,False,False
+458328,,New Digital Doctor,F77*,2026-08-19 11:00:00,2026-09-01,2026-08-31 15:00:00,In Production,PRINTING,0.0,CENT RT1,,CAD_CAM,0,2,6,0,False,False,False,False
 458338,,Katy Correa,F911*,2026-08-19 11:34:00,2026-09-01,2026-08-31 15:00:00,In Production,PRINTING,0.0,SW RT 5,,CAD_CAM,0,2,6,0,False,False,False,False
 458352,,New Digital Doctor,F159*,2026-08-19 12:46:00,2026-09-01,2026-08-31 15:00:00,In Production,MILLINGIP,0.0,CENT RT1,,Implants,0,5,6,0,False,False,False,False
 458398,,Joseph McCartin,R71,2026-08-20 08:20:00,2026-09-01,2026-08-31 15:00:00,In Production,SAMEDAY/HOLDING,0.0,SE RT 3,,Unknown,0,5,5,0,False,False,False,False
@@ -142,20 +143,20 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458569,,Luis Peralta,E302,2026-08-21 14:08:00,2026-09-01,2026-08-31 15:00:00,In Production,MILLING BRUX,0.0,NWIND RT 6,,CAD_CAM,0,2,4,0,False,False,False,False
 458591,,Hwaiyin Chang,V297,2026-08-24 08:24:00,2026-09-01,2026-08-31 15:00:00,In Production,MILLINGIP,0.0,CENT RT1,,Implants,0,5,1,0,False,False,False,False
 458598,,Kevin Breen,V100,2026-08-24 09:48:00,2026-09-01,2026-08-31 15:00:00,In Production,PRINTING,0.0,FNW RT 8,,CAD_CAM,0,2,1,0,False,False,False,False
-458604,,Nisha Patel,V82,2026-08-24 11:18:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,CENT RT1,,Surgical,0,7,1,0,False,False,False,False
-458605,,Michael Lenart,V224,2026-08-24 11:20:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,CENT RT1,,Surgical,0,7,1,0,False,False,False,False
-458607,,Christine Petrilla,V231,2026-08-24 11:22:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,CENT RT1,,Surgical,0,7,1,0,False,False,False,False
+458604,,Nisha Patel,V82,2026-08-24 11:18:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,CENT RT1,,CAD_CAM,0,2,1,0,False,False,False,False
+458605,,Michael Lenart,V224,2026-08-24 11:20:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,CENT RT1,,CAD_CAM,0,2,1,0,False,False,False,False
+458607,,Christine Petrilla,V231,2026-08-24 11:22:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,CENT RT1,,CAD_CAM,0,2,1,0,False,False,False,False
 458610,,Khadija Sulemanjee,V281*,2026-08-24 11:49:00,2026-09-01,2026-08-31 15:00:00,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,0,7,1,0,False,False,False,False
 458617,,Blair Edgington,V95,2026-08-24 12:26:00,2026-09-02,2026-08-31 14:00:00,In Production,SPLFINISH,0.0,UPS: 03,,Fixed,0,3,1,0,False,False,False,False
-458619,,Mirette Hanna,V67,2026-08-24 12:45:00,2026-09-01,2026-08-31 15:00:00,In Production,PREP,0.0,SW RT 5,,Hold_Stalled,0,1,1,0,False,False,False,False
-458620,,Mirette Hanna,V296,2026-08-24 12:47:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,SW RT 5,,Surgical,0,7,1,0,False,False,False,False
-458622,,Catherine Rhim,V208,2026-08-24 12:48:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,SW RT 5,,Surgical,0,7,1,0,False,False,False,False
+458619,,Mirette Hanna,V67,2026-08-24 12:45:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,SW RT 5,,Surgical,0,7,1,0,False,False,False,False
+458620,,Mirette Hanna,V296,2026-08-24 12:47:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,SW RT 5,,CAD_CAM,0,2,1,0,False,False,False,False
+458622,,Catherine Rhim,V208,2026-08-24 12:48:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,SW RT 5,,CAD_CAM,0,2,1,0,False,False,False,False
 458623,,Colleen Gaffney,V264,2026-08-24 12:51:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,SE RT 3,,Surgical,0,7,1,0,False,False,False,False
 458629,,Alexander Grabavoy,V86,2026-08-24 12:56:00,2026-09-01,2026-08-31 15:00:00,In Production,SPLFINISH,0.0,SW RT 5,,Fixed,0,3,1,0,False,False,False,False
-458638,,Neeva Patel,V282,2026-08-24 13:15:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,NWIND RT 6,,Surgical,0,7,1,0,False,False,False,False
-458640,,Neeva Patel,V90,2026-08-24 13:16:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,NWIND RT 6,,Surgical,0,7,1,0,False,False,False,False
-458643,,Jacob Samuel,V244,2026-08-24 13:18:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,WEST RT 4,,Surgical,0,7,1,0,False,False,False,False
-458644,,Jacob Samuel,V241,2026-08-24 13:19:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,WEST RT 4,,Surgical,0,7,1,0,False,False,False,False
+458638,,Neeva Patel,V282,2026-08-24 13:15:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,NWIND RT 6,,CAD_CAM,0,2,1,0,False,False,False,False
+458640,,Neeva Patel,V90,2026-08-24 13:16:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,NWIND RT 6,,CAD_CAM,0,2,1,0,False,False,False,False
+458643,,Jacob Samuel,V244,2026-08-24 13:18:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,WEST RT 4,,CAD_CAM,0,2,1,0,False,False,False,False
+458644,,Jacob Samuel,V241,2026-08-24 13:19:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,WEST RT 4,,CAD_CAM,0,2,1,0,False,False,False,False
 458646,,Elzbieta Stojkowski,V76,2026-08-24 13:14:00,2026-09-01,2026-08-31 15:00:00,In Production,REMIPMARGARET,0.0,FNW RT 8,,Removable,0,5,1,0,False,False,False,False
 458658,,Mark Kolozenski,D313$,2026-08-24 14:28:00,2026-09-01,2026-08-31 15:00:00,In Production,PORCIP DEAN,0.0,SE RT 3,,Implants,0,5,1,0,False,False,False,False
 458663,,Ryann Maloney,EVDSGN-082426101839,2026-08-24 14:45:00,2026-09-01,2026-08-31 15:00:00,In Production,STAINGLAZECART,0.0,NWIND RT 6,,Fixed,0,3,1,0,False,False,False,False
@@ -167,12 +168,12 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458672,,Michael Boyle,EVDSGN-082426102416,2026-08-24 15:43:00,2026-09-01,2026-08-31 15:00:00,In Production,STAINGLAZECART,0.0,FNW RT 8,,Fixed,0,3,1,0,False,False,False,False
 458676,,Austin Czarnecki,EVDSGN-082426122256,2026-08-24 16:14:00,2026-09-01,2026-08-31 15:00:00,In Production,STAINGLAZECART,0.0,FNW RT 8,,Fixed,0,3,1,0,False,False,False,False
 458679,,Jane Cooney,EVDSGN-082426131212,2026-08-24 16:30:00,2026-09-01,2026-08-31 14:00:00,In Production,EVD SUBMITTED,0.0,UPS: 03,,Scheduling,0,2,1,0,False,False,False,False
-458680,,Pinal Patel,H281*,2026-08-24 16:35:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,WEST RT 4,,Surgical,0,7,1,0,False,False,False,False
+458680,,Pinal Patel,H281*,2026-08-24 16:35:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,WEST RT 4,,CAD_CAM,0,2,1,0,False,False,False,False
 458681,,Brian Douts,EVDSGN-082426132525,2026-08-24 16:43:00,2026-09-01,2026-08-31 15:00:00,In Production,STAINGLAZECART,0.0,NWIND RT 6,,Fixed,0,3,1,0,False,False,False,False
 458682,,Tom Siewert,EVDSGN-082426132600,2026-08-24 16:48:00,2026-09-01,2026-08-31 15:00:00,In Production,GRINDING,0.0,GL,,Fixed,0,3,1,0,False,False,False,False
 458685,,Jason Douts,EVDSGN-082426134321,2026-08-24 17:08:00,2026-09-01,2026-08-31 14:00:00,In Production,EVD SUBMITTED,0.0,UPS: 03,,Scheduling,0,2,1,0,False,False,False,False
 458686,,Amiel Pappas,EVDSGN-082426141313,2026-08-24 17:19:00,2026-09-01,2026-08-31 15:00:00,In Production,STAINGLAZECART,0.0,SE RT 3,,Fixed,0,3,1,0,False,False,False,False
-458687,,Michael Boyle,H9*,2026-08-24 17:24:00,2026-09-01,2026-08-31 15:00:00,In Production,SCANNING,0.0,FNW RT 8,,Surgical,0,7,1,0,False,False,False,False
+458687,,Michael Boyle,H9*,2026-08-24 17:24:00,2026-09-01,2026-08-31 15:00:00,In Production,SENTFORDESIGN,0.0,FNW RT 8,,CAD_CAM,0,2,1,0,False,False,False,False
 458689,,Nadia Arain,EVDSGN-082426143409,2026-08-24 17:36:00,2026-09-01,2026-08-31 15:00:00,In Production,MATCHING TABLE,0.0,NE RT 2,,Fixed,0,3,1,0,False,False,False,False
 458690,,Hazel Santiago-Macanip,EVDSGN-082426145425,2026-08-24 17:41:00,2026-09-01,2026-08-31 15:00:00,In Production,EVD SUBMITTED,0.0,SW RT 5,,Scheduling,0,2,1,0,False,False,False,False
 458691,,Amee Patel,EVDSGN-082426135808,2026-08-24 17:50:00,2026-09-01,2026-08-31 15:00:00,In Production,STAINGLAZECART,0.0,WEST RT 4,,Fixed,0,3,1,0,False,False,False,False
@@ -181,7 +182,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458706,,Logan Brown,EVDSGN-082426154849,2026-08-25 09:14:00,2026-09-01,2026-08-31 14:00:00,In Production,EVD SUBMITTED,0.0,UPS: 03,,Scheduling,0,2,0,0,False,False,False,False
 458707,,Fayda Hassan,H214*,2026-08-25 09:19:00,2026-09-01,2026-08-31 15:00:00,In Production,IOS,0.0,SW RT 5,,Surgical,0,7,0,0,False,False,False,False
 458708,,Sheena Patel,EVDSGN-082426164317,2026-08-25 09:31:00,2026-09-01,2026-08-31 15:00:00,In Production,EVD SUBMITTED,0.0,CENT RT1,,Scheduling,0,2,0,0,False,False,False,False
-458709,,Michael Boyle,H351*,2026-08-25 09:36:00,2026-09-01,2026-08-31 15:00:00,In Production,DIGITALREMOVABLE,0.0,FNW RT 8,,Removable,0,5,0,0,False,False,False,False
+458709,,Michael Boyle,H351*,2026-08-25 09:36:00,2026-09-01,2026-08-31 15:00:00,In Production,PRINTING,0.0,FNW RT 8,,CAD_CAM,0,2,0,0,False,False,False,False
 458711,,Hazel Santiago-Macanip,EVDSGN-082426160822,2026-08-25 09:51:00,2026-09-01,2026-08-31 15:00:00,In Production,EVD SUBMITTED,0.0,SW RT 5,,Scheduling,0,2,0,0,False,False,False,False
 458712,,Logan Brown,EVDSGN-082526071749,2026-08-25 09:56:00,2026-09-01,2026-08-31 14:00:00,In Production,EVD SUBMITTED,0.0,UPS: 03,,Scheduling,0,2,0,0,False,False,False,False
 458718,,Austin Czarnecki,EVDSGN-082526081807,2026-08-25 10:33:00,2026-09-01,2026-08-31 15:00:00,In Production,EVD SUBMITTED,0.0,FNW RT 8,,Scheduling,0,2,0,0,False,False,False,False
@@ -193,8 +194,10 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458731,,Raffi Leblebijian,EVDSGN-082526093434,2026-08-25 11:52:00,2026-09-01,2026-08-31 14:00:00,In Production,EVD SUBMITTED,0.0,UPS: 03,,Scheduling,0,2,0,0,False,False,False,False
 458732,,David Dardick,EVDSGN-082526094152,2026-08-25 12:13:00,2026-09-01,2026-08-31 15:00:00,In Production,EVD SUBMITTED,0.0,FNW RT 8,,Scheduling,0,2,0,0,False,False,False,False
 458736,,Benjamin Baptist,EVDSGN-082526100905,2026-08-25 12:23:00,2026-09-01,2026-08-31 15:00:00,In Production,EVD SUBMITTED,0.0,NE RT 2,,Scheduling,0,2,0,0,False,False,False,False
-458751,,Thomas John Raia,H305*,2026-08-25 13:07:00,2026-09-01,2026-08-31 15:00:00,In Production,DIGITALREMOVABLE,0.0,SW RT 5,,Removable,0,5,0,0,False,False,False,False
-456625,,Sean Cullinan,V20,2026-08-24 09:27:00,2026-09-02,2026-09-01 15:00:00,In Production,REMIPLIZ,0.0,GL,,Removable,0,5,1,0,False,False,False,False
+458751,,Thomas John Raia,H305*,2026-08-25 13:07:00,2026-09-01,2026-08-31 15:00:00,In Production,PRINTING,0.0,SW RT 5,,CAD_CAM,0,2,0,0,False,False,False,False
+458811,,Sam Calabrese,P806,2026-08-26 10:22:00,2026-09-01,2026-08-31 15:00:00,In Production,REMPREP,0.0,FNW RT 8,,Removable,0,5,-1,0,False,False,False,False
+458836,,Joshua Willard,F25,2026-08-26 11:26:00,2026-09-03,2026-08-31 14:00:00,In Production,SPLINTINCOMING,0.0,UPS: 03,,Unknown,0,5,-1,0,False,False,False,False
+456625,,Sean Cullinan,V20,2026-08-24 09:27:00,2026-09-02,2026-09-01 15:00:00,In Production,REMPREP,0.0,GL,,Removable,0,5,1,0,False,False,False,False
 456862,,Devang Thakkar,F75,2026-08-12 12:33:00,2026-09-02,2026-09-01 15:00:00,In Production,GUIDES,0.0,SE RT 3,,Surgical,0,7,13,0,False,False,False,False
 456864,,Upasna Janu,F226,2026-08-12 12:37:00,2026-09-02,2026-09-01 14:00:00,In Production,GUIDES,0.0,UPS: 03,,Surgical,0,7,13,0,False,False,False,False
 457117,,James Javorski,E326,2026-08-21 11:00:00,2026-09-02,2026-09-01 15:00:00,In Production,REMIPMARY,0.0,SE RT 3,,Removable,0,5,4,0,False,False,False,False
@@ -222,32 +225,37 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458608,,Aneta Paniczko,V204,2026-08-24 11:23:00,2026-09-02,2026-09-01 15:00:00,In Production,REMIPBLERTA,0.0,CENT RT1,,Removable,0,5,1,0,False,False,False,False
 458625,,Natalie Korolis,V261,2026-08-24 12:52:00,2026-09-02,2026-09-01 15:00:00,In Production,SCANNING,0.0,SE RT 3,,Surgical,0,7,1,0,False,False,False,False
 458642,,Jacob Samuel,V80,2026-08-24 13:16:00,2026-09-02,2026-09-01 15:00:00,In Production,SCANNING,0.0,WEST RT 4,,Surgical,0,7,1,0,False,False,False,False
+458677,,Abigail Cortis,EVDSGN-082426123323,2026-08-24 16:19:00,2026-09-02,2026-09-01 15:00:00,In Production,PRINTING,0.0,WEST RT 4,,CAD_CAM,0,2,1,0,False,False,False,False
 458733,,Pinal Patel,EVDSGN-082526095600,2026-08-25 12:18:00,2026-09-02,2026-09-01 15:00:00,In Production,EVD SUBMITTED,0.0,WEST RT 4,,Scheduling,0,2,0,0,False,False,False,False
 458738,,Rebecca Jans,H264,2026-08-25 12:29:00,2026-09-02,2026-09-01 15:00:00,In Production,CTS,0.0,SW RT 5,,Surgical,0,7,0,0,False,False,False,False
 458739,,Meghan Gaffney,H255,2026-08-25 12:30:00,2026-09-02,2026-09-01 15:00:00,In Production,REMPREP,0.0,SE RT 3,,Removable,0,5,0,0,False,False,False,False
-458741,,Fras Arbi Katbi,H131!,2026-08-25 12:36:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,SE RT 3,,Hold_Stalled,0,1,0,0,False,False,False,False
+458741,,Fras Arbi Katbi,H131!,2026-08-25 12:36:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,SE RT 3,,Unknown,0,5,0,0,False,False,False,False
 458742,,Amee Patel,EVDSGN-082526102342,2026-08-25 12:39:00,2026-09-02,2026-09-01 15:00:00,In Production,EVD SUBMITTED,0.0,WEST RT 4,,Scheduling,0,2,0,0,False,False,False,False
 458745,,Veronica Resek,EVDSGN-082526102235,2026-08-25 12:48:00,2026-09-02,2026-09-01 15:00:00,In Production,EVD SUBMITTED,0.0,SW RT 5,,Scheduling,0,2,0,0,False,False,False,False
+458746,,Simon Tadros,H268,2026-08-25 12:51:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,NWIND RT 6,,Unknown,0,5,0,0,False,False,False,False
 458747,,Simon Tadros,H127,2026-08-25 12:53:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,NWIND RT 6,,Hold_Stalled,0,1,0,0,False,False,False,False
-458748,,Daniel Berquist,H203,2026-08-25 12:54:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,NWIND RT 6,,Hold_Stalled,0,1,0,0,False,False,False,False
-458750,,Neeva Patel,H219,2026-08-25 12:57:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,NWIND RT 6,,Hold_Stalled,0,1,0,0,False,False,False,False
-458752,,Gabriella Paolucci,H113*,2026-08-25 13:15:00,2026-09-02,2026-09-01 15:00:00,In Production,IOS,0.0,SW RT 5,,Surgical,0,7,0,0,False,False,False,False
-458754,,Patrick Yerkes,H84*,2026-08-25 13:25:00,2026-09-02,2026-09-01 15:00:00,In Production,REMIPSABRINA,0.0,SW RT 5,,Removable,0,5,0,0,False,False,False,False
+458748,,Daniel Berquist,H203,2026-08-25 12:54:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,NWIND RT 6,,Unknown,0,5,0,0,False,False,False,False
+458750,,Neeva Patel,H219,2026-08-25 12:57:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,NWIND RT 6,,Unknown,0,5,0,0,False,False,False,False
+458752,,Gabriella Paolucci,H113*,2026-08-25 13:15:00,2026-09-02,2026-09-01 15:00:00,In Production,SCANNING,0.0,SW RT 5,,Surgical,0,7,0,0,False,False,False,False
+458754,,Patrick Yerkes,H84*,2026-08-25 13:25:00,2026-09-02,2026-09-01 15:00:00,In Production,SCANNING,0.0,SW RT 5,,Surgical,0,7,0,0,False,False,False,False
 458755,,Patrick Yerkes,H293*,2026-08-25 13:31:00,2026-09-02,2026-09-01 15:00:00,In Production,SCANNING,0.0,SW RT 5,,Surgical,0,7,0,0,False,False,False,False
 458756,,Mark Anderson,EVDSGN-082526105454,2026-08-25 13:36:00,2026-09-02,2026-09-01 15:00:00,In Production,EVD SUBMITTED,0.0,SE RT 3,,Scheduling,0,2,0,0,False,False,False,False
+458759,,Manas Chug,H287,2026-08-25 13:43:00,2026-09-02,2026-09-01 15:00:00,In Production,REMPREP,0.0,WEST RT 4,,Removable,0,5,0,0,False,False,False,False
 458760,,Patrick Yerkes,EVDSGN-082526110029,2026-08-25 13:41:00,2026-09-02,2026-09-01 15:00:00,In Production,EVD SUBMITTED,0.0,SW RT 5,,Scheduling,0,2,0,0,False,False,False,False
-458761,,Jacob Samuel,H164,2026-08-25 13:44:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,WEST RT 4,,Hold_Stalled,0,1,0,0,False,False,False,False
-458764,,Magdaleno Nucum,H304,2026-08-25 13:59:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,WEST RT 4,,Hold_Stalled,0,1,0,0,False,False,False,False
-458765,,Jacob Samuel,H310,2026-08-25 14:00:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,WEST RT 4,,Hold_Stalled,0,1,0,0,False,False,False,False
-458766,,Vincent Versaci,H126,2026-08-25 14:01:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,NE RT 2,,Hold_Stalled,0,1,0,0,False,False,False,False
-458767,,Sana Ahmed,H271,2026-08-25 14:04:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,WEST RT 4,,Hold_Stalled,0,1,0,0,False,False,False,False
-458769,,Jacob Samuel,H272,2026-08-25 14:05:00,2026-09-02,2026-09-01 15:00:00,In Production,PREP,0.0,WEST RT 4,,Hold_Stalled,0,1,0,0,False,False,False,False
+458761,,Jacob Samuel,H164,2026-08-25 13:44:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,WEST RT 4,,Unknown,0,5,0,0,False,False,False,False
+458764,,Magdaleno Nucum,H304,2026-08-25 13:59:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,WEST RT 4,,Unknown,0,5,0,0,False,False,False,False
+458765,,Jacob Samuel,H310,2026-08-25 14:00:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,WEST RT 4,,Unknown,0,5,0,0,False,False,False,False
+458766,,Vincent Versaci,H126,2026-08-25 14:01:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,NE RT 2,,Unknown,0,5,0,0,False,False,False,False
+458767,,Sana Ahmed,H271,2026-08-25 14:04:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,WEST RT 4,,Unknown,0,5,0,0,False,False,False,False
+458769,,Jacob Samuel,H272,2026-08-25 14:05:00,2026-09-02,2026-09-01 15:00:00,In Production,DIETRIM,0.0,WEST RT 4,,Unknown,0,5,0,0,False,False,False,False
 458772,,Mark Niemiec,EVDSGN-082526110604,2026-08-25 14:55:00,2026-09-09,2026-09-01 14:00:00,In Production,EVD SUBMITTED,0.0,UPS: 03,,Scheduling,0,2,0,0,False,False,False,False
 458774,,Michael Frantal,EVDSGN-082526114614,2026-08-25 15:00:00,2026-09-02,2026-09-01 14:00:00,In Production,EVD SUBMITTED,0.0,UPS: 03,,Scheduling,0,2,0,0,False,False,False,False
+458778,,Pinal Patel,EVDSGN-082526120408,2026-08-25 15:12:00,2026-09-02,2026-09-01 15:00:00,In Production,EVD SUBMITTED,0.0,WEST RT 4,,Scheduling,0,2,0,0,False,False,False,False
+458793,,Michael Boyle,F130*,2026-08-25 17:59:00,2026-09-02,2026-09-01 15:00:00,In Production,SCANNING,0.0,FNW RT 8,,Surgical,0,7,0,0,False,False,False,False
 447638,,Abdalhameed Madwar,H100,2026-08-24 10:39:00,2026-09-03,2026-09-02 15:00:00,In Production,CTS,0.0,CENT RT1,,Surgical,0,7,1,0,False,False,False,False
 454306,,Muhammad Sohail,F210*,2026-07-08 15:24:00,2026-09-03,2026-09-02 15:00:00,In Production,IOS,0.0,NWIND RT 6,,Surgical,0,7,48,0,False,False,False,False
 454341,,Jinyoung (Anny) Yoo,D317$,2026-07-09 09:22:00,2026-09-03,2026-09-02 15:00:00,In Production,REMIPMARGARET,0.0,FNE RT 7,,Removable,0,5,47,0,False,False,False,False
-455054,,Michael Pauley,E348,2026-08-26 11:15:00,2026-09-03,2026-09-02 14:00:00,In Production,CTS,0.0,UPS: 03,,Surgical,0,7,-1,0,False,False,False,False
+455054,,Michael Pauley,E348,2026-08-26 11:15:00,2026-09-03,2026-09-02 14:00:00,In Production,REMPREP,0.0,UPS: 03,,Removable,0,5,-1,0,False,False,False,False
 455424,,Nicholas Tokarski,H273,2026-08-20 13:15:00,2026-09-03,2026-09-02 15:00:00,In Production,REMOUT,0.0,GL,,Removable,0,5,5,0,False,False,False,False
 456649,,Eric Kosnic,V287,2026-08-10 10:41:00,2026-09-08,2026-09-02 14:00:00,In Production,REMOUT,0.0,UPS: 03,,Removable,0,5,15,0,False,False,False,False
 456667,,Drew Bannerman,E176!,2026-08-25 11:58:00,2026-09-08,2026-09-02 14:00:00,In Production,REMIPBLERTA,0.0,UPS: 03,,Removable,0,5,0,0,False,False,False,False
@@ -258,7 +266,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458304,,James Thomas III,F207*,2026-08-19 08:45:00,2026-09-09,2026-09-02 14:00:00,In Production,CTS,0.0,UPS: 03,,Surgical,0,7,6,0,False,False,False,False
 458344,,Peter Gallos,F27*,2026-08-19 11:54:00,2026-09-03,2026-09-02 15:00:00,In Production,REMIPDOM,0.0,SW RT 5,,Removable,0,5,6,0,False,False,False,False
 458346,,Linsay Diaz,F34*,2026-08-19 12:10:00,2026-09-03,2026-09-02 15:00:00,In Production,DIGITALREMOVABLE,0.0,FNE RT 7,,Removable,0,5,6,0,False,False,False,False
-458360,,Colleen Gaffney,F76,2026-08-19 13:11:00,2026-09-03,2026-09-02 15:00:00,In Production,PREP,0.0,SE RT 3,,Hold_Stalled,0,1,6,0,False,False,False,False
+458360,,Colleen Gaffney,F76,2026-08-19 13:11:00,2026-09-03,2026-09-02 15:00:00,In Production,DIETRIM,0.0,SE RT 3,,Unknown,0,5,6,0,False,False,False,False
 458380,,Woon Kang,P24*,2026-08-19 15:11:00,2026-09-03,2026-09-02 15:00:00,In Production,MILLINGIP,0.0,NWIND RT 6,,Implants,0,5,6,0,False,False,False,False
 458391,,Matthew Drescher,P188*,2026-08-19 17:14:00,2026-09-03,2026-09-02 15:00:00,In Production,PRINTING,0.0,WEST RT 4,,CAD_CAM,0,2,6,0,False,False,False,False
 458404,,Linora Nissan,P732,2026-08-20 08:38:00,2026-09-03,2026-09-02 15:00:00,In Production,REMOUT,0.0,GL,,Removable,0,5,5,0,False,False,False,False
@@ -270,7 +278,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458491,,Pinal Patel,E31*,2026-08-20 15:07:00,2026-09-03,2026-09-02 15:00:00,In Production,GUIDES,0.0,WEST RT 4,,Surgical,0,7,5,0,False,False,False,False
 458495,,Brian Walczak,D306$*,2026-08-20 16:12:00,2026-09-03,2026-09-02 15:00:00,In Production,PRINTING,0.0,SE RT 3,,CAD_CAM,0,2,5,0,False,False,False,False
 458497,,James Santarelli,E204*,2026-08-20 16:18:00,2026-09-03,2026-09-02 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,0,2,5,0,False,False,False,False
-458508,,Amit Sud,E347*,2026-08-20 17:28:00,2026-09-03,2026-09-02 15:00:00,In Production,MATCHING TABLE,0.0,WEST RT 4,,Fixed,0,3,5,0,False,False,False,False
+458508,,Amit Sud,E347*,2026-08-20 17:28:00,2026-09-03,2026-09-02 15:00:00,In Production,PRINTING,0.0,WEST RT 4,,CAD_CAM,0,2,5,0,False,False,False,False
 458511,,Mandeep Raina,E341*,2026-08-20 17:45:00,2026-09-03,2026-09-02 15:00:00,In Production,GUIDES,0.0,CENT RT1,,Surgical,0,7,5,0,False,False,False,False
 458513,,Dennis Beck,E178*,2026-08-20 18:12:00,2026-09-04,2026-09-02 15:00:00,In Production,CTS,0.0,CENT RT1,,Surgical,0,7,5,0,False,False,False,False
 458522,,Jane Lang,E362,2026-08-21 08:22:00,2026-09-03,2026-09-02 15:00:00,In Production,REMIPLIZ,0.0,GL,,Removable,0,5,4,0,False,False,False,False
@@ -283,7 +291,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458574,,Ryann Maloney,E209,2026-08-21 14:15:00,2026-09-03,2026-09-02 15:00:00,In Production,CADSTALLED,0.0,NWIND RT 6,,CAD_CAM,0,2,4,0,False,False,False,False
 458582,,Pinal Patel,E70*,2026-08-21 15:52:00,2026-09-03,2026-09-02 15:00:00,In Production,PRINTING,0.0,WEST RT 4,,CAD_CAM,0,2,4,0,False,False,False,False
 458606,,Scott McCarty,V51,2026-08-24 11:21:00,2026-09-03,2026-09-02 15:00:00,In Production,SCANNING,0.0,CENT RT1,,Surgical,0,7,1,0,False,False,False,False
-458612,,Mikhail Korolyov,V112*,2026-08-24 12:02:00,2026-09-03,2026-09-02 15:00:00,In Production,SCANNING,0.0,GL,,Surgical,0,7,1,0,False,False,False,False
+458612,,Mikhail Korolyov,V112*,2026-08-24 12:02:00,2026-09-03,2026-09-02 15:00:00,In Production,SENTFORDESIGN,0.0,GL,,CAD_CAM,0,2,1,0,False,False,False,False
 458647,,Mark Anderson,V141*,2026-08-24 13:24:00,2026-09-03,2026-09-02 15:00:00,In Production,IOS,0.0,SE RT 3,,Surgical,0,7,1,0,False,False,False,False
 458649,,John Athos,V123*,2026-08-24 13:36:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,SE RT 3,,Removable,0,5,1,0,False,False,False,False
 458669,,Pinal Patel,H22*,2026-08-24 15:18:00,2026-09-03,2026-09-02 15:00:00,In Production,CADSTALLED,0.0,WEST RT 4,,CAD_CAM,0,2,1,0,False,False,False,False
@@ -295,7 +303,16 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458726,,Scott McCarty,H256,2026-08-25 11:25:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,0,5,0,0,False,False,False,False
 458735,,Alexander Grabavoy,H115,2026-08-25 12:23:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,SW RT 5,,Removable,0,5,0,0,False,False,False,False
 458749,,Mark Niemiec,H244*,2026-08-25 12:54:00,2026-09-10,2026-09-02 14:00:00,In Production,REMIPSABRINA,0.0,UPS: 03,,Removable,0,5,0,0,False,False,False,False
-458763,,Peter Liang,H318*,2026-08-25 13:56:00,2026-09-03,2026-09-02 14:00:00,In Production,DIGITALREMOVABLE,0.0,UPS: 03,,Removable,0,5,0,0,False,False,False,False
+458758,,Magdaleno Nucum,H73,2026-08-25 13:41:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,WEST RT 4,,Removable,0,5,0,0,False,False,False,False
+458763,,Peter Liang,H318*,2026-08-25 13:56:00,2026-09-03,2026-09-02 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,0,2,0,0,False,False,False,False
+458786,,Monika Tyszkowski,EVDSGN-082526123831,2026-08-25 17:10:00,2026-09-03,2026-09-02 15:00:00,In Production,EVD SUBMITTED,0.0,NE RT 2,,Scheduling,0,2,0,0,False,False,False,False
+458817,,Beata Lezerkiewicz,F104,2026-08-26 10:44:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,0,5,-1,0,False,False,False,False
+458818,,Scott McCarty,F94,2026-08-26 10:47:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,0,5,-1,0,False,False,False,False
+458819,,Scott McCarty,F69,2026-08-26 10:48:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,0,5,-1,0,False,False,False,False
+458829,,Beata Lezerkiewicz,F197,2026-08-26 11:12:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,0,5,-1,0,False,False,False,False
+458832,,Magdaleno Nucum,F38,2026-08-26 11:16:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,WEST RT 4,,Removable,0,5,-1,0,False,False,False,False
+458834,,Manas Chug,F163,2026-08-26 11:17:00,2026-09-03,2026-09-02 15:00:00,In Production,REMPREP,0.0,WEST RT 4,,Removable,0,5,-1,0,False,False,False,False
+458835,,Michael Frantal,F206,2026-08-26 11:20:00,2026-09-03,2026-09-02 14:00:00,In Production,REMPREP,0.0,UPS: 03,,Removable,0,5,-1,0,False,False,False,False
 455289,,Paul Singh,F138*,2026-07-22 12:12:00,2026-09-08,2026-09-03 15:00:00,In Production,IOS,0.0,SW RT 5,,Surgical,0,7,34,0,False,False,False,False
 455483,,David Fiore,D224$*,2026-07-24 09:30:00,2026-09-04,2026-09-03 15:00:00,In Production,GUIDES,0.0,GL,,Surgical,0,7,32,0,False,False,False,False
 456049,,Kaleigh Fulmer,D110$,2026-08-03 09:34:00,2026-09-08,2026-09-03 14:00:00,In Production,REMIPMARGARET,0.0,UPS: 03,,Removable,0,5,22,0,False,False,False,False
@@ -307,22 +324,23 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458267,,Nisha Patel,V871,2026-08-21 14:55:00,2026-09-04,2026-09-03 15:00:00,In Production,REMOUT,0.0,CENT RT1,,Removable,0,5,4,0,False,False,False,False
 458305,,Elizabeth Tucker,F223,2026-08-19 08:44:00,2026-09-08,2026-09-03 15:00:00,In Production,MILLINGIP,0.0,FNE RT 7,,Implants,0,5,6,0,False,False,False,False
 458390,,Greg Germino,EVDSGN-081926141855,2026-08-19 16:54:00,2026-09-08,2026-09-03 15:00:00,In Production,CADSTALLED,0.0,SE RT 3,,CAD_CAM,0,2,6,0,False,False,False,False
-458425,,Nick Feller,P491,2026-08-20 10:52:00,2026-09-08,2026-09-03 14:00:00,In Production,CTS,0.0,UPS: 03,,Surgical,0,7,5,0,False,False,False,False
+458425,,Nick Feller,P491,2026-08-20 10:52:00,2026-09-08,2026-09-03 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,0,2,5,0,False,False,False,False
 458455,,Anthony Glorioso,P131,2026-08-20 12:24:00,2026-09-04,2026-09-03 15:00:00,In Production,REMOUT,0.0,WEST RT 4,,Removable,0,5,5,0,False,False,False,False
 458465,,Dana Akawi,P750,2026-08-20 12:56:00,2026-09-04,2026-09-03 15:00:00,In Production,CTS,0.0,SE RT 3,,Surgical,0,7,5,0,False,False,False,False
 458525,,Andrew Lee,E318,2026-08-21 08:38:00,2026-09-04,2026-09-03 15:00:00,In Production,REMOUT,0.0,GL,,Removable,0,5,4,0,False,False,False,False
-458618,,Colleen Gaffney,V218,2026-08-24 12:41:00,2026-09-08,2026-09-03 15:00:00,In Production,SCANNING,0.0,SE RT 3,,Surgical,0,7,1,0,False,False,False,False
+458618,,Colleen Gaffney,V218,2026-08-24 12:41:00,2026-09-08,2026-09-03 15:00:00,In Production,SENTFORDESIGN,0.0,SE RT 3,,CAD_CAM,0,2,1,0,False,False,False,False
 458627,,Catherine Rhim,V92,2026-08-24 12:53:00,2026-09-08,2026-09-03 15:00:00,In Production,REMIPBLERTA,0.0,SW RT 5,,Removable,0,5,1,0,False,False,False,False
 458662,,Khadija Sulemanjee,H161*,2026-08-24 14:39:00,2026-09-08,2026-09-03 15:00:00,In Production,EVD SUBMITTED,0.0,NWIND RT 6,,Scheduling,0,2,1,0,False,False,False,False
 458715,,Nick Feller,H95*,2026-08-25 10:01:00,2026-09-08,2026-09-03 14:00:00,In Production,EVD SUBMITTED,0.0,UPS: 03,,Scheduling,0,2,0,0,False,False,False,False
 458737,,Alexander Grabavoy,H215,2026-08-25 12:26:00,2026-09-08,2026-09-03 15:00:00,In Production,REMPREP,0.0,SW RT 5,,Removable,0,5,0,0,False,False,False,False
-458743,,Meghan Gaffney,H307,2026-08-25 12:43:00,2026-09-08,2026-09-03 15:00:00,In Production,PREP,0.0,SE RT 3,,Hold_Stalled,0,1,0,0,False,False,False,False
+458743,,Meghan Gaffney,H307,2026-08-25 12:43:00,2026-09-08,2026-09-03 15:00:00,In Production,DIETRIM,0.0,SE RT 3,,Unknown,0,5,0,0,False,False,False,False
 458782,,Pinal Patel,H94*,2026-08-25 15:40:00,2026-09-08,2026-09-03 15:00:00,In Production,EVD SUBMITTED,0.0,WEST RT 4,,Scheduling,0,2,0,0,False,False,False,False
 455947,,Shafaq Mustafa,E140*,2026-08-18 17:30:00,2026-09-08,2026-09-04 15:00:00,In Production,PRINTING,0.0,NWIND RT 6,,CAD_CAM,0,2,7,0,False,False,False,False
 456699,,Daniel Kmak,N9*,2026-08-10 14:42:00,2026-09-08,2026-09-04 15:00:00,In Production,CTS,0.0,NWIND RT 6,,Surgical,0,7,15,0,False,False,False,False
 458386,,Paul Singh,P386*,2026-08-19 16:16:00,2026-09-08,2026-09-04 15:00:00,In Production,GUIDES,0.0,SW RT 5,,Surgical,0,7,6,0,False,False,False,False
 458512,,Abigail Cortis,E221*,2026-08-20 18:02:00,2026-09-08,2026-09-04 15:00:00,In Production,PRINTING,0.0,WEST RT 4,,CAD_CAM,0,2,5,0,False,False,False,False
 456011,,Mark Kolozenski,D333$,2026-07-31 12:26:00,2026-09-09,2026-09-08 15:00:00,In Production,REMIPMARGARET,0.0,SE RT 3,,Removable,0,5,25,0,False,False,False,False
+456632,,Dina Alssaeaidi,F83,2026-08-26 09:44:00,2026-09-09,2026-09-08 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,0,5,-1,0,False,False,False,False
 456847,,Peter Gallos,E332,2026-08-21 11:17:00,2026-09-09,2026-09-08 15:00:00,In Production,REMOUT,0.0,SW RT 5,,Removable,0,5,4,0,False,False,False,False
 457026,,Matthew Gotta,F229*,2026-08-21 10:36:00,2026-09-09,2026-09-08 15:00:00,In Production,REMIPMARY,0.0,FNE RT 7,,Removable,0,5,4,0,False,False,False,False
 457115,,Sumayyah Khan,P574*,2026-08-25 10:53:00,2026-09-09,2026-09-08 15:00:00,In Production,REMPROCESSSHELF,0.0,CENT RT1,,Removable,0,5,0,0,False,False,False,False
@@ -336,16 +354,22 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 458721,,Drew Bannerman,H275!&,2026-08-25 10:54:00,2026-09-10,2026-09-08 14:00:00,In Production,REMTRYINWALL,0.0,UPS: 03,,Removable,0,5,0,0,False,False,False,False
 458734,,Alexander Grabavoy,H130,2026-08-25 12:21:00,2026-09-09,2026-09-08 15:00:00,In Production,REMPREP,0.0,SW RT 5,,Removable,0,5,0,0,False,False,False,False
 458780,,Richard Brenner,H224*,2026-08-25 15:28:00,2026-09-09,2026-09-08 15:00:00,In Production,REMIPSABRINA,0.0,NE RT 2,,Removable,0,5,0,0,False,False,False,False
+458830,,Christine Petrilla,F66,2026-08-26 11:12:00,2026-09-09,2026-09-08 15:00:00,In Production,REMPREP,0.0,CENT RT1,,Removable,0,5,-1,0,False,False,False,False
+458840,,Krupa Patel,F189,2026-08-26 11:46:00,2026-09-09,2026-09-08 15:00:00,In Production,PREP,0.0,SW RT 5,,Hold_Stalled,0,1,-1,0,False,False,False,False
+458852,,Brian Douts,F225,2026-08-26 13:05:00,2026-09-09,2026-09-08 15:00:00,In Production,PREP,0.0,NWIND RT 6,,Hold_Stalled,0,1,-1,0,False,False,False,False
 458499,,Eman Alsahlani,E155*,2026-08-20 16:40:00,2026-09-10,2026-09-09 15:00:00,In Production,PRINTING,0.0,GL,,CAD_CAM,0,2,5,0,False,False,False,False
-458534,,Drew Bannerman,E183!,2026-08-21 10:42:00,2026-09-11,2026-09-09 14:00:00,In Production,CTS,0.0,UPS: 03,,Surgical,0,7,4,0,False,False,False,False
+458534,,Drew Bannerman,E183!,2026-08-21 10:42:00,2026-09-11,2026-09-09 14:00:00,In Production,SCANNING,0.0,UPS: 03,,Surgical,0,7,4,0,False,False,False,False
 458551,,Eman Alsahlani,E127*,2026-08-21 11:27:00,2026-09-10,2026-09-09 15:00:00,In Production,MILLINGIP,0.0,GL,,Implants,0,5,4,0,False,False,False,False
 458657,,Caroline Shepherd,H249*,2026-08-24 14:27:00,2026-09-10,2026-09-09 15:00:00,In Production,REMIPSABRINA,0.0,FNE RT 7,,Removable,0,5,1,0,False,False,False,False
-458703,,Elizabeth Tucker,H76,2026-08-25 08:35:00,2026-09-10,2026-09-09 15:00:00,In Production,PREP,0.0,FNE RT 7,,Hold_Stalled,0,1,0,0,False,False,False,False
+458703,,Elizabeth Tucker,H76,2026-08-25 08:35:00,2026-09-10,2026-09-09 15:00:00,In Production,SCANNING,0.0,FNE RT 7,,Surgical,0,7,0,0,False,False,False,False
 458710,,Aditya Pai,H296*& black tub,2026-08-25 09:42:00,2026-09-10,2026-09-09 15:00:00,In Production,SCANNING,0.0,SW RT 5,,Surgical,0,7,0,0,False,False,False,False
+458757,,Manas Chug,H276,2026-08-25 13:39:00,2026-09-10,2026-09-09 15:00:00,In Production,REMPREP,0.0,WEST RT 4,,Removable,0,5,0,0,False,False,False,False
+458813,,Mark Prakash,F11&,2026-08-26 10:13:00,2026-09-10,2026-09-09 15:00:00,In Production,REMPREP,0.0,GL,,Removable,0,5,-1,0,False,False,False,False
+458841,,Catherine Rhim,F17,2026-08-26 11:47:00,2026-09-10,2026-09-09 15:00:00,In Production,REMPREP,0.0,SW RT 5,,Removable,0,5,-1,0,False,False,False,False
 455216,,Kimberley Latour,D156$,2026-07-21 14:42:00,2026-09-11,2026-09-10 15:00:00,In Production,MILLING AO4,0.0,FNE RT 7,,CAD_CAM,0,2,35,0,False,False,False,False
-458727,,Abdalhameed Madwar,H139,2026-08-25 11:27:00,2026-09-11,2026-09-10 15:00:00,In Production,PREP,0.0,CENT RT1,,Hold_Stalled,0,1,0,0,False,False,False,False
+458727,,Abdalhameed Madwar,H139,2026-08-25 11:27:00,2026-09-11,2026-09-10 15:00:00,In Production,SCANNING,0.0,CENT RT1,,Surgical,0,7,0,0,False,False,False,False
 458615,,Shyler Vincent,V263,2026-08-24 12:23:00,2026-09-15,2026-09-11 14:00:00,In Production,SPLFINISH,0.0,UPS: 03,,Fixed,0,3,1,0,False,False,False,False
-458770,,James Lovelace,H245,2026-08-25 14:06:00,2026-09-14,2026-09-11 15:00:00,In Production,PREP,0.0,NE RT 2,,Hold_Stalled,0,1,0,0,False,False,False,False
+458770,,James Lovelace,H245,2026-08-25 14:06:00,2026-09-14,2026-09-11 15:00:00,In Production,SCANNING,0.0,NE RT 2,,Surgical,0,7,0,0,False,False,False,False
 458566,,Muhammad Sohail,P838*&,2026-08-21 13:59:00,2026-09-15,2026-09-14 15:00:00,In Production,GUIDES,0.0,GL,,Surgical,0,7,4,0,False,False,False,False
 458717,,James Fieldhouse,H144*,2026-08-25 10:24:00,2026-09-15,2026-09-14 15:00:00,In Production,EVD SUBMITTED,0.0,NE RT 2,,Scheduling,0,2,0,0,False,False,False,False
 458538,,Colton Sylvester,E307,2026-08-21 10:46:00,2026-09-23,2026-09-22 14:00:00,In Production,MILLINGIP,0.0,UPS: 03,,Implants,0,5,4,0,False,False,False,False
