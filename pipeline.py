@@ -1461,9 +1461,47 @@ def run_pipeline():
         result = subprocess.run(["git", "commit", "-m", f"Auto-update data {date.today()}"],
                                 cwd=repo_dir, env=genv, timeout=60)
         if result.returncode == 0:
-            subprocess.run(["git", "push", "origin", "main"],
-                           cwd=repo_dir, check=True, env=genv, timeout=180)
-            log.info("GitHub push complete.")
+            # Race-safe push: three other automations on this machine
+            # (run_pipeline.bat, pipeline_logistics_only.py) push to origin/main
+            # every few minutes. If one lands between our local HEAD and origin,
+            # our push is rejected non-fast-forward. Rebase and retry.
+            push_ok = False
+            last_err = ""
+            for attempt in range(3):
+                push = subprocess.run(["git", "push", "origin", "main"],
+                                      cwd=repo_dir, env=genv, timeout=180,
+                                      capture_output=True, text=True)
+                if push.returncode == 0:
+                    push_ok = True
+                    break
+                last_err = (push.stderr or push.stdout or "").strip()
+                # Non-fast-forward or ref-lock error → rebase onto latest origin
+                if ("rejected" in last_err or "cannot lock ref" in last_err
+                        or "non-fast-forward" in last_err):
+                    log.warning("Push rejected (attempt %d/3), rebasing onto origin/main",
+                                attempt + 1)
+                    subprocess.run(["git", "fetch", "origin", "main"],
+                                   cwd=repo_dir, env=genv, timeout=60)
+                    rebase = subprocess.run(
+                        ["git", "rebase", "--autostash", "origin/main"],
+                        cwd=repo_dir, env=genv, timeout=60,
+                        capture_output=True, text=True)
+                    if rebase.returncode != 0:
+                        # Give up cleanly; leaving a rebase in progress would
+                        # jam the next run.
+                        subprocess.run(["git", "rebase", "--abort"],
+                                       cwd=repo_dir, env=genv, timeout=30)
+                        last_err = ("rebase conflict — " +
+                                    (rebase.stderr or rebase.stdout or "").strip())
+                        break
+                else:
+                    # Auth/network error — retrying won't help.
+                    break
+            if push_ok:
+                log.info("GitHub push complete.")
+            else:
+                log.error("GitHub push failed. stderr: %s",
+                          last_err[:1000] or "<empty>")
         else:
             log.info("Nothing new to push to GitHub.")
     except Exception as exc:

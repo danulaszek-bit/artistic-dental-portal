@@ -1593,9 +1593,14 @@ def parse_issued_file(path: Path) -> pd.DataFrame:
         "Case #":        "case_number",
         "Issued Dept.":  "department",
         "Issue Date":    "issue_date",
-        "Qty":           "qty",
         "Issued Value":  "issued_value",
     }
+    # Clixon renamed "Qty" -> "Issued Units" around 2026-09. Support both so
+    # older archived files still parse; prefer the new name when both present.
+    if "Issued Units" in df.columns:
+        rename["Issued Units"] = "qty"
+    elif "Qty" in df.columns:
+        rename["Qty"] = "qty"
     df = df.rename(columns={k: v for k, v in rename.items() if k in df.columns})
 
     # Drop subtotal rows: Issue Date literally reads "Total:"

@@ -120,10 +120,37 @@ def main():
                            cwd=repo, check=True, env=genv, timeout=60)
             subprocess.run(["git", "commit", "-m", f"Logistics update {ts}"],
                            cwd=repo, check=True, env=genv, timeout=60)
-            subprocess.run(["git", "push", "origin", "main"],
-                           cwd=repo, check=True, env=genv, timeout=180)
+            # Race-safe push: pipeline.py and run_pipeline.bat also push to
+            # origin/main. If one landed between our HEAD and origin, rebase
+            # and retry rather than silently orphaning our commit.
+            push_ok = False
+            for attempt in range(3):
+                push = subprocess.run(["git", "push", "origin", "main"],
+                                      cwd=repo, env=genv, timeout=180,
+                                      capture_output=True, text=True)
+                if push.returncode == 0:
+                    push_ok = True
+                    break
+                err = (push.stderr or push.stdout or "").strip()
+                if ("rejected" in err or "cannot lock ref" in err
+                        or "non-fast-forward" in err):
+                    log.warning("Push rejected (attempt %d/3), rebasing", attempt + 1)
+                    subprocess.run(["git", "fetch", "origin", "main"],
+                                   cwd=repo, env=genv, timeout=60)
+                    rb = subprocess.run(["git", "rebase", "--autostash", "origin/main"],
+                                        cwd=repo, env=genv, timeout=60,
+                                        capture_output=True, text=True)
+                    if rb.returncode != 0:
+                        subprocess.run(["git", "rebase", "--abort"],
+                                       cwd=repo, env=genv, timeout=30)
+                        log.warning("Rebase conflict — leaving commit local, will retry next cycle")
+                        break
+                else:
+                    log.warning("Push failed (non-race): %s", err[:400])
+                    break
             state_file.write_text(str(time.time()))
-            log.info("Pushed to GitHub — Streamlit will redeploy")
+            if push_ok:
+                log.info("Pushed to GitHub — Streamlit will redeploy")
         else:
             state_file.write_text(str(time.time()))  # nothing to push; still reset the clock
             log.info("No logistics changes — skipping push")
