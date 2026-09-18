@@ -19,7 +19,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 459994,,Hwaiyin Chang,E370,2026-09-11 11:20:00,2026-09-21,2026-09-18 15:00:00,In Production,PORCIP DEAN,0.0,CENT RT1,,Implants,0,5,6,0,False,False,False,False
 460006,,James Fieldhouse,E331,2026-09-11 12:48:00,2026-09-21,2026-09-18 15:00:00,In Production,PORCIP DEAN,0.0,NE RT 2,,Implants,0,5,6,0,False,False,False,False
 460013,,Nicholas Chionis,E40,2026-09-11 13:21:00,2026-09-21,2026-09-18 15:00:00,In Production,PORCIP DEAN,0.0,SE RT 3,,Implants,0,5,6,0,False,False,False,False
-460023,,Gary Jagmin,E222,2026-09-11 14:02:00,2026-09-21,2026-09-18 15:00:00,In Production,SINTERING,0.0,NWIND RT 6,,CAD_CAM,0,2,6,0,False,False,False,False
+460023,,Gary Jagmin,E222,2026-09-11 14:02:00,2026-09-21,2026-09-18 15:00:00,In Production,HENRY,0.0,NWIND RT 6,,Fixed,0,3,6,0,False,False,False,False
 460026,,Simon Tadros,E180,2026-09-11 14:09:00,2026-09-21,2026-09-18 15:00:00,In Production,PORCIP DEAN,0.0,NWIND RT 6,,Implants,0,5,6,0,False,False,False,False
 460035,,Austin Czarnecki,EVDSGN-091126113039,2026-09-11 14:53:00,2026-09-21,2026-09-18 15:00:00,In Production,PORCIP DEAN,0.0,FNW RT 8,,Implants,0,5,6,0,False,False,False,False
 460056,,Muhammad Sohail,E99*,2026-09-11 16:53:00,2026-09-21,2026-09-18 15:00:00,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,3,7,6,0,False,False,False,False
@@ -69,17 +69,17 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 460304,,Maryam Hafezi,F48,2026-09-16 11:00:00,2026-09-22,2026-09-21 15:00:00,In Production,REMIPBLERTA,0.0,WEST RT 4,,Removable,0,5,1,0,False,False,False,False
 460316,,Gary Tapak,F29,2026-09-16 12:46:00,2026-09-22,2026-09-21 15:00:00,In Production,MILLINGIP,0.0,SE RT 3,,Implants,0,5,1,0,False,False,False,False
 460332,,Alexander Grabavoy,F210,2026-09-16 14:15:00,2026-09-22,2026-09-21 15:00:00,In Production,SPLFINISH,0.0,SW RT 5,,Fixed,0,3,1,0,False,False,False,False
-456699,,Daniel Kmak,N9*,2026-08-10 14:42:00,2026-09-23,2026-09-22 15:00:00,In Production,CTS,0.0,NWIND RT 6,,Surgical,4,7,38,0,False,False,False,False
+456699,,Daniel Kmak,N9*,2026-08-10 14:42:00,2026-09-23,2026-09-22 15:00:00,In Production,CTS,0.0,NWIND RT 6,,Surgical,15,7,38,0,False,True,False,True
 456712,,Niki Demakakos-Kasper,D286$,2026-08-11 08:49:00,2026-09-23,2026-09-22 15:00:00,In Production,CTS,0.0,SE RT 3,,Surgical,4,7,37,0,False,False,False,False
 458513,,Dennis Beck,E178*,2026-08-20 18:12:00,2026-09-23,2026-09-22 15:00:00,In Production,FRED,0.0,CENT RT1,,Fixed,0,3,28,0,False,False,False,False
 459036,,Moses Rasberry,P602*,2026-09-11 12:10:00,2026-09-23,2026-09-22 15:00:00,In Production,CTS,0.0,NWIND RT 6,,Surgical,2,7,6,0,False,False,False,False
 459067,,Mark Prakash,F177,2026-09-10 14:04:00,2026-09-23,2026-09-22 15:00:00,In Production,REMFINISHWALL,0.0,GL,,Removable,1,5,7,0,False,False,False,False
-459348,,Hwaiyin Chang,E163,2026-09-11 15:12:00,2026-09-23,2026-09-22 15:00:00,In Production,REMIPLIZ,0.0,CENT RT1,,Removable,6,5,6,0,False,True,False,True
+459348,,Hwaiyin Chang,E163,2026-09-11 15:12:00,2026-09-23,2026-09-22 15:00:00,In Production,REMIPLIZ,0.0,CENT RT1,,Removable,1,5,6,0,False,False,False,False
 459387,,Scott Halkyard,D278*$,2026-09-01 18:29:00,2026-09-23,2026-09-22 15:00:00,In Production,REMTRYINWALL,0.0,SW RT 5,,Removable,3,5,16,0,False,False,False,False
 459516,,Sumayyah Khan,P515,2026-09-03 11:57:00,2026-09-23,2026-09-22 15:00:00,In Production,PORCIP NINI,0.0,CENT RT1,,Implants,1,5,14,0,False,False,False,False
 459661,,Maja Sukovic,H123,2026-09-08 11:29:00,2026-09-23,2026-09-22 15:00:00,In Production,CTS,0.0,CENT RT1,,Surgical,0,7,9,0,False,False,False,False
 459751,,Colton Sylvester,F131,2026-09-09 10:45:00,2026-09-23,2026-09-22 14:00:00,In Production,STAINGLAZE,0.0,UPS: 03,,Fixed,0,3,8,0,False,False,False,False
-459796,,Brian Gambla,D283$,2026-09-09 12:54:00,2026-09-23,2026-09-22 15:00:00,In Production,REMTRYINWALL,0.0,SE RT 3,,Removable,2,5,8,0,False,False,False,False
+459796,,Brian Gambla,D283$,2026-09-09 12:54:00,2026-09-23,2026-09-22 15:00:00,In Production,REMTRYINWALL,0.0,SE RT 3,,Removable,8,5,8,0,False,True,False,True
 459802,,John Athos,DX44$,2026-09-09 13:10:00,2026-09-23,2026-09-22 15:00:00,In Production,REMIPDOM,0.0,SE RT 3,,Removable,8,5,8,0,False,True,False,True
 459826,,Simon Abu-Aita,P813*,2026-09-09 15:35:00,2026-09-23,2026-09-22 15:00:00,In Production,GUIDES,0.0,NWIND RT 6,,Surgical,7,7,8,0,False,False,False,False
 459828,,Woon Kang,P323*,2026-09-09 15:45:00,2026-09-23,2026-09-22 15:00:00,In Production,PORCWALL,0.0,NWIND RT 6,,Fixed,2,3,8,0,False,False,False,False
@@ -269,7 +269,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 460451,,James Lovelace,P187,2026-09-17 14:00:00,2026-09-28,2026-09-25 15:00:00,In Production,SPLFINISH,0.0,NE RT 2,,Fixed,0,3,0,0,False,False,False,False
 456277,,Dina Alssaeaidi,P811,2026-09-15 13:33:00,2026-09-29,2026-09-28 15:00:00,In Production,REMQC,0.0,CENT RT1,,Removable,1,5,2,0,False,False,False,False
 458867,,Nicholas Tokarski,H39,2026-09-16 14:29:00,2026-09-29,2026-09-28 15:00:00,In Production,REMIPBLERTA,0.0,GL,,Removable,1,5,1,0,False,False,False,False
-459798,,Lisa O'Grady,D146$,2026-09-09 13:05:00,2026-09-29,2026-09-28 15:00:00,In Production,REMTRYINWALL,0.0,SW RT 5,,Removable,1,5,8,0,False,False,False,False
+459798,,Lisa O'Grady,D146$,2026-09-09 13:05:00,2026-09-29,2026-09-28 15:00:00,In Production,REMTRYINWALL,0.0,SW RT 5,,Removable,8,5,8,0,False,True,False,True
 459867,,Aditya Pai,H141,2026-09-15 09:54:00,2026-09-29,2026-09-28 15:00:00,In Production,REMIPLIZ,0.0,SW RT 5,,Removable,0,5,2,0,False,False,False,False
 460071,,Jane Lang,V31,2026-09-14 08:49:00,2026-09-29,2026-09-28 15:00:00,In Production,REMOUT,0.0,GL,,Removable,2,5,3,0,False,False,False,False
 460107,,Sumayyah Khan,V24,2026-09-14 11:32:00,2026-09-29,2026-09-28 15:00:00,In Production,REMOUT,0.0,CENT RT1,,Removable,2,5,3,0,False,False,False,False
@@ -303,7 +303,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 460418,,Hazel Santiago-Macanip,P859,2026-09-17 12:23:00,2026-09-30,2026-09-29 15:00:00,In Production,SCANNING,0.0,SW RT 5,,Surgical,0,7,0,0,False,False,False,False
 460447,,Dana Akawi,P718,2026-09-17 13:40:00,2026-09-30,2026-09-29 15:00:00,In Production,REMPREP,0.0,SE RT 3,,Removable,0,5,0,0,False,False,False,False
 457024,,Mark Kolozenski,D83$,2026-08-14 10:23:00,2026-10-01,2026-09-30 15:00:00,In Production,PORCIP DEAN,0.0,SE RT 3,,Implants,1,5,34,0,False,False,False,False
-459934,,Maria Barnes,D111$,2026-09-10 13:33:00,2026-10-01,2026-09-30 14:00:00,In Production,PORCIP DEAN,0.0,UPS: 03,,Implants,2,5,7,0,False,False,False,False
+459934,,Maria Barnes,D111$,2026-09-10 13:33:00,2026-10-01,2026-09-30 14:00:00,In Production,PORCIP DEAN,0.0,UPS: 03,,Implants,6,5,7,0,False,True,False,True
 460139,,Rachel Cuadros,V61,2026-09-14 13:58:00,2026-10-01,2026-09-30 15:00:00,In Production,SCANNING,0.0,SE RT 3,,Surgical,1,7,3,0,False,False,False,False
 460323,,Catherine Rhim,F112,2026-09-16 14:02:00,2026-10-01,2026-09-30 15:00:00,In Production,SCANNING,0.0,SW RT 5,,Surgical,0,7,1,0,False,False,False,False
 460405,,Amy Wadas,P561*,2026-09-17 11:18:00,2026-10-01,2026-09-30 15:00:00,In Production,IOS,0.0,NWIND RT 6,,Surgical,0,7,0,0,False,False,False,False
@@ -326,5 +326,5 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 460226,,David Fulton,H238,2026-09-15 13:35:00,2026-10-07,2026-10-06 15:00:00,In Production,MILLING EZ,0.0,FNE RT 7,,CAD_CAM,0,2,2,0,False,False,False,False
 460255,,Brandon Santelli,D115$*,2026-09-15 17:00:00,2026-10-07,2026-10-06 14:00:00,In Production,DIGITALREMOVABLE,0.0,UPS: 03,,Removable,1,5,2,0,False,False,False,False
 460443,,John Mui,P145,2026-09-17 13:37:00,2026-10-08,2026-10-07 15:00:00,In Production,PREP,0.0,SE RT 3,,Hold_Stalled,0,1,0,0,False,False,False,False
-459584,,Steven Walker,F22,2026-09-03 16:51:00,2026-10-09,2026-10-08 14:00:00,In Production,METALFINISHING,0.0,UPS: 03,,Fixed,0,3,14,0,False,False,False,False
+459584,,Steven Walker,F22,2026-09-03 16:51:00,2026-10-09,2026-10-08 14:00:00,In Production,METALFINISHING,0.0,UPS: 03,,Fixed,2,3,14,0,False,False,False,False
 460408,,John Athos,D221$,2026-09-17 11:22:00,2026-10-13,2026-10-12 15:00:00,In Production,REMIPBLERTA,0.0,SE RT 3,,Removable,0,5,0,0,False,False,False,False
