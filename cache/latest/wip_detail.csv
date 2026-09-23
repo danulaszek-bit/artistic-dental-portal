@@ -3,7 +3,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 460226,FULDAV,,2026-09-15,2026-10-07,In Production,615.66,8,False
 458475,FIEJAM,,2026-08-20,2026-09-28,In Production,1315.52,34,False
 458945,CARMATFL,,2026-08-27,2026-10-07,In Production,773.39,27,False
-459661,SUKMAJ,Maja Sukovic,2026-09-08,2026-09-24,In Production,1181.14,15,False
 459790,AHMSAN,,2026-09-09,2026-09-25,In Production,1060.68,14,False
 460074,PATPINNV,,2026-09-14,2026-09-25,In Production,1227.54,9,False
 460078,HOLMARLA,,2026-09-14,2026-09-25,In Production,551.01,9,False
@@ -70,8 +69,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 460738,WALBRIOP,,2026-09-22,2026-10-06,In Production,204.59,1,False
 460374,NIEJOS,,2026-09-17,2026-09-28,In Production,87.81,6,False
 460413,SAMJACSTC,,2026-09-17,2026-10-01,In Production,79.79,6,False
-460425,MALRYA,,2026-09-17,2026-09-25,In Production,79.79,6,False
 460427,GAFMEG,,2026-09-17,2026-09-28,In Production,119.51,6,False
+460425,MALRYA,,2026-09-17,2026-09-25,In Production,79.79,6,False
 460432,TAPGAR,,2026-09-17,2026-09-25,In Production,129.74,6,False
 460435,ARBFRA,,2026-09-17,2026-09-25,In Production,119.51,6,False
 460513,PATNIS,,2026-09-18,2026-09-30,In Production,116.98,5,False
@@ -101,7 +100,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 460472,DOUBRI,,2026-09-17,2026-09-25,In Production,80.82,6,False
 460524,SHAAMI,,2026-09-18,2026-09-28,In Production,141.17,5,False
 460554,SONSEO,,2026-09-18,2026-09-28,In Production,70.59,5,False
-460564,MALRYA,,2026-09-21,2026-09-28,In Production,79.79,2,False
 460573,ANDMAR,,2026-09-21,2026-09-28,In Production,92.06,2,False
 460575,HANPATSK,,2026-09-21,2026-09-28,In Production,108.43,2,False
 460596,ATAJAD,,2026-09-21,2026-09-25,In Production,79.79,2,False
@@ -143,6 +141,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 451719,SLAMICDYE,,2026-06-03,2026-06-19,In Production,0.0,112,True
 453210,SLAMICJOL,,2026-06-23,2026-07-01,In Production,0.0,92,True
 455685,LEBRAFB,Raffi Leblebijian,2026-07-28,2026-08-05,In Production,0.0,57,True
+456787,SOHMUHHW,,2026-08-11,2026-09-25,In Production,309.98,43,False
 460135,ALSEMA,,2026-09-14,2026-09-25,In Production,92.06,9,False
 448148,THADEVOP,,2026-04-21,2026-05-05,In Production,283.77,155,True
 454721,SLAMICJOL,Michael Slavin,2026-07-14,2026-07-28,In Production,200.0,71,True
@@ -150,12 +149,13 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 454920,SLAMICJOL,Michael Slavin,2026-07-16,2026-08-07,In Production,222.92,69,True
 459059,THADEVHOM,Devang Thakkar,2026-08-28,2026-09-11,In Production,277.91,26,True
 459946,ABDSAM,,2026-09-10,2026-09-28,In Production,3689.79,13,False
+460056,SOHMUHHW,,2026-09-11,2026-09-25,In Production,254.99,12,False
 460113,ANDMAR,,2026-09-14,2026-09-25,In Production,0.0,9,False
 460153,SYEMAZ,,2026-09-14,2026-09-28,In Production,3682.8,9,False
 460320,SOHMUHHW,,2026-09-16,2026-09-30,In Production,630.04,7,False
 460448,SYEMAZ,Mazher Syed,2026-09-17,2026-09-24,In Production,1175.43,6,False
 460552,SOHMUHHW,,2026-09-18,2026-10-02,In Production,309.98,5,False
-460718,SOHMUHHW,Muhammad Sohail,2026-09-22,2026-09-24,In Production,472.49,1,False
+460718,SOHMUHHW,Muhammad Sohail,2026-09-22,2026-09-24,In Production,420.43,1,False
 460371,NAPSTE,,2026-09-17,2026-09-28,In Production,87.81,6,False
 460372,SUHINE,,2026-09-17,2026-09-28,In Production,87.81,6,False
 460393,RYASEA,,2026-09-17,2026-10-01,In Production,129.51,6,False
@@ -229,8 +229,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 460530,SAMJACSTC,,2026-09-18,2026-09-28,In Production,79.79,5,False
 460681,POLNIC,,2026-09-22,2026-10-02,In Production,308.76,1,False
 460682,NAIANK,,2026-09-22,2026-10-06,In Production,477.56,1,False
-460697,HANMIR,,2026-09-22,2026-10-07,In Production,650.63,1,False
 460692,MCCSCO,,2026-09-22,2026-10-02,In Production,119.51,1,False
+460697,HANMIR,,2026-09-22,2026-10-07,In Production,650.63,1,False
 460720,MALRYA,,2026-09-22,2026-10-06,In Production,79.79,1,False
 460700,HANMIR,,2026-09-22,2026-10-02,In Production,254.73,1,False
 460704,ARBFRA,,2026-09-22,2026-09-30,In Production,119.51,1,False
