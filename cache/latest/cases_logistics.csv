@@ -20,10 +20,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 460411,,Paul Singh,P940*,2026-09-17 12:03:00,2026-10-02,2026-10-01 15:00:00,In Production,PORCIP NINI,0.0,WEST,,Implants,0,5,13,0,False,False,False,False
 460552,,Muhammad Sohail,E312*,2026-09-18 14:27:00,2026-10-02,2026-10-01 15:00:00,In Production,GUIDES,0.0,INDIANA,,Surgical,10,7,12,0,False,True,False,True
 460588,,Mary Ann Hollis,V55*,2026-09-21 10:06:00,2026-10-02,2026-10-01 15:00:00,In Production,REMOUT,0.0,GL,,Removable,3,5,9,0,False,False,False,False
-460681,,Nicholas Polito,H201,2026-09-22 09:18:00,2026-10-02,2026-10-01 15:00:00,In Production,FRED,0.0,GL,,Fixed,0,3,8,0,False,False,False,False
 460761,,Kevin Landers,EVDSGN-092226134037,2026-09-22 16:05:00,2026-10-02,2026-10-01 15:00:00,In Production,HENRY,0.0,GL,,Fixed,2,3,8,0,False,False,False,False
-460810,,Mark Huberty,F189,2026-09-23 11:09:00,2026-10-02,2026-10-01 14:00:00,In Production,HENRY,0.0,UPS: 03,,Fixed,0,3,7,0,False,False,False,False
-460947,,Jason Douts,EVDSGN-092426095800,2026-09-24 12:26:00,2026-10-02,2026-10-01 14:00:00,In Production,FIXEDQC,0.0,UPS: 03,,Fixed,2,3,6,0,False,False,False,False
 460965,,Muhammad Sohail,P499,2026-09-24 13:21:00,2026-10-02,2026-10-01 15:00:00,In Production,REMIPLIZ,0.0,SOUTHEAST,,Removable,0,5,6,0,False,False,False,False
 461319,,Simon Tadros,F60,2026-09-30 08:22:00,2026-10-02,2026-10-01 15:00:00,In Production,HENRY,0.0,SOUTHEAST,,Fixed,0,3,0,0,False,False,False,False
 460398,,Christine Petrilla,P585,2026-09-17 10:48:00,2026-10-05,2026-10-02 15:00:00,In Production,FRED,0.0,CENTRAL,,Fixed,0,3,13,0,False,False,False,False
@@ -38,7 +35,6 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 461058,,Leo Skrypkun,E315,2026-09-25 12:03:00,2026-10-05,2026-10-02 15:00:00,In Production,SINTERING,0.0,SOUTHEAST,,CAD_CAM,0,2,5,0,False,False,False,False
 461059,,Colleen Gaffney,E84,2026-09-25 12:03:00,2026-10-05,2026-10-02 15:00:00,In Production,SINTERING,0.0,SOUTHEAST,,CAD_CAM,0,2,5,0,False,False,False,False
 461067,,Mirette Hanna,E83,2026-09-25 12:30:00,2026-10-05,2026-10-02 15:00:00,In Production,SINTERING,0.0,CENTRAL,,CAD_CAM,0,2,5,0,False,False,False,False
-461084,,Nick Feller,E333*,2026-09-25 13:43:00,2026-10-05,2026-10-02 14:00:00,In Production,HENRY,0.0,UPS: 03,,Fixed,0,3,5,0,False,False,False,False
 461085,,Gary Jagmin,E139,2026-09-25 13:48:00,2026-10-05,2026-10-02 15:00:00,In Production,SINTERING,0.0,INDIANA,,CAD_CAM,0,2,5,0,False,False,False,False
 461086,,Neeva Patel,V288*,2026-09-25 13:51:00,2026-10-05,2026-10-02 15:00:00,In Production,PRINTING,0.0,SOUTHEAST,,CAD_CAM,0,2,5,0,False,False,False,False
 461106,,Karen Kowalesik,V65,2026-09-25 17:14:00,2026-10-05,2026-10-02 15:00:00,In Production,DIGITALREMOVABLE,0.0,CENTRAL,,Removable,2,5,5,0,False,False,False,False
@@ -115,7 +111,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 459612,,Michael Acierno,H96*,2026-09-04 15:14:00,2026-10-07,2026-10-06 15:00:00,In Production,REMIPLIZ,0.0,GL,,Removable,1,5,26,0,False,False,False,False
 460113,,Mark Anderson,V290*,2026-09-14 11:56:00,2026-10-07,2026-10-06 15:00:00,In Production,MILLING BRUX,0.0,SOUTHEAST,,CAD_CAM,0,2,16,0,False,False,False,False
 460590,,Andrew Jursik,V81*,2026-09-21 10:20:00,2026-10-07,2026-10-06 15:00:00,In Production,CADOUT,0.0,GL,,CAD_CAM,0,2,9,0,False,False,False,False
-460697,,Mirette Hanna,H94,2026-09-22 11:09:00,2026-10-07,2026-10-06 15:00:00,In Production,CADSTALLED,0.0,CENTRAL,,CAD_CAM,1,2,8,0,False,False,False,False
+460697,,Mirette Hanna,H94,2026-09-22 11:09:00,2026-10-07,2026-10-06 15:00:00,In Production,CADSTALLED,0.0,CENTRAL,,CAD_CAM,6,2,8,0,False,True,False,True
 460709,,David Sefcik,H265,2026-09-22 11:45:00,2026-10-07,2026-10-06 15:00:00,In Production,REMOUT,0.0,CENTRAL,,Removable,3,5,8,0,False,False,False,False
 460776,,James Thomas III,F230*,2026-09-22 17:52:00,2026-10-09,2026-10-06 14:00:00,In Production,PORCIP NINI,0.0,UPS: 03,,Implants,0,5,8,0,False,False,False,False
 460820,,Paul Singh,F245*,2026-09-23 11:24:00,2026-10-07,2026-10-06 15:00:00,In Production,MILLINGIP,0.0,WEST,,Implants,1,5,7,0,False,False,False,False
