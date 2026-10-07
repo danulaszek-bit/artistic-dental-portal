@@ -18,7 +18,6 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 460738,,Brian Walczak,E158*,2026-09-22 13:42:00,2026-10-06,2026-10-05 15:00:00,In Production,REMOUT,0.0,SOUTHEAST,,Removable,8,5,14,1,True,True,False,True
 460972,,John Mastrud,P536,2026-09-24 13:30:00,2026-10-06,2026-10-05 15:00:00,In Production,CTS,0.0,CENTRAL,,Surgical,8,7,12,1,True,True,False,True
 461136,,Khadija Sulemanjee,H288*,2026-09-28 11:08:00,2026-10-06,2026-10-05 15:00:00,In Production,GUIDES,0.0,SOUTHEAST,,Surgical,6,7,8,1,True,False,False,True
-461248,,Rajul Patel,H297*,2026-09-29 12:07:00,2026-10-06,2026-10-05 15:00:00,In Production,CADSTALLED,0.0,GL,,CAD_CAM,7,2,7,1,True,True,False,True
 460842,,Scott Szatkowski,D285$*,2026-09-23 12:53:00,2026-10-07,2026-10-06 15:00:00,In Production,GUIDES,0.0,GL,,Surgical,6,7,13,0,False,False,False,False
 460963,,Ryann Maloney,P574,2026-09-24 13:17:00,2026-10-08,2026-10-07 15:00:00,In Production,FIXEDQC,0.0,SOUTHEAST,,Fixed,0,3,12,0,False,False,False,False
 460977,,Hazel Santiago-Macanip,P97*,2026-09-24 13:33:00,2026-10-08,2026-10-07 15:00:00,In Production,PORCIP DEAN,0.0,CENTRAL,,Implants,0,5,12,0,False,False,False,False
@@ -29,7 +28,6 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 461170,,Gary Tapak,V262,2026-09-28 13:25:00,2026-10-08,2026-10-07 15:00:00,In Production,FIXEDQC,0.0,SOUTHEAST,,Fixed,0,3,8,0,False,False,False,False
 461236,,Tarik Patel,H138*,2026-09-29 11:24:00,2026-10-08,2026-10-07 15:00:00,In Production,PORCIP NINI,0.0,CENTRAL,,Implants,0,5,7,0,False,False,False,False
 461266,,Tarikh Patel,H97,2026-09-29 13:33:00,2026-10-08,2026-10-07 15:00:00,In Production,FRED,0.0,WEST,,Fixed,0,3,7,0,False,False,False,False
-461382,,Paulette Lucario,F96,2026-09-30 13:51:00,2026-10-08,2026-10-07 15:00:00,In Production,CTS,0.0,GL,,Surgical,0,7,6,0,False,False,False,False
 461383,,Gary Jagmin,F131,2026-09-30 13:52:00,2026-10-08,2026-10-07 15:00:00,In Production,FIXEDQC,0.0,INDIANA,,Fixed,0,3,6,0,False,False,False,False
 461388,,Neeva Patel,F57,2026-09-30 13:57:00,2026-10-08,2026-10-07 15:00:00,In Production,FIXEDQC,0.0,SOUTHEAST,,Fixed,0,3,6,0,False,False,False,False
 461440,,Katy Correa,P515*,2026-10-01 08:47:00,2026-10-08,2026-10-07 15:00:00,In Production,PORCIP NINI,0.0,WEST,,Implants,0,5,5,0,False,False,False,False
@@ -117,6 +115,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 461223,,Brian Gambla,D181$,2026-09-29 09:30:00,2026-10-12,2026-10-09 15:00:00,In Production,MILLINGIP,0.0,SOUTHEAST,,Implants,1,5,7,0,False,False,False,False
 461234,,Brian Douts,H289*,2026-09-29 11:05:00,2026-10-12,2026-10-09 15:00:00,In Production,PORCWALL,0.0,INDIANA,,Fixed,0,3,7,0,False,False,False,False
 461240,,Beata Lezerkiewicz,H153,2026-09-29 11:46:00,2026-10-12,2026-10-09 15:00:00,In Production,WAX,0.0,CENTRAL,,Fixed,0,3,7,0,False,False,False,False
+461248,,Rajul Patel,H297*,2026-09-29 12:07:00,2026-10-12,2026-10-09 15:00:00,In Production,CADSTALLED,0.0,GL,,CAD_CAM,7,2,7,0,False,True,False,True
 461253,,Niki Demakakos-Kasper,D286$,2026-09-29 13:04:00,2026-10-12,2026-10-09 15:00:00,In Production,HENRY,0.0,SOUTHEAST,,Fixed,0,3,7,0,False,False,False,False
 461265,,Mark Niemiec,H276*,2026-09-29 13:30:00,2026-10-15,2026-10-09 14:00:00,In Production,MILLING IMPLANT,0.0,UPS: 03,,Unknown,0,5,7,0,False,False,False,False
 461301,,Kathleen McClintock,F16*,2026-09-29 16:47:00,2026-10-13,2026-10-09 14:00:00,In Production,REMQC,0.0,UPS: 02,,Removable,0,5,7,0,False,False,False,False
@@ -319,6 +318,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 460978,,Michael Slavin,P125,2026-09-24 13:38:00,2026-10-15,2026-10-14 15:00:00,In Production,GUIDES,0.0,CENTRAL,,Surgical,8,7,12,0,False,True,False,True
 461314,,Eric Kosnic,F168*,2026-09-29 17:57:00,2026-10-16,2026-10-14 14:00:00,In Production,REMQC,0.0,UPS: 03,,Removable,0,5,7,0,False,False,False,False
 461364,,Scott McCarty,F244&,2026-09-30 11:48:00,2026-10-15,2026-10-14 15:00:00,In Production,MILLINGIP,0.0,CENTRAL,,Implants,1,5,6,0,False,False,False,False
+461382,,Paulette Lucario,F96,2026-09-30 13:51:00,2026-10-15,2026-10-14 15:00:00,In Production,CTS,0.0,GL,,Surgical,0,7,6,0,False,False,False,False
 461401,,Paul Lukawski,F53,2026-09-30 14:19:00,2026-10-15,2026-10-14 15:00:00,In Production,MATCHING TABLE,0.0,WEST,,Fixed,0,3,6,0,False,False,False,False
 461447,,Brian Walczak,P824*,2026-10-01 09:46:00,2026-10-15,2026-10-14 15:00:00,In Production,REMFINISHWALL,0.0,SOUTHEAST,,Removable,0,5,5,0,False,False,False,False
 461459,,Sumayyah Khan,P602,2026-10-01 11:18:00,2026-10-15,2026-10-14 15:00:00,In Production,IOS,0.0,CENTRAL,,Surgical,0,7,5,0,False,False,False,False
