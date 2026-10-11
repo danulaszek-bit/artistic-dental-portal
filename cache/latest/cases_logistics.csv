@@ -15,12 +15,12 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 455289,,Paul Singh,F138*,2026-07-22 12:12:00,2026-10-12,2026-10-09 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,45,7,80,0,False,True,False,True
 460660,,David Dardick,H155*,2026-09-21 18:09:00,2026-10-12,2026-10-09 15:00:00,In Production,PRINTING,0.0,NORTH,,CAD_CAM,2,2,19,0,False,False,False,False
 461240,,Beata Lezerkiewicz,H153,2026-09-29 11:46:00,2026-10-12,2026-10-09 15:00:00,In Production,PORCIP DEAN,0.0,CENTRAL,,Implants,3,5,11,0,False,False,False,False
-461248,,Rajul Patel,H297*,2026-09-29 12:07:00,2026-10-12,2026-10-09 15:00:00,In Production,MILLINGIP,0.0,GL,,Implants,3,5,11,0,False,False,False,False
+461248,,Rajul Patel,H297*,2026-09-29 12:07:00,2026-10-12,2026-10-09 15:00:00,In Production,MILLINGIP,0.0,GL,,Implants,4,5,11,0,False,False,False,False
 461691,,John Athos,V223*,2026-10-05 09:50:00,2026-10-12,2026-10-09 15:00:00,In Production,REMIPLIZ,0.0,SOUTHEAST,,Removable,2,5,5,0,False,False,False,False
 461891,,Anu Sood,F38,2026-10-07 09:08:00,2026-10-12,2026-10-09 15:00:00,In Production,REMIPLIZ,0.0,NORTH,,Removable,2,5,3,0,False,False,False,False
 456630,,Tarek Safadi,V57,2026-09-28 09:37:00,2026-10-13,2026-10-12 15:00:00,In Production,REMOUT,0.0,INDIANA,,Removable,6,5,12,0,False,True,False,True
 460408,,John Athos,D221$,2026-09-17 11:22:00,2026-10-13,2026-10-12 15:00:00,In Production,PORCIP DEAN,0.0,SOUTHEAST,,Implants,6,5,23,0,False,True,False,True
-460754,,Nicholas Tokarski,E128,2026-09-29 15:09:00,2026-10-13,2026-10-12 15:00:00,In Production,REMFINISHWALL,0.0,GL,,Removable,5,5,11,0,False,False,False,False
+460754,,Nicholas Tokarski,E128,2026-09-29 15:09:00,2026-10-13,2026-10-12 15:00:00,In Production,REMFINISHWALL,0.0,GL,,Removable,6,5,11,0,False,True,False,True
 461106,,Karen Kowalesik,V65,2026-09-25 17:14:00,2026-10-13,2026-10-12 15:00:00,In Production,REMIPMARY,0.0,CENTRAL,,Removable,2,5,15,0,False,False,False,False
 461238,,Victor Grandinetti,H222*,2026-09-29 11:36:00,2026-10-13,2026-10-12 15:00:00,In Production,PRINTING,0.0,GL,,CAD_CAM,2,2,11,0,False,False,False,False
 461239,,John Athos,H236*,2026-09-29 11:41:00,2026-10-13,2026-10-12 15:00:00,In Production,SPLFINISH,0.0,SOUTHEAST,,Fixed,5,3,11,0,False,True,False,True
@@ -90,7 +90,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 461856,,Anthony Glorioso,H135,2026-10-06 14:35:00,2026-10-14,2026-10-13 15:00:00,In Production,MILLING EZ,0.0,WEST,,CAD_CAM,2,2,4,0,False,False,False,False
 461870,,David Dardick,EVDSGN-100626124655,2026-10-06 15:57:00,2026-10-14,2026-10-13 15:00:00,In Production,STAINGLAZE,0.0,NORTH,,Fixed,2,3,4,0,False,False,False,False
 461874,,Manpreet Singh,F183*,2026-10-06 17:23:00,2026-10-14,2026-10-13 15:00:00,In Production,MILLING BRUX,0.0,WEST,,CAD_CAM,2,2,4,0,False,False,False,False
-461877,,Mikhail Korolyov,EVDSGN-100626134659,2026-10-06 17:42:00,2026-10-14,2026-10-13 15:00:00,In Production,MATCHING TABLE,0.0,GL,,Fixed,2,3,4,0,False,False,False,False
+461877,,Mikhail Korolyov,EVDSGN-100626134659,2026-10-06 17:42:00,2026-10-14,2026-10-13 15:00:00,In Production,MATCHING TABLE,0.0,GL,,Fixed,3,3,4,0,False,False,False,False
 461879,,David Dardick,EVDSGN-100626135628,2026-10-06 17:53:00,2026-10-14,2026-10-13 15:00:00,In Production,STAINGLAZE,0.0,NORTH,,Fixed,2,3,4,0,False,False,False,False
 461881,,Gail Vittori,F103*,2026-10-06 18:08:00,2026-10-14,2026-10-13 15:00:00,In Production,PRINTING,0.0,GL,,CAD_CAM,3,2,4,0,False,True,False,True
 461882,,Eric Kosnic,F230*,2026-10-06 18:14:00,2026-10-15,2026-10-13 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,3,2,4,0,False,True,False,True
@@ -119,7 +119,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 456882,,Andrew Jursik,H299*,2026-10-06 14:54:00,2026-10-15,2026-10-14 15:00:00,In Production,DESIGN,0.0,,,Unknown,4,5,4,0,False,False,False,False
 458716,,Colleen Gaffney,D232$,2026-08-25 10:13:00,2026-10-15,2026-10-14 15:00:00,In Production,REMIPDOM,0.0,SOUTHEAST,,Removable,2,5,46,0,False,False,False,False
 459109,,Kaleigh Fulmer,D110$,2026-08-31 10:53:00,2026-10-15,2026-10-14 14:00:00,In Production,REMIPMARGARET,0.0,UPS: 03,,Removable,9,5,40,0,False,True,False,True
-460215,,Anna Zborek,H71,2026-10-01 12:58:00,2026-10-15,2026-10-14 15:00:00,In Production,REMFINISHWALL,0.0,GL,,Removable,5,5,9,0,False,False,False,False
+460215,,Anna Zborek,H71,2026-10-01 12:58:00,2026-10-15,2026-10-14 15:00:00,In Production,REMFINISHWALL,0.0,GL,,Removable,6,5,9,0,False,True,False,True
 460475,,Sarah Lopez,H220,2026-10-02 07:41:00,2026-10-15,2026-10-14 15:00:00,In Production,REMFINISHWALL,0.0,INDIANA,,Removable,4,5,8,0,False,False,False,False
 460978,,Michael Slavin,P125,2026-09-24 13:38:00,2026-10-15,2026-10-14 15:00:00,In Production,GUIDES,0.0,CENTRAL,,Surgical,12,7,16,0,False,True,False,True
 461295,,James Thomas III,F104*,2026-09-29 16:10:00,2026-10-19,2026-10-14 14:00:00,In Production,PORCIP DEAN,0.0,UPS: 03,,Implants,2,5,11,0,False,False,False,False
@@ -177,7 +177,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 461964,,Colleen Gaffney,F19,2026-10-07 13:43:00,2026-10-15,2026-10-14 15:00:00,In Production,SENTFORDESIGN,0.0,SOUTHEAST,,CAD_CAM,2,2,3,0,False,False,False,False
 461965,,Colleen Gaffney,F184,2026-10-07 13:46:00,2026-10-15,2026-10-14 15:00:00,In Production,REMIPMARY,0.0,SOUTHEAST,,Removable,2,5,3,0,False,False,False,False
 461966,,Soo H. Lee,F207,2026-10-07 13:50:00,2026-10-15,2026-10-14 15:00:00,In Production,REMIPLIZ,0.0,NORTH,,Removable,2,5,3,0,False,False,False,False
-461976,,Mikhail Korolyov,EVDSGN-100726115539,2026-10-07 14:11:00,2026-10-15,2026-10-14 15:00:00,In Production,MATCHING TABLE,0.0,GL,,Fixed,2,3,3,0,False,False,False,False
+461976,,Mikhail Korolyov,EVDSGN-100726115539,2026-10-07 14:11:00,2026-10-15,2026-10-14 15:00:00,In Production,MATCHING TABLE,0.0,GL,,Fixed,3,3,3,0,False,False,False,False
 461980,,Medalith Somers,F79*,2026-10-07 14:25:00,2026-10-15,2026-10-14 15:00:00,In Production,MILLING EMAX,0.0,WEST,,CAD_CAM,3,2,3,0,False,True,False,True
 461981,,Rana Barakat,EVDSGN-100726120428,2026-10-07 14:31:00,2026-10-15,2026-10-14 15:00:00,In Production,EVD SUBMITTED,0.0,GL,,Scheduling,2,2,3,0,False,False,False,False
 461982,,David Dardick,EVDSGN-100726121233,2026-10-07 14:37:00,2026-10-15,2026-10-14 15:00:00,In Production,STAINGLAZE,0.0,NORTH,,Fixed,2,3,3,0,False,False,False,False
