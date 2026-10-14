@@ -230,12 +230,12 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 462308,,Jason Douts,H315,2026-10-13 10:46:00,2026-10-21,2026-10-20 14:00:00,In Production,SCANNING,0.0,UPS: 03,,Surgical,0,7,0,0,False,False,False,False
 462309,,Harvey Satz,H180*,2026-10-13 10:44:00,2026-10-23,2026-10-20 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,0,2,0,0,False,False,False,False
 462317,,Harvey Satz,H79*,2026-10-13 11:11:00,2026-10-23,2026-10-20 14:00:00,In Production,PRINTING,0.0,UPS: 03,,CAD_CAM,0,2,0,0,False,False,False,False
-462320,,Thomas Remijas,H118,2026-10-13 11:56:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,SOUTHEAST,,Hold_Stalled,0,1,0,0,False,False,False,False
-462321,,Colleen Gaffney,H221,2026-10-13 10:57:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,SOUTHEAST,,Hold_Stalled,0,1,0,0,False,False,False,False
+462320,,Thomas Remijas,H118,2026-10-13 11:56:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,SOUTHEAST,,Hold_Stalled,1,1,0,0,False,False,False,False
+462321,,Colleen Gaffney,H221,2026-10-13 10:57:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,SOUTHEAST,,Hold_Stalled,1,1,0,0,False,False,False,False
 462323,,Jerome Correa,H240,2026-10-13 11:57:00,2026-10-21,2026-10-20 15:00:00,In Production,SENTFORDESIGN,0.0,SOUTHEAST,,CAD_CAM,0,2,0,0,False,False,False,False
-462331,,Jacob Samuel,H99,2026-10-13 12:22:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,NORTH,,Hold_Stalled,0,1,0,0,False,False,False,False
-462332,,Jacob Samuel,H134,2026-10-13 12:24:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,NORTH,,Hold_Stalled,0,1,0,0,False,False,False,False
-462333,,Jacob Samuel,H22,2026-10-13 12:25:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,NORTH,,Hold_Stalled,0,1,0,0,False,False,False,False
+462331,,Jacob Samuel,H99,2026-10-13 12:22:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,NORTH,,Hold_Stalled,1,1,0,0,False,False,False,False
+462332,,Jacob Samuel,H134,2026-10-13 12:24:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,NORTH,,Hold_Stalled,1,1,0,0,False,False,False,False
+462333,,Jacob Samuel,H22,2026-10-13 12:25:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,NORTH,,Hold_Stalled,1,1,0,0,False,False,False,False
 462335,,Thomas John Raia,H226,2026-10-13 12:41:00,2026-10-21,2026-10-20 15:00:00,In Production,PRINTING,0.0,CENTRAL,,CAD_CAM,0,2,0,0,False,False,False,False
 462336,,Mirette Hanna,H140,2026-10-13 12:40:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,CENTRAL,,Hold_Stalled,0,1,0,0,False,False,False,False
 462337,,Mirette Hanna,H50,2026-10-13 12:42:00,2026-10-21,2026-10-20 15:00:00,In Production,PREP,0.0,CENTRAL,,Hold_Stalled,0,1,0,0,False,False,False,False
@@ -294,7 +294,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 462244,,Luis Peralta,V58*,2026-10-12 12:45:00,2026-10-23,2026-10-22 15:00:00,In Production,MILLING EZ,0.0,INDIANA,,CAD_CAM,0,2,1,0,False,False,False,False
 462285,,Ine Suh,H9,2026-10-13 08:33:00,2026-10-23,2026-10-22 15:00:00,In Production,SCANNING,0.0,GL,,Surgical,0,7,0,0,False,False,False,False
 462310,,Alisa Martin,H52,2026-10-13 10:48:00,2026-10-28,2026-10-22 14:00:00,In Production,SCANNING,0.0,UPS: 03,,Surgical,0,7,0,0,False,False,False,False
-462322,,Gary Tapak,H250,2026-10-13 11:58:00,2026-10-23,2026-10-22 15:00:00,In Production,PREP,0.0,SOUTHEAST,,Hold_Stalled,0,1,0,0,False,False,False,False
+462322,,Gary Tapak,H250,2026-10-13 11:58:00,2026-10-23,2026-10-22 15:00:00,In Production,PREP,0.0,SOUTHEAST,,Hold_Stalled,1,1,0,0,False,False,False,False
 462344,,Sumayyah Khan,H266,2026-10-13 12:41:00,2026-10-23,2026-10-22 15:00:00,In Production,REMPREP,0.0,CENTRAL,,Removable,0,5,0,0,False,False,False,False
 461621,,Caroline Shepherd,D162$,2026-10-02 11:42:00,2026-10-26,2026-10-23 15:00:00,In Production,REMPROCESSSHELF,0.0,GL,,Removable,0,5,11,0,False,False,False,False
 461760,,Patrick Hann,H223*,2026-10-05 14:50:00,2026-10-26,2026-10-23 15:00:00,In Production,PRINTING,0.0,GL,,CAD_CAM,2,2,8,0,False,False,False,False
