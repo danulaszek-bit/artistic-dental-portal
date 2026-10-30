@@ -4,7 +4,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 462345,LUKPAU,,2026-10-13,2026-11-03,In Production,229.17,17,False
 462531,LOMANTM,,2026-10-15,2026-11-04,In Production,278.76,15,False
 462561,PATMAR,,2026-10-15,2026-11-06,In Production,1138.17,15,False
-462587,SYEMAZ,,2026-10-15,2026-11-05,In Production,0.0,15,False
 462748,PATNEE,,2026-10-19,2026-11-04,In Production,206.27,11,False
 462786,KAMTHO,Thomas Kaminski,2026-10-19,2026-11-02,In Production,531.47,11,False
 462817,SKRLEO,,2026-10-20,2026-11-03,In Production,430.16,10,False
@@ -56,6 +55,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 463544,BAPBENNR,,2026-10-28,2026-11-05,In Production,79.79,2,False
 463546,PETCHR,,2026-10-28,2026-11-05,In Production,85.85,2,False
 463548,HOLMARLA,,2026-10-28,2026-11-05,In Production,69.69,2,False
+445200,KMADAN,,2026-03-17,2026-11-16,Outsourced,314.22,227,False
+445749,KMADAN,,2026-03-23,2026-11-09,In Production,184.12,221,False
 449753,KMADAN,,2026-05-08,2026-11-06,Outsourced,0.0,175,False
 449914,KMADAN,,2026-05-11,2026-11-05,In Production,0.0,172,False
 450014,KMADAN,,2026-05-12,2026-11-05,In Production,0.0,171,False
@@ -72,13 +73,14 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 463221,SOOANUHE,Anu Sood,2026-10-23,2026-11-02,In Production,90.89,7,False
 463236,CUARACMOK,,2026-10-26,2026-11-03,In Production,122.77,4,False
 463270,LEURIN,,2026-10-26,2026-11-06,In Production,1211.94,4,False
+463275,BERDERCP,,2026-10-26,2026-11-12,In Production,6.99,4,False
 463304,KHAALI,,2026-10-26,2026-11-06,In Production,454.45,4,False
 463311,MADABD,,2026-10-26,2026-11-05,In Production,212.1,4,False
 463318,ALSEMA,,2026-10-26,2026-11-09,In Production,380.56,4,False
 463334,KORMIK,,2026-10-27,2026-11-03,In Production,78.78,3,False
 463355,FAUTHOLF,,2026-10-27,2026-11-10,In Production,320.07,3,False
 463378,SHAAMI,,2026-10-27,2026-11-04,In Production,79.79,3,False
-463455,POLNIC,,2026-10-28,2026-11-09,In Production,6.99,2,False
+463455,POLNIC,,2026-10-28,2026-11-09,In Production,102.94,2,False
 463500,TADSIM,,2026-10-28,2026-11-05,In Production,157.56,2,False
 463529,WALBRIOP,,2026-10-28,2026-11-11,In Production,233.87,2,False
 463583,LEURINSV,,2026-10-29,2026-11-05,In Production,89.89,1,False
@@ -271,7 +273,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 463581,KORMIK,,2026-10-29,2026-11-05,In Production,78.78,1,False
 463642,KORMIK,,2026-10-29,2026-11-06,In Production,78.78,1,False
 463523,GAFMEG,,2026-10-28,2026-11-09,In Production,320.07,2,False
-463062,ATHJOH,,2026-10-22,2026-11-12,In Production,3026.89,8,False
 463321,DOUBRI,,2026-10-26,2026-11-03,In Production,79.79,4,False
 463372,FADSADNA,,2026-10-27,2026-11-03,In Production,69.69,3,False
 463373,DARDAVSB2,,2026-10-27,2026-11-03,In Production,162.87,3,False
@@ -279,8 +280,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 463385,SAMJACSTC,,2026-10-27,2026-11-04,In Production,78.78,3,False
 463398,ARBFRA,,2026-10-27,2026-11-06,In Production,118.08,3,False
 463397,REMTHO,,2026-10-27,2026-11-06,In Production,208.98,3,False
-463400,SKRLEO,,2026-10-27,2026-11-04,In Production,118.08,3,False
 463401,MALRYA,,2026-10-27,2026-11-04,In Production,78.78,3,False
+463400,SKRLEO,,2026-10-27,2026-11-04,In Production,118.08,3,False
 463403,AKADAN,,2026-10-27,2026-11-04,In Production,71.99,3,False
 463404,RESVER,,2026-10-27,2026-11-04,In Production,86.78,3,False
 463406,LUKPAU,,2026-10-27,2026-11-04,In Production,118.08,3,False
@@ -295,10 +296,10 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 463467,LEEALI,,2026-10-28,2026-11-11,In Production,517.02,2,False
 463499,HISADA,,2026-10-28,2026-11-05,In Production,78.78,2,False
 463501,GATGUY,,2026-10-28,2026-11-06,In Production,118.08,2,False
-463503,GAFMEG,,2026-10-28,2026-11-13,In Production,249.37,2,False
 463502,TADSIM,,2026-10-28,2026-11-05,In Production,236.34,2,False
-463506,TADSIM,,2026-10-28,2026-11-05,In Production,315.12,2,False
+463503,GAFMEG,,2026-10-28,2026-11-13,In Production,249.37,2,False
 463504,GAFMEG,,2026-10-28,2026-11-05,In Production,121.19,2,False
+463506,TADSIM,,2026-10-28,2026-11-05,In Production,315.12,2,False
 463507,HISADA,,2026-10-28,2026-11-05,In Production,78.78,2,False
 463509,TADSIM,,2026-10-28,2026-11-05,In Production,78.78,2,False
 463510,TADSIM,,2026-10-28,2026-11-05,In Production,157.56,2,False
