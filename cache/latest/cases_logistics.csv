@@ -200,7 +200,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 463440,,Niki Demakakos-Kasper,EV-102726125624,2026-10-27 16:45:00,2026-11-05,2026-11-04 15:00:00,In Production,PRINTING,0.0,SOUTHEAST,,CAD_CAM,1,2,2,0,False,False,False,False
 463450,,Atish Shah,EV-102726162715,2026-10-28 08:45:00,2026-11-05,2026-11-04 15:00:00,In Production,PRINTING,0.0,GL,,CAD_CAM,1,2,1,0,False,False,False,False
 463460,,Alisa YouYeon Lee,F4,2026-10-28 09:11:00,2026-11-05,2026-11-04 15:00:00,In Production,SENTFORDESIGN,0.0,GL,,CAD_CAM,0,2,1,0,False,False,False,False
-463463,,David Dardick,F238*,2026-10-28 09:16:00,2026-11-05,2026-11-04 15:00:00,In Production,PRINTING,0.0,NORTH,,CAD_CAM,0,2,1,0,False,False,False,False
+463463,,David Dardick,F238*,2026-10-28 09:16:00,2026-11-05,2026-11-04 15:00:00,In Production,PRINTING,0.0,NORTH,,CAD_CAM,2,2,1,0,False,False,False,False
 463477,,Chrisoula Georgacopoulos,EV-102826081134,2026-10-28 10:27:00,2026-11-05,2026-11-04 15:00:00,In Production,PRINTING,0.0,SOUTHEAST,,CAD_CAM,1,2,1,0,False,False,False,False
 463494,,David Dardick,EV-102826091412,2026-10-28 11:38:00,2026-11-05,2026-11-04 15:00:00,In Production,PRINTING,0.0,NORTH,,CAD_CAM,1,2,1,0,False,False,False,False
 463499,,Adam Hishmeh,F174!,2026-10-28 12:46:00,2026-11-05,2026-11-04 15:00:00,In Production,SCANNING,0.0,SOUTHEAST,,Surgical,0,7,1,0,False,False,False,False
@@ -386,9 +386,9 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 463662,,Mark Santucci,E148,2026-10-30 08:52:00,2026-11-10,2026-11-09 15:00:00,In Production,PREP,0.0,GL,,Hold_Stalled,0,1,-1,0,False,False,False,False
 463663,,Jad Atassi,E344,2026-10-30 08:57:00,2026-11-10,2026-11-09 15:00:00,In Production,REMPREP,0.0,GL,,Removable,0,5,-1,0,False,False,False,False
 462733,,Richard Eber,D563$,2026-10-19 11:48:00,2026-11-11,2026-11-10 15:00:00,In Production,REMPROCESSSHELF,0.0,SOUTHEAST,,Removable,0,5,10,0,False,False,False,False
-463207,,Ammar Adam,E308*,2026-10-23 14:16:00,2026-11-12,2026-11-10 14:00:00,In Production,GUIDES,0.0,UPS: 02,,Surgical,4,7,6,0,False,False,False,False
+463207,,Ammar Adam,E308*,2026-10-23 14:16:00,2026-11-12,2026-11-10 14:00:00,In Production,GUIDES,0.0,UPS: 02,,Surgical,0,7,6,0,False,False,False,False
 463282,,Devang Thakkar,V106,2026-10-26 12:50:00,2026-11-11,2026-11-10 15:00:00,In Production,GUIDES,0.0,CENTRAL,,Surgical,1,7,3,0,False,False,False,False
-463285,,Devang Thakkar,V230,2026-10-26 12:51:00,2026-11-11,2026-11-10 15:00:00,In Production,GUIDES,0.0,CENTRAL,,Surgical,1,7,3,0,False,False,False,False
+463285,,Devang Thakkar,V230,2026-10-26 12:51:00,2026-11-11,2026-11-10 15:00:00,In Production,GUIDES,0.0,CENTRAL,,Surgical,0,7,3,0,False,False,False,False
 463381,,Kathryn Bachinski,H97,2026-10-27 12:56:00,2026-11-11,2026-11-10 15:00:00,In Production,SPLFINISH,0.0,CENTRAL,,Fixed,0,3,2,0,False,False,False,False
 463448,,Khadija Sulemanjee,F185*,2026-10-28 08:37:00,2026-11-11,2026-11-10 15:00:00,In Production,MILLING BRUX,0.0,SOUTHEAST,,CAD_CAM,1,2,1,0,False,False,False,False
 463467,,Alisa YouYeon Lee,F156,2026-10-28 09:42:00,2026-11-11,2026-11-10 15:00:00,In Production,SENTFORDESIGN,0.0,GL,,CAD_CAM,0,2,1,0,False,False,False,False
@@ -402,7 +402,6 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 463646,,Mansi Raina,EV-102926141517,2026-10-29 17:38:00,2026-11-11,2026-11-10 15:00:00,In Production,CTS,0.0,GL,,Surgical,0,7,0,0,False,False,False,False
 463664,,Samuel Grandinetti,E206,2026-10-30 09:07:00,2026-11-11,2026-11-10 15:00:00,In Production,SPLINTINCOMING,0.0,GL,,Unknown,0,5,-1,0,False,False,False,False
 462726,,Cynthia Jourdan,P410,2026-10-29 11:17:00,2026-11-12,2026-11-11 15:00:00,In Production,REMTRYINWALL,0.0,GL,,Removable,1,5,0,0,False,False,False,False
-463062,,John Athos,DX46$,2026-10-22 09:50:00,2026-11-12,2026-11-11 15:00:00,In Production,PORCIP DEAN,0.0,SOUTHEAST,,Implants,1,5,7,0,False,False,False,False
 463069,,Scott Szatkowski,D285$*,2026-10-22 10:51:00,2026-11-12,2026-11-11 15:00:00,In Production,CADSTALLED,0.0,GL,,CAD_CAM,1,2,7,0,False,False,False,False
 463126,,Daniela Brzozowski,E361,2026-10-22 15:52:00,2026-11-12,2026-11-11 15:00:00,In Production,REMOUT,0.0,CENTRAL,,Removable,0,5,7,0,False,False,False,False
 463128,,Richard Brenner,E181*,2026-10-22 16:30:00,2026-11-12,2026-11-11 15:00:00,In Production,DESIGN,0.0,GL,,Unknown,1,5,7,0,False,False,False,False
