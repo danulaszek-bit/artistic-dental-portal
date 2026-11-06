@@ -1,13 +1,13 @@
 Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,Cases_DueDate,Cases_ShipDate,Cases_Status,Cases_LastLocation,Cases_TotalCharge,Cases_Carrier,Cases_Notes,pseudo_dept,days_at_station,dept_threshold_days,age_days,days_overdue,flag_past_due,flag_stuck,flag_high_value_aged,is_behind
-448148,,Devang Thakkar,H292,2026-04-21 12:27:00,2026-05-05,2026-05-04 15:00:00,In Production,GUIDES,0.0,SOUTHEAST,,Surgical,6,7,198,185,True,False,False,True
-450856,,Michael Slavin,P303,2026-05-21 13:58:00,2026-06-09,2026-06-08 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,6,7,168,150,True,False,False,True
-451058,,Michael Slavin,H103*,2026-05-27 09:30:00,2026-06-18,2026-06-17 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,6,7,162,141,True,False,False,True
-451719,,Michael Slavin,F166*,2026-06-03 13:08:00,2026-06-19,2026-06-18 15:00:00,In Production,GUIDES,0.0,INDIANA,,Surgical,6,7,155,140,True,False,False,True
-453210,,Michael Slavin,H91*,2026-06-23 16:07:00,2026-07-01,2026-06-30 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,6,7,135,128,True,False,False,True
-454721,,Michael Slavin,H163*,2026-07-14 15:40:00,2026-07-28,2026-07-27 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,6,7,114,101,True,False,False,True
-454723,,Michael Slavin,H247*,2026-07-14 15:42:00,2026-07-28,2026-07-27 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,6,7,114,101,True,False,False,True
-455685,,Raffi Leblebijian,H152,2026-07-28 11:06:00,2026-08-05,2026-08-04 14:00:00,In Production,SABRINA CALLS,0.0,UPS: 03,,Unknown,6,5,100,93,True,True,False,True
-462767,,Upasna Janu,V57,2026-10-19 13:35:00,2026-10-27,2026-10-26 15:00:00,In Production,GUIDES,0.0,SOUTHEAST,,Surgical,6,7,17,10,True,False,False,True
+448148,,Devang Thakkar,H292,2026-04-21 12:27:00,2026-05-05,2026-05-04 15:00:00,In Production,GUIDES,0.0,SOUTHEAST,,Surgical,7,7,198,185,True,False,False,True
+450856,,Michael Slavin,P303,2026-05-21 13:58:00,2026-06-09,2026-06-08 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,7,7,168,150,True,False,False,True
+451058,,Michael Slavin,H103*,2026-05-27 09:30:00,2026-06-18,2026-06-17 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,7,7,162,141,True,False,False,True
+451719,,Michael Slavin,F166*,2026-06-03 13:08:00,2026-06-19,2026-06-18 15:00:00,In Production,GUIDES,0.0,INDIANA,,Surgical,7,7,155,140,True,False,False,True
+453210,,Michael Slavin,H91*,2026-06-23 16:07:00,2026-07-01,2026-06-30 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,7,7,135,128,True,False,False,True
+454721,,Michael Slavin,H163*,2026-07-14 15:40:00,2026-07-28,2026-07-27 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,7,7,114,101,True,False,False,True
+454723,,Michael Slavin,H247*,2026-07-14 15:42:00,2026-07-28,2026-07-27 15:00:00,In Production,GUIDES,0.0,WEST,,Surgical,7,7,114,101,True,False,False,True
+455685,,Raffi Leblebijian,H152,2026-07-28 11:06:00,2026-08-05,2026-08-04 14:00:00,In Production,SABRINA CALLS,0.0,UPS: 03,,Unknown,7,5,100,93,True,True,False,True
+462767,,Upasna Janu,V57,2026-10-19 13:35:00,2026-10-27,2026-10-26 15:00:00,In Production,GUIDES,0.0,SOUTHEAST,,Surgical,7,7,17,10,True,False,False,True
 463221,,Anu Sood,EV-102326151432,2026-10-23 17:51:00,2026-11-02,2026-10-30 15:00:00,In Production,CTS,0.0,NORTH,,Surgical,9,7,13,4,True,True,False,True
 462828,,Christopher Pottorff,D324$,2026-10-20 09:37:00,2026-11-03,2026-11-02 15:00:00,In Production,REMIPDOM,0.0,NORTH,,Removable,1,5,16,3,True,False,False,True
 463412,,Thomas Remijas,H276,2026-10-27 14:08:00,2026-11-04,2026-11-03 15:00:00,In Production,FRED CALLS,0.0,SOUTHEAST,,Unknown,7,5,9,2,True,True,False,True
@@ -90,7 +90,7 @@ Cases_CaseNumber,Cases_CustomerID,Cases_DoctorName,Cases_PanNumber,Cases_DateIn,
 463428,,Mark Niemiec,EV-102726114610,2026-10-27 15:00:00,2026-11-13,2026-11-09 14:00:00,In Production,REMIPDOM,0.0,UPS: 03,,Removable,2,5,9,0,False,False,False,False
 463439,,Upasna Janu,H153*,2026-10-27 16:28:00,2026-11-10,2026-11-09 14:00:00,In Production,GUIDES,0.0,UPS: 03,,Surgical,8,7,9,0,False,True,False,True
 463442,,Anthony Ponzio,D111$*,2026-10-27 16:57:00,2026-11-10,2026-11-09 15:00:00,In Production,REMTRYINWALL,0.0,GL,,Removable,1,5,9,0,False,False,False,False
-463465,,Matthew Van Auken,F88!,2026-10-28 09:24:00,2026-11-10,2026-11-09 15:00:00,In Production,REMTRYINWALL,0.0,GL,,Removable,6,5,8,0,False,True,False,True
+463465,,Matthew Van Auken,F88!,2026-10-28 09:24:00,2026-11-10,2026-11-09 15:00:00,In Production,REMTRYINWALL,0.0,GL,,Removable,7,5,8,0,False,True,False,True
 463506,,Simon Tadros,F143,2026-10-28 12:52:00,2026-11-10,2026-11-09 15:00:00,In Production,SINTERING,0.0,SOUTHEAST,,CAD_CAM,0,2,8,0,False,False,False,False
 463519,,Fatjona Aliaj,F65,2026-10-28 13:23:00,2026-11-10,2026-11-09 15:00:00,In Production,SPLFINISH,0.0,CENTRAL,,Fixed,1,3,8,0,False,False,False,False
 463539,,Upasna Janu,F129*,2026-10-28 14:21:00,2026-11-10,2026-11-09 15:00:00,In Production,GUIDES,0.0,INDIANA,,Surgical,7,7,8,0,False,False,False,False
