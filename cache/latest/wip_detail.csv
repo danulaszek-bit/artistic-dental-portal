@@ -1,6 +1,6 @@
 case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_lab,overdue
 462900,PATTAR,,2026-10-20,2026-11-11,In Production,770.63,21,False
-462927,COOJAN,Jane Cooney,2026-10-20,2026-11-10,In Production,90.89,21,True
+462927,COOJAN,,2026-10-20,2026-11-13,In Production,90.89,21,False
 463033,GERGRE,,2026-10-21,2026-11-12,In Production,339.79,20,False
 463057,CASLEN,,2026-10-22,2026-11-18,In Production,1705.93,19,False
 463069,SZASCO,,2026-10-22,2026-11-12,In Production,6.99,19,False
@@ -11,7 +11,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 463448,SULKHAFL,,2026-10-28,2026-11-11,In Production,423.74,13,False
 463493,GIUMIC,,2026-10-28,2026-11-11,In Production,201.99,13,False
 463551,KORMIK,,2026-10-28,2026-11-11,In Production,332.83,13,False
-463632,SHASHE,,2026-10-29,2026-11-11,In Production,89.89,12,False
+463632,SHASHE,,2026-10-29,2026-11-12,In Production,89.89,12,False
 463635,TRALUA,,2026-10-29,2026-11-11,In Production,1211.94,12,False
 463634,AKADAN,,2026-10-29,2026-11-13,In Production,400.99,12,False
 463653,BORDEM,,2026-10-30,2026-11-12,In Production,382.49,11,False
@@ -289,8 +289,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464274,PERLUI,,2026-11-06,2026-11-16,In Production,96.88,4,False
 464277,ABUSIM,,2026-11-06,2026-11-17,In Production,96.88,4,False
 464289,LUKPAU,,2026-11-06,2026-11-16,In Production,118.08,4,False
-464290,RHICAT,,2026-11-06,2026-11-16,In Production,83.83,4,False
 464291,CHUMAN,,2026-11-06,2026-11-16,In Production,89.89,4,False
+464290,RHICAT,,2026-11-06,2026-11-16,In Production,83.83,4,False
 464292,RHICAT,,2026-11-06,2026-11-16,In Production,83.83,4,False
 464293,RHICAT,,2026-11-06,2026-11-16,In Production,0.0,4,False
 464296,GAFCOL,,2026-11-06,2026-11-17,In Production,118.08,4,False
@@ -313,7 +313,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 463639,CORABI,,2026-10-29,2026-11-20,In Production,711.59,12,False
 463772,VANLAU,,2026-11-02,2026-11-12,In Production,162.17,8,False
 463907,HIJNAN,,2026-11-02,2026-11-16,In Production,182.37,8,False
-463925,GRAVICDES,,2026-11-03,2026-11-13,In Production,82.74,7,False
 463951,YIANIC,,2026-11-03,2026-11-11,In Production,89.89,7,False
 463953,SALNICLAW,,2026-11-03,2026-11-13,In Production,172.27,7,False
 463956,WALBRIOP,,2026-11-03,2026-11-13,In Production,182.37,7,False
