@@ -24,7 +24,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464216,NIEMAR,,2026-11-05,2026-11-20,In Production,381.78,8,False
 464265,FULKAL,,2026-11-06,2026-12-01,In Production,3026.89,7,False
 464294,KHAALI,,2026-11-06,2026-11-16,In Production,181.78,7,False
-464293,RHICAT,,2026-11-06,2026-11-16,In Production,0.0,7,False
 464311,LEBRAFB,,2026-11-06,2026-11-20,In Production,549.34,7,False
 464316,ZHAVIV,,2026-11-06,2026-11-23,In Production,42.48,7,False
 464420,LEBRAF,,2026-11-09,2026-11-17,In Production,89.89,4,False
@@ -39,7 +38,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 463601,HASFAY,Fayda Hassan,2026-10-29,2026-11-06,In Production,0.0,15,True
 463911,LOPSARST,,2026-11-02,2026-11-23,In Production,554.49,11,False
 463979,KORMIK,,2026-11-03,2026-11-17,In Production,944.43,10,False
-464059,TRAJAC,,2026-11-04,2026-11-16,In Production,255.67,9,False
 464099,LOPSARST,Sarah Lopez,2026-11-04,2026-11-10,In Production,0.0,9,True
 464126,MURBRAOP,Brandon Murphy,2026-11-04,2026-11-05,In Production,554.49,9,True
 464189,MORCHR,,2026-11-05,2026-11-17,In Production,128.18,8,False
@@ -64,13 +62,12 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464608,PATNEE,,2026-11-11,2026-11-19,In Production,157.56,2,False
 464761,PAIADI,,2026-11-12,2026-11-24,In Production,848.4,1,False
 462954,LACMAT,,2026-10-21,2026-11-19,In Production,1037.68,23,False
-463128,BRERIC,,2026-10-22,2026-11-17,Outsourced,310.63,22,False
+463128,BRERIC,,2026-10-22,2026-11-17,In Production,310.63,22,False
 463492,MUIJOHLE,,2026-10-28,2026-11-20,In Production,3400.44,16,False
 463723,CORABI,,2026-10-30,2026-11-20,In Production,765.66,14,False
 463978,SINPAU,,2026-11-03,2026-11-19,In Production,1237.9,10,False
+464408,GATGUY,,2026-11-09,2026-11-20,In Production,6.99,4,False
 463904,TYSMONLB,,2026-11-09,2026-11-23,In Production,6.99,4,False
-464657,HAFMAR,,2026-11-11,2026-11-17,In Production,148.37,2,False
-464659,JONDAVNV,,2026-11-11,2026-11-19,In Production,93.61,2,False
 464709,TYSMONLB,,2026-11-12,2026-11-30,In Production,517.02,1,False
 463542,VOHSAF,,2026-10-28,2026-11-18,In Production,1108.98,16,False
 463907,HIJNAN,,2026-11-02,2026-11-16,In Production,182.37,11,False
@@ -96,7 +93,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464333,ANDMAR,,2026-11-09,2026-11-23,In Production,1245.41,4,False
 464373,LIAPETBO,,2026-11-09,2026-11-17,In Production,78.78,4,False
 464389,MACHAZ,,2026-11-09,2026-11-17,In Production,236.34,4,False
-464423,BROLOGSY,,2026-11-09,2026-11-16,In Production,69.69,4,False
 464428,BROLOGSY,,2026-11-09,2026-11-23,In Production,69.69,4,False
 464431,OLCVAN,,2026-11-09,2026-11-20,In Production,79.79,4,False
 464434,OLCVAN,,2026-11-09,2026-11-18,In Production,319.16,4,False
@@ -153,15 +149,11 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464680,CUARACMOK,,2026-11-11,2026-11-24,In Production,272.67,2,False
 464719,PATPINNV,,2026-11-12,2026-11-19,In Production,69.69,1,False
 463639,CORABI,,2026-10-29,2026-11-20,In Production,711.59,15,False
-464192,MENMAR,,2026-11-05,2026-11-17,In Production,118.08,8,False
 464236,LOVJAM,,2026-11-06,2026-11-17,In Production,118.08,7,False
 464250,NAIANK,,2026-11-06,2026-11-17,In Production,72.64,7,False
 464274,PERLUI,,2026-11-06,2026-11-16,In Production,96.88,7,False
 464289,LUKPAU,,2026-11-06,2026-11-16,In Production,118.08,7,False
-464290,RHICAT,,2026-11-06,2026-11-16,In Production,83.83,7,False
 464292,RHICAT,,2026-11-06,2026-11-16,In Production,83.83,7,False
-464336,NISLIN,,2026-11-09,2026-11-18,In Production,78.78,4,False
-464341,NISLIN,,2026-11-09,2026-11-18,In Production,78.78,4,False
 464352,WILJEN,,2026-11-09,2026-11-18,In Production,97.41,4,False
 464391,LEBRAF,,2026-11-09,2026-11-17,In Production,89.89,4,False
 464404,TADSIM,,2026-11-09,2026-11-17,In Production,78.78,4,False
@@ -305,8 +297,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464568,NISLIN,,2026-11-11,2026-11-20,In Production,78.78,2,False
 464569,NISLIN,,2026-11-11,2026-11-20,In Production,78.78,2,False
 464578,BALJOS,,2026-11-11,2026-11-25,In Production,964.45,2,False
-464605,GAFMEG,,2026-11-11,2026-12-04,In Production,726.98,2,False
 464603,GATGUY,,2026-11-11,2026-11-19,In Production,118.08,2,False
+464605,GAFMEG,,2026-11-11,2026-12-04,In Production,726.98,2,False
 464606,CORABI,,2026-11-11,2026-11-19,In Production,78.78,2,False
 464610,MALRYA,,2026-11-11,2026-11-19,In Production,78.78,2,False
 464615,TAPGAR,,2026-11-11,2026-11-19,In Production,128.18,2,False
@@ -438,8 +430,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464708,GREDANPA,,2026-11-12,2026-11-24,In Production,157.48,1,False
 464722,LEEJIW,,2026-11-12,2026-11-20,In Production,187.41,1,False
 464736,GRAALE,,2026-11-12,2026-11-30,In Production,161.02,1,False
-464738,GRAALE,,2026-11-12,2026-11-19,In Production,161.02,1,False
 464737,GRAALE,,2026-11-12,2026-11-19,In Production,161.02,1,False
+464738,GRAALE,,2026-11-12,2026-11-19,In Production,161.02,1,False
 464739,GRAALE,,2026-11-12,2026-11-23,In Production,161.02,1,False
 464742,PATMAR,,2026-11-12,2026-11-23,In Production,273.62,1,False
 464771,SAMJACSTC,,2026-11-12,2026-11-23,In Production,126.25,1,False
