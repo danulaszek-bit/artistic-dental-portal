@@ -1,3 +1,3 @@
 # Auto-generated — do not edit manually.
 # Changing this file forces Streamlit Cloud to redeploy.
-DATA_VERSION = "2026-11-20 11:57:48"
+DATA_VERSION = "2026-11-20 12:04:30"
