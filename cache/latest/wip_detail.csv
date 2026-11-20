@@ -9,8 +9,9 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 463157,NIEMAR,,2026-10-23,2026-11-30,In Production,698.1,28,False
 463492,MUIJOHLE,John Mui,2026-10-28,2026-11-20,In Production,3400.44,23,True
 464040,LEEALI,,2026-11-04,2026-11-30,In Production,683.67,16,False
+464102,PATPINNVO,,2026-11-04,2026-11-30,In Production,577.46,16,False
 464408,GATGUY,,2026-11-09,2026-11-25,In Production,517.02,11,False
-464495,LEURIN,Ringo Leung,2026-11-10,2026-11-23,In Production,381.78,10,False
+464495,LEURIN,,2026-11-10,2026-11-24,In Production,381.78,10,False
 464544,THOJAM,,2026-11-10,2026-11-27,In Production,201.99,10,False
 464590,HUBMAR,,2026-11-11,2026-11-24,In Production,229.08,9,False
 464709,TYSMONLB,,2026-11-12,2026-11-30,In Production,517.02,8,False
@@ -25,7 +26,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464885,KHAALI,,2026-11-13,2026-11-24,In Production,181.78,7,False
 463212,SENWILL,,2026-11-13,2026-12-02,In Production,0.0,7,False
 464890,SHASHE,,2026-11-13,2026-11-24,In Production,269.67,7,False
-464892,PATPINNV,Pinal Patel,2026-11-13,2026-11-23,In Production,69.69,7,False
 464897,BAPBENNR,,2026-11-13,2026-11-24,In Production,0.0,7,False
 464926,ATAJAD,,2026-11-16,2026-12-02,In Production,392.11,4,False
 464945,SHASHE,,2026-11-16,2026-11-24,In Production,89.89,4,False
@@ -116,7 +116,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 465197,ATAJAD,,2026-11-18,2026-12-01,In Production,107.88,2,False
 464960,HIJNAN,,2026-11-16,2026-11-24,In Production,0.0,4,False
 464672,LLAANT,,2026-11-11,2026-11-24,In Production,269.67,9,False
-464898,JURAND,Andrew Jursik,2026-11-13,2026-11-23,In Production,78.78,7,False
 464948,HOLMARLA,,2026-11-16,2026-11-24,In Production,69.69,4,False
 464975,MADABD,,2026-11-16,2026-11-24,In Production,0.0,4,False
 464987,DOUBRI,,2026-11-16,2026-11-24,In Production,79.79,4,False
@@ -181,8 +180,7 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464724,PAUMICBL,,2026-11-12,2026-12-01,In Production,217.98,8,False
 464725,PAUMICBL,,2026-11-12,2026-12-01,In Production,217.98,8,False
 464806,WILJEN,,2026-11-13,2026-11-25,In Production,79.79,7,False
-464850,TADSIMNR,Simon Tadros,2026-11-13,2026-11-23,In Production,78.78,7,False
-464854,RHICAT,Catherine Rhim,2026-11-13,2026-11-23,In Production,83.83,7,False
+464850,TADSIMNR,,2026-11-13,2026-11-24,In Production,78.78,7,False
 464866,MALRYA,,2026-11-13,2026-12-03,In Production,480.76,7,False
 464910,NIEJOS,,2026-11-16,2026-11-25,In Production,246.36,4,False
 464966,SIETOM,,2026-11-16,2026-11-24,In Production,69.69,4,False
@@ -195,7 +193,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464561,LEBRAFB,,2026-11-11,2026-11-24,In Production,343.94,9,False
 464805,ATAJAD,,2026-11-13,2026-11-24,In Production,78.78,7,False
 464913,NISLIN,,2026-11-16,2026-11-25,In Production,78.78,4,False
-465011,MCCSCO,,2026-11-16,2026-11-24,In Production,118.08,4,False
 465303,NUCMAG,,2026-11-19,2026-12-02,In Production,0.0,1,False
 448148,THADEVOP,,2026-04-21,2026-05-05,In Production,283.77,213,True
 454721,SLAMICJOL,,2026-07-14,2026-07-28,In Production,200.0,129,True
@@ -212,7 +209,6 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 464877,THADEVJOL,,2026-11-13,2026-12-03,In Production,293.83,7,False
 465118,SYEMAZ,,2026-11-17,2026-12-03,In Production,3636.0,3,False
 463422,SAFTAR,,2026-11-18,2026-12-03,In Production,6.99,2,False
-464915,ALBMONWA,Monim Albazzaz,2026-11-16,2026-11-23,In Production,118.08,4,False
 465282,TYSMONLB,,2026-11-19,2026-12-02,In Production,0.0,1,False
 465347,MENMAR,,2026-11-19,2026-11-25,In Production,0.0,1,False
 464844,PATMAR,,2026-11-13,2026-12-08,In Production,572.58,7,False
@@ -293,8 +289,8 @@ case_number,account_id,doctor_name,date_in,due_date,status,total_charge,days_in_
 465250,SHAAMI,,2026-11-18,2026-12-02,In Production,139.38,2,False
 465306,HANMIR,,2026-11-19,2026-12-01,In Production,158.19,1,False
 465307,PETCHR,,2026-11-19,2026-12-03,In Production,178.69,1,False
-465310,HANMIR,,2026-11-19,2026-11-30,In Production,83.83,1,False
 465309,CHUMANRV,,2026-11-19,2026-12-01,In Production,83.83,1,False
+465310,HANMIR,,2026-11-19,2026-11-30,In Production,83.83,1,False
 465312,HANMIR,,2026-11-19,2026-11-30,In Production,0.0,1,False
 465314,KHASUM,,2026-11-19,2026-12-02,In Production,6.99,1,False
 465316,MCCSCO,,2026-11-19,2026-12-07,In Production,102.54,1,False
